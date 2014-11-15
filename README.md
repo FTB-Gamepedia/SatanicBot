@@ -1,0 +1,4 @@
+SatanicBot
+==========
+
+SatanicBot IRC bot.
