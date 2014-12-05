@@ -1,7 +1,7 @@
 use warnings;
 use strict;
 
-package MyBot;
+package SatanicBot;
 use base qw(Bot::BasicBot);
 
 my $bot = Bot::BasicBot->new(
@@ -16,7 +16,7 @@ my $bot = Bot::BasicBot->new(
 );
 $bot->run();
 
-#Use this method for adding commands.
+#Use this subroutine definition for adding commands.
 sub said{
   my ($self, $message) = @_;
   if ($message->{body} == '$quit'){
