@@ -1,9 +1,8 @@
 use warnings;
 use strict;
 
-package SatanicBot;
-use qw(Bot::BasicBot);
-use Acme::Comment type => 'C++';
+package MyBot;
+use base qw(Bot::BasicBot);
 
 my $bot = Bot::BasicBot->new(
   server    => 'irc.esper.net',
@@ -17,6 +16,13 @@ my $bot = Bot::BasicBot->new(
 );
 $bot->run();
 
-if (Bot::BasicBot->said(who, raw_nick, channel, '$quit', address){
-  $bot->shutdown($bot->quit_message('Someone killed me!!'));
+#Use this method for adding commands.
+sub said{
+  my ($self, $message) = @_;
+  if ($message->{body} == '$quit'){
+    return $bot->shutdown($bot->quit_message('Someone killed me!!'));
+  }
+  if ($message->{body} == '$addabbrv'){
+    return 'Nigga that code ain\t even work yet'
+  }
 }
