@@ -23,6 +23,6 @@ sub said{
     return $bot->shutdown($bot->quit_message('Someone killed me!!'));
   }
   if ($message->{body} == '$addabbrv'){
-    return 'Nigga that code ain\t even work yet'
+    return 'Nigga that code ain\'t even work yet'
   }
 }
