@@ -22,9 +22,9 @@ sub login{
 
 sub edit_gmods{
   #remove the User:TheSatanicSanta/ from them once you know it works.
-  my $gmods = "User:TheSatanicSanta/Template:G/Mods";
-  my $gmodsdoc = "User:TheSatanicSanta/Template:G/Mods/doc";
-  my $firstref = $mw->get_page({title => $gmods});
+  my $gmods     = "User:TheSatanicSanta/Template:G/Mods";
+  my $gmodsdoc  = "User:TheSatanicSanta/Template:G/Mods/doc";
+  my $firstref  = $mw->get_page({title => $gmods});
   my $secondref = $mw->get_page({title => $gmodsdoc});
 
   unless ($firstref->{missing}){
