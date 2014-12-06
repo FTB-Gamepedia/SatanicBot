@@ -21,13 +21,17 @@ my $bot = SatanicBot->new(
 #Use this subroutine definition for adding commands.
 sub said{
   my ($self, $message) = @_;
+
+  #This command is used to stop the bot.
   if ($message->{body} eq '!quit'){
     $bot->shutdown();
   }
+
+  #This command does not do anything YET. See issues.
   if ($message->{body} eq '!abbrv'){
     $self->say(
       channel => '#SatanicSanta',
-      body =>'$message->{who}: Bitch, that code ain\'t even work yet'
+      body    => 'Bitch, that code ain\'t even work yet'
     );
     return undef;
   }
