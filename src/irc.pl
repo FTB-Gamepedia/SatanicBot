@@ -1,18 +1,17 @@
+#!/usr/bin/perl -w
 use warnings;
 use strict;
-
-package SatanicBot;
-use base qw(Bot::BasicBot);
+use Bot::BasicBot;
 
 my $bot = Bot::BasicBot->new(
-  server    => 'irc.esper.net',
-  port      => '6667',
-  channels  => ['#FTB-Wiki', '#SatanicSanta'],
+server    => 'irc.esper.net',
+port      => '6667',
+channels  => ['#FTB-Wiki', '#SatanicSanta'],
 
-  nick      => 'SatanicBot',
-  alt_nicks => ['SatanicButt', 'SatanicBooty'],
-  username  => 'SatanicBot',
-  name      => 'SatanicSanta\'s IRC bot'
+nick      => 'SatanicBot',
+alt_nicks => ['SatanicButt', 'SatanicBooty'],
+username  => 'SatanicBot',
+name      => 'SatanicSanta\'s IRC bot'
 );
 $bot->run();
 
