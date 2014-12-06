@@ -1,11 +1,12 @@
 #!/usr/bin/perl -w
 use warnings;
 use strict;
+use diagnostics;
 
 package SatanicBot;
 use base qw(Bot::BasicBot);
 
-my $bot = Bot::BasicBot->new(
+my $bot = SatanicBot->new(
   server    => 'irc.esper.net',
   port      => '6667',
   channels  => ['#SatanicSanta'],
@@ -21,9 +22,13 @@ my $bot = Bot::BasicBot->new(
 sub said{
   my ($self, $message) = @_;
   if ($message->{body} eq '!quit'){
-    $bot->shutdown($bot->quit_message('Someone killed me!!'));
+    $bot->shutdown();
   }
   if ($message->{body} eq '!abbrv'){
-    $self->say($message->{channel}, $message->{'Bitch, that code ain\'t even work yet'})
+    $self->say(
+      channel => '#SatanicSanta',
+      body =>'$message->{who}: Bitch, that code ain\'t even work yet'
+    );
+    return undef;
   }
 }
