@@ -25,7 +25,7 @@ sub said{
 
   #This command is used to stop the bot.
   if ($message->{body} eq '!quit'){
-    $self->shutdown();
+    $bot->shutdown();
   }
 
   #This command is supposed to edit User:TheSatanicSanta/Template:G/Mods and /doc
