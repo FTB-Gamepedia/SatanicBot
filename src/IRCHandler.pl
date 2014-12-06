@@ -1,7 +1,7 @@
 use warnings;
 use strict;
 
-package SatanicBot;
+package IRCHandler;
 use base qw(Bot::BasicBot);
 
 my $bot = Bot::BasicBot->new(
@@ -20,7 +20,7 @@ $bot->run();
 sub said{
   my ($self, $message) = @_;
   if ($message->{body} == '$quit'){
-    return $bot->shutdown($bot->quit_message('Someone killed me!!'));
+    $bot->shutdown($bot->quit_message('Someone killed me!!'))
   }
   if ($message->{body} == '$addabbrv'){
     return 'Nigga that code ain\'t even work yet'
