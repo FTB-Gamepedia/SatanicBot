@@ -4,7 +4,6 @@ use strict;
 
 package SatanicBot;
 use base qw(Bot::BasicBot);
-use POE qw(Component::IRC);
 
 my $bot = Bot::BasicBot->new(
   server    => 'irc.esper.net',
