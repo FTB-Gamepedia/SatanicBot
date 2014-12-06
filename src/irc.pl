@@ -5,6 +5,7 @@ use diagnostics;
 
 package SatanicBot;
 use base qw(Bot::BasicBot);
+require 'wiki.pl';
 
 my $bot = SatanicBot->new(
   server    => 'irc.esper.net',
@@ -24,11 +25,13 @@ sub said{
 
   #This command is used to stop the bot.
   if ($message->{body} eq '!quit'){
-    $bot->shutdown();
+    $self->shutdown();
   }
 
-  #This command does not do anything YET. See issues.
+  #This command is supposed to edit User:TheSatanicSanta/Template:G/Mods and /doc
   if ($message->{body} eq '!abbrv'){
+    Wiki->login();
+    Wiki->edit_gmods();
     $self->say(
       channel => '#SatanicSanta',
       body    => 'Bitch, that code ain\'t even work yet'
