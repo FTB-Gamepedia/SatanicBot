@@ -1,7 +1,7 @@
 use warnings;
 use strict;
 
-package IRCHandler;
+package SatanicBot;
 use base qw(Bot::BasicBot);
 
 my $bot = Bot::BasicBot->new(
