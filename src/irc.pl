@@ -7,7 +7,7 @@ package SatanicBot;
 use base qw(Bot::BasicBot);
 require 'wiki.pl';
 
-my $chan = '#SatanicSanta';
+my $chan = '#FTB-Wiki';
 
 my $bot = SatanicBot->new(
   server    => 'irc.esper.net',
