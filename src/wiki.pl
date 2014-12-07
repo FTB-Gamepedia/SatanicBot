@@ -39,11 +39,11 @@ sub edit_gmods{
 
   unless ($secondref->{missing}){
     $mw->edit({
-      action     => 'edit',
-      title      => $gmodsdoc,
-      text       => $replace,
-      bot        => 1,
-      minor      => 1
+      action => 'edit',
+      title  => $gmodsdoc,
+      text   => $replace,
+      bot    => 1,
+      minor  => 1
     }) || die $mw->{error}->{code} . ": " . $mw->{error}->{details};
   }
 }
