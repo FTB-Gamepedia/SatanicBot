@@ -39,7 +39,7 @@ sub edit_gmods{
   }
 
   unless ($secondref->{missing}){
-    $replace =~ s/\|\}/\|-\n\| [[$SatanicBot::words[2]]] \|\| <code>$SatanicBot::words[1]<\/code>\n\|\}/
+    $replace =~ s/\|\}/\|-\n\| [[$SatanicBot::words[2]]] \|\| <code>$SatanicBot::words[1]<\/code>\n\|\}/;
     $mw->edit({
       action => 'edit',
       title  => $gmodsdoc,
