@@ -28,13 +28,13 @@ sub said{
     $bot->shutdown();
   }
 
-  #This command is supposed to edit User:TheSatanicSanta/Template:G/Mods and /doc
+  #This command edits User:TheSatanicSanta/Template:G/Mods and /doc
   if ($message->{body} eq '!abbrv'){
     Wiki->login();
     Wiki->edit_gmods();
     $self->say(
       channel => '#SatanicSanta',
-      body    => 'Abbreviation and documentation added.'
+      body    => 'Abbreviation and documentation added at '.  ', ' .  '.'
     );
     return undef;
   }

@@ -8,18 +8,15 @@ use MediaWiki::API;
 my $mw = MediaWiki::API->new();
 $mw->{config}->{api_url} = 'http://ftb.gamepedia.com/api.php';
 
-my $file = 'secure.txt';
-open my $fh, '<', $file or die "Could not open '$file' $!\n";
-
-while (<$fh>){
-  my $username = $_ if /\ba\b/;
-  my $password = $_ if /\b1\b/;
-}
-
 sub login{
+  my $file = 'secure.txt';
+  open my $fh, '<', $file or die "Could not open '$file' $!\n";
+  @lines = <$fh>;
+  close $fh;
+  chomp @lines;
   $mw->login({
-    lgname     => $username,
-    lgpassword => $password
+    lgname     => $lines[0],
+    lgpassword => $lines[-1]
   }) || die $mw->{error}->{code} . ": " . $mw->{error}->{details};
 }
 
@@ -32,17 +29,19 @@ sub edit_gmods{
 
   unless ($firstref->{missing}){
     $mw->edit({
-      action => 'edit',
-      title  => $gmods,
-      text   => 'This is an automated test'#$firstref->{'*'} . "\n|" + modname + " = {{#if:{{{name|}}}{{{code|}}}||_(}}{{#if:{{{name|}}}{{{link|}}}|" + name + "|" + abbrev + "}}{{#if:{{{name|}}}{{{code|}}}||)}}" #figure out how to do stuff with that python script
+      action     => 'edit',
+      title      => $gmods,
+      appendtext => "\n\nThis is also an automated test",#$firstref->{'*'} . "\n|" + modname + " = {{#if:{{{name|}}}{{{code|}}}||_(}}{{#if:{{{name|}}}{{{link|}}}|" + name + "|" + abbrev + "}}{{#if:{{{name|}}}{{{code|}}}||)}}" #figure out how to do stuff with that python script
+      bot        => 1
     }) || die $mw->{error}->{code} . ': ' . $mw->{error}->{details};
   }
 
   unless ($secondref->{missing}){
     $mw->edit({
-      action => 'edit',
-      title  => $gmodsdoc,
-      text   => 'This is an automated test'#$secondref->{'*'} . "\n* [[" + modname "]]: <code>" + abbrv + "</code>"
+      action     => 'edit',
+      title      => $gmodsdoc,
+      appendtext => "\n\nThis is also an automated test",#$secondref->{'*'} . "\n* [[" + modname "]]: <code>" + abbrv + "</code>"
+      bot        => 1
     }) || die $mw->{error}->{code} . ": " . $mw->{error}->{details};
   }
 }
