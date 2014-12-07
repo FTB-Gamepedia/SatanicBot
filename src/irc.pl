@@ -67,7 +67,7 @@ sub said{
     );
   }
 
-  if ($message->{body} eq '$help quit'){
+  if ($message->{body} eq '$help abbrv'){
     $self->say(
       channel => $chan,
       body    => 'Used to add abbreviations to the wiki. Required args: <abbreviation> <mod name>'
