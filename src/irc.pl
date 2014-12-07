@@ -18,6 +18,8 @@ my $bot = SatanicBot->new(
   name      => 'SatanicSanta\'s IRC bot'
 )->run();
 
+our $abbrev = <>;
+our $modname = <>;
 
 #Use this subroutine definition for adding commands.
 sub said{
@@ -29,12 +31,18 @@ sub said{
   }
 
   #This command edits User:TheSatanicSanta/Template:G/Mods and /doc
-  if ($message->{body} eq '!abbrv'){
-    Wiki->login();
-    Wiki->edit_gmods();
+  if ($message->{body} eq "!abbrv $abbrev $modname"){
     $self->say(
       channel => '#SatanicSanta',
-      body    => 'Abbreviation and documentation added at '.  ', ' .  '.'
+      body    => ("Abbreviating $modname as $abbrev")
+    );
+
+    Wiki->login();
+    Wiki->edit_gmods();
+
+    $self->say(
+      channel => '#SatanicSanta',
+      body    => 'Abbreviation and documentation added.'
     );
     return undef;
   }
