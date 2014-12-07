@@ -7,10 +7,12 @@ package SatanicBot;
 use base qw(Bot::BasicBot);
 require 'wiki.pl';
 
+my $chan = '#FTB-Wiki';
+
 my $bot = SatanicBot->new(
   server    => 'irc.esper.net',
   port      => '6667',
-  channels  => ['#SatanicSanta'],
+  channels  => [$chan],
 
   nick      => 'SatanicBot',
   alt_nicks => ['SatanicButt', 'SatanicBooty'],
@@ -18,32 +20,56 @@ my $bot = SatanicBot->new(
   name      => 'SatanicSanta\'s IRC bot'
 )->run();
 
-our $abbrev = <>;
-our $modname = <>;
-
 #Use this subroutine definition for adding commands.
 sub said{
   my ($self, $message) = @_;
 
-  #This command is used to stop the bot.
-  if ($message->{body} eq '!quit'){
+  #quit command: no args
+  if ($message->{body} eq '$quit'){
     $bot->shutdown();
   }
 
-  #This command edits User:TheSatanicSanta/Template:G/Mods and /doc
-  if ($message->{body} eq "!abbrv $abbrev $modname"){
+  #abbrv command: 2 args required: <abbreviation> <mod name>
+  our $msg = ($message->{body}, $message->{body}, $message->{body});
+  our @words = split(/\s/, $msg, 3);
+  if ($words[0] eq '$abbrv'){
     $self->say(
-      channel => '#SatanicSanta',
-      body    => ("Abbreviating $modname as $abbrev")
+      channel => $chan,
+      body    => ("Abbreviating $words[2] as $words[1]")
     );
 
     Wiki->login();
     Wiki->edit_gmods();
 
     $self->say(
-      channel => '#SatanicSanta',
+      channel => $chan,
       body    => 'Abbreviation and documentation added.'
     );
     return undef;
+  }
+
+  if ($message->{body} eq '$help'){
+    $self->say(
+      channel => $chan,
+      body    => 'Listing commands... quit, abbrv'
+    );
+    $self->say(
+      channel => $chan,
+      body    => 'To get info on a specific command, do $help <command>'
+    );
+  }
+
+  if ($message->{body} eq '$help quit'){
+    $self->say(
+      channel => $chan,
+      body    => 'Used to stop the bot. Takes no args.'
+    );
+  }
+
+  if ($message->{body} eq '$help quit'){
+    $self->say(
+      channel => $chan,
+      body    => 'Used to add abbreviations to the wiki. Required args: <abbreviation> <mod name>'
+    );
   }
 }
