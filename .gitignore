@@ -1,6 +1,4 @@
-pircbot.jar
 .idea
 .idea/
-out/
-*.json
 .DS_Store
+secure.txt

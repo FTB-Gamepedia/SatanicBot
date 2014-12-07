@@ -34,7 +34,7 @@ sub said{
     Wiki->edit_gmods();
     $self->say(
       channel => '#SatanicSanta',
-      body    => 'Bitch, that code ain\'t even work yet'
+      body    => 'Abbreviation and documentation added.'
     );
     return undef;
   }
