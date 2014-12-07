@@ -26,7 +26,7 @@ sub edit_gmods{
   my $gmodsdoc  = "User:TheSatanicSanta/Sandbox/Bot"; #This needs fixing.
   my $firstref  = $mw->get_page({title => $gmods});
   my $secondref = $mw->get_page({title => $gmodsdoc});
-  my $replace   = $mw->get_page({'*'});
+  my $replace   = $secondref->{'*'};
 
   unless ($firstref->{missing}){
     $mw->edit({
@@ -39,7 +39,7 @@ sub edit_gmods{
   }
 
   unless ($secondref->{missing}){
-    $replace =~ s/\|\}/\|-\n\| [[{SatanicBot::words[2]}]] \|\| <code>{SatanicBot::words[1]}<\/code>\n\|\}/;
+    $replace =~ s/\|\}/\|-\n\| [[$SatanicBot::words[2]]] \|\| <code>$SatanicBot::words[1]<\/code>\n\|\}/
     $mw->edit({
       action => 'edit',
       title  => $gmodsdoc,
