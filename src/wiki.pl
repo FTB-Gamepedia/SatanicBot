@@ -1,5 +1,6 @@
 #!/usr/bin/perl
 use warnings;
+use strict;
 use diagnostics;
 
 package Wiki;
@@ -11,7 +12,7 @@ $mw->{config}->{api_url} = 'http://ftb.gamepedia.com/api.php';
 sub login{
   my $file = 'secure.txt';
   open my $fh, '<', $file or die "Could not open '$file' $!\n";
-  @lines = <$fh>;
+  my @lines = <$fh>;
   close $fh;
   chomp @lines;
   $mw->login({

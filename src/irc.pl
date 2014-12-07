@@ -30,7 +30,7 @@ sub said{
   }
 
   #abbrv command: 2 args required: <abbreviation> <mod name>
-  our $msg = ($message->{body}, $message->{body}, $message->{body});
+  my $msg = $message->{body};
   our @words = split(/\s/, $msg, 3);
   if ($words[0] eq '$abbrv'){
     $self->say(
