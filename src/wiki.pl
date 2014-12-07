@@ -44,4 +44,8 @@ sub edit_gmods{
     }) || die $mw->{error}->{code} . ": " . $mw->{error}->{details};
   }
 }
+
+sub logout{
+  $mw->logout();
+}
 return 1;

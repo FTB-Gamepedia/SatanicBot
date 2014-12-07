@@ -40,6 +40,7 @@ sub said{
 
     Wiki->login();
     Wiki->edit_gmods();
+    Wiki->logout();
 
     $self->say(
       channel => $chan,
