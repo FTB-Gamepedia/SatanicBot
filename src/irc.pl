@@ -6,12 +6,10 @@ use diagnostics;
 package SatanicBot;
 use base qw(Bot::BasicBot);
 use Data::Random qw(:all);
-use Geo::Weather;
+use Weather::Underground::Forecast;
 require 'wiki.pl';
 
 my $chan = '#SatanicSanta';
-
-my $weather = new Geo::Weather;
 
 my $bot = SatanicBot->new(
   server    => 'irc.esper.net',
@@ -37,20 +35,27 @@ sub said{
   my $msg = $message->{body};
   our @words = split(/\s/, $msg, 3);
   if ($words[0] eq '$abbrv'){
-    $self->say(
-      channel => $chan,
-      body    => ("Abbreviating $words[2] as $words[1]")
-    );
+    if ($words[1] =~ m/.+/){
+      $self->say(
+        channel => $chan,
+        body    => "Abbreviating $words[2] as $words[1]"
+      );
 
-    Wiki->login();
-    Wiki->edit_gmods();
-    Wiki->logout();
+      Wiki->login();
+      Wiki->edit_gmods();
+      Wiki->logout();
 
-    $self->say(
-      channel => $chan,
-      body    => 'Abbreviation and documentation added.'
-    );
-    return undef;
+      $self->say(
+        channel => $chan,
+        body    => 'Abbreviation and documentation added.'
+      );
+      return undef;
+    } else {
+      $self->say(
+        channel => $chan,
+        body    => 'Please provide the required arguments.'
+      );
+    }
   }
 
   if ($message->{body} eq '$spookyscaryskeletons'){
@@ -66,44 +71,45 @@ sub said{
   }
 
   my $weathermsg = $message->{body};
-  our @weatherwords = split(/,/, $weathermsg, 3);
+  our @weatherwords = split(/\s/, $weathermsg, 2);
   if ($weatherwords[0] eq '$weather'){
-    $weather->get_weather($weatherwords[1], $weatherwords[2]);
-    $self->say(
-      channel => $chan,
-      body    => $weather->report();
-    )
+    if ($weatherwords[1] =~ m/.+/){
+      $self->say(
+          channel => $chan,
+          body    => 'I understand the words you just said.'
+        );
+        my $weather = Weather::Underground::Forecast->new(
+          location          => $weatherwords[1],
+          temperature_units => 'farenheit'
+        );
+
+        my $high   = $weather->highs;
+        my $low    = $weather->lows;
+        my $precip = $weather->precipitation;
+        $self->say(
+          channel => $chan,
+          body    => 'High: ' . $high
+        );
+        $self->say(
+          channel => $chan,
+          body    => 'Low: ' . $low
+        );
+        $self->say(
+          channel => $chan,
+          body    => 'Chance of precipitation: ' . $precip->[0]
+        );
+      } else {
+        $self->say(
+          channel => $chan,
+          body    => 'Please provide the required arguments.'
+        )
+      }
   }
 
   if ($message->{body} eq '$help'){
     $self->say(
       channel => $chan,
-      body    => 'Listing commands... quit, abbrv'
-    );
-    $self->say(
-      channel => $chan,
-      body    => 'To get info on a specific command, do $help <command>'
-    );
-  }
-
-  if ($message->{body} eq '$help quit'){
-    $self->say(
-      channel => $chan,
-      body    => 'Used to stop the bot. Takes no args.'
-    );
-  }
-
-  if ($message->{body} eq '$help abbrv'){
-    $self->say(
-      channel => $chan,
-      body    => 'Used to add abbreviations to the wiki. Required args: <abbreviation> <mod name>'
-    );
-  }
-
-  if ($message->{body} eq '$help spookyscaryskeletons'){
-    $self->say(
-      channel => $chan,
-      body    => 'Generates a random word from spook.lines, like EMACS. Takes no args.'
+      body    => 'Listing commands... quit, abbrv, spookyscaryskeletons, weather'
     );
   }
 }
