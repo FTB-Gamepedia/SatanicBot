@@ -10,14 +10,14 @@ use Weather::Underground::Forecast;
 use Data::Dumper;
 require 'wiki.pl';
 
-my $chan = '#FTB-Wiki';
+my $chan = '#SatanicSanta';
 
 my $bot = SatanicBot->new(
   server    => 'irc.esper.net',
   port      => '6667',
   channels  => [$chan],
 
-  nick      => 'SatanicBot',
+  nick      => 'SatanicBot|dev',
   alt_nicks => ['SatanicButt', 'SatanicBooty'],
   username  => 'SatanicBot',
   name      => 'SatanicSanta\'s IRC bot'
@@ -62,7 +62,8 @@ sub said{
   if ($message->{body} eq '$spookyscaryskeletons'){
     my @random_words = rand_words(
       wordlist => 'spook.lines',
-      shuffle  => 1
+      min      => 10,
+      max      => 20
     );
 
     $self->say(
