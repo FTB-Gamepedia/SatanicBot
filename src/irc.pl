@@ -7,16 +7,17 @@ package SatanicBot;
 use base qw(Bot::BasicBot);
 use Data::Random qw(:all);
 use Weather::Underground::Forecast;
+use Data::Dumper;
 require 'wiki.pl';
 
-my $chan = '#SatanicSanta';
+my $chan = '#FTB-Wiki';
 
 my $bot = SatanicBot->new(
   server    => 'irc.esper.net',
   port      => '6667',
   channels  => [$chan],
 
-  nick      => 'SatanicBot|dev',
+  nick      => 'SatanicBot',
   alt_nicks => ['SatanicButt', 'SatanicBooty'],
   username  => 'SatanicBot',
   name      => 'SatanicSanta\'s IRC bot'
@@ -74,36 +75,32 @@ sub said{
   our @weatherwords = split(/\s/, $weathermsg, 2);
   if ($weatherwords[0] eq '$weather'){
     if ($weatherwords[1] =~ m/.+/){
-      $self->say(
-          channel => $chan,
-          body    => 'I understand the words you just said.'
-        );
-        my $weather = Weather::Underground::Forecast->new(
-          location          => $weatherwords[1],
-          temperature_units => 'farenheit'
-        );
+      my $weather = Weather::Underground::Forecast->new(
+        location => $weatherwords[1]
+      );
 
-        my $high   = $weather->highs;
-        my $low    = $weather->lows;
-        my $precip = $weather->precipitation;
-        $self->say(
-          channel => $chan,
-          body    => 'High: ' . @{$high}
-        );
-        $self->say(
-          channel => $chan,
-          body    => 'Low: ' . @{$low}
-        );
-        $self->say(
-          channel => $chan,
-          body    => 'Chance of precipitation: ' . $precip->[0]
-        );
-      } else {
-        $self->say(
-          channel => $chan,
-          body    => 'Please provide the required arguments.'
-        )
-      }
+      my $high   = $weather->highs;
+      my $low    = $weather->lows;
+      my $precip = $weather->precipitation;
+      #my $dump = Data::Dumper->new([$high]);
+      $self->say(
+        channel => $chan,
+        body    => 'High today: ' . $high->[0] . ' F'
+      );
+      $self->say(
+        channel => $chan,
+        body    => 'Low today: ' . $low->[0] . ' F'
+      );
+      $self->say(
+        channel => $chan,
+        body    => 'Chance of precipitation today: ' . $precip->[0] . '%'
+      );
+    } else {
+      $self->say(
+        channel => $chan,
+        body    => 'Please provide the required arguments.'
+      )
+    }
   }
 
   if ($message->{body} eq '$help'){
