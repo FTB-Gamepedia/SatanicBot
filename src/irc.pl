@@ -44,13 +44,24 @@ sub said{
 
             Wiki->login();
             Wiki->edit_gmods();
-            Wiki->logout();
 
-            $self->say(
+            if (!Wiki->edit_gmods()){
+                $self->say(
                 channel => $chan,
-                body    => 'Abbreviation and documentation added.'
-            );
-            return undef;
+                body    => 'Could not proceed. Abbreviation and\/or name already on the list.'
+                );
+
+                Wiki->logout();
+            }
+
+            if (Wiki->edit_gmods()){
+                $self->say(
+                    channel => $chan,
+                    body    => 'Abbreviation and documentation added.'
+                );
+
+                Wiki->logout();
+            }
         } else {
             $self->say(
                 channel => $chan,
@@ -111,3 +122,4 @@ sub said{
     );
     }
 }
+return 1;
