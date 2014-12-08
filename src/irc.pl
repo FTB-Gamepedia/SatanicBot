@@ -88,11 +88,11 @@ sub said{
         my $precip = $weather->precipitation;
         $self->say(
           channel => $chan,
-          body    => 'High: ' . $high
+          body    => 'High: ' . @{$high}
         );
         $self->say(
           channel => $chan,
-          body    => 'Low: ' . $low
+          body    => 'Low: ' . @{$low}
         );
         $self->say(
           channel => $chan,
