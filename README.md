@@ -8,9 +8,7 @@ Commands
 
 help
 ----
-The $help command is used to provide information on commands to the users. It will output the following text to the channel:
-
-Listing commands... quit, abbrv
+The $help command is used to provide information on commands to the users. It will output a list of commands to the channel.
 
 abbrv
 -----
