@@ -1,9 +1,9 @@
 SatanicBot
 ==========
 
-SatanicBot IRC bot for accomplishing simple FTB Wiki tasks.
+SatanicBot written in Perl. This is an IRC and FTB Wiki bot (MediaWiki API) that can help do things easier.
 
-Commands
+IRC Commands
 ========
 
 help
