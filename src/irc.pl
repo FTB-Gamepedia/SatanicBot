@@ -6,16 +6,19 @@ use diagnostics;
 package SatanicBot;
 use base qw(Bot::BasicBot);
 use Data::Random qw(:all);
+use Geo::Weather;
 require 'wiki.pl';
 
-my $chan = '#FTB-Wiki';
+my $chan = '#SatanicSanta';
+
+my $weather = new Geo::Weather;
 
 my $bot = SatanicBot->new(
   server    => 'irc.esper.net',
   port      => '6667',
   channels  => [$chan],
 
-  nick      => 'SatanicBot',
+  nick      => 'SatanicBot|dev',
   alt_nicks => ['SatanicButt', 'SatanicBooty'],
   username  => 'SatanicBot',
   name      => 'SatanicSanta\'s IRC bot'
@@ -60,6 +63,16 @@ sub said{
       channel => $chan,
       body    => @random_words
     );
+  }
+
+  my $weathermsg = $message->{body};
+  our @weatherwords = split(/,/, $weathermsg, 3);
+  if ($weatherwords[0] eq '$weather'){
+    $weather->get_weather($weatherwords[1], $weatherwords[2]);
+    $self->say(
+      channel => $chan,
+      body    => $weather->report();
+    )
   }
 
   if ($message->{body} eq '$help'){
