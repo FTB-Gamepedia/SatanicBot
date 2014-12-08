@@ -11,6 +11,7 @@ use Data::Random qw(:all);
 use Weather::Underground::Forecast;
 use Data::Dumper;
 require 'wiki.pl';
+require 'wikib.pl';
 
 my $chan = '#FTB-Wiki';
 
@@ -117,10 +118,38 @@ sub said{
         }
     }
 
+    my $uploadmsg = $message->{body};
+    our @uploadwords = split(/\s/, $uploadmsg, 3);
+    if ($uploadwords[0] eq '$upload'){
+        if ($uploadwords[1] =~ m/.+/){
+            if ($uploadwords[2] =~ m/.+/){
+                WikiBot->login();
+                WikiBot->upload();
+                WikiBot->logout();
+
+                $self->say(
+                    channel => $chan,
+                    body    => "Uploaded $uploadwords[2] to the Wiki."
+                );
+            } else {
+                $self->say(
+                    channel => $chan,
+                    body    => 'Please provide the required arguments.'
+                );
+            }
+        } else {
+            $self->say(
+                channel => $chan,
+                body    => 'Please provide the required arguments.'
+            );
+        }
+    }
+
+
     if ($message->{body} eq '$help'){
         $self->say(
         channel => $chan,
-        body    => 'Listing commands... quit, abbrv, spookyscaryskeletons, weather'
+        body    => 'Listing commands... quit, abbrv, spookyscaryskeletons, weather, upload'
     );
     }
 }

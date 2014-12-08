@@ -29,6 +29,10 @@ spookyscaryskeletons
 --------------------
 The $spookyscaryskeletons command will output a random word from the spook.lines file, like EMACS. It takes no arguments.
 
+upload
+------
+The $upload command will upload the first argument file to the wiki with the file name of the second argument.
+
 quit
 ----
 The $quit command will stop the bot.
