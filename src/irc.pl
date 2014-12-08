@@ -5,6 +5,7 @@ use diagnostics;
 
 package SatanicBot;
 use base qw(Bot::BasicBot);
+use Data::Random qw(:all);
 require 'wiki.pl';
 
 my $chan = '#FTB-Wiki';
@@ -49,6 +50,18 @@ sub said{
     return undef;
   }
 
+  if ($message->{body} eq '$spookyscaryskeletons'){
+    my @random_words = rand_words(
+      wordlist => 'spook.lines',
+      shuffle  => 1
+    );
+
+    $self->say(
+      channel => $chan,
+      body    => @random_words
+    );
+  }
+
   if ($message->{body} eq '$help'){
     $self->say(
       channel => $chan,
@@ -71,6 +84,13 @@ sub said{
     $self->say(
       channel => $chan,
       body    => 'Used to add abbreviations to the wiki. Required args: <abbreviation> <mod name>'
+    );
+  }
+
+  if ($message->{body} eq '$help spookyscaryskeletons'){
+    $slef->say(
+      channel => $chan,
+      body    => 'Generates a random word from spook.lines, like EMACS. Takes no args.'
     );
   }
 }
