@@ -40,7 +40,7 @@ sub said{
             $self->say(
                 channel => $chan,
                 body    => "Abbreviating $words[2] as $words[1]"
-        );
+            );
 
             Wiki->login();
             Wiki->edit_gmods();
