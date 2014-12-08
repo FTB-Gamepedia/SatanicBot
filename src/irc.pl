@@ -88,7 +88,7 @@ sub said{
   }
 
   if ($message->{body} eq '$help spookyscaryskeletons'){
-    $slef->say(
+    $self->say(
       channel => $chan,
       body    => 'Generates a random word from spook.lines, like EMACS. Takes no args.'
     );
