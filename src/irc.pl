@@ -1,4 +1,6 @@
-#!/usr/bin/perl -w
+#!/usr/bin/perl
+# Copyright 2014 Eli Foster
+
 use warnings;
 use strict;
 use diagnostics;
@@ -10,14 +12,14 @@ use Weather::Underground::Forecast;
 use Data::Dumper;
 require 'wiki.pl';
 
-my $chan = '#SatanicSanta';
+my $chan = '#FTB-Wiki';
 
 my $bot = SatanicBot->new(
     server    => 'irc.esper.net',
     port      => '6667',
     channels  => [$chan],
 
-    nick      => 'SatanicBot|dev',
+    nick      => 'SatanicBot',
     alt_nicks => ['SatanicButt', 'SatanicBooty'],
     username  => 'SatanicBot',
     name      => 'SatanicSanta\'s IRC bot'

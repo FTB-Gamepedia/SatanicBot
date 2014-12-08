@@ -1,4 +1,6 @@
 #!/usr/bin/perl
+# Copyright 2014 Eli Foster
+
 use warnings;
 use strict;
 use diagnostics;
