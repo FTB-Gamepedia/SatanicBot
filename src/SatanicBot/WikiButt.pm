@@ -5,7 +5,7 @@ use warnings;
 use strict;
 use diagnostics;
 
-package WikiBot;
+package SatanicBot::WikiButt;
 use MediaWiki::Bot;
 
 my $mw = MediaWiki::Bot->new({

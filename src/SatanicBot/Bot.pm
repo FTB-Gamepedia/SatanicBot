@@ -9,24 +9,9 @@ package SatanicBot;
 use base qw(Bot::BasicBot);
 use Data::Random qw(:all);
 use Weather::Underground::Forecast;
-use Data::Dumper;
-require 'wiki.pm';
-require 'wikib.pm';
-
-my $chan = '#FTB-Wiki';
-
-my $bot = SatanicBot->new(
-    server    => 'irc.esper.net',
-    port      => '6667',
-    channels  => [$chan],
-
-    nick      => 'SatanicBot',
-    alt_nicks => ['SatanicButt', 'SatanicBooty'],
-    username  => 'SatanicBot',
-    name      => 'SatanicSanta\'s IRC bot'
-);
-
-$bot->run();
+#use Data::Dumper;
+use SatanicBot::Wiki;
+use SatanicBot::WikiButt;
 
 #Use this subroutine definition for adding commands.
 sub said{
@@ -47,25 +32,25 @@ sub said{
                 body    => "Abbreviating $words[2] as $words[1]"
             );
 
-            Wiki->login();
-            Wiki->edit_gmods();
+            SatanicBot::Wiki->login();
+            SatanicBot::Wiki->edit_gmods();
 
-            if (!Wiki->edit_gmods()){
+            if (!SatanicBot::Wiki->edit_gmods()){
                 $self->say(
                 channel => $chan,
                 body    => 'Could not proceed. Abbreviation and/or name already on the list.'
                 );
 
-                Wiki->logout();
+                SatanicBot::Wiki->logout();
             }
 
-            if (Wiki->edit_gmods()){
+            if (SatanicBot::Wiki->edit_gmods()){
                 $self->say(
                     channel => $chan,
                     body    => 'Abbreviation and documentation added.'
                 );
 
-                Wiki->logout();
+                SatanicBot::Wiki->logout();
             }
         } else {
             $self->say(
@@ -77,7 +62,7 @@ sub said{
 
     if ($message->{body} eq '$spookyscaryskeletons'){
         my @random_words = rand_words(
-            wordlist => 'spook.lines',
+            wordlist => 'info/spook.lines',
             min      => 10,
             max      => 20
         );
@@ -129,9 +114,9 @@ sub said{
                     channel => $chan,
                     body    => 'Sorry, $wgAllowCopyUploads is not enabled on the Wiki yet :('
                 );
-                #WikiBot->login();
-                #WikiBot->upload();
-                #WikiBot->logout();
+                #SatanicBot::WikiButt->login();
+                #SatanicBot::WikiButt->upload();
+                #SatanicBot::WikiButt->logout();
 
                 #$self->say(
                 #    channel => $chan,
