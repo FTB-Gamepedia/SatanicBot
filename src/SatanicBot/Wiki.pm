@@ -24,7 +24,7 @@ sub login{
 }
 
 sub edit_gmods{
-    my ($class, @words) = @_;
+    my ($self, $abbrev, $name) = @_;
     my $gmods     = "Template:G/Mods";
     my $gmodsdoc  = "Template:G/Mods/doc";
     my $firstref  = $mw->get_page({title => $gmods});
@@ -32,35 +32,31 @@ sub edit_gmods{
     my $replace_t = $firstref->{'*'};
     my $replace_d = $secondref->{'*'};
 
-    unless ($firstref->{missing}){
-        unless ($secondref->{missing}){
-            if ($replace_d !~ m/\|\| <code>$words[1]/){
-                if ($replace_d !~ m/\| [[$words[2]]]/){
-                    $replace_t =~ s/\|#default/\|$words[1] = {{#if:{{{name\|}}}{{{code\|}}}\|\|_(}}{{#if:{{{name\|}}}{{{link\|}}}\|$words[2]\|$words[1]}}{{#if:{{{name\|}}}{{{code\|}}}\|\|)}}\n\|$words[2] = {{#if:{{{name\|}}}{{{code\|}}}\|\|_(}}{{#if:{{{name\|}}}{{{link\|}}}\|$words[2]\|$words[1]}}{{#if:{{{name\|}}}{{{code\|}}}\|\|)}}\n\n\|#default/;
-                    $mw->edit({
-                        action     => 'edit',
-                        title      => $gmods,
-                        text       => $replace_t,
-                        bot        => 1,
-                        minor      => 1
-                    }) || die $mw->{error}->{code} . ': ' . $mw->{error}->{details};
+    if ($replace_d !~ m/\|\| <code>$abbrev/){
+        if ($replace_d !~ m/\| [[$name]]/){
+            $replace_t =~ s/\|#default/\|$abbrev = {{#if:{{{name\|}}}{{{code\|}}}\|\|_(}}{{#if:{{{name\|}}}{{{link\|}}}\|$name\|$abbrev}}{{#if:{{{name\|}}}{{{code\|}}}\|\|)}}\n\|$name = {{#if:{{{name\|}}}{{{code\|}}}\|\|_(}}{{#if:{{{name\|}}}{{{link\|}}}\|$name\|$abbrev}}{{#if:{{{name\|}}}{{{code\|}}}\|\|)}}\n\n\|#default/;
+            $mw->edit({
+                action     => 'edit',
+                title      => $gmods,
+                text       => $replace_t,
+                bot        => 1,
+                minor      => 1
+            }) || die $mw->{error}->{code} . ': ' . $mw->{error}->{details};
 
-                    $replace_d =~ s/\|\}/\|-\n\| [[$words[2]]] \|\| <code>$words[1]<\/code>\n\|\}/;
-                    $mw->edit({
-                        action => 'edit',
-                        title  => $gmodsdoc,
-                        text   => $replace_d,
-                        bot    => 1,
-                        minor  => 1
-                    }) || die $mw->{error}->{code} . ": " . $mw->{error}->{details};
-                    return 1;
-                } else {
-                    return 0;
-                }
-            } else {
-                return 0;
-            }
+            $replace_d =~ s/\|\}/\|-\n\| [[$name]] \|\| <code>$abbrev<\/code>\n\|\}/;
+            $mw->edit({
+                action => 'edit',
+                title  => $gmodsdoc,
+                text   => $replace_d,
+                bot    => 1,
+                minor  => 1
+            }) || die $mw->{error}->{code} . ": " . $mw->{error}->{details};
+            return 1;
+        } else {
+            return 0;
         }
+    } else {
+        return 0;
     }
 }
 

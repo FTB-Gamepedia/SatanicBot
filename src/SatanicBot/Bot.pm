@@ -32,20 +32,19 @@ sub said{
             );
 
             SatanicBot::Wiki->login();
-            SatanicBot::Wiki->edit_gmods(@words);
+            SatanicBot::Wiki->edit_gmods(@words[1,2]);
             SatanicBot::Wiki->logout();
-            if (SatanicBot::Wiki->edit_gmods()){
-                $self->say(
-                    channel => $message->{channel},
-                    body    => 'Abbreviation and documentation added.'
-                );
-            }
-            elsif (!SatanicBot::Wiki->edit_gmods()) {
-                $self->say(
-                    channel => $message->{channel},
-                    body    => 'Could not proceed. Abbreviation and/or name already on the list.'
-                );
-            }
+
+            $self->say(
+                channel => $message->{channel},
+                body    => 'Abbreviation and documentation probably added. Return values are fucked, which then fucks the message code.'
+            );
+            #if (!SatanicBot::Wiki->edit_gmods(@words[1,2])) {
+            #    $self->say(
+            #        channel => $message->{channel},
+            #        body    => 'Could not proceed. Abbreviation and/or name already on the list.'
+            #    );
+            #}
         } else {
             $self->say(
                 channel => $message->{channel},
