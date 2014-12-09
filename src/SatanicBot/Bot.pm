@@ -40,8 +40,7 @@ sub said{
                     body    => 'Abbreviation and documentation added.'
                 );
             }
-
-            if (!SatanicBot::Wiki->edit_gmods()) {
+            elsif (!SatanicBot::Wiki->edit_gmods()) {
                 $self->say(
                     channel => $message->{channel},
                     body    => 'Could not proceed. Abbreviation and/or name already on the list.'
