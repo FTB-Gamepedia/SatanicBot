@@ -7,12 +7,17 @@ use diagnostics;
 
 package WikiBot;
 use MediaWiki::Bot;
-require 'irc.pl';
 
-my $mw = MediaWiki::Bot({
+my $mw = MediaWiki::Bot->new({
     host     => 'ftb.gamepedia.com',
     operator => 'TheSatanicSanta',
     debug    => 2
+});
+
+$mw->set_wiki({
+    protocol => 'http',
+    host     => 'ftb.gamepedia.com',
+    path     => '/'
 });
 
 sub login{

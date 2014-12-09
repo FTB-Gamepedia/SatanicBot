@@ -10,8 +10,8 @@ use base qw(Bot::BasicBot);
 use Data::Random qw(:all);
 use Weather::Underground::Forecast;
 use Data::Dumper;
-require 'wiki.pl';
-require 'wikib.pl';
+require 'wiki.pm';
+require 'wikib.pm';
 
 my $chan = '#FTB-Wiki';
 
@@ -24,7 +24,9 @@ my $bot = SatanicBot->new(
     alt_nicks => ['SatanicButt', 'SatanicBooty'],
     username  => 'SatanicBot',
     name      => 'SatanicSanta\'s IRC bot'
-)->run();
+);
+
+$bot->run();
 
 #Use this subroutine definition for adding commands.
 sub said{
@@ -45,25 +47,25 @@ sub said{
                 body    => "Abbreviating $words[2] as $words[1]"
             );
 
-            Wiki->login();
-            Wiki->edit_gmods();
+            Wiki::login();
+            Wiki::edit_gmods();
 
-            if (!Wiki->edit_gmods()){
+            if (!Wiki::edit_gmods()){
                 $self->say(
                 channel => $chan,
-                body    => 'Could not proceed. Abbreviation and\/or name already on the list.'
+                body    => 'Could not proceed. Abbreviation and/or name already on the list.'
                 );
 
-                Wiki->logout();
+                Wiki::logout();
             }
 
-            if (Wiki->edit_gmods()){
+            if (Wiki::edit_gmods()){
                 $self->say(
                     channel => $chan,
                     body    => 'Abbreviation and documentation added.'
                 );
 
-                Wiki->logout();
+                Wiki::logout();
             }
         } else {
             $self->say(
@@ -123,14 +125,18 @@ sub said{
     if ($uploadwords[0] eq '$upload'){
         if ($uploadwords[1] =~ m/.+/){
             if ($uploadwords[2] =~ m/.+/){
-                WikiBot->login();
-                WikiBot->upload();
-                WikiBot->logout();
-
                 $self->say(
                     channel => $chan,
-                    body    => "Uploaded $uploadwords[2] to the Wiki."
+                    body    => 'Sorry, $wgAllowCopyUploads is not enabled on the Wiki yet :('
                 );
+                #WikiBot->login();
+                #WikiBot->upload();
+                #WikiBot->logout();
+
+                #$self->say(
+                #    channel => $chan,
+                #    body    => "Uploaded $uploadwords[2] to the Wiki."
+                #);
             } else {
                 $self->say(
                     channel => $chan,
@@ -153,4 +159,4 @@ sub said{
     );
     }
 }
-return 1;
+1;
