@@ -68,6 +68,12 @@ sub said{
             channel => $message->{channel},
             body    => @random_words
         );
+
+        #my $dump = Data::Dumper->new([$random_words[0]]);
+        #$self->say(
+        #    channel => $message->{channel},
+        #    body    => $dump
+        #);
     }
 
     my $weathermsg = $message->{body};
@@ -75,7 +81,7 @@ sub said{
     if ($weatherwords[0] eq '$weather'){
         if ($weatherwords[1] =~ m/.+/){
             my $weather = Weather::Underground::Forecast->new(
-            location => $weatherwords[1]
+                location => $weatherwords[1]
         );
 
         my $high   = $weather->highs;
