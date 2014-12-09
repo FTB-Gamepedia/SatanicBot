@@ -1,6 +1,5 @@
 #!usr/bin/perl
 
-package SatanicBot;
 use warnings;
 use strict;
 use diagnostics;
@@ -11,7 +10,7 @@ use Bot::BasicBot;
 
 our $chan = '#FTB-Wiki';
 
-our $bot = Bot::BasicBot->new(
+our $bot = SatanicBot::Bot->new(
 server    => 'irc.esper.net',
 port      => '6667',
 channels  => [$chan],
@@ -23,5 +22,3 @@ name      => 'SatanicSanta\'s IRC bot'
 );
 
 $bot->run();
-
-SatanicBot::Bot::said();
