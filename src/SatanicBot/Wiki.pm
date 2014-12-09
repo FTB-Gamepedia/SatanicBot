@@ -54,8 +54,12 @@ sub edit_gmods{
                         minor  => 1
                     }) || die $mw->{error}->{code} . ": " . $mw->{error}->{details};
                     return 1;
-                } else { return 0; }
-            } else { return 0; }
+                } else {
+                    return 0;
+                }
+            } else {
+                return 0;
+            }
         }
     }
 }

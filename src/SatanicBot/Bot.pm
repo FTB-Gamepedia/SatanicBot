@@ -33,21 +33,19 @@ sub said{
 
             SatanicBot::Wiki->login();
             SatanicBot::Wiki->edit_gmods(@words);
-
-            if (SatanicBot::Wiki->edit_gmods(@words)){
+            SatanicBot::Wiki->logout();
+            if (SatanicBot::Wiki->edit_gmods()){
                 $self->say(
                     channel => $message->{channel},
                     body    => 'Abbreviation and documentation added.'
                 );
+            }
 
-                SatanicBot::Wiki->logout();
-            } else {
+            if (!SatanicBot::Wiki->edit_gmods()) {
                 $self->say(
                     channel => $message->{channel},
                     body    => 'Could not proceed. Abbreviation and/or name already on the list.'
                 );
-
-                SatanicBot::Wiki->logout();
             }
         } else {
             $self->say(
