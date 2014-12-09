@@ -47,25 +47,25 @@ sub said{
                 body    => "Abbreviating $words[2] as $words[1]"
             );
 
-            Wiki::login();
-            Wiki::edit_gmods();
+            Wiki->login();
+            Wiki->edit_gmods();
 
-            if (!Wiki::edit_gmods()){
+            if (!Wiki->edit_gmods()){
                 $self->say(
                 channel => $chan,
                 body    => 'Could not proceed. Abbreviation and/or name already on the list.'
                 );
 
-                Wiki::logout();
+                Wiki->logout();
             }
 
-            if (Wiki::edit_gmods()){
+            if (Wiki->edit_gmods()){
                 $self->say(
                     channel => $chan,
                     body    => 'Abbreviation and documentation added.'
                 );
 
-                Wiki::logout();
+                Wiki->logout();
             }
         } else {
             $self->say(
