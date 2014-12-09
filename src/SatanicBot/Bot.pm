@@ -1,4 +1,3 @@
-#!/usr/bin/perl
 # Copyright 2014 Eli Foster
 
 use warnings;
@@ -24,7 +23,7 @@ sub said{
 
     #abbrv command: 2 args required: <abbreviation> <mod name>
     my $msg = $message->{body};
-    our @words = split(/\s/, $msg, 3);
+    my @words = split(/\s/, $msg, 3);
     if ($words[0] eq '$abbrv'){
         if ($words[1] =~ m/.+/){
             $self->say(
@@ -33,21 +32,19 @@ sub said{
             );
 
             SatanicBot::Wiki->login();
-            SatanicBot::Wiki->edit_gmods();
+            SatanicBot::Wiki->edit_gmods(@words);
 
-            if (!SatanicBot::Wiki->edit_gmods()){
-                $self->say(
-                channel => $message->{channel},
-                body    => 'Could not proceed. Abbreviation and/or name already on the list.'
-                );
-
-                SatanicBot::Wiki->logout();
-            }
-
-            if (SatanicBot::Wiki->edit_gmods()){
+            if (SatanicBot::Wiki->edit_gmods(@words)){
                 $self->say(
                     channel => $message->{channel},
                     body    => 'Abbreviation and documentation added.'
+                );
+
+                SatanicBot::Wiki->logout();
+            } else {
+                $self->say(
+                    channel => $message->{channel},
+                    body    => 'Could not proceed. Abbreviation and/or name already on the list.'
                 );
 
                 SatanicBot::Wiki->logout();
@@ -105,6 +102,7 @@ sub said{
         }
     }
 
+    #if the command does not work when the API gets enabled, do what you did with $abbrv
     my $uploadmsg = $message->{body};
     our @uploadwords = split(/\s/, $uploadmsg, 3);
     if ($uploadwords[0] eq '$upload'){

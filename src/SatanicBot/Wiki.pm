@@ -1,4 +1,3 @@
-#!/usr/bin/perl
 # Copyright 2014 Eli Foster
 
 use warnings;
@@ -25,6 +24,7 @@ sub login{
 }
 
 sub edit_gmods{
+    my ($class, @words) = @_;
     my $gmods     = "Template:G/Mods";
     my $gmodsdoc  = "Template:G/Mods/doc";
     my $firstref  = $mw->get_page({title => $gmods});
@@ -34,9 +34,9 @@ sub edit_gmods{
 
     unless ($firstref->{missing}){
         unless ($secondref->{missing}){
-            if (!$replace_d =~ m/\|\| <code>$SatanicBot::Bot::words[1]/){
-                if (!$replace_d =~ m/\| [[$SatanicBot::Bot::words[2]]]/){
-                    $replace_t =~ s/\|#default/\|$SatanicBot::Bot::words[1] = {{#if:{{{name\|}}}{{{code\|}}}\|\|_(}}{{#if:{{{name\|}}}{{{link\|}}}\|$SatanicBot::Bot::words[2]\|$SatanicBot::Bot::words[1]}}{{#if:{{{name\|}}}{{{code\|}}}\|\|)}}\n\|$SatanicBot::Bot::words[2] = {{#if:{{{name\|}}}{{{code\|}}}\|\|_(}}{{#if:{{{name\|}}}{{{link\|}}}\|$SatanicBot::Bot::words[2]\|$SatanicBot::Bot::words[1]}}{{#if:{{{name\|}}}{{{code\|}}}\|\|)}}\n\n\|#default/;
+            if ($replace_d !~ m/\|\| <code>$words[1]/){
+                if ($replace_d !~ m/\| [[$words[2]]]/){
+                    $replace_t =~ s/\|#default/\|$words[1] = {{#if:{{{name\|}}}{{{code\|}}}\|\|_(}}{{#if:{{{name\|}}}{{{link\|}}}\|$words[2]\|$words[1]}}{{#if:{{{name\|}}}{{{code\|}}}\|\|)}}\n\|$words[2] = {{#if:{{{name\|}}}{{{code\|}}}\|\|_(}}{{#if:{{{name\|}}}{{{link\|}}}\|$words[2]\|$words[1]}}{{#if:{{{name\|}}}{{{code\|}}}\|\|)}}\n\n\|#default/;
                     $mw->edit({
                         action     => 'edit',
                         title      => $gmods,
@@ -45,7 +45,7 @@ sub edit_gmods{
                         minor      => 1
                     }) || die $mw->{error}->{code} . ': ' . $mw->{error}->{details};
 
-                    $replace_d =~ s/\|\}/\|-\n\| [[$SatanicBot::Bot::words[2]]] \|\| <code>$SatanicBot::Bot::words[1]<\/code>\n\|\}/;
+                    $replace_d =~ s/\|\}/\|-\n\| [[$words[2]]] \|\| <code>$words[1]<\/code>\n\|\}/;
                     $mw->edit({
                         action => 'edit',
                         title  => $gmodsdoc,
@@ -53,14 +53,9 @@ sub edit_gmods{
                         bot    => 1,
                         minor  => 1
                     }) || die $mw->{error}->{code} . ": " . $mw->{error}->{details};
-
-                    SatanicBot->both_true();
-                }
-            } elsif ($replace_d =~ m/\| [[$SatanicBot::Bot::words[2]]]/) {
-                SatanicBot->name_fail();
-            }
-        } elsif ($replace_d =~ m/\|\| <code>$SatanicBot::Bot::words[1]/) {
-            SatanicBot->abbrv_fail();
+                    return 1;
+                } else { return 0; }
+            } else { return 0; }
         }
     }
 }
