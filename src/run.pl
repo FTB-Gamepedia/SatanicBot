@@ -7,10 +7,11 @@ use diagnostics;
 use SatanicBot::Bot;
 use SatanicBot::Wiki;
 use SatanicBot::WikiButt;
+use Bot::BasicBot;
 
 our $chan = '#FTB-Wiki';
 
-our $bot = SatanicBot->new(
+our $bot = Bot::BasicBot->new(
 server    => 'irc.esper.net',
 port      => '6667',
 channels  => [$chan],
@@ -22,3 +23,5 @@ name      => 'SatanicSanta\'s IRC bot'
 );
 
 $bot->run();
+
+SatanicBot::Bot::said();

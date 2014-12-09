@@ -5,7 +5,7 @@ use warnings;
 use strict;
 use diagnostics;
 
-package SatanicBot;
+package SatanicBot::Bot;
 use base qw(Bot::BasicBot);
 use Data::Random qw(:all);
 use Weather::Underground::Forecast;
@@ -19,7 +19,7 @@ sub said{
 
     #quit command: no args
     if ($message->{body} eq '$quit'){
-        $bot->shutdown();
+        $self->shutdown();
     }
 
     #abbrv command: 2 args required: <abbreviation> <mod name>
@@ -28,7 +28,7 @@ sub said{
     if ($words[0] eq '$abbrv'){
         if ($words[1] =~ m/.+/){
             $self->say(
-                channel => $chan,
+                channel => $message->{channel},
                 body    => "Abbreviating $words[2] as $words[1]"
             );
 
@@ -37,7 +37,7 @@ sub said{
 
             if (!SatanicBot::Wiki->edit_gmods()){
                 $self->say(
-                channel => $chan,
+                channel => $message->{channel},
                 body    => 'Could not proceed. Abbreviation and/or name already on the list.'
                 );
 
@@ -46,7 +46,7 @@ sub said{
 
             if (SatanicBot::Wiki->edit_gmods()){
                 $self->say(
-                    channel => $chan,
+                    channel => $message->{channel},
                     body    => 'Abbreviation and documentation added.'
                 );
 
@@ -54,7 +54,7 @@ sub said{
             }
         } else {
             $self->say(
-                channel => $chan,
+                channel => $message->{channel},
                 body    => 'Please provide the required arguments.'
             );
         }
@@ -68,7 +68,7 @@ sub said{
         );
 
         $self->say(
-            channel => $chan,
+            channel => $message->{channel},
             body    => @random_words
         );
     }
@@ -86,20 +86,20 @@ sub said{
         my $precip = $weather->precipitation;
         #my $dump = Data::Dumper->new([$high]);
         $self->say(
-            channel => $chan,
+            channel => $message->{channel},
             body    => 'High today: ' . $high->[0] . ' F'
         );
         $self->say(
-            channel => $chan,
+            channel => $message->{channel},
             body    => 'Low today: ' . $low->[0] . ' F'
         );
         $self->say(
-            channel => $chan,
+            channel => $message->{channel},
             body    => 'Chance of precipitation today: ' . $precip->[0] . '%'
         );
     } else {
         $self->say(
-            channel => $chan,
+            channel => $message->{channel},
             body    => 'Please provide the required arguments.'
         );
         }
@@ -111,7 +111,7 @@ sub said{
         if ($uploadwords[1] =~ m/.+/){
             if ($uploadwords[2] =~ m/.+/){
                 $self->say(
-                    channel => $chan,
+                    channel => $message->{channel},
                     body    => 'Sorry, $wgAllowCopyUploads is not enabled on the Wiki yet :('
                 );
                 #SatanicBot::WikiButt->login();
@@ -124,13 +124,13 @@ sub said{
                 #);
             } else {
                 $self->say(
-                    channel => $chan,
+                    channel => $message->{channel},
                     body    => 'Please provide the required arguments.'
                 );
             }
         } else {
             $self->say(
-                channel => $chan,
+                channel => $message->{channel},
                 body    => 'Please provide the required arguments.'
             );
         }
@@ -139,7 +139,7 @@ sub said{
 
     if ($message->{body} eq '$help'){
         $self->say(
-        channel => $chan,
+        channel => $message->{channel},
         body    => 'Listing commands... quit, abbrv, spookyscaryskeletons, weather, upload'
     );
     }
