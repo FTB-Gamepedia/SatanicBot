@@ -18,7 +18,18 @@ sub said{
 
     #quit command: no args
     if ($message->{body} eq '$quit'){
-        $self->shutdown();
+        if ($message->{who} eq 'SatanicSanta'){
+            $self->say(
+                channel => $message->{channel},
+                body    => 'I don\'t love you anymore'
+            );
+            $self->shutdown();
+        } else {
+            $self->say(
+                channel => $message->{channel},
+                body    => "$message->{who}: Fuck you, bitch ass."
+            );
+        }
     }
 
     #abbrv command: 2 args required: <abbreviation> <mod name>
