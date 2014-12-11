@@ -11,6 +11,7 @@ use Weather::Underground::Forecast;
 #use Data::Dumper;
 use SatanicBot::Wiki;
 use SatanicBot::WikiButt;
+use LWP::Simple;
 
 #Use this subroutine definition for adding commands.
 sub said{
@@ -84,7 +85,7 @@ sub said{
     }
 
     my $weathermsg = $message->{body};
-    our @weatherwords = split(/\s/, $weathermsg, 2);
+    my @weatherwords = split(/\s/, $weathermsg, 2);
     if ($weatherwords[0] eq '$weather'){
         if ($weatherwords[1] =~ m/.+/){
             my $weather = Weather::Underground::Forecast->new(
@@ -117,7 +118,7 @@ sub said{
 
     #if the command does not work when the API gets enabled, do what you did with $abbrv
     my $uploadmsg = $message->{body};
-    our @uploadwords = split(/\s/, $uploadmsg, 3);
+    my @uploadwords = split(/\s/, $uploadmsg, 3);
     if ($uploadwords[0] eq '$upload'){
         if ($uploadwords[1] =~ m/.+/){
             if ($uploadwords[2] =~ m/.+/){
@@ -126,7 +127,7 @@ sub said{
                     body    => 'Sorry, $wgAllowCopyUploads is not enabled on the Wiki yet :('
                 );
                 #SatanicBot::WikiButt->login();
-                #SatanicBot::WikiButt->upload();
+                #SatanicBot::WikiButt->upload(@uploadwords);
                 #SatanicBot::WikiButt->logout();
 
                 #$self->say(
@@ -147,12 +148,49 @@ sub said{
         }
     }
 
+    my $osrcmessage = $message->{body};
+    my @osrcwords = split(/\s/, $osrcmessage, 2);
+    if ($osrcwords[0] eq '$osrc'){
+        my $url = "https://osrc.dfm.io/$osrcwords[1]";
+        if (head($url)){
+            $self->say(
+                channel => $message->{channel},
+                body    => $url
+            );
+        } else {
+            $self->say(
+                channel => $message->{channel},
+                body    => 'Does not exist.'
+            );
+        }
+    }
+
+    if ($message->{body} eq '$src'){
+        $self->say(
+            channel => $message->{channel},
+            body    => 'https://github.com/satanicsanta/SatanicBot'
+        );
+    }
 
     if ($message->{body} eq '$help'){
         $self->say(
-        channel => $message->{channel},
-        body    => 'Listing commands... quit, abbrv, spookyscaryskeletons, weather, upload'
-    );
+            channel => $message->{channel},
+            body    => 'Listing commands... quit, abbrv, spookyscaryskeletons, weather, upload, osrc, src'
+        );
     }
+
+    undef $msg;
+    undef @words;
+    undef @random_words;
+    undef $weathermsg;
+    undef @weatherwords;
+    undef $weather;
+    undef $high;
+    undef $low;
+    undef $precip;
+    undef $uploadmsg;
+    undef @uploadwords;
+    undef $osrcmessage;
+    undef @osrcwords;
 }
 1;

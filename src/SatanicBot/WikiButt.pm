@@ -6,6 +6,7 @@ use diagnostics;
 
 package SatanicBot::WikiButt;
 use MediaWiki::Bot;
+use SatanicBot::Bot;
 
 my $mw = MediaWiki::Bot->new({
     host     => 'ftb.gamepedia.com',
@@ -32,15 +33,20 @@ sub login{
 }
 
 sub upload{
+    my ($self, $url, $title) = @_;
     $mw->upload_from_url({
-        url     => $SatanicBot::uploadwords[1],
-        title   => $SatanicBot::uploadwords[2],
+        url     => $url,
+        title   => $title,
         summary => 'Uploading automatically from IRC'
     });
 }
 
 sub logout{
     $mw->logout();
+    undef $mw;
+    undef $file;
+    undef $fh;
+    undef @lines;
 }
 
 return 1;
