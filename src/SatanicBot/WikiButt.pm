@@ -43,10 +43,6 @@ sub upload{
 
 sub logout{
     $mw->logout();
-    undef $mw;
-    undef $file;
-    undef $fh;
-    undef @lines;
 }
 
 return 1;

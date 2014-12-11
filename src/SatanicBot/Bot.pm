@@ -178,19 +178,5 @@ sub said{
             body    => 'Listing commands... quit, abbrv, spookyscaryskeletons, weather, upload, osrc, src'
         );
     }
-
-    undef $msg;
-    undef @words;
-    undef @random_words;
-    undef $weathermsg;
-    undef @weatherwords;
-    undef $weather;
-    undef $high;
-    undef $low;
-    undef $precip;
-    undef $uploadmsg;
-    undef @uploadwords;
-    undef $osrcmessage;
-    undef @osrcwords;
 }
 1;

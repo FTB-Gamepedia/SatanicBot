@@ -62,15 +62,5 @@ sub edit_gmods{
 
 sub logout{
     $mw->logout();
-    undef $mw;
-    undef $file;
-    undef $fh;
-    undef @lines;
-    undef $gmods;
-    undef $gmodsdoc;
-    undef $firstref;
-    undef $secondref;
-    undef $replace_t;
-    undef $replace_d;
 }
 return 1;
