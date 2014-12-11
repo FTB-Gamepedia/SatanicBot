@@ -9,19 +9,15 @@ use MediaWiki::Bot;
 use SatanicBot::Bot;
 
 my $mw = MediaWiki::Bot->new({
+    protocol => 'https',
     host     => 'ftb.gamepedia.com',
+    path     => '/',
     operator => 'TheSatanicSanta',
     debug    => 2
 });
 
-$mw->set_wiki({
-    protocol => 'http',
-    host     => 'ftb.gamepedia.com',
-    path     => '/'
-});
-
 sub login{
-    my $file = 'secure.txt';
+    my $file = 'info/secure.txt';
     open my $fh, '<', $file or die "Could not open '$file' $!\n";
     my @lines = <$fh>;
     close $fh;
@@ -29,7 +25,7 @@ sub login{
     $mw->login({
         username => $lines[0],
         password => $lines[-1]
-    });
+    }) or die "Login failed!";
 }
 
 sub upload{
@@ -38,7 +34,12 @@ sub upload{
         url     => $url,
         title   => $title,
         summary => 'Uploading automatically from IRC'
-    });
+    }) or die "Upload failed!";
+}
+
+sub count_contribs{
+    my ($self, $username) = @_;
+    my $count = $mw->count_contributions($username);
 }
 
 sub logout{

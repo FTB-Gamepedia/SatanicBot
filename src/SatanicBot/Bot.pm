@@ -172,6 +172,23 @@ sub said{
         );
     }
 
+    #This does not currently work. Please do not use it.
+    my $contribmsg = $message->{body};
+    my @contribwords = split(/\s/, $contribmsg, 2);
+    if ($contribwords[0] eq '$contribs'){
+        if ($contribwords[1] =~ m/.+/){
+            $self->say(
+                channel => $message->{channel},
+                body    => "$contribwords[1] has $SatanicBot::WikiButt::count contributions to the wiki."
+            );
+        } else {
+            $self->say(
+                channel => $message->{channel},
+                body    => 'Please provide a username.'
+            );
+        }
+    }
+
     if ($message->{body} eq '$help'){
         $self->say(
             channel => $message->{channel},

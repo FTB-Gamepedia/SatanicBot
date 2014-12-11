@@ -8,7 +8,7 @@ use SatanicBot::Wiki;
 use SatanicBot::WikiButt;
 use Bot::BasicBot;
 
-my $chan = '#FTB-Wiki';
+my $chan = '#SatanicSanta';
 
 my $bot = SatanicBot::Bot->new(
 server    => 'irc.esper.net',
@@ -22,6 +22,3 @@ name      => 'SatanicSanta\'s IRC bot'
 );
 
 $bot->run();
-
-undef $chan;
-undef $bot;
