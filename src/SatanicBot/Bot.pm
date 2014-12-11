@@ -12,6 +12,8 @@ use Weather::Underground::Forecast;
 use SatanicBot::Wiki;
 use SatanicBot::WikiButt;
 use LWP::Simple;
+use XML::Simple;
+use WWW::Mechanize;
 
 #Use this subroutine definition for adding commands.
 sub said{
@@ -177,9 +179,16 @@ sub said{
     my @contribwords = split(/\s/, $contribmsg, 2);
     if ($contribwords[0] eq '$contribs'){
         if ($contribwords[1] =~ m/.+/){
+
+            my $www = WWW::Mechanize->new();
+            my $stuff = $www->get("http://ftb.gamepedia.com/api.php?action=query&list=users&ususers=$contribwords[1]&usprop=editcount&format=xml") or die "Unable to get url.\n";
+            my $decode = $stuff->decoded_content();
+            my $xml = XML::Simple->new();
+            my $contribs = $xml->XMLin($decode);
+
             $self->say(
                 channel => $message->{channel},
-                body    => "$contribwords[1] has $SatanicBot::WikiButt::count contributions to the wiki."
+                body    => "$contribwords[1] has made $contribs->{'api'}->{'query'}->{'users'}->{'user'}{'editcount'} contributions to the wiki."
             );
         } else {
             $self->say(

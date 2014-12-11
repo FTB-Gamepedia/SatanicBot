@@ -37,10 +37,10 @@ sub upload{
     }) or die "Upload failed!";
 }
 
-sub count_contribs{
-    my ($self, $username) = @_;
-    my $count = $mw->count_contributions($username);
-}
+#sub count_contribs{
+#    my ($self, $username) = @_;
+#    my $count = $mw->count_contributions($username);
+#}
 
 sub logout{
     $mw->logout();
