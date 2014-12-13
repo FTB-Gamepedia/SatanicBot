@@ -184,10 +184,17 @@ sub said{
             my $decode = $stuff->decoded_content();
             my @contribs = $decode =~ m{\"editcount\":(.*?)\}};
 
-            $self->say(
-                channel => $message->{channel},
-                body    => "$contribwords[1] has made $contribs[0] contributions to the wiki."
-            );
+            if ($decode =~ m{\"missing\"}){
+                $self->say(
+                    channel => $message->{channel},
+                    body    => 'Please enter a valid username.'
+                );
+            } else {
+                $self->say(
+                    channel => $message->{channel},
+                    body    => "$contribwords[1] has made $contribs[0] contributions to the wiki."
+                );
+            }
         } else {
             $self->say(
                 channel => $message->{channel},
