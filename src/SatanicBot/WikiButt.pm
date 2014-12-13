@@ -29,10 +29,9 @@ sub login{
 }
 
 sub upload{
-    my ($self, $url, $title) = @_;
     $mw->upload_from_url({
-        url     => $url,
-        title   => $title,
+        url     => $SatanicBot::Bot::uploadwords[1],
+        title   => $SatanicBot::Bot::uploadwords[2],
         summary => 'Uploading automatically from IRC'
     }) or die "Upload failed!";
 }

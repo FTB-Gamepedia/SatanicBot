@@ -33,6 +33,10 @@ upload
 ------
 The $upload command will upload the first argument file to the wiki with the file name of the second argument.
 
+contribs
+--------
+The $contribs command will state the first argument's number of contributions to the wiki.
+
 quit
 ----
 The $quit command will stop the bot.

@@ -12,7 +12,6 @@ use Weather::Underground::Forecast;
 use SatanicBot::Wiki;
 use SatanicBot::WikiButt;
 use LWP::Simple;
-use XML::Simple;
 use WWW::Mechanize;
 
 #Use this subroutine definition for adding commands.
@@ -120,22 +119,22 @@ sub said{
 
     #if the command does not work when the API gets enabled, do what you did with $abbrv
     my $uploadmsg = $message->{body};
-    my @uploadwords = split(/\s/, $uploadmsg, 3);
+    our @uploadwords = split(/\s/, $uploadmsg, 3);
     if ($uploadwords[0] eq '$upload'){
         if ($uploadwords[1] =~ m/.+/){
             if ($uploadwords[2] =~ m/.+/){
+                #$self->say(
+                #    channel => $message->{channel},
+                #    body    => 'Sorry, $wgAllowCopyUploads is not enabled on the Wiki yet :('
+                #);
+                SatanicBot::WikiButt->login();
+                SatanicBot::WikiButt->upload();
+                SatanicBot::WikiButt->logout();
+
                 $self->say(
                     channel => $message->{channel},
-                    body    => 'Sorry, $wgAllowCopyUploads is not enabled on the Wiki yet :('
+                    body    => "Uploaded $uploadwords[2] to the Wiki."
                 );
-                #SatanicBot::WikiButt->login();
-                #SatanicBot::WikiButt->upload(@uploadwords);
-                #SatanicBot::WikiButt->logout();
-
-                #$self->say(
-                #    channel => $chan,
-                #    body    => "Uploaded $uploadwords[2] to the Wiki."
-                #);
             } else {
                 $self->say(
                     channel => $message->{channel},
@@ -181,14 +180,13 @@ sub said{
         if ($contribwords[1] =~ m/.+/){
 
             my $www = WWW::Mechanize->new();
-            my $stuff = $www->get("http://ftb.gamepedia.com/api.php?action=query&list=users&ususers=$contribwords[1]&usprop=editcount&format=xml") or die "Unable to get url.\n";
+            my $stuff = $www->get("http://ftb.gamepedia.com/api.php?action=query&list=users&ususers=$contribwords[1]&usprop=editcount&format=json") or die "Unable to get url.\n";
             my $decode = $stuff->decoded_content();
-            my $xml = XML::Simple->new();
-            my $contribs = $xml->XMLin($decode);
+            my @contribs = $decode =~ m{\"editcount\":(.*?)\}};
 
             $self->say(
                 channel => $message->{channel},
-                body    => "$contribwords[1] has made $contribs->{'api'}->{'query'}->{'users'}->{'user'}{'editcount'} contributions to the wiki."
+                body    => "$contribwords[1] has made $contribs[0] contributions to the wiki."
             );
         } else {
             $self->say(
