@@ -165,7 +165,6 @@ sub said{
         );
     }
 
-    #This does not currently work. Please do not use it.
     my $contribmsg = $message->{body};
     my @contribwords = split(/\s/, $contribmsg, 2);
     if ($contribwords[0] eq '$contribs'){
