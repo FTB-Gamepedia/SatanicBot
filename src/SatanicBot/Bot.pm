@@ -99,15 +99,7 @@ sub said{
         #my $dump = Data::Dumper->new([$high]);
         $self->say(
             channel => $message->{channel},
-            body    => 'High today: ' . $high->[0] . ' F'
-        );
-        $self->say(
-            channel => $message->{channel},
-            body    => 'Low today: ' . $low->[0] . ' F'
-        );
-        $self->say(
-            channel => $message->{channel},
-            body    => 'Chance of precipitation today: ' . $precip->[0] . '%'
+            body    => 'High today: ' . $high->[0] . ' F .. Low today: ' . $low->[0] . 'F .. Precipitation: ' . $precip->[0] . '% chance'
         );
     } else {
         $self->say(
