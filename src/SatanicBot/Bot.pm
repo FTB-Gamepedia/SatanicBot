@@ -180,11 +180,43 @@ sub said{
                     channel => $message->{channel},
                     body    => 'Please enter a valid username.'
                 );
-            } else {
+            } elsif ($decode =~ m{\"invalid\"}) {
                 $self->say(
                     channel => $message->{channel},
-                    body    => "$contribwords[1] has made $contribs[0] contributions to the wiki."
+                    body    => 'Sorry, but IPs are not compatible.'
                 );
+            } else {
+                if ($contribs[0] eq '1'){
+                    $self->say(
+                        channel => $message->{channel},
+                        body    => "$contribwords[1] has made $contribs[0] contribution to the wiki."
+                    );
+                } elsif ($contribwords[1] eq 'SatanicBot') {
+                    $self->say(
+                        channel => $message->{channel},
+                        body    => "I have made $contribs[0] contributions to the wiki."
+                    );
+                } elsif ($contribwords[1] eq 'TheSatanicSanta'){
+                    $self->say(
+                        channel => $message->{channel},
+                        body    => "My amazing and everlasting god, lord, savior, master, daddy has made $contribs[0] contributions to the wiki. Isn't he wonderful?"
+                    );
+                } elsif ($contribwords[1] eq 'retep998'){
+                    $self->say(
+                        channel => $message->{channel},
+                        body    => "The hottest babe in the channel has made $contribs[0] contributions to the wiki."
+                    );
+                } elsif ($contribwords[1] eq 'PonyButt'){
+                    $self->say(
+                        channel => $message->{channel},
+                        body    => "FUCK YOU BITCH ASS NIGGA IM BETTER THAN YOU IN EVERY WAY, MOTHERFUCK ($contribs[0] contributions)"
+                    );
+                } else {
+                    $self->say(
+                        channel => $message->{channel},
+                        body    => "$contribwords[1] has made $contribs[0] contributions to the wiki."
+                    );
+                }
             }
         } else {
             $self->say(
