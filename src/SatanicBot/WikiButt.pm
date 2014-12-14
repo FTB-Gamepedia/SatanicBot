@@ -9,7 +9,7 @@ use MediaWiki::Bot;
 use SatanicBot::Bot;
 
 my $mw = MediaWiki::Bot->new({
-    protocol => 'https',
+    protocol => 'http',
     host     => 'ftb.gamepedia.com',
     path     => '/',
     operator => 'TheSatanicSanta',
@@ -35,11 +35,6 @@ sub upload{
         summary => 'Uploading automatically from IRC'
     }) or die "Upload failed!";
 }
-
-#sub count_contribs{
-#    my ($self, $username) = @_;
-#    my $count = $mw->count_contributions($username);
-#}
 
 sub logout{
     $mw->logout();

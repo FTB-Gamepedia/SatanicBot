@@ -226,10 +226,38 @@ sub said{
         }
     }
 
+    if ($message->{body} eq '$8ball'){
+        my $file = 'info/8ball.txt';
+        open my $fh, '<', $file or die "Could not open '$file' $!\n";
+        my @lines = <$fh>;
+        close $fh;
+        chomp @lines;
+        my $num = int(rand(35));
+        $self->say(
+            channel => $message->{channel},
+            body    => $lines[$num]
+        );
+    }
+
+    if ($message->{body} eq '$flip'){
+        my $coin = int(rand(2));
+        if ($coin eq 1){
+            $self->say(
+                channel => $message->{channel},
+                body    => 'Heads!'
+            );
+        } else {
+            $self->say(
+                channel => $message->{channel},
+                body    => 'Tails!'
+            );
+        }
+    }
+
     if ($message->{body} eq '$help'){
         $self->say(
             channel => $message->{channel},
-            body    => 'Listing commands... quit, abbrv, spookyscaryskeletons, weather, upload, osrc, src, contribs'
+            body    => 'Listing commands... quit, abbrv, spookyscaryskeletons, weather, upload, osrc, src, contribs, flip, 8ball'
         );
     }
 }
