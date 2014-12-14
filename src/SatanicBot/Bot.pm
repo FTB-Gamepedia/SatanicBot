@@ -7,7 +7,7 @@ use diagnostics;
 package SatanicBot::Bot;
 use base qw(Bot::BasicBot);
 use Data::Random qw(:all);
-use Weather::Underground::Forecast;
+use Weather::Underground;
 #use Data::Dumper;
 use SatanicBot::Wiki;
 use SatanicBot::WikiButt;
@@ -89,17 +89,14 @@ sub said{
     my @weatherwords = split(/\s/, $weathermsg, 2);
     if ($weatherwords[0] eq '$weather'){
         if ($weatherwords[1] =~ m/.+/){
-            my $weather = Weather::Underground::Forecast->new(
-                location => $weatherwords[1]
+            my $weather = Weather::Underground->new(
+                place => $weatherwords[1]
         );
 
-        my $high   = $weather->highs;
-        my $low    = $weather->lows;
-        my $precip = $weather->precipitation;
-        #my $dump = Data::Dumper->new([$high]);
+        my $stuff   = $weather->getweather();
         $self->say(
             channel => $message->{channel},
-            body    => 'High today: ' . $high->[0] . ' F .. Low today: ' . $low->[0] . 'F .. Precipitation: ' . $precip->[0] . '% chance'
+            body    => "$stuff->[0]->{conditions} || Temperature: $stuff->[0]->{fahrenheit} F || Humidity: $stuff->[0]->{humidity}% || Winds: $stuff->[0]->{wind_direction} at $stuff->[0]->{wind_milesperhour} mph || Last updated: $stuff->[0]->{updated}"
         );
     } else {
         $self->say(
