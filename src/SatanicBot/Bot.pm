@@ -264,10 +264,75 @@ sub said{
         );
     }
 
+    my $statmsg = $message->{body};
+    my @statwords = split(/\s/, $statmsg, 2);
+    if ($statwords[0] eq '$stats'){
+
+        my $www = WWW::Mechanize->new();
+        my $stuff = $www->get("http://ftb.gamepedia.com/api.php?action=query&meta=siteinfo&siprop=statistics&format=json") or die "Unable to get url.\n";
+        my $decode = $stuff->decoded_content();
+
+        if ($statwords[1] eq 'all' or $statwords[1] !~ m/.+/){
+            my @pages = $decode =~ m{\"pages\":(.*?),};
+            my @articulos = $decode =~ m{\"articles\":(.*?),};
+            my @edits = $decode =~ m{\"edits\":(.*?),};
+            my @images = $decode =~ m{\"images\":(.*?),};
+            my @users = $decode =~ m{\"users\":(.*?),};
+            my @activeusers = $decode =~ m{\"activeusers\":(.*?),};
+            my @admins = $decode =~ m{\"admins\":(.*?),};
+            $self->say(
+                channel => $message->{channel},
+                body    => "$pages[0] pages || $articulos[0] articles || $edits[0] edits || $images[0] images || $users[0] users || $activeusers[0] active users || $admins[0] admins"
+            );
+        } elsif ($statwords[1] eq 'pages'){
+            my @pages = $decode =~ m{\"pages\":(.*?),};
+            $self->say(
+                channel => $message->{channel},
+                body    => "The wiki has $pages[0] pages."
+            );
+        } elsif ($statwords[1] eq 'articles'){
+            my @articulos = $decode =~ m{\"articles\":(.*?),};
+            $self->say(
+                channel => $message->{channel},
+                body    => "The wiki has $articulos[0] articles."
+            );
+        } elsif ($statwords[1] eq 'edits'){
+            my @edits = $decode =~ m{\"edits\":(.*?),};
+            $self->say(
+                channel => $message->{channel},
+                body    => "The wiki has $edits[0] edits."
+            );
+        } elsif ($statwords[1] eq 'images'){
+            my @images = $decode =~ m{\"images\":(.*?),};
+            $self->say(
+                channel => $message->{channel},
+                body    => "The wiki has $images[0] images."
+            );
+        } elsif ($statwords[1] eq 'users'){
+            my @users = $decode =~ m{\"users\":(.*?),};
+            $self->say(
+                channel => $message->{channel},
+                body    => "The wiki has $users[0] users."
+            );
+        } elsif ($statwords[1] eq 'active users'){
+            my @activeusers = $decode =~ m{\"activeusers\":(.*?),};
+            $self->say(
+                channel => $message->{channel},
+                body    => "The wiki has $activeusers[0] active users."
+            );
+        } elsif ($statwords[1] eq 'admins'){
+            my @admins = $decode =~ m{\"admins\":(.*?),};
+            $self->say(
+                channel => $message->{channel},
+                body    => "The wiki has $admins[0] admins."
+            );
+        }
+    }
+
     if ($message->{body} eq '$help'){
         $self->say(
             channel => $message->{channel},
-            body    => 'Listing commands... quit, abbrv, spookyscaryskeletons, weather, upload, osrc, src, contribs, flip, 8ball, randquote'
+            body    => 'Listing commands... quit, abbrv, spookyscaryskeletons, weather, upload, osrc, src, contribs, flip, 8ball, randquote, stats'
         );
     }
 }

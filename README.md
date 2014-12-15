@@ -37,6 +37,18 @@ contribs
 --------
 The $contribs command will state the first argument's number of contributions to the wiki.
 
+flip
+----
+The $flip command will generate a random integer of either 1 or 0. If it is 1 it will say "Heads!", if it is 0 it will say "Tails!".
+
+8ball
+-----
+The $8ball command will output a random sentence from 8ball.txt.
+
+randquote
+---------
+The $randquote command will output a random quote from ircquotes.txt. These are all from the #FTB-Wiki channel.
+
 quit
 ----
 The $quit command will stop the bot.
