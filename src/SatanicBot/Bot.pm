@@ -68,7 +68,7 @@ sub said{
 
     if ($message->{body} eq '$spookyscaryskeletons'){
         my @random_words = rand_words(
-            wordlist => 'info/spook.lines',
+            wordlist => 'info/spook.txt',
             min      => 10,
             max      => 20
         );
@@ -251,10 +251,23 @@ sub said{
         }
     }
 
+    if ($message->{body} eq '$randquote'){
+        my $file = 'info/ircquotes.txt';
+        open my $fh, '<', $file or die "Could not open $file $!\n";
+        my @lines = <$fh>;
+        close $fh;
+        chomp @lines;
+        my $quote = int(rand(31));
+        $self->say(
+            channel => $message->{channel},
+            body    => $lines[$quote]
+        );
+    }
+
     if ($message->{body} eq '$help'){
         $self->say(
             channel => $message->{channel},
-            body    => 'Listing commands... quit, abbrv, spookyscaryskeletons, weather, upload, osrc, src, contribs, flip, 8ball'
+            body    => 'Listing commands... quit, abbrv, spookyscaryskeletons, weather, upload, osrc, src, contribs, flip, 8ball, randquote'
         );
     }
 }
