@@ -18,9 +18,9 @@ use WWW::Mechanize;
 sub said{
     my ($self, $message) = @_;
 
-    #quit command: no args
+    #quit command: no args. Only those with the nickname SatanicSanta can do it.
     if ($message->{body} eq '$quit'){
-        if ($message->{who} eq 'SatanicSanta'){
+        if ($message->{raw_nick} =~ m/75-164-196-89.ptld.qwest.net/){
             $self->say(
                 channel => $message->{channel},
                 body    => 'I don\'t love you anymore'
@@ -34,7 +34,7 @@ sub said{
         }
     }
 
-    #abbrv command: 2 args required: <abbreviation> <mod name>
+    #Adds the <first arg abbreviation> to the G:Mods and doc as <second arg mod name>
     my $msg = $message->{body};
     my @words = split(/\s/, $msg, 3);
     if ($words[0] eq '$abbrv'){
@@ -70,7 +70,7 @@ sub said{
         my @random_words = rand_words(
             wordlist => 'info/spook.txt',
             min      => 10,
-            max      => 20
+            max      => 20 #for whatever reason, this does not actually work. It only outputs one word. See issue tracker.
         );
 
         $self->say(
@@ -85,6 +85,7 @@ sub said{
         #);
     }
 
+    #Outputs the weather for the <first arg location>.
     my $weathermsg = $message->{body};
     my @weatherwords = split(/\s/, $weathermsg, 2);
     if ($weatherwords[0] eq '$weather'){
@@ -93,10 +94,13 @@ sub said{
                 place => $weatherwords[1]
         );
 
-        my $stuff   = $weather->getweather();
+        my $forecast   = $weather->getweather();
+
+        #This is missing the precipitation percentage. I should do that. Perhaps I could re-use Weather::Underground::Forecast's percentage.
+        #Maybe I should add highs and lows again too.
         $self->say(
             channel => $message->{channel},
-            body    => "$stuff->[0]->{conditions} || Temperature: $stuff->[0]->{fahrenheit} F || Humidity: $stuff->[0]->{humidity}% || Winds: $stuff->[0]->{wind_direction} at $stuff->[0]->{wind_milesperhour} mph || Last updated: $stuff->[0]->{updated}"
+            body    => "$forecast->[0]->{conditions} || Temperature: $forecast->[0]->{fahrenheit} F || Humidity: $forecast->[0]->{humidity}% || Winds: $forecast->[0]->{wind_direction} at $forecast->[0]->{wind_milesperhour} mph || Last updated: $forecast->[0]->{updated}"
         );
     } else {
         $self->say(
@@ -107,23 +111,25 @@ sub said{
     }
 
     #if the command does not work when the API gets enabled, do what you did with $abbrv
+    #It does not work yet. We still need $wgAllowCopyUploads to be enabled.
+    #Uploads the <first arg image> to the wiki as <second arg name>.
     my $uploadmsg = $message->{body};
     our @uploadwords = split(/\s/, $uploadmsg, 3);
     if ($uploadwords[0] eq '$upload'){
         if ($uploadwords[1] =~ m/.+/){
             if ($uploadwords[2] =~ m/.+/){
-                #$self->say(
-                #    channel => $message->{channel},
-                #    body    => 'Sorry, $wgAllowCopyUploads is not enabled on the Wiki yet :('
-                #);
-                SatanicBot::WikiButt->login();
-                SatanicBot::WikiButt->upload();
-                SatanicBot::WikiButt->logout();
-
                 $self->say(
                     channel => $message->{channel},
-                    body    => "Uploaded $uploadwords[2] to the Wiki."
+                    body    => 'Sorry, $wgAllowCopyUploads is not enabled on the Wiki yet :('
                 );
+                #SatanicBot::WikiButt->login();
+                #SatanicBot::WikiButt->upload();
+                #SatanicBot::WikiButt->logout();
+
+                #$self->say(
+                #    channel => $message->{channel},
+                #    body    => "Uploaded $uploadwords[2] to the Wiki."
+                #);
             } else {
                 $self->say(
                     channel => $message->{channel},
@@ -138,6 +144,7 @@ sub said{
         }
     }
 
+    #Outputs the open source report card link for the first argument username. Eventually I should actually do JSON parsing for this.
     my $osrcmessage = $message->{body};
     my @osrcwords = split(/\s/, $osrcmessage, 2);
     if ($osrcwords[0] eq '$osrc'){
@@ -155,6 +162,7 @@ sub said{
         }
     }
 
+    #Outputs the link to this bot's source code.
     if ($message->{body} eq '$src'){
         $self->say(
             channel => $message->{channel},
@@ -162,6 +170,8 @@ sub said{
         );
     }
 
+    #Outputs how many contributions the user has made to the wiki.
+    #Consider using a JSON parser instead of regular expression.
     my $contribmsg = $message->{body};
     my @contribwords = split(/\s/, $contribmsg, 2);
     if ($contribwords[0] eq '$contribs'){
@@ -223,6 +233,7 @@ sub said{
         }
     }
 
+    #Outputs a random sentence from 8ball.txt.
     if ($message->{body} eq '$8ball'){
         my $file = 'info/8ball.txt';
         open my $fh, '<', $file or die "Could not open '$file' $!\n";
@@ -236,6 +247,7 @@ sub said{
         );
     }
 
+    #50/50 chance of outputting heads or tails.
     if ($message->{body} eq '$flip'){
         my $coin = int(rand(2));
         if ($coin eq 1){
@@ -251,6 +263,7 @@ sub said{
         }
     }
 
+    #Outputs a random quote from ircquotes.txt.
     if ($message->{body} eq '$randquote'){
         my $file = 'info/ircquotes.txt';
         open my $fh, '<', $file or die "Could not open $file $!\n";
@@ -264,6 +277,8 @@ sub said{
         );
     }
 
+    #Wiki statistics.
+    #Consider using a real JSON parser rather than regular expression.
     my $statmsg = $message->{body};
     my @statwords = split(/\s/, $statmsg, 2);
     if ($statwords[0] eq '$stats'){
@@ -329,6 +344,7 @@ sub said{
         }
     }
 
+    #Provides the user with a command list.
     if ($message->{body} eq '$help'){
         $self->say(
             channel => $message->{channel},

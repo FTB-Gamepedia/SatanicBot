@@ -49,6 +49,10 @@ randquote
 ---------
 The $randquote command will output a random quote from ircquotes.txt. These are all from the #FTB-Wiki channel.
 
+stats
+-----
+The $stats command will output statistics for the wiki. It has one optional argument, and can take 'pages', 'articles', 'edits', 'images', 'users', 'active users', or 'admins' as the args. They will output the stats accordingly.
+
 quit
 ----
 The $quit command will stop the bot.
