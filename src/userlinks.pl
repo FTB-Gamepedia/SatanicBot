@@ -45,8 +45,8 @@ sub what{
     my $replace_user = $firstref->{'*'};
     my $replace_talk = $secondref->{'*'};
 
-    $replace_user =~ s/[[User:SatanicSanta]]/[[User:TheSatanicSanta]]/;
-    $replace_talk =~ s/[[User talk:SatanicSanta]]/[[User talk:TheSatanicSanta]]/;
+    $replace_user =~ s/\b\[\[User:SatanicSanta\]\]\b/\[\[User:TheSatanicSanta\]\]/;
+    $replace_talk =~ s/\b\[\[User talk:SatanicSanta\]\]\b/\[\[User talk:TheSatanicSanta\]\]/;
 
     $mwapi->edit({
         action     => 'edit',
