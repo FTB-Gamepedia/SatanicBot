@@ -17,7 +17,9 @@ my $mw = MediaWiki::Bot->new({
 my $mwapi = MediaWiki::API->new();
 $mwapi->{config}->{api_url} = 'http://ftb.gamepedia.com/api.php';
 login();
-what();
+user();
+sleep(30);
+talk();
 logout();
 
 sub login{
@@ -36,49 +38,42 @@ sub login{
     });
 }
 
-sub what{
-    #my $links  = $mw->what_links_here("User:SatanicSanta");
-    #my $tlinks = $mw->what_links_here("User talk:SatanicSanta");
+sub user{
+    my @links  = ($mw->what_links_here("User:SatanicSanta"));
 
-    my $firstref  = $mwapi->get_page({title => "User:TheSatanicSanta/Sandbox/userlinks"});
-    my $secondref = $mwapi->get_page({title => "User:TheSatanicSanta/Sandbox/userlinks"});
-    my $replace_user = $firstref->{'*'};
-    my $replace_talk = $secondref->{'*'};
+    foreach (@links){
+        my $user_ref = $mwapi->get_page({title => $_});
+        my $replace_user = $user_ref->{'*'};
 
-    $replace_user =~ s/\b\[\[User:SatanicSanta\]\]\b/\[\[User:TheSatanicSanta\]\]/;
-    $replace_talk =~ s/\b\[\[User talk:SatanicSanta\]\]\b/\[\[User talk:TheSatanicSanta\]\]/;
+        $replace_user =~ s/\[\[User:SatanicSanta\]\]/\[\[User:TheSatanicSanta\]\]/;
 
-    $mwapi->edit({
-        action     => 'edit',
-        title      => "User:TheSatanicSanta/Sandbox/userlinks",
-        text       => $replace_user,
-        bot        => 1,
-        minor      => 1
-    }) || die $mw->{error}->{code} . ': ' . $mw->{error}->{details};
+        $mwapi->edit({
+            action     => 'edit',
+            title      => $_,
+            text       => $replace_user,
+            bot        => 1,
+            minor      => 1
+        }) || die $mw->{error}->{code} . ': ' . $mw->{error}->{details};
+    }
+}
 
-    $mwapi->edit({
-        action     => 'edit',
-        title      => "User:TheSatanicSanta/Sandbox/userlinks",
-        text       => $replace_talk,
-        bot        => 1,
-        minor      => 1
-    }) || die $mw->{error}->{code} . ': ' . $mw->{error}->{details};
+sub talk{
+    my @tlinks = ($mw->what_links_here("User talk:SatanicSanta"));
 
-    #$mw->edit({
-    #    page    => 'User:TheSatanicSanta/Sandbox/userlinks',
-    #    text    => $replace_user,
-    #    summary => 'Fixing old user page links',
-    #    minor   => 1,
-    #    bot     => 1
-    #});
+    foreach (@tlinks){
+        my $talk_ref = $mwapi->get_page({title => $_});
+        my $replace_talk = $talk_ref->{'*'};
 
-    #$mw->edit({
-    #    page    => 'User:TheSatanicSanta/Sandbox/userlinks',
-    #    text    => $replace_talk,
-    #    summary => 'Fixing old talk page links',
-    #    minor   => 1,
-    #    bot     => 1
-    #});
+        $replace_talk =~ s/\[\[User talk:SatanicSanta\]\]/\[\[User talk:TheSatanicSanta\]\]/;
+
+        $mwapi->edit({
+            action     => 'edit',
+            title      => $_,
+            text       => $replace_talk,
+            bot        => 1,
+            minor      => 1
+        }) || die $mw->{error}->{code} . ': ' . $mw->{error}->{details};
+    }
 }
 
 sub logout{
