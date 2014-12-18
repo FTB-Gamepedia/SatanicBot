@@ -51,11 +51,14 @@ sub edit_gmods{
                 bot    => 1,
                 minor  => 1
             }) || die $mw->{error}->{code} . ": " . $mw->{error}->{details};
+            our $check = 'true';
             return 1;
         } else {
+            our $check = 'false';
             return 0;
         }
     } else {
+        our $check = 'false';
         return 0;
     }
 }
