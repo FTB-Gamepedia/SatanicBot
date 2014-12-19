@@ -21,6 +21,7 @@ user();
 sleep(30);
 talk();
 logout();
+exit;
 
 sub login{
     my $file = 'info/secure.txt';

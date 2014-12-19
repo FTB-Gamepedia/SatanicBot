@@ -27,6 +27,7 @@ sub said{
                 body    => 'I don\'t love you anymore'
             );
             $self->shutdown();
+            exit;
         } else {
             $self->say(
                 channel => $message->{channel},
@@ -104,7 +105,7 @@ sub said{
             my $urmomhigh = $urmomweather->highs;
             my $urmomlow  = $urmomweather->lows;
             my $momprecip = $urmomweather->precipitation;
-            
+
             if (exists $forecast->[0]->{conditions}){
                 $self->say(
                     channel => $message->{channel},
