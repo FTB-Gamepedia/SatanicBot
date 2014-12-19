@@ -8,6 +8,7 @@ package SatanicBot::Bot;
 use base qw(Bot::BasicBot);
 use Data::Random qw(:all);
 use Weather::Underground;
+use Weather::Underground::Forecast;
 #use Data::Dumper;
 use SatanicBot::Wiki;
 use SatanicBot::WikiButt;
@@ -93,21 +94,33 @@ sub said{
         if ($weatherwords[1] =~ m/.+/){
             my $weather = Weather::Underground->new(
                 place => $weatherwords[1]
-        );
+            );
 
-        my $forecast   = $weather->getweather();
+            my $urmomweather = Weather::Underground::Forecast->new(
+                location => $weatherwords[1]
+            );
 
-        #This is missing the precipitation percentage. I should do that. Perhaps I could re-use Weather::Underground::Forecast's percentage.
-        #Maybe I should add highs and lows again too.
-        $self->say(
-            channel => $message->{channel},
-            body    => "$forecast->[0]->{conditions} || Temperature: $forecast->[0]->{fahrenheit} F || Humidity: $forecast->[0]->{humidity}% || Winds: $forecast->[0]->{wind_direction} at $forecast->[0]->{wind_milesperhour} mph || Last updated: $forecast->[0]->{updated}"
-        );
-    } else {
-        $self->say(
-            channel => $message->{channel},
-            body    => 'Please provide the required arguments.'
-        );
+            my $forecast  = $weather->getweather();
+            my $urmomhigh = $urmomweather->highs;
+            my $urmomlow  = $urmomweather->lows;
+            my $momprecip = $urmomweather->precipitation;
+            
+            if (exists $forecast->[0]->{conditions}){
+                $self->say(
+                    channel => $message->{channel},
+                    body    => "$forecast->[0]->{conditions} || Precipitation: $momprecip->[0] % chance || Temperature: $forecast->[0]->{fahrenheit} F ($urmomlow->[0] - $urmomhigh->[0] F) || Humidity: $forecast->[0]->{humidity}% || Last updated: $forecast->[0]->{updated}"
+                    );
+            } else {
+                $self->say(
+                    channel => $message->{channel},
+                    body    => "\'$weatherwords[1]\' is not a valid place."
+                );
+            }
+        } else {
+            $self->say(
+                channel => $message->{channel},
+                body    => 'Please provide the required arguments.'
+            );
         }
     }
 
