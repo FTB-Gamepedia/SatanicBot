@@ -53,6 +53,10 @@ stats
 -----
 The $stats command will output statistics for the wiki. It has one optional argument, and can take 'pages', 'articles', 'edits', 'images', 'users', 'active users', or 'admins' as the args. They will output the stats accordingly.
 
+calc
+----
+Used to add/subtract/divide/multiply two numbers. Takes 3 arguments: $calc <first num> <sign (+-/*)> <second num>
+
 quit
 ----
 The $quit command will stop the bot.

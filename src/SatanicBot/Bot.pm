@@ -359,11 +359,62 @@ sub said{
         }
     }
 
+    my $calcmsg = $message->{body};
+    my @calcwords = split(/\s/, $calcmsg, 4);
+    if ($calcwords[0] eq '$calc'){
+        if ($calcwords[1] =~ m/\d+/){
+            if ($calcwords[2] =~ m/[\+\-\/\*]/){
+                if ($calcwords[3] =~ m/\d+/){
+                    if ($calcwords[2] eq '+'){
+                        my $add = $calcwords[1] + $calcwords[3];
+                        $self->say(
+                            channel => $message->{channel},
+                            body    => "$calcwords[1] + $calcwords[3] = $add"
+                        );
+                    } elsif ($calcwords[2] eq '-'){
+                        my $sub = $calcwords[1] - $calcwords[3];
+                        $self->say(
+                            channel => $message->{channel},
+                            body    => "$calcwords[1] - $calcwords[3] = $sub"
+                        );
+                    } elsif ($calcwords[2] eq '/'){
+                        my $div = $calcwords[1] / $calcwords[3];
+                        $self->say(
+                            channel => $message->{channel},
+                            body    => "$calcwords[1] / $calcwords[3] = $div"
+                        );
+                    } elsif ($calcwords[2] eq '*'){
+                        my $mult = $calcwords[1] * $calcwords[3];
+                        $self->say(
+                            channel => $message->{channel},
+                            body    => "$calcwords[1] * $calcwords[3] = $mult"
+                        );
+                    }
+                } else {
+                    $self->say(
+                        channel => $message->{channel},
+                        body    => 'Please provide the required arguments.'
+                    );
+                }
+            } else {
+                $self->say(
+                    channel => $message->{channel},
+                    body    => 'Please provide the required arguments.'
+                );
+            }
+        } else {
+            $self->say(
+                channel => $message->{channel},
+                body    => 'Please provide the required arguments.'
+            );
+        }
+    }
+
     #Provides the user with a command list.
     if ($message->{body} eq '$help'){
         $self->say(
             channel => $message->{channel},
-            body    => 'Listing commands... quit, abbrv, spookyscaryskeletons, weather, upload, osrc, src, contribs, flip, 8ball, randquote, stats'
+            body    => 'Listing commands... quit, abbrv, spookyscaryskeletons, weather, upload, osrc, src, contribs, flip, 8ball, randquote, stats, calc'
         );
     }
 }
