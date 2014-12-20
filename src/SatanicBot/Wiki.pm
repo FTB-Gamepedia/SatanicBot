@@ -7,6 +7,7 @@ use diagnostics;
 package SatanicBot::Wiki;
 use MediaWiki::API;
 use SatanicBot::Bot;
+use WWW::Mechanize;
 
 our $mw = MediaWiki::API->new();
 $mw->{config}->{api_url} = 'http://ftb.gamepedia.com/api.php';
@@ -17,10 +18,16 @@ sub login{
     my @lines = <$fh>;
     close $fh;
     chomp @lines;
-    $mw->login({
-        lgname     => $lines[0],
-        lgpassword => $lines[-1]
-    }) || die $mw->{error}->{code} . ": " . $mw->{error}->{details};
+    my $www = WWW::Mechanize->new();
+    my $credentials = $www->get("http://ftb.gamepedia.com/api.php?action=login&lgname=$lines[0]&lgpassword=$lines[-1]&format=json") or die "Unable to get url.\n";
+    my $decode = $credentials->decoded_content();
+    my @loggedin = $decode =~ m{\"result\":(.*?)\}};
+    if ($loggedin[0] eq 'NeedToken'){
+        $mw->login({
+            lgname     => $lines[0],
+            lgpassword => $lines[-1]
+        }) || die $mw->{error}->{code} . ": " . $mw->{error}->{details};
+    }
 }
 
 sub edit_gmods{
