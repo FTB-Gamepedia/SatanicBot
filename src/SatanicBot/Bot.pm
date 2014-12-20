@@ -221,7 +221,7 @@ sub said{
                 } elsif ($contribwords[1] eq 'TheSatanicSanta'){
                     $self->say(
                         channel => $message->{channel},
-                        body    => "My amazing and everlasting god, lord, savior, master, daddy has made $contribs[0] contributions to the wiki. Isn't he wonderful?"
+                        body    => "The second hottest babe in the channel has made $contribs[0] contributions to the wiki."
                     );
                 } elsif ($contribwords[1] eq 'retep998'){
                     $self->say(
@@ -231,12 +231,7 @@ sub said{
                 } elsif ($contribwords[1] eq 'PonyButt'){
                     $self->say(
                         channel => $message->{channel},
-                        body    => "FUCK YOU BITCH ASS NIGGA IM BETTER THAN YOU IN EVERY WAY, MOTHERFUCK ($contribs[0] contributions)"
-                    );
-                } else {
-                    $self->say(
-                        channel => $message->{channel},
-                        body    => "$contribwords[1] has made $contribs[0] contributions to the wiki."
+                        body    => "Some bitch ass nigga has made $contribs[0] contributions to the wiki."
                     );
                 }
             }
