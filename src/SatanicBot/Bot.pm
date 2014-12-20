@@ -360,59 +360,18 @@ sub said{
     }
 
     my $calcmsg = $message->{body};
-    my @calcwords = split(/\s/, $calcmsg, 4);
+    my @calcwords = split(/\s/, $calcmsg, 2);
     if ($calcwords[0] eq '$calc'){
-        if ($calcwords[1] =~ m/\d+/){
-            if ($calcwords[2] =~ m/[\+\-\/\*]/){
-                if ($calcwords[3] =~ m/\d+/){
-                    if ($calcwords[2] eq '+'){
-                        my $add = $calcwords[1] + $calcwords[3];
-                        $self->say(
-                            channel => $message->{channel},
-                            body    => "$calcwords[1] + $calcwords[3] = $add"
-                        );
-                    } elsif ($calcwords[2] eq '-'){
-                        my $sub = $calcwords[1] - $calcwords[3];
-                        $self->say(
-                            channel => $message->{channel},
-                            body    => "$calcwords[1] - $calcwords[3] = $sub"
-                        );
-                    } elsif ($calcwords[2] eq '/'){
-                        if ($calcwords[3] eq '0'){
-                            $self->say(
-                                channel => $message->{channel},
-                                body    => 'Don\'t divide by 0.'
-                            );
-                        } else {
-                            my $div = $calcwords[1] / $calcwords[3];
-                            $self->say(
-                                channel => $message->{channel},
-                                body    => "$calcwords[1] / $calcwords[3] = $div"
-                            );
-                        }
-                    } elsif ($calcwords[2] eq '*'){
-                        my $mult = $calcwords[1] * $calcwords[3];
-                        $self->say(
-                            channel => $message->{channel},
-                            body    => "$calcwords[1] * $calcwords[3] = $mult"
-                        );
-                    }
-                } else {
-                    $self->say(
-                        channel => $message->{channel},
-                        body    => 'Please provide the required arguments.'
-                    );
-                }
-            } else {
-                $self->say(
-                    channel => $message->{channel},
-                    body    => 'Please provide the required arguments.'
-                );
-            }
+        if ($calcwords[1] =~ m/.+/){
+            my $out = eval($calcwords[1]);
+            $self->say(
+                channel => $message->{channel},
+                body    => "$calcwords[1] = $out"
+            );
         } else {
             $self->say(
                 channel => $message->{channel},
-                body    => 'Please provide the required arguments.'
+                body    => 'Please provide an equation.'
             );
         }
     }
