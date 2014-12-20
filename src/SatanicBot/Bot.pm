@@ -378,11 +378,18 @@ sub said{
                             body    => "$calcwords[1] - $calcwords[3] = $sub"
                         );
                     } elsif ($calcwords[2] eq '/'){
-                        my $div = $calcwords[1] / $calcwords[3];
-                        $self->say(
-                            channel => $message->{channel},
-                            body    => "$calcwords[1] / $calcwords[3] = $div"
-                        );
+                        if ($calcwords[3] eq '0'){
+                            $self->say(
+                                channel => $message->{channel},
+                                body    => 'Don\'t divide by 0.'
+                            );
+                        } else {
+                            my $div = $calcwords[1] / $calcwords[3];
+                            $self->say(
+                                channel => $message->{channel},
+                                body    => "$calcwords[1] / $calcwords[3] = $div"
+                            );
+                        }
                     } elsif ($calcwords[2] eq '*'){
                         my $mult = $calcwords[1] * $calcwords[3];
                         $self->say(
