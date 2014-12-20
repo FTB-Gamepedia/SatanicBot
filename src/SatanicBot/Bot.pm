@@ -233,6 +233,11 @@ sub said{
                         channel => $message->{channel},
                         body    => "Some bitch ass nigga has made $contribs[0] contributions to the wiki."
                     );
+                } else {
+                    $self->say(
+                        channel => $message->{channel},
+                        body    => "$contribwords[1] has made $contribs[0] contributions to the wiki."
+                    );
                 }
             }
         } else {
