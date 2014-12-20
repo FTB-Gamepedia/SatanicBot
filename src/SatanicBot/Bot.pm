@@ -19,7 +19,6 @@ use Math::Symbolic;
 #Use this subroutine definition for adding commands.
 sub said{
     my ($self, $message) = @_;
-    SatanicBot::Wiki->login();
 
     #quit command: no args. Only those with the nickname SatanicSanta can do it.
     if ($message->{body} eq '$quit'){
@@ -48,6 +47,7 @@ sub said{
                 body    => "Abbreviating $words[2] as $words[1]"
             );
 
+            SatanicBot::Wiki->login();
             SatanicBot::Wiki->edit_gmods(@words[1,2]);
 
             if ($SatanicBot::Wiki::check eq 'false') {

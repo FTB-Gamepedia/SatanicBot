@@ -22,12 +22,10 @@ sub login{
     my $credentials = $www->get("http://ftb.gamepedia.com/api.php?action=login&lgname=$lines[0]&lgpassword=$lines[-1]&format=json") or die "Unable to get url.\n";
     my $decode = $credentials->decoded_content();
     my @loggedin = $decode =~ m{\"result\":(.*?)\}};
-    if ($loggedin[0] eq 'NeedToken'){
-        $mw->login({
-            lgname     => $lines[0],
-            lgpassword => $lines[-1]
-        }) || die $mw->{error}->{code} . ": " . $mw->{error}->{details};
-    }
+    $mw->login({
+        lgname     => $lines[0],
+        lgpassword => $lines[-1]
+    }) || die $mw->{error}->{code} . ": " . $mw->{error}->{details};
 }
 
 sub edit_gmods{
