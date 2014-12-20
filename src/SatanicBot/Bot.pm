@@ -14,6 +14,7 @@ use SatanicBot::Wiki;
 use SatanicBot::WikiButt;
 use LWP::Simple;
 use WWW::Mechanize;
+use Math::Symbolic;
 
 #Use this subroutine definition for adding commands.
 sub said{
@@ -362,11 +363,17 @@ sub said{
     my $calcmsg = $message->{body};
     my @calcwords = split(/\s/, $calcmsg, 2);
     if ($calcwords[0] eq '$calc'){
-        if ($calcwords[1] =~ m/.+/){
+        if ($calcwords[1] =~ m/\d/){
             my $out = eval($calcwords[1]);
             $self->say(
                 channel => $message->{channel},
                 body    => "$calcwords[1] = $out"
+            );
+        } elsif ($calcwords[1] =~ m/\D/){
+            my $algebra = Math::Symbolic->parse_from_string($calcwords[1]);
+            $self->say(
+                channel => $message->{channel},
+                body    => "$calcwords[1] = $algebra"
             );
         } else {
             $self->say(
