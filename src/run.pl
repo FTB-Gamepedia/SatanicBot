@@ -8,38 +8,18 @@ use SatanicBot::Wiki;
 use SatanicBot::WikiButt;
 use Bot::BasicBot;
 
-my @ARGV;
+my $chan = '#FTB-Wiki';
+my $nick = 'LittleHelper';
 
-if ($ARGV[1] eq 'dev'){
-    my $chan = '#SatanicSanta';
-    my $nick = 'LittleHelper|dev';
+my $bot = SatanicBot::Bot->new(
+server    => 'irc.esper.net',
+port      => '6667',
+channels  => [$chan],
 
-    my $bot = SatanicBot::Bot->new(
-    server    => 'irc.esper.net',
-    port      => '6667',
-    channels  => [$chan],
+nick      => $nick,
+alt_nicks => ['SatanicButt', 'SatanicBooty'],
+username  => 'SatanicBot',
+name      => 'SatanicSanta\'s IRC bot'
+);
 
-    nick      => $nick,
-    alt_nicks => ['SatanicButt', 'SatanicBooty'],
-    username  => 'SatanicBot',
-    name      => 'SatanicSanta\'s IRC bot'
-    );
-
-    $bot->run();
-} else {
-    my $chan = '#FTB-Wiki';
-    my $nick = 'LittleHelper';
-
-    my $bot = SatanicBot::Bot->new(
-    server    => 'irc.esper.net',
-    port      => '6667',
-    channels  => [$chan],
-
-    nick      => $nick,
-    alt_nicks => ['SatanicButt', 'SatanicBooty'],
-    username  => 'SatanicBot',
-    name      => 'SatanicSanta\'s IRC bot'
-    );
-
-    $bot->run();
-}
+$bot->run();

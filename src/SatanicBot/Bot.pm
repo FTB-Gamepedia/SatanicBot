@@ -42,23 +42,30 @@ sub said{
     my @words = split(/\s/, $msg, 3);
     if ($words[0] eq '$abbrv'){
         if ($words[1] =~ m/.+/){
-            $self->say(
-                channel => $message->{channel},
-                body    => "Abbreviating $words[2] as $words[1]"
-            );
-
-            SatanicBot::Wiki->login();
-            SatanicBot::Wiki->edit_gmods(@words[1,2]);
-
-            if ($SatanicBot::Wiki::check eq 'false') {
+            if ($message->{raw_nick} =~ m/SatanicSa\@75/ or $message->{raw_nick} =~ m/retep998\@pool/ or $message->{raw_nick} =~ m/webchat\@81.168.2.162/){
                 $self->say(
                     channel => $message->{channel},
-                    body    => 'Could not proceed. Abbreviation and/or name already on the list.'
+                    body    => "Abbreviating $words[2] as $words[1]"
                 );
-            } elsif ($SatanicBot::Wiki::check eq 'true'){
+
+                SatanicBot::Wiki->login();
+                SatanicBot::Wiki->edit_gmods(@words[1,2]);
+
+                if ($SatanicBot::Wiki::check eq 'false') {
+                    $self->say(
+                        channel => $message->{channel},
+                        body    => 'Could not proceed. Abbreviation and/or name already on the list.'
+                    );
+                } elsif ($SatanicBot::Wiki::check eq 'true'){
+                    $self->say(
+                        channel => $message->{channel},
+                        body    => 'Success!'
+                    );
+                }
+            } else {
                 $self->say(
                     channel => $message->{channel},
-                    body    => 'Success!'
+                    body    => "Blame $message->{who}."
                 );
             }
         } else {
@@ -137,14 +144,21 @@ sub said{
                     channel => $message->{channel},
                     body    => 'Sorry, $wgAllowCopyUploads is not enabled on the Wiki yet :('
                 );
-                #SatanicBot::WikiButt->login();
-                #SatanicBot::WikiButt->upload();
-                #SatanicBot::WikiButt->logout();
+                #if ($message->{raw_nick} =~ m/75-164-196-89.ptld.qwest.net/){
+                    #SatanicBot::WikiButt->login();
+                    #SatanicBot::WikiButt->upload();
+                    #SatanicBot::WikiButt->logout();
 
-                #$self->say(
-                #    channel => $message->{channel},
-                #    body    => "Uploaded $uploadwords[2] to the Wiki."
-                #);
+                    #$self->say(
+                    #    channel => $message->{channel},
+                    #    body    => "Uploaded $uploadwords[2] to the Wiki."
+                    #);
+                #} else {
+                #    $self->say(
+                #        channel => $message->{channel},
+                #        body    => 'You are not good enough.'
+                #    );
+                #}
             } else {
                 $self->say(
                     channel => $message->{channel},
@@ -381,6 +395,37 @@ sub said{
             );
         }
     }
+
+#    my $minormodsmsg = $message->{body};
+#    my @minormodswords = split(/\s/, $minormodsmsg, 2);
+#    if ($minormodswords[0] eq '$addminor'){
+#        if ($minormodswords[1] =~ m/.+/){
+#            $self->say(
+#                channel => $message->{channel},
+#                body    => "Adding $minormodswords[1] to the Minor Mods list."
+#            );
+#
+#            SatanicBot::Wiki->login();
+#            SatanicBot::Wiki->edit_minor($minormodswords[1]);
+#
+#            if ($SatanicBot::Wiki::minor eq 'false') {
+#                $self->say(
+#                    channel => $message->{channel},
+#                    body    => 'Could not proceed. Mod already on the list.'
+#                );
+#            } elsif ($SatanicBot::Wiki::minor eq 'true'){
+#                $self->say(
+#                    channel => $message->{channel},
+#                    body    => 'Success!'
+#                );
+#            }
+#        } else {
+#            $self->say(
+#                channel => $message->{channel},
+#                body    => 'Please provide the required arguments.'
+#            );
+#        }
+#    }
 
     #Provides the user with a command list.
     if ($message->{body} eq '$help'){
