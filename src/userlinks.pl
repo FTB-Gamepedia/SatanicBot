@@ -5,7 +5,7 @@ use warnings;
 use diagnostics;
 use strict;
 use MediaWiki::Bot;
-use MediaWiki::API;
+use MediaWiki::EditFramework;
 
 my $mw = MediaWiki::Bot->new({
     protocol => 'http',
@@ -14,14 +14,12 @@ my $mw = MediaWiki::Bot->new({
     operator => 'TheSatanicSanta',
     debug    => 2
 });
-my $mwapi = MediaWiki::API->new();
-$mwapi->{config}->{api_url} = 'http://ftb.gamepedia.com/api.php';
+
+my $mwef = MediaWiki::EditFramework->new('ftb.gamepedia.com', '/');
+
 login();
-user();
-sleep(30);
-talk();
-logout();
-exit;
+
+my @links  = $mw->what_links_here("User:SatanicSanta", undef, 0, {hook => \&user});
 
 sub login{
     my $file = 'info/secure.txt';
@@ -33,48 +31,30 @@ sub login{
         username => $lines[0],
         password => $lines[-1]
     });
-    $mwapi->login({
-        lgname     => $lines[0],
-        lgpassword => $lines[-1]
-    });
 }
 
 sub user{
-    my @links  = ($mw->what_links_here("User:SatanicSanta"));
+    my ($stuff) = @_;
 
-    foreach (@links){
-        my $user_ref = $mwapi->get_page({title => $_});
-        my $replace_user = $user_ref->{'*'};
+    foreach my $thing (@$stuff){
+        my $user_ref = $mwef->get_page($thing);
+        my $replace_user = $user_ref->get_text;
 
-        $replace_user =~ s/\[\[User:SatanicSanta\]\]/\[\[User:TheSatanicSanta\]\]/;
+        $replace_user =~ s/\[\[User:SatanicSanta\]\]/\[\[User:TheSatanicSanta\]\]/g;
 
-        $mwapi->edit({
-            action     => 'edit',
-            title      => $_,
-            text       => $replace_user,
-            bot        => 1,
-            minor      => 1
-        }) || die $mw->{error}->{code} . ': ' . $mw->{error}->{details};
+        $user_ref->edit($replace_user, 'Fixing user links.');
     }
 }
 
 sub talk{
-    my @tlinks = ($mw->what_links_here("User talk:SatanicSanta"));
-
-    foreach (@tlinks){
-        my $talk_ref = $mwapi->get_page({title => $_});
-        my $replace_talk = $talk_ref->{'*'};
-
-        $replace_talk =~ s/\[\[User talk:SatanicSanta\]\]/\[\[User talk:TheSatanicSanta\]\]/;
-
-        $mwapi->edit({
-            action     => 'edit',
-            title      => $_,
-            text       => $replace_talk,
-            bot        => 1,
-            minor      => 1
-        }) || die $mw->{error}->{code} . ': ' . $mw->{error}->{details};
-    }
+    #my @tlinks = ($mw->what_links_here("User talk:SatanicSanta"));
+#
+#    foreach (@tlinks){
+#        my $talk_ref = $mwapi->get_page({title => $_});
+#        my $replace_talk = $talk_ref->{'*'};
+#
+#        $replace_talk =~ s/\[\[User talk:SatanicSanta\]\]/\[\[User talk:TheSatanicSanta\]\]/;
+#    }
 }
 
 sub logout{
