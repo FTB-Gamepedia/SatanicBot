@@ -57,6 +57,10 @@ calc
 ----
 Used to add/subtract/divide/multiply two numbers. Takes 3 arguments: $calc <first num> <sign (+-/*)> <second num>
 
+randnum
+-------
+Generates a random integer between 0 and the number defined in the first arg (inclusive).
+
 quit
 ----
 The $quit command will stop the bot.

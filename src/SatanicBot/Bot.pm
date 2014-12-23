@@ -427,11 +427,22 @@ sub said{
 #        }
 #    }
 
+    my $randmsg = $message->{body};
+    my @randwords = split(/\s/, $randmsg, 2);
+    if ($randwords[0] eq '$randnum'){
+        if ($randwords[1] =~ m/\d/){
+            $self->say(
+                channel => $message->{channel},
+                body    => int(rand($randwords[1] + 1))
+            );
+        }
+    }
+
     #Provides the user with a command list.
     if ($message->{body} eq '$help'){
         $self->say(
             channel => $message->{channel},
-            body    => 'Listing commands... quit, abbrv, spookyscaryskeletons, weather, upload, osrc, src, contribs, flip, 8ball, randquote, stats, calc'
+            body    => 'Listing commands... quit, abbrv, spookyscaryskeletons, weather, upload, osrc, src, contribs, flip, 8ball, randquote, stats, calc, randnum'
         );
     }
 }
