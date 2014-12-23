@@ -61,6 +61,10 @@ randnum
 -------
 Generates a random integer between 0 and the number defined in the first arg (inclusive).
 
+game
+----
+Random number guessing game. Takes 2 arguments: <int or float> <number>. Integers will be from 0-100. Floats will be from 0-10.
+
 quit
 ----
 The $quit command will stop the bot.

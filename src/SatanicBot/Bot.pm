@@ -438,6 +438,43 @@ sub said{
         }
     }
 
+    my $gamemsg = $message->{body};
+    my @gamewords = split(/\s/, $gamemsg, 3);
+    if ($gamewords[0] eq '$game'){
+        if ($gamewords[1] eq 'int'){
+            my $num = int(rand(101));
+            if ($gamewords[2] eq $num){
+                $self->say(
+                    channel => $message->{channel},
+                    body    => "Correct! The answer was $num"
+                );
+            } else {
+                $self->say(
+                    channel => $message->{channel},
+                    body    => "Wrong! The answer was $num"
+                );
+            }
+        } elsif ($gamewords[1] eq 'float'){
+            my $num = rand(10);
+            if ($gamewords[2] eq $num){
+                $self->say(
+                    channel => $message->{channel},
+                    body    => "Correct! The answer was $num"
+                );
+            } else {
+                $self->say(
+                    channel => $message->{channel},
+                    body    => "Wrong! The answer was $num"
+                );
+            }
+        } else {
+            $self->say(
+                channel => $message->{channel},
+                body    => 'Please provide the required arguments.'
+            );
+        }
+    }
+
     #Provides the user with a command list.
     if ($message->{body} eq '$help'){
         $self->say(
