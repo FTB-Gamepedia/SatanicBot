@@ -222,35 +222,38 @@ sub said{
                     body    => 'Sorry, but IPs are not compatible.'
                 );
             } else {
+                my $contribs = reverse $contribs[0];
+                $contribs =~ s/(\d\d\d)(?=\d)(?!\d*\.)/$1,/g;
+                my $num_contribs = reverse $contribs;
                 if ($contribs[0] eq '1'){
                     $self->say(
                         channel => $message->{channel},
-                        body    => "$contribwords[1] has made $contribs[0] contribution to the wiki."
+                        body    => "$contribwords[1] has made 1 contribution to the wiki."
                     );
                 } elsif ($contribwords[1] eq 'SatanicBot' or $contribwords[1] eq 'satanicBot') {
                     $self->say(
                         channel => $message->{channel},
-                        body    => "I have made $contribs[0] contributions to the wiki."
+                        body    => "I have made $num_contribs contributions to the wiki."
                     );
                 } elsif ($contribwords[1] eq 'TheSatanicSanta' or $contribwords[1] eq 'theSatanicSanta'){
                     $self->say(
                         channel => $message->{channel},
-                        body    => "The second hottest babe in the channel has made $contribs[0] contributions to the wiki."
+                        body    => "The second hottest babe in the channel has made $num_contribs contributions to the wiki."
                     );
                 } elsif ($contribwords[1] eq 'Retep998' or $contribwords[1] eq 'retep998'){
                     $self->say(
                         channel => $message->{channel},
-                        body    => "The hottest babe in the channel has made $contribs[0] contributions to the wiki."
+                        body    => "The hottest babe in the channel has made $num_contribs contributions to the wiki."
                     );
                 } elsif ($contribwords[1] eq 'PonyButt' or $contribwords[1] eq 'ponyButt'){
                     $self->say(
                         channel => $message->{channel},
-                        body    => "Some bitch ass nigga has made $contribs[0] contributions to the wiki."
+                        body    => "Some bitch ass nigga has made $num_contribs contributions to the wiki."
                     );
                 } else {
                     $self->say(
                         channel => $message->{channel},
-                        body    => "$contribwords[1] has made $contribs[0] contributions to the wiki."
+                        body    => "$contribwords[1] has made $num_contribs contributions to the wiki."
                     );
                 }
             }
