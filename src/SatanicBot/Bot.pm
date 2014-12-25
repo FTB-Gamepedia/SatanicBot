@@ -22,7 +22,7 @@ sub said{
 
     #quit command: no args. Only those with the nickname SatanicSanta can do it.
     if ($message->{body} eq '$quit'){
-        if ($message->{raw_nick} =~ m/75-164-196-89.ptld.qwest.net/){
+        if ($message->{raw_nick} =~ m/SatanicSa\@/){
             $self->say(
                 channel => $message->{channel},
                 body    => 'I don\'t love you anymore'

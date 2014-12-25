@@ -9,7 +9,7 @@ use SatanicBot::WikiButt;
 use Bot::BasicBot;
 
 my $chan = '#FTB-Wiki';
-my $nick = 'SantasHelper';
+my $nick = 'LittleHelper';
 
 my $bot = SatanicBot::Bot->new(
 server    => 'irc.esper.net',
