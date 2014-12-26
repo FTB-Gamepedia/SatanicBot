@@ -478,11 +478,35 @@ sub said{
         }
     }
 
+    my $primewords = $message->{body};
+    my @primemsg   = split(/\s/, $primewords, 2);
+    if ($primemsg[0] eq '$prime'){
+        if ($primemsg[1] =~ m/\d/){
+            my $num = $primemsg[1] / 2;
+            if ($num =~ m/\./){
+                $self->say(
+                    channel => $message->{channel},
+                    body    => "$primemsg[1] is a prime number."
+                );
+            } else {
+                $self->say(
+                    channel => $message->{channel},
+                    body    => "$primemsg[1] is not a prime number: $primemsg[1] / 2 = $num"
+                );
+            }
+        } else {
+            $self->say(
+                channel => $message->{channel},
+                body    => 'Please provide the required arguments.'
+            )
+        }
+    }
+
     #Provides the user with a command list.
     if ($message->{body} eq '$help'){
         $self->say(
             channel => $message->{channel},
-            body    => 'Listing commands... quit, abbrv, spookyscaryskeletons, weather, upload, osrc, src, contribs, flip, 8ball, randquote, stats, calc, randnum'
+            body    => 'Listing commands... quit, abbrv, spookyscaryskeletons, weather, upload, osrc, src, contribs, flip, 8ball, randquote, stats, calc, randnum, prime'
         );
     }
 }
