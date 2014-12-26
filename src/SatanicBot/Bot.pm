@@ -98,7 +98,7 @@ sub said{
     my $weathermsg = $message->{body};
     my @weatherwords = split(/\s/, $weathermsg, 2);
     if ($weatherwords[0] eq '$weather'){
-        if ($weatherwords[1] =~ m/[a-zA-Z],/){
+        if ($weatherwords[1] =~ m/[a-zA-Z\d,]/){
             my $weather = Weather::Underground->new(
                 place => $weatherwords[1]
             );
