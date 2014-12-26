@@ -99,7 +99,7 @@ sub said{
     my $weathermsg = $message->{body};
     my @weatherwords = split(/\s/, $weathermsg, 2);
     if ($weatherwords[0] eq '$weather'){
-        if ($weatherwords[1] =~ m/.+/){
+        if ($weatherwords[1] =~ m/[a-zA-Z],/){
             my $weather = Weather::Underground->new(
                 place => $weatherwords[1]
             );
@@ -482,8 +482,7 @@ sub said{
     my @primemsg   = split(/\s/, $primewords, 2);
     if ($primemsg[0] eq '$prime'){
         if ($primemsg[1] =~ m/\d/){
-            my $num = $primemsg[1] / 2;
-            if ($num =~ m/\./){
+            if ($primemsg[1] / 2 !~ m/\./){
                 $self->say(
                     channel => $message->{channel},
                     body    => "$primemsg[1] is a prime number."
@@ -491,7 +490,7 @@ sub said{
             } else {
                 $self->say(
                     channel => $message->{channel},
-                    body    => "$primemsg[1] is not a prime number: $primemsg[1] / 2 = $num"
+                    body    => "$primemsg[1] is not a prime number"
                 );
             }
         } else {
