@@ -8,7 +8,6 @@ package SatanicBot::Bot;
 use base qw(Bot::BasicBot);
 use Data::Random qw(:all);
 use Weather::Underground;
-use Weather::Underground::Forecast;
 #use Data::Dumper;
 use SatanicBot::Wiki;
 use SatanicBot::WikiButt;
@@ -104,19 +103,12 @@ sub said{
                 place => $weatherwords[1]
             );
 
-            my $urmomweather = Weather::Underground::Forecast->new(
-                location => $weatherwords[1]
-            );
+            my $forecast = $weather->getweather();
 
-            my $forecast  = $weather->getweather();
-            my $urmomhigh = $urmomweather->highs;
-            my $urmomlow  = $urmomweather->lows;
-            my $momprecip = $urmomweather->precipitation;
-
-            if (exists $forecast->[0]->{conditions}){
+            if (exists $forecast->[0]->{place}){
                 $self->say(
                     channel => $message->{channel},
-                    body    => "$forecast->[0]->{conditions} || Precipitation: $momprecip->[0] % chance || Temperature: $forecast->[0]->{fahrenheit} F ($urmomlow->[0] - $urmomhigh->[0] F) || Humidity: $forecast->[0]->{humidity}% || Last updated: $forecast->[0]->{updated}"
+                    body    => "$forecast->[0]->{place}: $forecast->[0]->{conditions} || Temperature: $forecast->[0]->{fahrenheit} F || Humidity: $forecast->[0]->{humidity}% || Last updated: $forecast->[0]->{updated}"
                     );
             } else {
                 $self->say(
@@ -437,6 +429,11 @@ sub said{
             $self->say(
                 channel => $message->{channel},
                 body    => int(rand($randwords[1] + 1))
+            );
+        } else {
+            $self->say(
+                channel => $message->{channel},
+                body    => 'No argument provided. Using 100... ' . int(rand(101))
             );
         }
     }
