@@ -4,8 +4,8 @@
 use warnings;
 use diagnostics;
 use strict;
-use MediaWiki::Bot;
-use MediaWiki::EditFramework;
+use MediaWiki::Bot qw(:constants);
+use MediaWiki::API;
 
 my $mw = MediaWiki::Bot->new({
     protocol => 'http',
@@ -14,12 +14,10 @@ my $mw = MediaWiki::Bot->new({
     operator => 'TheSatanicSanta',
     debug    => 2
 });
-
-my $mwef = MediaWiki::EditFramework->new('ftb.gamepedia.com', '/');
+my $mwapi = MediaWiki::API->new();
+$mwapi->{config}->{api_url} = 'http://ftb.gamepedia.com/api.php';
 
 login();
-
-my @links  = $mw->what_links_here("User:SatanicSanta", undef, 0, {hook => \&user});
 
 sub login{
     my $file = 'info/secure.txt';
@@ -27,23 +25,42 @@ sub login{
     my @lines = <$fh>;
     close $fh;
     chomp @lines;
-    $mw->login({
-        username => $lines[0],
-        password => $lines[-1]
-    });
+    #$mw->login({
+    #    username => $lines[0],
+    #    password => $lines[-1]
+    #}) or die $mw->{error}->{code} . ": " . $mw->{error}->{details};
+    $mwapi->login({
+        lgname => $lines[0],
+        lgpassword => $lines[-1]
+    }) or die $mwapi->{error}->{code} . ": " . $mwapi->{error}->{details};
+    user();
 }
 
 sub user{
-    my ($stuff) = @_;
+    my $file = 'info/list_user.txt';
+    open my $fh, '<', $file or die "Could not open $file $!\n";
+    my @lines = <$fh>;
+    chomp @lines;
+    my $things = join("\n", @lines);
+    my @newlines = split("\n", $things);
+    print "newlines variable has been set.\n";
+    foreach (@newlines){
+        my $article = $_;
+        my $text = $mw->get_text($article);
+        $text =~ s/\[\[User:SatanicSanta\]\]/\[\[User:TheSatanicSanta\]\]/g;
 
-    foreach my $thing (@$stuff){
-        my $user_ref = $mwef->get_page($thing);
-        my $replace_user = $user_ref->get_text;
-
-        $replace_user =~ s/\[\[User:SatanicSanta\]\]/\[\[User:TheSatanicSanta\]\]/g;
-
-        $user_ref->edit($replace_user, 'Fixing user links.');
+        print "Text and article  variables have been set.\n";
+        $mwapi->edit({
+            action => 'edit',
+            title  => $article,
+            text   => $text,
+            bot    => 1,
+            minor  => 1
+        }) or die $mwapi->{error}->{code} . ": " . $mwapi->{error}->{details};
+        print "Page \'$article\' has been edited edited.\n";
     }
+    close $fh;
+    print "File closed.";
 }
 
 sub talk{
