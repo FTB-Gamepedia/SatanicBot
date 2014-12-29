@@ -39,28 +39,31 @@ sub login{
 sub user{
     my $file = 'info/list_user.txt';
     open my $fh, '<', $file or die "Could not open $file $!\n";
-    my @lines = <$fh>;
-    chomp @lines;
-    my $things = join("\n", @lines);
-    my @newlines = split("\n", $things);
-    print "newlines variable has been set.\n";
-    foreach (@newlines){
-        my $article = $_;
-        my $text = $mw->get_text($article);
+    #my @lines = <$fh>;
+    #chomp @lines;
+    #my $things = join("\n", @lines);
+    #my @newlines = split("\n", $things);
+    #print "newlines variable has been set.\n";
+    print "Starting loop...\n";
+    while (my $line = <$fh>){
+        #my $article = $_;
+        chomp $line;
+        my $text = $mw->get_text($line);
         $text =~ s/\{\{U\|SatanicSanta/\{\{U\|TheSatanicSanta/g;
 
         print "Text and article variables have been set.\n";
         $mwapi->edit({
             action => 'edit',
-            title  => $article,
+            title  => $line,
             text   => $text,
             bot    => 1,
             minor  => 1
         }) or die $mwapi->{error}->{code} . ": " . $mwapi->{error}->{details};
-        print "Page \'$article\' has been edited.\n";
+        print "Page \'$line\' has been edited.\n";
     }
     close $fh;
     print "File closed.";
+    logout();
 }
 
 sub talk{
