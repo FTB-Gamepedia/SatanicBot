@@ -47,9 +47,9 @@ sub user{
     foreach (@newlines){
         my $article = $_;
         my $text = $mw->get_text($article);
-        $text =~ s/\[\[User:SatanicSanta\]\]/\[\[User:TheSatanicSanta\]\]/g;
+        $text =~ s/\{\{U\|SatanicSanta/\{\{U\|TheSatanicSanta/g;
 
-        print "Text and article  variables have been set.\n";
+        print "Text and article variables have been set.\n";
         $mwapi->edit({
             action => 'edit',
             title  => $article,
@@ -57,7 +57,7 @@ sub user{
             bot    => 1,
             minor  => 1
         }) or die $mwapi->{error}->{code} . ": " . $mwapi->{error}->{details};
-        print "Page \'$article\' has been edited edited.\n";
+        print "Page \'$article\' has been edited.\n";
     }
     close $fh;
     print "File closed.";

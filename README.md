@@ -55,7 +55,7 @@ The $stats command will output statistics for the wiki. It has one optional argu
 
 calc
 ----
-Used to add/subtract/divide/multiply two numbers. Takes 3 arguments: $calc <first num> <sign (+-/*)> <second num>
+Used to add/subtract/divide/multiply two numbers. Takes 3 arguments: $calc <first num> <sign +-/* <second num>
 
 randnum
 -------
