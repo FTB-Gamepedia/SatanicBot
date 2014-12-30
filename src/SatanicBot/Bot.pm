@@ -96,24 +96,31 @@ sub said{
 
     #Outputs the weather for the <first arg location>.
     my $weathermsg = $message->{body};
-    my @weatherwords = split(/\s/, $weathermsg, 2);
+    my @weatherwords = split(/\s/, $weathermsg, 3);
     if ($weatherwords[0] eq '$weather'){
-        if ($weatherwords[1] =~ m/[a-zA-Z\d,]/){
+        if ($weatherwords[2] =~ m/[a-zA-Z\d,]/){
             my $weather = Weather::Underground->new(
-                place => $weatherwords[1]
+                place => $weatherwords[2]
             );
 
             my $forecast = $weather->getweather();
 
             if (exists $forecast->[0]->{place}){
-                $self->say(
-                    channel => $message->{channel},
-                    body    => "$forecast->[0]->{place}: $forecast->[0]->{conditions} || Temperature: $forecast->[0]->{fahrenheit} F || Humidity: $forecast->[0]->{humidity}% || Last updated: $forecast->[0]->{updated}"
+                if ($weatherwords[1] =~ m/[fF]/ or $weatherwords[1] !~ m/.+/){
+                    $self->say(
+                        channel => $message->{channel},
+                        body    => "$forecast->[0]->{place}: $forecast->[0]->{conditions} || Temperature: $forecast->[0]->{fahrenheit} F || Humidity: $forecast->[0]->{humidity}% || Last updated: $forecast->[0]->{updated}"
                     );
+                } elsif ($weatherwords[1] =~ m/[cC]/){
+                    $self->say(
+                        channel => $message->{channel},
+                        body    => "$forecast->[0]->{place}: $forecast->[0]->{conditions} || Temperature: $forecast->[0]->{celsius} C || Humidity: $forecast->[0]->{humidity}% || Last updated: $forecast->[0]->{updated}"
+                    );
+                }
             } else {
                 $self->say(
                     channel => $message->{channel},
-                    body    => "\'$weatherwords[1]\' is not a valid place."
+                    body    => "\'$weatherwords[2]\' is not a valid place."
                 );
             }
         } else {
