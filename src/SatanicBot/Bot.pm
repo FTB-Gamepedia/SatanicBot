@@ -25,7 +25,7 @@ sub said{
     my $user = $message->{who};
 
     #quit command: no args. Only those with the nickname SatanicSanta can do it.
-    if ($msg eq '$quit'){
+    if ($msg =~ m/^\$quit$/i){
         if ($host =~ m/SatanicSa\@/){
             $self->say(
                 channel => $channel,
@@ -42,7 +42,7 @@ sub said{
     }
 
     #Adds the <first arg abbreviation> to the G:Mods and doc as <second arg mod name>
-    if ($msg =~ m/^\$abbrv(?: )/){
+    if ($msg =~ m/^\$abbrv(?: )/i){
         my @abbrvwords = split(/\s/, $msg, 3);
         if ($abbrvwords[1] =~ m/.+/ and $abbrvwords[2] =~ m/.+/){
             if ($host =~ m/SatanicSa\@75/ or $host =~ m/retep998\@pool/ or $host =~ m/webchat\@81.168.2.162/ or $host =~ m/Wolfman12\@CPE/){
@@ -79,7 +79,7 @@ sub said{
         }
     }
 
-    if ($msg eq '$spookyscaryskeletons'){
+    if ($msg =~ m/^\$spookyscaryskeletons$/i){
         my @random_words = rand_words(
             wordlist => 'info/spook.txt',
             min      => 10,
@@ -99,8 +99,8 @@ sub said{
     }
 
     #Outputs the weather for the <first arg location>.
-    if ($msg =~ m/^\$weather(?: )/){
-        if ($msg =~ m/\$weather f(?: )/ or $msg =~ m/\$weather F(?: )/){
+    if ($msg =~ m/^\$weather(?: )/i){
+        if ($msg =~ m/\$weather f(?: )/i){
             my @weatherwords = split(/\s/, $msg, 3);
             if ($weatherwords[2] =~ m/[a-zA-Z\d,]/){
                 my $weather = Weather::Underground->new(
@@ -126,7 +126,7 @@ sub said{
                     body    => 'Please provide the required arguments.'
                 );
             }
-        } elsif ($msg =~ m/\$weather c(?: )/ or $msg =~ m/\$weather C(?: )/){
+        } elsif ($msg =~ m/\$weather c(?: )/i){
             my @weatherwords = split(/\s/, $msg, 3);
             if ($weatherwords[2] =~ m/[a-zA-Z\d,]/){
                 my $weather = Weather::Underground->new(
@@ -184,7 +184,7 @@ sub said{
     #if the command does not work when the API gets enabled, do what you did with $abbrv
     #It does not work yet. We still need $wgAllowCopyUploads to be enabled.
     #Uploads the <first arg image> to the wiki as <second arg name>.
-    if ($msg =~ m/^\$upload(?: )/){
+    if ($msg =~ m/^\$upload(?: )/i){
         our @uploadwords = split(/\s/, $msg, 3);
         if ($uploadwords[1] =~ m/.+/){
             if ($uploadwords[2] =~ m/.+/){
@@ -222,7 +222,7 @@ sub said{
     }
 
     #Outputs the open source report card link for the first argument username. Eventually I should actually do JSON parsing for this.
-    if ($msg =~ m/^\$osrc(?: )/){
+    if ($msg =~ m/^\$osrc(?: )/i){
         my @osrcwords = split(/\s/, $msg, 2);
         my $url = "https://osrc.dfm.io/$osrcwords[1]";
         if (head($url)){
@@ -239,7 +239,7 @@ sub said{
     }
 
     #Outputs the link to this bot's source code.
-    if ($msg eq '$src'){
+    if ($msg =~ m/^\$src$/i){
         $self->say(
             channel => $channel,
             body    => 'https://github.com/satanicsanta/SatanicBot'
@@ -248,7 +248,7 @@ sub said{
 
     #Outputs how many contributions the user has made to the wiki.
     #Consider using a JSON parser instead of regular expression.
-    if ($msg =~ m/^\$contribs(?: )/){
+    if ($msg =~ m/^\$contribs(?: )/i){
         my @contribwords = split(/\s/, $msg, 2);
         if ($contribwords[1] =~ m/.+/){
             my $www = WWW::Mechanize->new();
@@ -316,7 +316,7 @@ sub said{
     }
 
     #Outputs a random sentence from 8ball.txt.
-    if ($msg eq '$8ball'){
+    if ($msg =~ m/^\$8ball$/i){
         my $file = 'info/8ball.txt';
         open my $fh, '<', $file or die "Could not open '$file' $!\n";
         my @lines = <$fh>;
@@ -330,7 +330,7 @@ sub said{
     }
 
     #50/50 chance of outputting heads or tails.
-    if ($msg eq '$flip'){
+    if ($msg =~ m/^\$flip$/i){
         my $coin = int(rand(2));
         if ($coin eq 1){
             $self->say(
@@ -346,7 +346,7 @@ sub said{
     }
 
     #Outputs a random quote from ircquotes.txt.
-    if ($msg eq '$randquote'){
+    if ($msg =~ m/^\$randquote$/i){
         my $file = 'info/ircquotes.txt';
         open my $fh, '<', $file or die "Could not open $file $!\n";
         my @lines = <$fh>;
@@ -361,63 +361,63 @@ sub said{
 
     #Wiki statistics.
     #Consider using a real JSON parser rather than regular expression.
-    if ($msg =~ m/^\$stats/){
-        if ($msg =~ m/^\$stats(?: )/){
+    if ($msg =~ m/^\$stats/i){
+        if ($msg =~ m/^\$stats(?: )/i){
             my @statwords = split(/\s/, $msg, 2);
             my $www = WWW::Mechanize->new();
             my $stuff = $www->get("http://ftb.gamepedia.com/api.php?action=query&meta=siteinfo&siprop=statistics&format=json") or die "Unable to get url.\n";
             my $decode = $stuff->decoded_content();
 
-            if ($statwords[1] eq 'pages'){
+            if ($statwords[1] =~ m/pages$/i){
                 my @pages = $decode =~ m{\"pages\":(.*?),};
                 $self->say(
                     channel => $channel,
                     body    => "The wiki has $pages[0] pages."
                 );
             }
-            if ($statwords[1] eq 'articles'){
+            if ($statwords[1] =~ m/articles$/i){
                 my @articulos = $decode =~ m{\"articles\":(.*?),};
                 $self->say(
                     channel => $channel,
                     body    => "The wiki has $articulos[0] articles."
                 );
             }
-            if ($statwords[1] eq 'edits'){
+            if ($statwords[1] =~ m/edits$/i){
                 my @edits = $decode =~ m{\"edits\":(.*?),};
                 $self->say(
                     channel => $channel,
                     body    => "The wiki has $edits[0] edits."
                 );
             }
-            if ($statwords[1] eq 'images'){
+            if ($statwords[1] =~ m/images$/i){
                 my @images = $decode =~ m{\"images\":(.*?),};
                 $self->say(
                     channel => $channel,
                     body    => "The wiki has $images[0] images."
                 );
             }
-            if ($statwords[1] eq 'users'){
+            if ($statwords[1] =~ m/users$/i){
                 my @users = $decode =~ m{\"users\":(.*?),};
                 $self->say(
                     channel => $channel,
                     body    => "The wiki has $users[0] users."
                 );
             }
-            if ($statwords[1] eq 'active users'){
+            if ($statwords[1] =~ m/active users$/i){
                 my @activeusers = $decode =~ m{\"activeusers\":(.*?),};
                 $self->say(
                     channel => $channel,
                     body    => "The wiki has $activeusers[0] active users."
                 );
             }
-            if ($statwords[1] eq 'admins'){
+            if ($statwords[1] =~ m/admins$/i){
                 my @admins = $decode =~ m{\"admins\":(.*?),};
                 $self->say(
                     channel => $channel,
                     body    => "The wiki has $admins[0] admins."
                 );
             }
-        } elsif ($msg eq '$stats'){
+        } elsif ($msg =~ m/^\$stats$/i){
             my @statwords = split(/\s/, $msg, 2);
             my $www = WWW::Mechanize->new();
             my $stuff = $www->get("http://ftb.gamepedia.com/api.php?action=query&meta=siteinfo&siprop=statistics&format=json") or die "Unable to get url.\n";
@@ -436,7 +436,7 @@ sub said{
         }
     }
 
-    if ($msg =~ m/^\$calc(?: )/){
+    if ($msg =~ m/^\$calc(?: )/i){
         my @calcwords = split(/\s/, $msg, 2);
         if ($calcwords[1] =~ m/\d/){
             my $out = eval($calcwords[1]);
@@ -489,7 +489,7 @@ sub said{
 #        }
 #    }
 
-    if ($msg =~ m/^\$randnum/){
+    if ($msg =~ m/^\$randnum/i){
         my @randwords = split(/\s/, $msg, 2);
         if ($randwords[1] =~ m/\d/){
             $self->say(
@@ -504,9 +504,9 @@ sub said{
         }
     }
 
-    if ($msg =~ m/^\$game/){
+    if ($msg =~ m/^\$game/i){
         my @gamewords = split(/\s/, $msg, 3);
-        if ($gamewords[1] eq 'int'){
+        if ($gamewords[1] =~ m/int/i){
             my $num = int(rand(101));
             if ($gamewords[2] eq $num){
                 $self->say(
@@ -519,7 +519,7 @@ sub said{
                     body    => "Wrong! The answer was $num"
                 );
             }
-        } elsif ($gamewords[1] eq 'float'){
+        } elsif ($gamewords[1] =~ m/float/i){
             my $num = rand(10);
             if ($gamewords[2] eq $num){
                 $self->say(
@@ -541,94 +541,94 @@ sub said{
     }
 
     #Provides the user with a command list.
-    if ($msg =~ m/^\$help/){
+    if ($msg =~ m/^\$help/i){
         if ($msg !~ m/\$help$/){
             my @helpwords = split(/\s/, $msg, 2);
-            if ($helpwords[1] eq 'quit'){
+            if ($helpwords[1] =~ m/quit$/i){
                 $self->say(
                     channel => $channel,
                     body    => 'Stops the bot. No args.'
                 );
             }
-            if ($helpwords[1] eq 'abbrv'){
+            if ($helpwords[1] =~ m/abbrv$/i){
                 $self->say(
                     channel => $channel,
                     body    => 'Abbreivates a mod for the tilesheet extension. 2 Args: <abbreviation> <mod name>'
                 );
             }
-            if ($helpwords[1] eq 'spookyscaryskeletons'){
+            if ($helpwords[1] =~ m/spookyscaryskeletons$/i){
                 $self->say(
                     channel => $channel,
                     body    => 'Very spooky. No args. This command is broken.'
                 );
             }
-            if ($helpwords[1] eq 'weather'){
+            if ($helpwords[1] =~ m/weather$/i){
                 $self->say(
                     channel => $channel,
                     body    => 'Provides weather information for the given place. 1 required arg, 1 optional arg: <(optional) f or c> <place>'
                 );
             }
-            if ($helpwords[1] eq 'upload'){
+            if ($helpwords[1] =~ m/upload$/i){
                 $self->say(
                     channel => $channel,
                     body    => 'Uploads an image to the wiki. 2 args: <file link> <file name>'
                 );
             }
-            if ($helpwords[1] eq 'osrc'){
+            if ($helpwords[1] =~ m/osrc$/i){
                 $self->say(
                     channel => $channel,
                     body    => 'Links the open source report card for the user. 1 optional arg: <username>'
                 );
             }
-            if ($helpwords[1] eq 'src'){
+            if ($helpwords[1] =~ m/src$/i){
                 $self->say(
                     channel => $channel,
                     body    => 'Links the source code for this bot. No args.'
                 );
             }
-            if ($helpwords[1] eq 'contribs'){
+            if ($helpwords[1] =~ m/contribs$/i){
                 $self->say(
                     channel => $channel,
                     body    => 'Provides some user information including num of contribs to the wiki and registration date. 1 arg: <username>'
                 );
             }
-            if ($helpwords[1] eq 'flip'){
+            if ($helpwords[1] =~ m/flip$/i){
                 $self->say(
                     channel => $channel,
                     body    => 'Heads or tails! No args'
                 );
             }
-            if ($helpwords[1] eq '8ball'){
+            if ($helpwords[1] =~ m/8ball$/i){
                 $self->say(
                     channel => $channel,
                     body    => 'Determines your fortune. No args'
                 );
             }
-            if ($helpwords[1] eq 'randquote'){
+            if ($helpwords[1] =~ m/randquote$/i){
                 $self->say(
                     channel => $channel,
                     body    => 'Gives a random quote from the #FTB-Wiki IRC channel. No args'
                 );
             }
-            if ($helpwords[1] eq 'stats'){
+            if ($helpwords[1] =~ m/stats$/i){
                 $self->say(
                     channel => $channel,
-                    body    => 'Gives wiki stats. 1 optional arg: <pages or articles or edits or images or users or activeusers or admins>'
+                    body    => 'Gives wiki stats. 1 optional arg: <pages or articles or edits or images or users or active users or admins>'
                 );
             }
-            if ($helpwords[1] eq 'calc'){
+            if ($helpwords[1] =~ m/calc$/i){
                 $self->say(
                     channel => $channel,
                     body    => 'Derpy calculator. Takes an equation. This performs eval; if it doesn\'t work blame eval'
                 );
             }
-            if ($helpwords[1] eq 'randnum'){
+            if ($helpwords[1] =~ m/randnum$/i){
                 $self->say(
                     channel => $channel,
                     body    => 'Generates a random number. 1 optional arg, if not provided it will assume 0-100: <max num>'
                 );
             }
-            if ($helpwords[1] eq 'game'){
+            if ($helpwords[1] =~ m/game$/i){
                 $self->say(
                     channel => $channel,
                     body    => 'Number guessing game. 2 args: <int or float> <guess>'
