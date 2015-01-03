@@ -542,97 +542,99 @@ sub said{
 
     #Provides the user with a command list.
     if ($msg =~ m/^\$help/){
-        my @helpwords = split(/\s/, $msg, 2);
-        if ($helpwords[1] eq 'quit'){
-            $self->say(
-                channel => $channel,
-                body    => 'Stops the bot. No args.'
-            );
-        }
-        if ($helpwords[1] eq 'abbrv'){
-            $self->say(
-                channel => $channel,
-                body    => 'Abbreivates a mod for the tilesheet extension. 2 Args: <abbreviation> <mod name>'
-            );
-        }
-        if ($helpwords[1] eq 'spookyscaryskeletons'){
-            $self->say(
-                channel => $channel,
-                body    => 'Very spooky. No args. This command is broken.'
-            );
-        }
-        if ($helpwords[1] eq 'weather'){
-            $self->say(
-                channel => $channel,
-                body    => 'Provides weather information for the given place. 1 required arg, 1 optional arg: <(optional) f or c> <place>'
-            );
-        }
-        if ($helpwords[1] eq 'upload'){
-            $self->say(
-                channel => $channel,
-                body    => 'Uploads an image to the wiki. 2 args: <file link> <file name>'
-            );
-        }
-        if ($helpwords[1] eq 'osrc'){
-            $self->say(
-                channel => $channel,
-                body    => 'Links the open source report card for the user. 1 optional arg: <username>'
-            );
-        }
-        if ($helpwords[1] eq 'src'){
-            $self->say(
-                channel => $channel,
-                body    => 'Links the source code for this bot. No args.'
-            );
-        }
-        if ($helpwords[1] eq 'contribs'){
-            $self->say(
-                channel => $channel,
-                body    => 'Provides some user information including num of contribs to the wiki and registration date. 1 arg: <username>'
-            );
-        }
-        if ($helpwords[1] eq 'flip'){
-            $self->say(
-                channel => $channel,
-                body    => 'Heads or tails! No args'
-            );
-        }
-        if ($helpwords[1] eq '8ball'){
-            $self->say(
-                channel => $channel,
-                body    => 'Determines your fortune. No args'
-            );
-        }
-        if ($helpwords[1] eq 'randquote'){
-            $self->say(
-                channel => $channel,
-                body    => 'Gives a random quote from the #FTB-Wiki IRC channel. No args'
-            );
-        }
-        if ($helpwords[1] eq 'stats'){
-            $self->say(
-                channel => $channel,
-                body    => 'Gives wiki stats. 1 optional arg: <pages or articles or edits or images or users or activeusers or admins>'
-            );
-        }
-        if ($helpwords[1] eq 'calc'){
-            $self->say(
-                channel => $channel,
-                body    => 'Derpy calculator. Takes an equation. This performs eval; if it doesn\'t work blame eval'
-            );
-        }
-        if ($helpwords[1] eq 'randnum'){
-            $self->say(
-                channel => $channel,
-                body    => 'Generates a random number. 1 optional arg, if not provided it will assume 0-100: <max num>'
-            );
-        }
-        if ($helpwords[1] eq 'game'){
-            $self->say(
-                channel => $channel,
-                body    => 'Number guessing game. 2 args: <int or float> <guess>'
-            );
-        } elsif ($helpwords[1] !~ m/.+/) {
+        if ($msg !~ m/\$help$/){
+            my @helpwords = split(/\s/, $msg, 2);
+            if ($helpwords[1] eq 'quit'){
+                $self->say(
+                    channel => $channel,
+                    body    => 'Stops the bot. No args.'
+                );
+            }
+            if ($helpwords[1] eq 'abbrv'){
+                $self->say(
+                    channel => $channel,
+                    body    => 'Abbreivates a mod for the tilesheet extension. 2 Args: <abbreviation> <mod name>'
+                );
+            }
+            if ($helpwords[1] eq 'spookyscaryskeletons'){
+                $self->say(
+                    channel => $channel,
+                    body    => 'Very spooky. No args. This command is broken.'
+                );
+            }
+            if ($helpwords[1] eq 'weather'){
+                $self->say(
+                    channel => $channel,
+                    body    => 'Provides weather information for the given place. 1 required arg, 1 optional arg: <(optional) f or c> <place>'
+                );
+            }
+            if ($helpwords[1] eq 'upload'){
+                $self->say(
+                    channel => $channel,
+                    body    => 'Uploads an image to the wiki. 2 args: <file link> <file name>'
+                );
+            }
+            if ($helpwords[1] eq 'osrc'){
+                $self->say(
+                    channel => $channel,
+                    body    => 'Links the open source report card for the user. 1 optional arg: <username>'
+                );
+            }
+            if ($helpwords[1] eq 'src'){
+                $self->say(
+                    channel => $channel,
+                    body    => 'Links the source code for this bot. No args.'
+                );
+            }
+            if ($helpwords[1] eq 'contribs'){
+                $self->say(
+                    channel => $channel,
+                    body    => 'Provides some user information including num of contribs to the wiki and registration date. 1 arg: <username>'
+                );
+            }
+            if ($helpwords[1] eq 'flip'){
+                $self->say(
+                    channel => $channel,
+                    body    => 'Heads or tails! No args'
+                );
+            }
+            if ($helpwords[1] eq '8ball'){
+                $self->say(
+                    channel => $channel,
+                    body    => 'Determines your fortune. No args'
+                );
+            }
+            if ($helpwords[1] eq 'randquote'){
+                $self->say(
+                    channel => $channel,
+                    body    => 'Gives a random quote from the #FTB-Wiki IRC channel. No args'
+                );
+            }
+            if ($helpwords[1] eq 'stats'){
+                $self->say(
+                    channel => $channel,
+                    body    => 'Gives wiki stats. 1 optional arg: <pages or articles or edits or images or users or activeusers or admins>'
+                );
+            }
+            if ($helpwords[1] eq 'calc'){
+                $self->say(
+                    channel => $channel,
+                    body    => 'Derpy calculator. Takes an equation. This performs eval; if it doesn\'t work blame eval'
+                );
+            }
+            if ($helpwords[1] eq 'randnum'){
+                $self->say(
+                    channel => $channel,
+                    body    => 'Generates a random number. 1 optional arg, if not provided it will assume 0-100: <max num>'
+                );
+            }
+            if ($helpwords[1] eq 'game'){
+                $self->say(
+                    channel => $channel,
+                    body    => 'Number guessing game. 2 args: <int or float> <guess>'
+                );
+            }
+        } else {
             $self->say(
                 channel => $channel,
                 body    => 'Listing commands... quit, abbrv, spookyscaryskeletons, weather, upload, osrc, src, contribs, flip, 8ball, randquote, stats, calc, randnum, game'
