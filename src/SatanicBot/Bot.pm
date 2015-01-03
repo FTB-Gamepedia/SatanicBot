@@ -19,64 +19,68 @@ use Date::Parse;
 #Use this subroutine definition for adding commands.
 sub said{
     my ($self, $message) = @_;
+    my $channel = $message->{channel};
+    my $host = $message->{raw_nick};
+    my $msg = $message->{body};
+    my $user = $message->{who};
 
     #quit command: no args. Only those with the nickname SatanicSanta can do it.
-    if ($message->{body} eq '$quit'){
-        if ($message->{raw_nick} =~ m/SatanicSa\@/){
+    if ($msg eq '$quit'){
+        if ($host =~ m/SatanicSa\@/){
             $self->say(
-                channel => $message->{channel},
+                channel => $channel,
                 body    => 'I don\'t love you anymore'
             );
             $self->shutdown();
             exit;
         } else {
             $self->say(
-                channel => $message->{channel},
-                body    => "$message->{who}: Fuck you, bitch ass."
+                channel => $channel,
+                body    => "$user: Fuck you, bitch ass."
             );
         }
     }
 
     #Adds the <first arg abbreviation> to the G:Mods and doc as <second arg mod name>
-    my $msg = $message->{body};
-    my @words = split(/\s/, $msg, 3);
-    if ($words[0] eq '$abbrv'){
-        if ($words[1] =~ m/.+/){
-            if ($message->{raw_nick} =~ m/SatanicSa\@75/ or $message->{raw_nick} =~ m/retep998\@pool/ or $message->{raw_nick} =~ m/webchat\@81.168.2.162/){
+    my $abbrvmsg = $msg;
+    my @abbrvwords = split(/\s/, $abbrvmsg, 3);
+    if ($abbrvwords[0] eq '$abbrv'){
+        if ($abbrvwords[1] =~ m/.+/){
+            if ($host =~ m/SatanicSa\@75/ or $host =~ m/retep998\@pool/ or $host =~ m/webchat\@81.168.2.162/ or $host =~ m/Wolfman12\@CPE/){
                 $self->say(
-                    channel => $message->{channel},
-                    body    => "Abbreviating $words[2] as $words[1]"
+                    channel => $channel,
+                    body    => "Abbreviating $abbrvwords[2] as $abbrvwords[1]"
                 );
 
                 SatanicBot::Wiki->login();
-                SatanicBot::Wiki->edit_gmods(@words[1,2]);
+                SatanicBot::Wiki->edit_gmods(@abbrvwords[1,2]);
 
                 if ($SatanicBot::Wiki::check eq 'false') {
                     $self->say(
-                        channel => $message->{channel},
+                        channel => $channel,
                         body    => 'Could not proceed. Abbreviation and/or name already on the list.'
                     );
                 } elsif ($SatanicBot::Wiki::check eq 'true'){
                     $self->say(
-                        channel => $message->{channel},
+                        channel => $channel,
                         body    => 'Success!'
                     );
                 }
             } else {
                 $self->say(
-                    channel => $message->{channel},
-                    body    => "Blame $message->{who}."
+                    channel => $channel,
+                    body    => "Blame $user."
                 );
             }
         } else {
             $self->say(
-                channel => $message->{channel},
+                channel => $channel,
                 body    => 'Please provide the required arguments.'
             );
         }
     }
 
-    if ($message->{body} eq '$spookyscaryskeletons'){
+    if ($msg eq '$spookyscaryskeletons'){
         my @random_words = rand_words(
             wordlist => 'info/spook.txt',
             min      => 10,
@@ -84,19 +88,19 @@ sub said{
         );
 
         $self->say(
-            channel => $message->{channel},
+            channel => $channel,
             body    => @random_words
         );
 
         #my $dump = Data::Dumper->new([$random_words[0]]);
         #$self->say(
-        #    channel => $message->{channel},
+        #    channel => $channel,
         #    body    => $dump
         #);
     }
 
     #Outputs the weather for the <first arg location>.
-    my $weathermsg = $message->{body};
+    my $weathermsg = $msg;
     my @weatherwords = split(/\s/, $weathermsg, 3);
     if ($weatherwords[0] eq '$weather'){
         if ($weatherwords[2] =~ m/[a-zA-Z\d,]/){
@@ -109,24 +113,24 @@ sub said{
             if (exists $forecast->[0]->{place}){
                 if ($weatherwords[1] =~ m/[fF]/ or $weatherwords[1] !~ m/.+/){
                     $self->say(
-                        channel => $message->{channel},
+                        channel => $channel,
                         body    => "$forecast->[0]->{place}: $forecast->[0]->{conditions} || Temperature: $forecast->[0]->{fahrenheit} F || Humidity: $forecast->[0]->{humidity}% || Last updated: $forecast->[0]->{updated}"
                     );
                 } elsif ($weatherwords[1] =~ m/[cC]/){
                     $self->say(
-                        channel => $message->{channel},
+                        channel => $channel,
                         body    => "$forecast->[0]->{place}: $forecast->[0]->{conditions} || Temperature: $forecast->[0]->{celsius} C || Humidity: $forecast->[0]->{humidity}% || Last updated: $forecast->[0]->{updated}"
                     );
                 }
             } else {
                 $self->say(
-                    channel => $message->{channel},
+                    channel => $channel,
                     body    => "\'$weatherwords[2]\' is not a valid place."
                 );
             }
         } else {
             $self->say(
-                channel => $message->{channel},
+                channel => $channel,
                 body    => 'Please provide the required arguments.'
             );
         }
@@ -135,73 +139,73 @@ sub said{
     #if the command does not work when the API gets enabled, do what you did with $abbrv
     #It does not work yet. We still need $wgAllowCopyUploads to be enabled.
     #Uploads the <first arg image> to the wiki as <second arg name>.
-    my $uploadmsg = $message->{body};
+    my $uploadmsg = $msg;
     our @uploadwords = split(/\s/, $uploadmsg, 3);
     if ($uploadwords[0] eq '$upload'){
         if ($uploadwords[1] =~ m/.+/){
             if ($uploadwords[2] =~ m/.+/){
                 $self->say(
-                    channel => $message->{channel},
+                    channel => $channel,
                     body    => 'Sorry, $wgAllowCopyUploads is not enabled on the Wiki yet :('
                 );
-                #if ($message->{raw_nick} =~ m/75-164-196-89.ptld.qwest.net/){
+                #if ($host =~ m/75-164-196-89.ptld.qwest.net/){
                     #SatanicBot::WikiButt->login();
                     #SatanicBot::WikiButt->upload();
                     #SatanicBot::WikiButt->logout();
 
                     #$self->say(
-                    #    channel => $message->{channel},
+                    #    channel => $channel,
                     #    body    => "Uploaded $uploadwords[2] to the Wiki."
                     #);
                 #} else {
                 #    $self->say(
-                #        channel => $message->{channel},
+                #        channel => $channel,
                 #        body    => 'You are not good enough.'
                 #    );
                 #}
             } else {
                 $self->say(
-                    channel => $message->{channel},
+                    channel => $channel,
                     body    => 'Please provide the required arguments.'
                 );
             }
         } else {
             $self->say(
-                channel => $message->{channel},
+                channel => $channel,
                 body    => 'Please provide the required arguments.'
             );
         }
     }
 
     #Outputs the open source report card link for the first argument username. Eventually I should actually do JSON parsing for this.
-    my $osrcmessage = $message->{body};
+    my $osrcmessage = $msg;
     my @osrcwords = split(/\s/, $osrcmessage, 2);
     if ($osrcwords[0] eq '$osrc'){
         my $url = "https://osrc.dfm.io/$osrcwords[1]";
         if (head($url)){
             $self->say(
-                channel => $message->{channel},
+                channel => $channel,
                 body    => $url
             );
         } else {
             $self->say(
-                channel => $message->{channel},
+                channel => $channel,
                 body    => 'Does not exist.'
             );
         }
     }
 
     #Outputs the link to this bot's source code.
-    if ($message->{body} eq '$src'){
+    if ($msg eq '$src'){
         $self->say(
-            channel => $message->{channel},
+            channel => $channel,
             body    => 'https://github.com/satanicsanta/SatanicBot'
         );
     }
 
     #Outputs how many contributions the user has made to the wiki.
     #Consider using a JSON parser instead of regular expression.
-    my $contribmsg = $message->{body};
+    my $contribmsg = $msg;
     my @contribwords = split(/\s/, $contribmsg, 2);
     if ($contribwords[0] eq '$contribs'){
         if ($contribwords[1] =~ m/.+/){
@@ -218,12 +222,12 @@ sub said{
 
             if ($decodecontribs =~ m{\"missing\"}){
                 $self->say(
-                    channel => $message->{channel},
+                    channel => $channel,
                     body    => 'Please enter a valid username.'
                 );
             } elsif ($decodecontribs =~ m{\"invalid\"}) {
                 $self->say(
-                    channel => $message->{channel},
+                    channel => $channel,
                     body    => 'Sorry, but IPs are not compatible.'
                 );
             } else {
@@ -233,46 +237,46 @@ sub said{
 
                 if ($contribs[0] eq '1'){
                     $self->say(
-                        channel => $message->{channel},
+                        channel => $channel,
                         body    => "$contribwords[1] has made 1 contribution to the wiki and registered on $register[0]."
                     );
                 } elsif ($contribwords[1] eq 'SatanicBot' or $contribwords[1] eq 'satanicBot') {
                     $self->say(
-                        channel => $message->{channel},
+                        channel => $channel,
                         body    => "I have made $num_contribs contributions to the wiki and registered on $register[0]."
                     );
                 } elsif ($contribwords[1] eq 'TheSatanicSanta' or $contribwords[1] eq 'theSatanicSanta'){
                     $self->say(
-                        channel => $message->{channel},
+                        channel => $channel,
                         body    => "The second hottest babe in the channel has made $num_contribs contributions to the wiki and registered on $register[0]."
                     );
                 } elsif ($contribwords[1] eq 'Retep998' or $contribwords[1] eq 'retep998'){
                     $self->say(
-                        channel => $message->{channel},
+                        channel => $channel,
                         body    => "The hottest babe in the channel has made $num_contribs contributions to the wiki and registered on $register[0]."
                     );
                 } elsif ($contribwords[1] eq 'PonyButt' or $contribwords[1] eq 'ponyButt'){
                     $self->say(
-                        channel => $message->{channel},
+                        channel => $channel,
                         body    => "Some bitch ass nigga has made $num_contribs contributions to the wiki and registered on $register[0]."
                     );
                 } else {
                     $self->say(
-                        channel => $message->{channel},
+                        channel => $channel,
                         body    => "$contribwords[1] has made $num_contribs contributions to the wiki and registered on $register[0]."
                     );
                 }
             }
         } else {
             $self->say(
-                channel => $message->{channel},
+                channel => $channel,
                 body    => 'Please provide a username.'
             );
         }
     }
 
     #Outputs a random sentence from 8ball.txt.
-    if ($message->{body} eq '$8ball'){
+    if ($msg eq '$8ball'){
         my $file = 'info/8ball.txt';
         open my $fh, '<', $file or die "Could not open '$file' $!\n";
         my @lines = <$fh>;
@@ -280,29 +284,29 @@ sub said{
         chomp @lines;
         my $num = int(rand(35));
         $self->say(
-            channel => $message->{channel},
+            channel => $channel,
             body    => $lines[$num]
         );
     }
 
     #50/50 chance of outputting heads or tails.
-    if ($message->{body} eq '$flip'){
+    if ($msg eq '$flip'){
         my $coin = int(rand(2));
         if ($coin eq 1){
             $self->say(
-                channel => $message->{channel},
+                channel => $channel,
                 body    => 'Heads!'
             );
         } else {
             $self->say(
-                channel => $message->{channel},
+                channel => $channel,
                 body    => 'Tails!'
             );
         }
     }
 
     #Outputs a random quote from ircquotes.txt.
-    if ($message->{body} eq '$randquote'){
+    if ($msg eq '$randquote'){
         my $file = 'info/ircquotes.txt';
         open my $fh, '<', $file or die "Could not open $file $!\n";
         my @lines = <$fh>;
@@ -310,14 +314,14 @@ sub said{
         chomp @lines;
         my $quote = int(rand(31));
         $self->say(
-            channel => $message->{channel},
+            channel => $channel,
             body    => $lines[$quote]
         );
     }
 
     #Wiki statistics.
     #Consider using a real JSON parser rather than regular expression.
-    my $statmsg = $message->{body};
+    my $statmsg = $msg;
     my @statwords = split(/\s/, $statmsg, 2);
     if ($statwords[0] eq '$stats'){
 
@@ -334,83 +338,83 @@ sub said{
             my @activeusers = $decode =~ m{\"activeusers\":(.*?),};
             my @admins = $decode =~ m{\"admins\":(.*?),};
             $self->say(
-                channel => $message->{channel},
+                channel => $channel,
                 body    => "$pages[0] pages || $articulos[0] articles || $edits[0] edits || $images[0] images || $users[0] users || $activeusers[0] active users || $admins[0] admins"
             );
         } elsif ($statwords[1] eq 'pages'){
             my @pages = $decode =~ m{\"pages\":(.*?),};
             $self->say(
-                channel => $message->{channel},
+                channel => $channel,
                 body    => "The wiki has $pages[0] pages."
             );
         } elsif ($statwords[1] eq 'articles'){
             my @articulos = $decode =~ m{\"articles\":(.*?),};
             $self->say(
-                channel => $message->{channel},
+                channel => $channel,
                 body    => "The wiki has $articulos[0] articles."
             );
         } elsif ($statwords[1] eq 'edits'){
             my @edits = $decode =~ m{\"edits\":(.*?),};
             $self->say(
-                channel => $message->{channel},
+                channel => $channel,
                 body    => "The wiki has $edits[0] edits."
             );
         } elsif ($statwords[1] eq 'images'){
             my @images = $decode =~ m{\"images\":(.*?),};
             $self->say(
-                channel => $message->{channel},
+                channel => $channel,
                 body    => "The wiki has $images[0] images."
             );
         } elsif ($statwords[1] eq 'users'){
             my @users = $decode =~ m{\"users\":(.*?),};
             $self->say(
-                channel => $message->{channel},
+                channel => $channel,
                 body    => "The wiki has $users[0] users."
             );
         } elsif ($statwords[1] eq 'active users'){
             my @activeusers = $decode =~ m{\"activeusers\":(.*?),};
             $self->say(
-                channel => $message->{channel},
+                channel => $channel,
                 body    => "The wiki has $activeusers[0] active users."
             );
         } elsif ($statwords[1] eq 'admins'){
             my @admins = $decode =~ m{\"admins\":(.*?),};
             $self->say(
-                channel => $message->{channel},
+                channel => $channel,
                 body    => "The wiki has $admins[0] admins."
             );
         }
     }
 
-    my $calcmsg = $message->{body};
+    my $calcmsg = $msg;
     my @calcwords = split(/\s/, $calcmsg, 2);
     if ($calcwords[0] eq '$calc'){
         if ($calcwords[1] =~ m/\d/){
             my $out = eval($calcwords[1]);
             $self->say(
-                channel => $message->{channel},
+                channel => $channel,
                 body    => "$calcwords[1] = $out"
             );
         } elsif ($calcwords[1] =~ m/\D/){
             my $algebra = Math::Symbolic->parse_from_string($calcwords[1]);
             $self->say(
-                channel => $message->{channel},
+                channel => $channel,
                 body    => "$calcwords[1] = $algebra"
             );
         } else {
             $self->say(
-                channel => $message->{channel},
+                channel => $channel,
                 body    => 'Please provide an equation.'
             );
         }
     }
 
-#    my $minormodsmsg = $message->{body};
+#    my $minormodsmsg = $msg;
 #    my @minormodswords = split(/\s/, $minormodsmsg, 2);
 #    if ($minormodswords[0] eq '$addminor'){
 #        if ($minormodswords[1] =~ m/.+/){
 #            $self->say(
-#                channel => $message->{channel},
+#                channel => $channel,
 #                body    => "Adding $minormodswords[1] to the Minor Mods list."
 #            );
 #
@@ -419,52 +423,52 @@ sub said{
 #
 #            if ($SatanicBot::Wiki::minor eq 'false') {
 #                $self->say(
-#                    channel => $message->{channel},
+#                    channel => $channel,
 #                    body    => 'Could not proceed. Mod already on the list.'
 #                );
 #            } elsif ($SatanicBot::Wiki::minor eq 'true'){
 #                $self->say(
-#                    channel => $message->{channel},
+#                    channel => $channel,
 #                    body    => 'Success!'
 #                );
 #            }
 #        } else {
 #            $self->say(
-#                channel => $message->{channel},
+#                channel => $channel,
 #                body    => 'Please provide the required arguments.'
 #            );
 #        }
 #    }
 
-    my $randmsg = $message->{body};
+    my $randmsg = $msg;
     my @randwords = split(/\s/, $randmsg, 2);
     if ($randwords[0] eq '$randnum'){
         if ($randwords[1] =~ m/\d/){
             $self->say(
-                channel => $message->{channel},
+                channel => $channel,
                 body    => int(rand($randwords[1] + 1))
             );
         } else {
             $self->say(
-                channel => $message->{channel},
+                channel => $channel,
                 body    => 'No argument provided. Using 100... ' . int(rand(101))
             );
         }
     }
 
-    my $gamemsg = $message->{body};
+    my $gamemsg = $msg;
     my @gamewords = split(/\s/, $gamemsg, 3);
     if ($gamewords[0] eq '$game'){
         if ($gamewords[1] eq 'int'){
             my $num = int(rand(101));
             if ($gamewords[2] eq $num){
                 $self->say(
-                    channel => $message->{channel},
+                    channel => $channel,
                     body    => "Correct! The answer was $num"
                 );
             } else {
                 $self->say(
-                    channel => $message->{channel},
+                    channel => $channel,
                     body    => "Wrong! The answer was $num"
                 );
             }
@@ -472,27 +476,27 @@ sub said{
             my $num = rand(10);
             if ($gamewords[2] eq $num){
                 $self->say(
-                    channel => $message->{channel},
+                    channel => $channel,
                     body    => "Correct! The answer was $num"
                 );
             } else {
                 $self->say(
-                    channel => $message->{channel},
+                    channel => $channel,
                     body    => "Wrong! The answer was $num"
                 );
             }
         } else {
             $self->say(
-                channel => $message->{channel},
+                channel => $channel,
                 body    => 'Please provide the required arguments.'
             );
         }
     }
 
     #Provides the user with a command list.
-    if ($message->{body} eq '$help'){
-        $self->say(
-            channel => $message->{channel},
+    if ($msg eq '$help'){
+        $self->notice(
+            channel => $channel,
             body    => 'Listing commands... quit, abbrv, spookyscaryskeletons, weather, upload, osrc, src, contribs, flip, 8ball, randquote, stats, calc, randnum'
         );
     }
