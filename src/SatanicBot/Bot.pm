@@ -42,7 +42,7 @@ sub said{
     }
 
     #Adds the <first arg abbreviation> to the G:Mods and doc as <second arg mod name>
-    if ($msg =~ m/\$abbrv(?: )/){
+    if ($msg =~ m/^\$abbrv(?: )/){
         my @abbrvwords = split(/\s/, $msg, 3);
         if ($abbrvwords[1] =~ m/.+/ and $abbrvwords[2] =~ m/.+/){
             if ($host =~ m/SatanicSa\@75/ or $host =~ m/retep998\@pool/ or $host =~ m/webchat\@81.168.2.162/ or $host =~ m/Wolfman12\@CPE/){
@@ -99,7 +99,7 @@ sub said{
     }
 
     #Outputs the weather for the <first arg location>.
-    if ($msg =~ m/\$weather(?: )/){
+    if ($msg =~ m/^\$weather(?: )/){
         if ($msg =~ m/\$weather f(?: )/ or $msg =~ m/\$weather F(?: )/){
             my @weatherwords = split(/\s/, $msg, 3);
             if ($weatherwords[2] =~ m/[a-zA-Z\d,]/){
@@ -184,7 +184,7 @@ sub said{
     #if the command does not work when the API gets enabled, do what you did with $abbrv
     #It does not work yet. We still need $wgAllowCopyUploads to be enabled.
     #Uploads the <first arg image> to the wiki as <second arg name>.
-    if ($msg =~ m/\$upload(?: )/){
+    if ($msg =~ m/^\$upload(?: )/){
         our @uploadwords = split(/\s/, $msg, 3);
         if ($uploadwords[1] =~ m/.+/){
             if ($uploadwords[2] =~ m/.+/){
@@ -222,7 +222,7 @@ sub said{
     }
 
     #Outputs the open source report card link for the first argument username. Eventually I should actually do JSON parsing for this.
-    if ($msg =~ m/\$osrc(?: )/){
+    if ($msg =~ m/^\$osrc(?: )/){
         my @osrcwords = split(/\s/, $msg, 2);
         my $url = "https://osrc.dfm.io/$osrcwords[1]";
         if (head($url)){
@@ -248,7 +248,7 @@ sub said{
 
     #Outputs how many contributions the user has made to the wiki.
     #Consider using a JSON parser instead of regular expression.
-    if ($msg =~ m/\$contribs(?: )/){
+    if ($msg =~ m/^\$contribs(?: )/){
         my @contribwords = split(/\s/, $msg, 2);
         if ($contribwords[1] =~ m/.+/){
             my $www = WWW::Mechanize->new();
@@ -361,7 +361,7 @@ sub said{
 
     #Wiki statistics.
     #Consider using a real JSON parser rather than regular expression.
-    if ($msg =~ m/\$stats(?: )/){
+    if ($msg =~ m/^\$stats(?: )/){
         my @statwords = split(/\s/, $msg, 2);
         my $www = WWW::Mechanize->new();
         my $stuff = $www->get("http://ftb.gamepedia.com/api.php?action=query&meta=siteinfo&siprop=statistics&format=json") or die "Unable to get url.\n";
@@ -424,7 +424,7 @@ sub said{
         }
     }
 
-    if ($msg =~ m/\$calc(?: )/){
+    if ($msg =~ m/^\$calc(?: )/){
         my @calcwords = split(/\s/, $msg, 2);
         if ($calcwords[1] =~ m/\d/){
             my $out = eval($calcwords[1]);
@@ -477,9 +477,8 @@ sub said{
 #        }
 #    }
 
-    my $randmsg = $msg;
-    my @randwords = split(/\s/, $randmsg, 2);
-    if ($randwords[0] eq '$randnum'){
+    if ($msg =~ m/^\$randnum/){
+        my @randwords = split(/\s/, $msg, 2);
         if ($randwords[1] =~ m/\d/){
             $self->say(
                 channel => $channel,
@@ -493,9 +492,8 @@ sub said{
         }
     }
 
-    my $gamemsg = $msg;
-    my @gamewords = split(/\s/, $gamemsg, 3);
-    if ($gamewords[0] eq '$game'){
+    if ($msg =~ m/^\$game/){
+        my @gamewords = split(/\s/, $msg, 3);
         if ($gamewords[1] eq 'int'){
             my $num = int(rand(101));
             if ($gamewords[2] eq $num){
@@ -532,9 +530,9 @@ sub said{
 
     #Provides the user with a command list.
     if ($msg eq '$help'){
-        $self->notice(
+        $self->say(
             channel => $channel,
-            body    => 'Listing commands... quit, abbrv, spookyscaryskeletons, weather, upload, osrc, src, contribs, flip, 8ball, randquote, stats, calc, randnum'
+            body    => 'Listing commands... quit, abbrv, spookyscaryskeletons, weather, upload, osrc, src, contribs, flip, 8ball, randquote, stats, calc, randnum, game'
         );
     }
 }
