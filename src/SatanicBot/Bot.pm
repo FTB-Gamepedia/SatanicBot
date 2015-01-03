@@ -508,12 +508,19 @@ sub said{
         my @gamewords = split(/\s/, $msg, 3);
         if ($gamewords[1] =~ m/int/i){
             my $num = int(rand(101));
+            if ($gamewords[2] > 100){
+                $self->say(
+                    channel => $channel,
+                    body    => 'Please provide a number lower than 100.'
+                );
+            }
             if ($gamewords[2] eq $num){
                 $self->say(
                     channel => $channel,
                     body    => "Correct! The answer was $num"
                 );
-            } else {
+            }
+            if ($gamewords[2] ne $num){
                 $self->say(
                     channel => $channel,
                     body    => "Wrong! The answer was $num"
@@ -521,12 +528,19 @@ sub said{
             }
         } elsif ($gamewords[1] =~ m/float/i){
             my $num = rand(10);
+            if ($gamewords[2] > 10){
+                $self->say(
+                    channel => $channel,
+                    body    => 'Please provide a number lower than 10.'
+                );
+            }
             if ($gamewords[2] eq $num){
                 $self->say(
                     channel => $channel,
                     body    => "Correct! The answer was $num"
                 );
-            } else {
+            }
+            if ($gamewords[2] ne $num) {
                 $self->say(
                     channel => $channel,
                     body    => "Wrong! The answer was $num"
