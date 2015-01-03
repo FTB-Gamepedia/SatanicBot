@@ -42,9 +42,8 @@ sub said{
     }
 
     #Adds the <first arg abbreviation> to the G:Mods and doc as <second arg mod name>
-    my $abbrvmsg = $msg;
-    my @abbrvwords = split(/\s/, $abbrvmsg, 3);
-    if ($abbrvwords[0] eq '$abbrv'){
+    if ($msg =~ m/\$abbrv(?: )/){
+        my @abbrvwords = split(/\s/, $abbrvmsg, 3);
         if ($abbrvwords[1] =~ m/.+/){
             if ($host =~ m/SatanicSa\@75/ or $host =~ m/retep998\@pool/ or $host =~ m/webchat\@81.168.2.162/ or $host =~ m/Wolfman12\@CPE/){
                 $self->say(
@@ -100,9 +99,8 @@ sub said{
     }
 
     #Outputs the weather for the <first arg location>.
-    my $weathermsg = $msg;
-    my @weatherwords = split(/\s/, $weathermsg, 3);
-    if ($weatherwords[0] eq '$weather'){
+    if ($msg =~ m/\$weather(?: )/){
+        my @weatherwords = split(/\s/, $weathermsg, 3);
         if ($weatherwords[2] =~ m/[a-zA-Z\d,]/){
             my $weather = Weather::Underground->new(
                 place => $weatherwords[2]
@@ -139,9 +137,8 @@ sub said{
     #if the command does not work when the API gets enabled, do what you did with $abbrv
     #It does not work yet. We still need $wgAllowCopyUploads to be enabled.
     #Uploads the <first arg image> to the wiki as <second arg name>.
-    my $uploadmsg = $msg;
-    our @uploadwords = split(/\s/, $uploadmsg, 3);
-    if ($uploadwords[0] eq '$upload'){
+    if ($msg =~ m/\$upload(?: )/){
+        our @uploadwords = split(/\s/, $uploadmsg, 3);
         if ($uploadwords[1] =~ m/.+/){
             if ($uploadwords[2] =~ m/.+/){
                 $self->say(
@@ -178,9 +175,8 @@ sub said{
     }
 
     #Outputs the open source report card link for the first argument username. Eventually I should actually do JSON parsing for this.
-    my $osrcmessage = $msg;
-    my @osrcwords = split(/\s/, $osrcmessage, 2);
-    if ($osrcwords[0] eq '$osrc'){
+    if ($msg =~ m/\$osrc(?: )/){
+        my @osrcwords = split(/\s/, $msg, 2);
         my $url = "https://osrc.dfm.io/$osrcwords[1]";
         if (head($url)){
             $self->say(
@@ -205,11 +201,9 @@ sub said{
 
     #Outputs how many contributions the user has made to the wiki.
     #Consider using a JSON parser instead of regular expression.
-    my $contribmsg = $msg;
-    my @contribwords = split(/\s/, $contribmsg, 2);
-    if ($contribwords[0] eq '$contribs'){
+    if ($msg =~ m/\$contribs(?: )/){
+        my @contribwords = split(/\s/, $msg, 2);
         if ($contribwords[1] =~ m/.+/){
-
             my $www = WWW::Mechanize->new();
             my $contriburl = $www->get("http://ftb.gamepedia.com/api.php?action=query&list=users&ususers=$contribwords[1]&usprop=editcount&format=json") or die "Unable to get url.\n";
             my $decodecontribs = $contriburl->decoded_content();
@@ -218,7 +212,6 @@ sub said{
             my $registerurl = $www->get("http://ftb.gamepedia.com/api.php?action=query&list=users&ususers=$contribwords[1]&usprop=registration&format=json") or die "Unable to get url.\n";
             my $decodereg = $registerurl->decoded_content();
             my @register = $decodereg =~ m{\"registration\":\"(.*?)T};
-
 
             if ($decodecontribs =~ m{\"missing\"}){
                 $self->say(
@@ -321,10 +314,8 @@ sub said{
 
     #Wiki statistics.
     #Consider using a real JSON parser rather than regular expression.
-    my $statmsg = $msg;
-    my @statwords = split(/\s/, $statmsg, 2);
-    if ($statwords[0] eq '$stats'){
-
+    if ($msg =~ m/\$stats(?: )/){
+        my @statwords = split(/\s/, $msg, 2);
         my $www = WWW::Mechanize->new();
         my $stuff = $www->get("http://ftb.gamepedia.com/api.php?action=query&meta=siteinfo&siprop=statistics&format=json") or die "Unable to get url.\n";
         my $decode = $stuff->decoded_content();
@@ -386,9 +377,8 @@ sub said{
         }
     }
 
-    my $calcmsg = $msg;
-    my @calcwords = split(/\s/, $calcmsg, 2);
-    if ($calcwords[0] eq '$calc'){
+    if ($msg =~ m/\$calc(?: )/){
+        my @calcwords = split(/\s/, $msg, 2);
         if ($calcwords[1] =~ m/\d/){
             my $out = eval($calcwords[1]);
             $self->say(
