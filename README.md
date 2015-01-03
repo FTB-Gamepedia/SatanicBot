@@ -65,10 +65,6 @@ game
 ----
 Random number guessing game. Takes 2 arguments: <int or float> <number>. Integers will be from 0-100. Floats will be from 0-10.
 
-prime
------
-Checks if the first argument is a prime number.
-
 quit
 ----
 The $quit command will stop the bot.
