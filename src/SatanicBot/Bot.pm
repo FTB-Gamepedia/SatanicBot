@@ -513,14 +513,12 @@ sub said{
                     channel => $channel,
                     body    => 'Please provide a number lower than 100.'
                 );
-            }
-            if ($gamewords[2] eq $num){
+            } elsif ($gamewords[2] eq $num){
                 $self->say(
                     channel => $channel,
                     body    => "Correct! The answer was $num"
                 );
-            }
-            if ($gamewords[2] ne $num){
+            } elsif ($gamewords[2] ne $num){
                 $self->say(
                     channel => $channel,
                     body    => "Wrong! The answer was $num"
@@ -533,14 +531,12 @@ sub said{
                     channel => $channel,
                     body    => 'Please provide a number lower than 10.'
                 );
-            }
-            if ($gamewords[2] eq $num){
+            } elsif ($gamewords[2] eq $num){
                 $self->say(
                     channel => $channel,
                     body    => "Correct! The answer was $num"
                 );
-            }
-            if ($gamewords[2] ne $num) {
+            } elsif ($gamewords[2] ne $num) {
                 $self->say(
                     channel => $channel,
                     body    => "Wrong! The answer was $num"
