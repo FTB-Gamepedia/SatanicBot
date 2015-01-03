@@ -43,8 +43,8 @@ sub said{
 
     #Adds the <first arg abbreviation> to the G:Mods and doc as <second arg mod name>
     if ($msg =~ m/\$abbrv(?: )/){
-        my @abbrvwords = split(/\s/, $abbrvmsg, 3);
-        if ($abbrvwords[1] =~ m/.+/){
+        my @abbrvwords = split(/\s/, $msg, 3);
+        if ($abbrvwords[1] =~ m/.+/ and $abbrvwords[2] =~ m/.+/){
             if ($host =~ m/SatanicSa\@75/ or $host =~ m/retep998\@pool/ or $host =~ m/webchat\@81.168.2.162/ or $host =~ m/Wolfman12\@CPE/){
                 $self->say(
                     channel => $channel,
@@ -100,37 +100,84 @@ sub said{
 
     #Outputs the weather for the <first arg location>.
     if ($msg =~ m/\$weather(?: )/){
-        my @weatherwords = split(/\s/, $weathermsg, 3);
-        if ($weatherwords[2] =~ m/[a-zA-Z\d,]/){
-            my $weather = Weather::Underground->new(
-                place => $weatherwords[2]
-            );
+        if ($msg =~ m/\$weather f(?: )/ or $msg =~ m/\$weather F(?: )/){
+            my @weatherwords = split(/\s/, $msg, 3);
+            if ($weatherwords[2] =~ m/[a-zA-Z\d,]/){
+                my $weather = Weather::Underground->new(
+                    place => $weatherwords[2]
+                );
 
-            my $forecast = $weather->getweather();
+                my $forecast = $weather->getweather();
 
-            if (exists $forecast->[0]->{place}){
-                if ($weatherwords[1] =~ m/[fF]/ or $weatherwords[1] !~ m/.+/){
+                if (exists $forecast->[0]->{place}){
                     $self->say(
                         channel => $channel,
                         body    => "$forecast->[0]->{place}: $forecast->[0]->{conditions} || Temperature: $forecast->[0]->{fahrenheit} F || Humidity: $forecast->[0]->{humidity}% || Last updated: $forecast->[0]->{updated}"
                     );
-                } elsif ($weatherwords[1] =~ m/[cC]/){
+                } else {
                     $self->say(
                         channel => $channel,
-                        body    => "$forecast->[0]->{place}: $forecast->[0]->{conditions} || Temperature: $forecast->[0]->{celsius} C || Humidity: $forecast->[0]->{humidity}% || Last updated: $forecast->[0]->{updated}"
+                        body    => "\'$weatherwords[2]\' is not a valid place."
                     );
                 }
             } else {
                 $self->say(
                     channel => $channel,
-                    body    => "\'$weatherwords[2]\' is not a valid place."
+                    body    => 'Please provide the required arguments.'
+                );
+            }
+        } elsif ($msg =~ m/\$weather c(?: )/ or $msg =~ m/\$weather C(?: )/){
+            my @weatherwords = split(/\s/, $msg, 3);
+            if ($weatherwords[2] =~ m/[a-zA-Z\d,]/){
+                my $weather = Weather::Underground->new(
+                    place => $weatherwords[2]
+                );
+
+                my $forecast = $weather->getweather();
+
+                if (exists $forecast->[0]->{place}){
+                    $self->say(
+                        channel => $channel,
+                        body    => "$forecast->[0]->{place}: $forecast->[0]->{conditions} || Temperature: $forecast->[0]->{celsius} C || Humidity: $forecast->[0]->{humidity}% || Last updated: $forecast->[0]->{updated}"
+                    );
+                } else {
+                    $self->say(
+                        channel => $channel,
+                        body    => "\'$weatherwords[2]\' is not a valid place."
+                    );
+                }
+            } else {
+                $self->say(
+                    channel => $channel,
+                    body    => 'Please provide the required arguments.'
                 );
             }
         } else {
-            $self->say(
-                channel => $channel,
-                body    => 'Please provide the required arguments.'
-            );
+            my @weatherwords = split(/\s/, $msg, 2);
+            if ($weatherwords[1] =~ m/[a-zA-Z\d,]/){
+                my $weather = Weather::Underground->new(
+                place => $weatherwords[1]
+                );
+
+                my $forecast = $weather->getweather();
+
+                if (exists $forecast->[0]->{place}){
+                    $self->say(
+                        channel => $channel,
+                        body    => "$forecast->[0]->{place}: $forecast->[0]->{conditions} || Temperature: $forecast->[0]->{fahrenheit} F || Humidity: $forecast->[0]->{humidity}% || Last updated: $forecast->[0]->{updated}"
+                    );
+                } else {
+                    $self->say(
+                        channel => $channel,
+                        body    => "\'$weatherwords[1]\' is not a valid place."
+                    );
+                }
+            } else {
+                $self->say(
+                    channel => $channel,
+                    body    => 'Please provide the required arguments.'
+                );
+            }
         }
     }
 
@@ -138,7 +185,7 @@ sub said{
     #It does not work yet. We still need $wgAllowCopyUploads to be enabled.
     #Uploads the <first arg image> to the wiki as <second arg name>.
     if ($msg =~ m/\$upload(?: )/){
-        our @uploadwords = split(/\s/, $uploadmsg, 3);
+        our @uploadwords = split(/\s/, $msg, 3);
         if ($uploadwords[1] =~ m/.+/){
             if ($uploadwords[2] =~ m/.+/){
                 $self->say(
