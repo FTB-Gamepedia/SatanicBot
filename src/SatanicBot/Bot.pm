@@ -255,6 +255,7 @@ sub said{
             my $contriburl = $www->get("http://ftb.gamepedia.com/api.php?action=query&list=users&ususers=$contribwords[1]&usprop=editcount&format=json") or die "Unable to get url.\n";
             my $decodecontribs = $contriburl->decoded_content();
             my @contribs = $decodecontribs =~ m{\"editcount\":(.*?)\}};
+            my @name = $decodecontribs =~ m{\"name\":(.*?),};
 
             my $registerurl = $www->get("http://ftb.gamepedia.com/api.php?action=query&list=users&ususers=$contribwords[1]&usprop=registration&format=json") or die "Unable to get url.\n";
             my $decodereg = $registerurl->decoded_content();
@@ -278,7 +279,7 @@ sub said{
                 if ($contribs[0] eq '1'){
                     $self->say(
                         channel => $channel,
-                        body    => "$contribwords[1] has made 1 contribution to the wiki and registered on $register[0]."
+                        body    => "$name[0] has made 1 contribution to the wiki and registered on $register[0]."
                     );
                 } elsif ($contribwords[1] eq 'SatanicBot' or $contribwords[1] eq 'satanicBot') {
                     $self->say(
@@ -303,7 +304,7 @@ sub said{
                 } else {
                     $self->say(
                         channel => $channel,
-                        body    => "$contribwords[1] has made $num_contribs contributions to the wiki and registered on $register[0]."
+                        body    => "$name[0] has made $num_contribs contributions to the wiki and registered on $register[0]."
                     );
                 }
             }
