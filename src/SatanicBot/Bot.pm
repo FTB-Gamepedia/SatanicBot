@@ -255,7 +255,7 @@ sub said{
             my $contriburl = $www->get("http://ftb.gamepedia.com/api.php?action=query&list=users&ususers=$contribwords[1]&usprop=editcount&format=json") or die "Unable to get url.\n";
             my $decodecontribs = $contriburl->decoded_content();
             my @contribs = $decodecontribs =~ m{\"editcount\":(.*?)\}};
-            my @name = $decodecontribs =~ m{\"name\":(.*?),};
+            my @name = $decodecontribs =~ m{\"name\":\"(.*?)\"};
 
             my $registerurl = $www->get("http://ftb.gamepedia.com/api.php?action=query&list=users&ususers=$contribwords[1]&usprop=registration&format=json") or die "Unable to get url.\n";
             my $decodereg = $registerurl->decoded_content();
