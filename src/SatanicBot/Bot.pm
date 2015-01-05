@@ -369,53 +369,74 @@ sub said{
             my $stuff = $www->get("http://ftb.gamepedia.com/api.php?action=query&meta=siteinfo&siprop=statistics&format=json") or die "Unable to get url.\n";
             my $decode = $stuff->decoded_content();
 
-            if ($statwords[1] =~ m/pages$/i){
+            if ($statwords[1] =~ m/^pages$/i){
                 my @pages = $decode =~ m{\"pages\":(.*?),};
+                $pages[0] = reverse $pages[0];
+                $pages[0] =~ s/(\d\d\d)(?=\d)(?!\d*\.)/$1,/g;
+                my $num_pages = reverse $pages[0];
                 $self->say(
                     channel => $channel,
-                    body    => "The wiki has $pages[0] pages."
+                    body    => "The wiki has $num_pages pages."
                 );
             }
-            if ($statwords[1] =~ m/articles$/i){
+            if ($statwords[1] =~ m/^articles$/i){
                 my @articulos = $decode =~ m{\"articles\":(.*?),};
+                $articulos[0] = reverse $articulos[0];
+                $articulos[0] =~ s/(\d\d\d)(?=\d)(?!\d*\.)/$1,/g;
+                my $num_articles = reverse $articulos[0];
                 $self->say(
                     channel => $channel,
-                    body    => "The wiki has $articulos[0] articles."
+                    body    => "The wiki has $num_articles articles."
                 );
             }
-            if ($statwords[1] =~ m/edits$/i){
+            if ($statwords[1] =~ m/^edits$/i){
                 my @edits = $decode =~ m{\"edits\":(.*?),};
+                $edits[0] = reverse $edits[0];
+                $edits[0] =~ s/(\d\d\d)(?=\d)(?!\d*\.)/$1,/g;
+                my $num_edits = reverse $edits[0];
                 $self->say(
                     channel => $channel,
-                    body    => "The wiki has $edits[0] edits."
+                    body    => "The wiki has $num_edits edits."
                 );
             }
-            if ($statwords[1] =~ m/images$/i){
+            if ($statwords[1] =~ m/^images$/i){
                 my @images = $decode =~ m{\"images\":(.*?),};
+                $images[0] = reverse $images[0];
+                $images[0] =~ s/(\d\d\d)(?=\d)(?!\d*\.)/$1,/g;
+                my $num_images = reverse $images[0];
                 $self->say(
                     channel => $channel,
-                    body    => "The wiki has $images[0] images."
+                    body    => "The wiki has $num_images images."
                 );
             }
-            if ($statwords[1] =~ m/users$/i){
+            if ($statwords[1] =~ m/^users$/i){
                 my @users = $decode =~ m{\"users\":(.*?),};
+                $users[0] = reverse $users[0];
+                $users[0] =~ s/(\d\d\d)(?=\d)(?!\d*\.)/$1,/g;
+                my $num_users = reverse $users[0];
                 $self->say(
                     channel => $channel,
-                    body    => "The wiki has $users[0] users."
+                    body    => "The wiki has $num_users users."
                 );
             }
-            if ($statwords[1] =~ m/active users$/i){
+            if ($statwords[1] =~ m/^active users$/i){
                 my @activeusers = $decode =~ m{\"activeusers\":(.*?),};
+                $activeusers[0] = reverse $activeusers[0];
+                $activeusers[0] =~ s/(\d\d\d)(?=\d)(?!\d*\.)/$1,/g;
+                my $num_active = reverse $activeusers[0];
                 $self->say(
                     channel => $channel,
-                    body    => "The wiki has $activeusers[0] active users."
+                    body    => "The wiki has $num_active active users."
                 );
             }
-            if ($statwords[1] =~ m/admins$/i){
+            if ($statwords[1] =~ m/^admins$/i){
                 my @admins = $decode =~ m{\"admins\":(.*?),};
+                $admins[0] = reverse $admins[0];
+                $admins[0] =~ s/(\d\d\d)(?=\d)(?!\d*\.)/$1,/g;
+                my $num_admins = reverse $admins[0];
                 $self->say(
                     channel => $channel,
-                    body    => "The wiki has $admins[0] admins."
+                    body    => "The wiki has $num_admins admins."
                 );
             }
         } elsif ($msg =~ m/^\$stats$/i){
@@ -430,9 +451,38 @@ sub said{
             my @users = $decode =~ m{\"users\":(.*?),};
             my @activeusers = $decode =~ m{\"activeusers\":(.*?),};
             my @admins = $decode =~ m{\"admins\":(.*?),};
+
+            $pages[0] = reverse $pages[0];
+            $pages[0] =~ s/(\d\d\d)(?=\d)(?!\d*\.)/$1,/g;
+            my $num_pages = reverse $pages[0];
+
+            $articulos[0] = reverse $articulos[0];
+            $articulos[0] =~ s/(\d\d\d)(?=\d)(?!\d*\.)/$1,/g;
+            my $num_articles = reverse $articulos[0];
+
+            $edits[0] = reverse $edits[0];
+            $edits[0] =~ s/(\d\d\d)(?=\d)(?!\d*\.)/$1,/g;
+            my $num_edits = reverse $edits[0];
+
+            $images[0] = reverse $images[0];
+            $images[0] =~ s/(\d\d\d)(?=\d)(?!\d*\.)/$1,/g;
+            my $num_images = reverse $images[0];
+
+            $users[0] = reverse $users[0];
+            $users[0] =~ s/(\d\d\d)(?=\d)(?!\d*\.)/$1,/g;
+            my $num_users = reverse $users[0];
+
+            $activeusers[0] = reverse $activeusers[0];
+            $activeusers[0] =~ s/(\d\d\d)(?=\d)(?!\d*\.)/$1,/g;
+            my $num_active = reverse $activeusers[0];
+
+            $admins[0] = reverse $admins[0];
+            $admins[0] =~ s/(\d\d\d)(?=\d)(?!\d*\.)/$1,/g;
+            my $num_admins = reverse $admins[0];
+
             $self->say(
                 channel => $channel,
-                body    => "$pages[0] pages || $articulos[0] articles || $edits[0] edits || $images[0] images || $users[0] users || $activeusers[0] active users || $admins[0] admins"
+                body    => "$num_pages pages || $num_articles articles || $num_edits edits || $num_images images || $num_users users || $num_active active users || $num_admins admins"
             );
         }
     }
