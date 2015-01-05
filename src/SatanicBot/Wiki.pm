@@ -68,8 +68,8 @@ sub edit_gmods{
     my $replace_t = $firstref->{'*'};
     my $replace_d = $secondref->{'*'};
 
-    if ($replace_d !~ m/\|\| <code>$abbrev/){
-        if ($replace_d !~ m/\| [[$name]]/){
+    if ($replace_d !~ m/\|\| <code>\$abbrev/){
+        if ($replace_d !~ m/\| \[\[\$name\]\]/){
             $replace_t =~ s/\|#default/\|$abbrev = {{#if:{{{name\|}}}{{{code\|}}}\|\|_(}}{{#if:{{{name\|}}}{{{link\|}}}\|$name\|$abbrev}}{{#if:{{{name\|}}}{{{code\|}}}\|\|)}}\n\|$name = {{#if:{{{name\|}}}{{{code\|}}}\|\|_(}}{{#if:{{{name\|}}}{{{link\|}}}\|$name\|$abbrev}}{{#if:{{{name\|}}}{{{code\|}}}\|\|)}}\n\n\|#default/;
             $mw->edit({
                 action     => 'edit',
