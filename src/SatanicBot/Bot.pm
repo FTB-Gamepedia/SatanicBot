@@ -15,6 +15,7 @@ use LWP::Simple;
 use WWW::Mechanize;
 use Math::Symbolic;
 use Date::Parse;
+use File::RandomLine;
 
 #Use this subroutine definition for adding commands.
 sub said{
@@ -317,14 +318,11 @@ sub said{
     #Outputs a random sentence from 8ball.txt.
     if ($msg =~ m/^\$8ball$/i){
         my $file = 'info/8ball.txt';
-        open my $fh, '<', $file or die "Could not open '$file' $!\n";
-        my @lines = <$fh>;
-        close $fh;
-        chomp @lines;
-        my $num = int(rand(35));
+        my $rl = File::RandomLine($file);
+        my $fortune = $rl->next(1);
         $self->say(
             channel => $channel,
-            body    => $lines[$num]
+            body    => $fortune
         );
     }
 
@@ -347,14 +345,11 @@ sub said{
     #Outputs a random quote from ircquotes.txt.
     if ($msg =~ m/^\$randquote$/i){
         my $file = 'info/ircquotes.txt';
-        open my $fh, '<', $file or die "Could not open $file $!\n";
-        my @lines = <$fh>;
-        close $fh;
-        chomp @lines;
-        my $quote = int(rand(31));
+        my $rl = File::RandomLine($file);
+        my $quote = $rl->next(1);
         $self->say(
             channel => $channel,
-            body    => $lines[$quote]
+            body    => $quote
         );
     }
 
@@ -603,22 +598,18 @@ sub said{
 
     #LittleHelper is a LittleMotivational too. Suggested by Peter to motivate Kyth.
     if ($msg =~ m/^\$motivate/i){
-        my $file = 'info/motivate.txt';
-        open my $fh, '<', $file or die "Could not open $file $!\n";
-        my @lines = <$fh>;
-        close $fh;
-        chomp @lines;
-        my $motmes = int(rand(17));
+        my $file = File::RandomLine->new('info/motivate.txt');
+        my $mess = $file->next(1);
         if ($msg =~ m/^\$motivate(?: )/i){
             my @who = split(/\s/, $msg, 2);
             $self->say(
-            channel => $channel,
-            body    => "$lines[$motmes], $who[1]"
+                channel => $channel,
+                body    => "$mess, $who[1]"
             );
         } elsif ($msg =~ m/^\$motivate$/i){
             $self->say(
                 channel => $channel,
-                body    => "$lines[$motmes], $message->{who}"
+                body    => "$mess, $message->{who}"
             );
         }
     }
