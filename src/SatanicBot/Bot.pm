@@ -181,17 +181,11 @@ sub said{
         }
     }
 
-    #if the command does not work when the API gets enabled, do what you did with $abbrv
-    #It does not work yet. We still need $wgAllowCopyUploads to be enabled.
     #Uploads the <first arg image> to the wiki as <second arg name>.
     if ($msg =~ m/^\$upload(?: )/i){
-        our @uploadwords = split(/\s/, $msg, 3);
-        if ($uploadwords[1] =~ m/.+/){
-            if ($uploadwords[2] =~ m/.+/){
-                $self->say(
-                    channel => $channel,
-                    body    => 'Sorry, $wgAllowCopyUploads is not enabled on the Wiki yet :('
-                );
+        #our @uploadwords = split(/\s/, $msg, 3);
+        #if ($uploadwords[1] =~ m/.+/){
+            #if ($uploadwords[2] =~ m/.+/){
                 #if ($host =~ m/75-164-196-89.ptld.qwest.net/){
                     #SatanicBot::WikiButt->login();
                     #SatanicBot::WikiButt->upload();
@@ -207,18 +201,22 @@ sub said{
                 #        body    => 'You are not good enough.'
                 #    );
                 #}
-            } else {
-                $self->say(
-                    channel => $channel,
-                    body    => 'Please provide the required arguments.'
-                );
-            }
-        } else {
-            $self->say(
-                channel => $channel,
-                body    => 'Please provide the required arguments.'
-            );
-        }
+            #} else {
+            #    $self->say(
+            #        channel => $channel,
+            #        body    => 'Please provide the required arguments.'
+            #    );
+            #}
+        #} else {
+        #    $self->say(
+        #        channel => $channel,
+        #        body    => 'Please provide the required arguments.'
+        #    );
+        #}
+        $self->say(
+            channel => $channel,
+            body    => 'Sorry, currently on Curse peoeple can upload by url.'
+        )
     }
 
     #Outputs the open source report card link for the first argument username. Eventually I should actually do JSON parsing for this.
