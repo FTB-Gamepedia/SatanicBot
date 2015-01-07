@@ -553,6 +553,8 @@ sub said{
         }
     }
 
+    #Super hard number guessing game
+    #Make it less hard you fuccboi
     if ($msg =~ m/^\$game/i){
         my @gamewords = split(/\s/, $msg, 3);
         if ($gamewords[1] =~ m/int/i){
@@ -595,6 +597,28 @@ sub said{
             $self->say(
                 channel => $channel,
                 body    => 'Please provide the required arguments.'
+            );
+        }
+    }
+
+    #LittleHelper is a LittleMotivational too. Suggested by Peter to motivate Kyth.
+    if ($msg =~ m/^\$motivate/i){
+        my $file = 'info/motivate.txt';
+        open my $fh, '<', $file or die "Could not open $file $!\n";
+        my @lines = <$fh>;
+        close $fh;
+        chomp @lines;
+        my $motmes = int(rand(17));
+        if ($msg =~ m/^\$motivate(?: )/i){
+            my @who = split(/\s/, $msg, 2);
+            $self->say(
+            channel => $channel,
+            body    => "$lines[$motmes], $who[1]"
+            );
+        } elsif ($msg =~ m/^\$motivate$/i){
+            $self->say(
+                channel => $channel,
+                body    => "$lines[$motmes], $message->{who}"
             );
         }
     }
@@ -693,10 +717,16 @@ sub said{
                     body    => 'Number guessing game. 2 args: <int or float> <guess>'
                 );
             }
+            if ($helpwords[1] =~ m/motivate$/i){
+                $self->say(
+                    channel => $channel,
+                    body    => 'Motivates you or the user you provide in the first arg.'
+                );
+            }
         } else {
             $self->say(
                 channel => $channel,
-                body    => 'Listing commands... quit, abbrv, spookyscaryskeletons, weather, upload, osrc, src, contribs, flip, 8ball, randquote, stats, calc, randnum, game'
+                body    => 'Listing commands... quit, abbrv, spookyscaryskeletons, weather, upload, osrc, src, contribs, flip, 8ball, randquote, stats, calc, randnum, game, motivate'
             );
         }
     }
