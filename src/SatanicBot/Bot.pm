@@ -318,7 +318,7 @@ sub said{
     #Outputs a random sentence from 8ball.txt.
     if ($msg =~ m/^\$8ball$/i){
         my $file = 'info/8ball.txt';
-        my $rl = File::RandomLine($file);
+        my $rl = File::RandomLine->new($file);
         my $fortune = $rl->next(1);
         $self->say(
             channel => $channel,
@@ -345,7 +345,7 @@ sub said{
     #Outputs a random quote from ircquotes.txt.
     if ($msg =~ m/^\$randquote$/i){
         my $file = 'info/ircquotes.txt';
-        my $rl = File::RandomLine($file);
+        my $rl = File::RandomLine->new($file);
         my $quote = $rl->next(1);
         $self->say(
             channel => $channel,
