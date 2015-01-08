@@ -184,40 +184,40 @@ sub said{
 
     #Uploads the <first arg image> to the wiki as <second arg name>.
     if ($msg =~ m/^\$upload(?: )/i){
-        #our @uploadwords = split(/\s/, $msg, 3);
-        #if ($uploadwords[1] =~ m/.+/){
-            #if ($uploadwords[2] =~ m/.+/){
-                #if ($host =~ m/75-164-196-89.ptld.qwest.net/){
-                    #SatanicBot::WikiButt->login();
-                    #SatanicBot::WikiButt->upload();
-                    #SatanicBot::WikiButt->logout();
+        our @uploadwords = split(/\s/, $msg, 3);
+        if ($uploadwords[1] =~ m/.+/){
+            if ($uploadwords[2] =~ m/.+/){
+                if ($host =~ m/SatanicSa\@75/ or $host =~ m/retep998\@pool/ or $host =~ m/webchat\@81.168.2.162/ or $host =~ m/Wolfman12\@CPE/){
+                    SatanicBot::WikiButt->login();
+                    SatanicBot::WikiButt->upload();
+                    SatanicBot::WikiButt->logout();
 
-                    #$self->say(
-                    #    channel => $channel,
-                    #    body    => "Uploaded $uploadwords[2] to the Wiki."
-                    #);
-                #} else {
-                #    $self->say(
-                #        channel => $channel,
-                #        body    => 'You are not good enough.'
-                #    );
-                #}
-            #} else {
-            #    $self->say(
-            #        channel => $channel,
-            #        body    => 'Please provide the required arguments.'
-            #    );
-            #}
-        #} else {
-        #    $self->say(
-        #        channel => $channel,
-        #        body    => 'Please provide the required arguments.'
-        #    );
-        #}
-        $self->say(
-            channel => $channel,
-            body    => 'Sorry, currently on Curse peoeple can upload by url.'
-        )
+                    $self->say(
+                        channel => $channel,
+                        body    => "Uploaded $uploadwords[2] to the Wiki."
+                    );
+                } else {
+                    $self->say(
+                        channel => $channel,
+                        body    => 'You are not good enough.'
+                    );
+                }
+            } else {
+                $self->say(
+                    channel => $channel,
+                    body    => 'Please provide the required arguments.'
+                );
+            }
+        } else {
+            $self->say(
+                channel => $channel,
+                body    => 'Please provide the required arguments.'
+            );
+        }
+        #$self->say(
+        #    channel => $channel,
+        #    body    => 'Sorry, currently on Curse peoeple can upload by url.'
+        #);
     }
 
     #Outputs the open source report card link for the first argument username. Eventually I should actually do JSON parsing for this.
