@@ -609,7 +609,7 @@ sub said{
         } elsif ($msg =~ m/^\$motivate$/i){
             $self->say(
                 channel => $channel,
-                body    => "$mess, $message->{who}"
+                body    => "$mess, $user"
             );
         }
     }
