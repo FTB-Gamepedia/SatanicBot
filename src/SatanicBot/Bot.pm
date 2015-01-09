@@ -320,6 +320,7 @@ sub said{
         my $file = 'info/8ball.txt';
         my $rl = File::RandomLine->new($file);
         my $fortune = $rl->next(1);
+        chomp $fortune;
         $self->say(
             channel => $channel,
             body    => $fortune
@@ -347,6 +348,7 @@ sub said{
         my $file = 'info/ircquotes.txt';
         my $rl = File::RandomLine->new($file);
         my $quote = $rl->next(1);
+        chomp $quote;
         $self->say(
             channel => $channel,
             body    => $quote
@@ -600,6 +602,7 @@ sub said{
     if ($msg =~ m/^\$motivate/i){
         my $file = File::RandomLine->new('info/motivate.txt');
         my $mess = $file->next(1);
+        chomp $mess;
         if ($msg =~ m/^\$motivate(?: )/i){
             my @who = split(/\s/, $msg, 2);
             $self->say(
