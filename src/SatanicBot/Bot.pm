@@ -25,14 +25,14 @@ sub said{
     my $msg = $message->{body};
     my $user = $message->{who};
 
-    #quit command: no args. Only those with the nickname SatanicSanta can do it.
+    #Quit command. Only Santa can do it.
     if ($msg =~ m/^\$quit$/i){
         if ($host =~ m/SatanicSa\@/){
             $self->say(
                 channel => $channel,
-                body    => 'I don\'t love you anymore'
+                body    => 'I don\'t love you anymore' #For some reason this does not get said before it quits in most cases.
             );
-            $self->shutdown();
+            $self->shutdown(); #Consider replacing the message said before it quits with an actual quit message.
             exit;
         } else {
             $self->say(

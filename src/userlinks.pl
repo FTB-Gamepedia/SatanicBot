@@ -1,4 +1,3 @@
-#!/usr/bin/perl
 # Copyright 2014 Eli Foster
 
 use warnings;
@@ -18,6 +17,9 @@ my $mwapi = MediaWiki::API->new();
 $mwapi->{config}->{api_url} = 'http://ftb.gamepedia.com/api.php';
 
 login();
+user();
+#talk();
+logout();
 
 sub login{
     my $file = 'info/secure.txt';
@@ -33,7 +35,6 @@ sub login{
         lgname => $lines[0],
         lgpassword => $lines[-1]
     }) or die $mwapi->{error}->{code} . ": " . $mwapi->{error}->{details};
-    user();
 }
 
 sub user{
@@ -63,11 +64,10 @@ sub user{
     }
     close $fh;
     print "File closed.";
-    logout();
 }
 
 sub talk{
-    #my @tlinks = ($mw->what_links_here("User talk:SatanicSanta"));
+#    my @tlinks = ($mw->what_links_here("User talk:SatanicSanta"));
 #
 #    foreach (@tlinks){
 #        my $talk_ref = $mwapi->get_page({title => $_});

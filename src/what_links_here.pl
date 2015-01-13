@@ -35,4 +35,5 @@ if ($type == 'talk'){
     exit 0;
 }
 
+print 'Done.';
 exit 0;
