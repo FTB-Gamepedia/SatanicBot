@@ -27,7 +27,7 @@ sub said{
 
     #Quit command. Only Santa can do it.
     if ($msg =~ m/^\$quit$/i){
-        if ($host =~ m/SatanicSa\@/){
+        if ($host =~ m/SatanicSa\@c/){
             $self->say(
                 channel => $channel,
                 body    => 'I don\'t love you anymore' #For some reason this does not get said before it quits in most cases.
@@ -46,30 +46,37 @@ sub said{
     if ($msg =~ m/^\$abbrv(?: )/i){
         my @abbrvwords = split(/\s/, $msg, 3);
         if ($abbrvwords[1] =~ m/.+/ and $abbrvwords[2] =~ m/.+/){
-            if ($host =~ m/SatanicSa\@75/ or $host =~ m/retep998\@pool/ or $host =~ m/webchat\@81.168.2.162/ or $host =~ m/Wolfman12\@CPE/){
-                $self->say(
-                    channel => $channel,
-                    body    => "Abbreviating $abbrvwords[2] as $abbrvwords[1]"
-                );
-
-                SatanicBot::Wiki->login();
-                SatanicBot::Wiki->edit_gmods(@abbrvwords[1,2]);
-
-                if ($SatanicBot::Wiki::check eq 'false') {
+            if ($abbrvwords[1] =~ m/[A-Z\d]/){
+                if ($host =~ m/SatanicSa\@c/ or $host =~ m/retep998\@pool/ or $host =~ m/webchat\@81.168.2.162/ or $host =~ m/Wolfman12\@CPE/){
                     $self->say(
                         channel => $channel,
-                        body    => 'Could not proceed. Abbreviation and/or name already on the list.'
+                        body    => "Abbreviating $abbrvwords[2] as $abbrvwords[1]"
                     );
-                } elsif ($SatanicBot::Wiki::check eq 'true'){
+
+                    SatanicBot::Wiki->login();
+                    SatanicBot::Wiki->edit_gmods(@abbrvwords[1,2]);
+
+                    if ($SatanicBot::Wiki::check eq 'false') {
+                        $self->say(
+                            channel => $channel,
+                            body    => 'Could not proceed. Abbreviation and/or name already on the list.'
+                        );
+                    } elsif ($SatanicBot::Wiki::check eq 'true'){
+                        $self->say(
+                            channel => $channel,
+                            body    => 'Success!'
+                        );
+                    }
+                } else {
                     $self->say(
                         channel => $channel,
-                        body    => 'Success!'
+                        body    => "Blame $user."
                     );
                 }
             } else {
                 $self->say(
                     channel => $channel,
-                    body    => "Blame $user."
+                    body    => 'Abbreviations can only be capital letters and digits.'
                 );
             }
         } else {
@@ -187,7 +194,7 @@ sub said{
         our @uploadwords = split(/\s/, $msg, 3);
         if ($uploadwords[1] =~ m/.+/){
             if ($uploadwords[2] =~ m/.+/){
-                if ($host =~ m/SatanicSa\@75/ or $host =~ m/retep998\@pool/ or $host =~ m/webchat\@81.168.2.162/ or $host =~ m/Wolfman12\@CPE/){
+                if ($host =~ m/SatanicSa\@c/ or $host =~ m/retep998\@pool/ or $host =~ m/webchat\@81.168.2.162/ or $host =~ m/Wolfman12\@CPE/){
                     SatanicBot::WikiButt->login();
                     SatanicBot::WikiButt->upload();
                     SatanicBot::WikiButt->logout();
