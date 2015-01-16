@@ -1,20 +1,19 @@
 # Copyright 2014 Eli Foster
 
+package SatanicBot::Wiki;
 use warnings;
 use strict;
 use diagnostics;
-
-package SatanicBot::Wiki;
 use MediaWiki::API;
 use SatanicBot::Bot;
 use WWW::Mechanize;
 
-our $mw = MediaWiki::API->new();
+my $mw = MediaWiki::API->new();
 $mw->{config}->{api_url} = 'http://ftb.gamepedia.com/api.php';
 
 sub login{
     my $file = 'info/secure.txt';
-    open my $fh, '<', $file or die "Could not open '$file' $!\n";
+    open my $fh, '<', $file or die "Could not open '$file' $ERRNO\n";
     my @lines = <$fh>;
     close $fh;
     chomp @lines;
@@ -25,7 +24,8 @@ sub login{
     $mw->login({
         lgname     => $lines[0],
         lgpassword => $lines[-1]
-    }) || die $mw->{error}->{code} . ": " . $mw->{error}->{details};
+    }) || die $mw->{error}->{code} . ': ' . $mw->{error}->{details};
+    return 1;
 }
 
 #sub edit_minor{
@@ -51,18 +51,18 @@ sub login{
 #    #        minor  => 1
 #    #    }) || die $mw->{error}->{code} . ': ' . $mw->{error}->{details};
 #
-#        our $minor = 'true';
+#        our $MINORCHECK = 'true';
 #        return 1;
 #    } else {
-#        our $minor = 'false';
+#        our $MINORCHECK = 'false';
 #        return 0;
 #    }
 #}
 
 sub edit_gmods{
     my ($self, $abbrev, $name) = @_;
-    my $gmods     = "Template:G/Mods";
-    my $gmodsdoc  = "Template:G/Mods/doc";
+    my $gmods     = 'Template:G/Mods';
+    my $gmodsdoc  = 'Template:G/Mods/doc';
     my $firstref  = $mw->get_page({title => $gmods});
     my $secondref = $mw->get_page({title => $gmodsdoc});
     my $replace_t = $firstref->{'*'};
@@ -86,20 +86,21 @@ sub edit_gmods{
                 text   => $replace_d,
                 bot    => 1,
                 minor  => 1
-            }) || die $mw->{error}->{code} . ": " . $mw->{error}->{details};
-            our $check = 'true';
+            }) || die $mw->{error}->{code} . ': ' . $mw->{error}->{details};
+            our $CHECK = 'true';
             return 1;
         } else {
-            our $check = 'false';
+            our $CHECK = 'false';
             return 0;
         }
     } else {
-        our $check = 'false';
+        our $CHECK = 'false';
         return 0;
     }
 }
 
 sub logout{
     $mw->logout();
+    return 1;
 }
-return 1;
+1;

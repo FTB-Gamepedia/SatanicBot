@@ -1,10 +1,9 @@
 # Copyright 2014 Eli Foster
 
+package SatanicBot::Bot;
 use warnings;
 use strict;
 use diagnostics;
-
-package SatanicBot::Bot;
 use base qw(Bot::BasicBot);
 use Data::Random qw(:all);
 use Weather::Underground;
@@ -44,9 +43,9 @@ sub said{
 
     #Adds the <first arg abbreviation> to the G:Mods and doc as <second arg mod name>
     if ($msg =~ m/^\$abbrv(?: )/i){
-        my @abbrvwords = split(/\s/, $msg, 3);
+        my @abbrvwords = split /\s/, $msg, 3;
         if ($abbrvwords[1] =~ m/.+/ and $abbrvwords[2] =~ m/.+/){
-            if ($abbrvwords[1] =~ m/[A-Z\d]/){
+            if ($abbrvwords[1] =~ m/[\p{IsUpper}\d]/){
                 if ($host =~ m/SatanicSa\@c/ or $host =~ m/retep998\@pool/ or $host =~ m/webchat\@81.168.2.162/ or $host =~ m/Wolfman12\@CPE/){
                     $self->say(
                         channel => $channel,
@@ -56,12 +55,12 @@ sub said{
                     SatanicBot::Wiki->login();
                     SatanicBot::Wiki->edit_gmods(@abbrvwords[1,2]);
 
-                    if ($SatanicBot::Wiki::check eq 'false') {
+                    if ($SatanicBot::Wiki::CHECK eq 'false') {
                         $self->say(
                             channel => $channel,
                             body    => 'Could not proceed. Abbreviation and/or name already on the list.'
                         );
-                    } elsif ($SatanicBot::Wiki::check eq 'true'){
+                    } elsif ($SatanicBot::Wiki::CHECK eq 'true'){
                         $self->say(
                             channel => $channel,
                             body    => 'Success!'
@@ -109,8 +108,8 @@ sub said{
     #Outputs the weather for the <first arg location>.
     if ($msg =~ m/^\$weather(?: )/i){
         if ($msg =~ m/\$weather f(?: )/i){
-            my @weatherwords = split(/\s/, $msg, 3);
-            if ($weatherwords[2] =~ m/[a-zA-Z\d,]/){
+            my @weatherwords = split /\s/, $msg, 3;
+            if ($weatherwords[2] =~ m/[\p{IsAlphabetic}\d,]/){
                 my $weather = Weather::Underground->new(
                     place => $weatherwords[2]
                 );
@@ -135,8 +134,8 @@ sub said{
                 );
             }
         } elsif ($msg =~ m/\$weather c(?: )/i){
-            my @weatherwords = split(/\s/, $msg, 3);
-            if ($weatherwords[2] =~ m/[a-zA-Z\d,]/){
+            my @weatherwords = split /\s/, $msg, 3;
+            if ($weatherwords[2] =~ m/[\p{IsAlphabetic}\d,]/){
                 my $weather = Weather::Underground->new(
                     place => $weatherwords[2]
                 );
@@ -161,8 +160,8 @@ sub said{
                 );
             }
         } else {
-            my @weatherwords = split(/\s/, $msg, 2);
-            if ($weatherwords[1] =~ m/[a-zA-Z\d,]/){
+            my @weatherwords = split /\s/, $msg, 2;
+            if ($weatherwords[1] =~ m/[\p{IsAlphabetic}\d,]/){
                 my $weather = Weather::Underground->new(
                 place => $weatherwords[1]
                 );
@@ -191,7 +190,7 @@ sub said{
 
     #Uploads the <first arg image> to the wiki as <second arg name>.
     if ($msg =~ m/^\$upload(?: )/i){
-        our @uploadwords = split(/\s/, $msg, 3);
+        our @uploadwords = split /\s/, $msg, 3;
         if ($uploadwords[1] =~ m/.+/){
             if ($uploadwords[2] =~ m/.+/){
                 if ($host =~ m/SatanicSa\@c/ or $host =~ m/retep998\@pool/ or $host =~ m/webchat\@81.168.2.162/ or $host =~ m/Wolfman12\@CPE/){
@@ -229,7 +228,7 @@ sub said{
 
     #Outputs the open source report card link for the first argument username. Eventually I should actually do JSON parsing for this.
     if ($msg =~ m/^\$osrc(?: )/i){
-        my @osrcwords = split(/\s/, $msg, 2);
+        my @osrcwords = split /\s/, $msg, 2;
         my $url = "https://osrc.dfm.io/$osrcwords[1]";
         if (head($url)){
             $self->say(
@@ -255,7 +254,7 @@ sub said{
     #Outputs how many contributions the user has made to the wiki.
     #Consider using a JSON parser instead of regular expression.
     if ($msg =~ m/^\$contribs(?: )/i){
-        my @contribwords = split(/\s/, $msg, 2);
+        my @contribwords = split /\s/, $msg, 2;
         if ($contribwords[1] =~ m/.+/){
             my $www = WWW::Mechanize->new();
             my $contriburl = $www->get("http://ftb.gamepedia.com/api.php?action=query&list=users&ususers=$contribwords[1]&usprop=editcount&format=json") or die "Unable to get url.\n";
@@ -336,7 +335,7 @@ sub said{
 
     #50/50 chance of outputting heads or tails.
     if ($msg =~ m/^\$flip$/i){
-        my $coin = int(rand(2));
+        my $coin = int rand 2;
         if ($coin eq 1){
             $self->say(
                 channel => $channel,
@@ -366,9 +365,9 @@ sub said{
     #Consider using a real JSON parser rather than regular expression.
     if ($msg =~ m/^\$stats/i){
         if ($msg =~ m/^\$stats(?: )/i){
-            my @statwords = split(/\s/, $msg, 2);
+            my @statwords = split /\s/, $msg, 2;
             my $www = WWW::Mechanize->new();
-            my $stuff = $www->get("http://ftb.gamepedia.com/api.php?action=query&meta=siteinfo&siprop=statistics&format=json") or die "Unable to get url.\n";
+            my $stuff = $www->get('http://ftb.gamepedia.com/api.php?action=query&meta=siteinfo&siprop=statistics&format=json') or die "Unable to get url.\n";
             my $decode = $stuff->decoded_content();
 
             if ($statwords[1] =~ m/^pages$/i){
@@ -444,7 +443,7 @@ sub said{
         } elsif ($msg =~ m/^\$stats$/i){
             my @statwords = split(/\s/, $msg, 2);
             my $www = WWW::Mechanize->new();
-            my $stuff = $www->get("http://ftb.gamepedia.com/api.php?action=query&meta=siteinfo&siprop=statistics&format=json") or die "Unable to get url.\n";
+            my $stuff = $www->get('http://ftb.gamepedia.com/api.php?action=query&meta=siteinfo&siprop=statistics&format=json') or die "Unable to get url.\n";
             my $decode = $stuff->decoded_content();
             my @pages = $decode =~ m{\"pages\":(.*?),};
             my @articulos = $decode =~ m{\"articles\":(.*?),};
@@ -490,9 +489,9 @@ sub said{
     }
 
     if ($msg =~ m/^\$calc(?: )/i){
-        my @calcwords = split(/\s/, $msg, 2);
+        my @calcwords = split /\s/, $msg, 2;
         if ($calcwords[1] =~ m/\d/){
-            my $out = eval($calcwords[1]);
+            my $out = eval $calcwords[1];
             $self->say(
                 channel => $channel,
                 body    => "$calcwords[1] = $out"
@@ -523,12 +522,12 @@ sub said{
 #            SatanicBot::Wiki->login();
 #            SatanicBot::Wiki->edit_minor($minormodswords[1]);
 #
-#            if ($SatanicBot::Wiki::minor eq 'false') {
+#            if ($SatanicBot::Wiki::MINORCHECK eq 'false') {
 #                $self->say(
 #                    channel => $channel,
 #                    body    => 'Could not proceed. Mod already on the list.'
 #                );
-#            } elsif ($SatanicBot::Wiki::minor eq 'true'){
+#            } elsif ($SatanicBot::Wiki::MINORCHECK eq 'true'){
 #                $self->say(
 #                    channel => $channel,
 #                    body    => 'Success!'
@@ -543,16 +542,16 @@ sub said{
 #    }
 
     if ($msg =~ m/^\$randnum/i){
-        my @randwords = split(/\s/, $msg, 2);
+        my @randwords = split /\s/, $msg, 2;
         if ($randwords[1] =~ m/\d/){
             $self->say(
                 channel => $channel,
-                body    => int(rand($randwords[1] + 1))
+                body    => int rand $randwords[1] + 1
             );
         } else {
             $self->say(
                 channel => $channel,
-                body    => 'No argument provided. Using 100... ' . int(rand(101))
+                body    => 'No argument provided. Using 100... ' . int rand 101
             );
         }
     }
@@ -560,9 +559,9 @@ sub said{
     #Super hard number guessing game
     #Make it less hard you fuccboi
     if ($msg =~ m/^\$game/i){
-        my @gamewords = split(/\s/, $msg, 3);
+        my @gamewords = split /\s/, $msg, 3;
         if ($gamewords[1] =~ m/int/i){
-            my $num = int(rand(101));
+            my $num = int rand 101;
             if ($gamewords[2] > 100){
                 $self->say(
                     channel => $channel,
@@ -580,7 +579,7 @@ sub said{
                 );
             }
         } elsif ($gamewords[1] =~ m/float/i){
-            my $num = rand(10);
+            my $num = rand 10;
             if ($gamewords[2] > 10){
                 $self->say(
                     channel => $channel,
@@ -611,7 +610,7 @@ sub said{
         my $mess = $file->next(1);
         chomp $mess;
         if ($msg =~ m/^\$motivate(?: )/i){
-            my @who = split(/\s/, $msg, 2);
+            my @who = split /\s/, $msg, 2;
             $self->say(
                 channel => $channel,
                 body    => "$mess, $who[1]"
@@ -627,7 +626,7 @@ sub said{
     #Provides the user with a command list.
     if ($msg =~ m/^\$help/i){
         if ($msg !~ m/\$help$/){
-            my @helpwords = split(/\s/, $msg, 2);
+            my @helpwords = split /\s/, $msg, 2;
             if ($helpwords[1] =~ m/quit$/i){
                 $self->say(
                     channel => $channel,

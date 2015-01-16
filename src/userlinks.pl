@@ -9,7 +9,7 @@ use MediaWiki::API;
 my $mw = MediaWiki::Bot->new({
     protocol => 'http',
     host     => 'ftb.gamepedia.com',
-    path     => '/',
+    path     => q{/},
     operator => 'TheSatanicSanta',
     debug    => 2
 });
@@ -23,7 +23,7 @@ logout();
 
 sub login{
     my $file = 'info/secure.txt';
-    open my $fh, '<', $file or die "Could not open '$file' $!\n";
+    open my $fh, '<', $file or die "Could not open '$file' $ERRNO\n";
     my @lines = <$fh>;
     close $fh;
     chomp @lines;
@@ -34,17 +34,20 @@ sub login{
     $mwapi->login({
         lgname => $lines[0],
         lgpassword => $lines[-1]
-    }) or die $mwapi->{error}->{code} . ": " . $mwapi->{error}->{details};
+    }) or die $mwapi->{error}->{code} . ': ' . $mwapi->{error}->{details};
+    return 1;
 }
 
 sub user{
     my $file = 'info/list_user.txt';
-    open my $fh, '<', $file or die "Could not open $file $!\n";
+    open my $fh, '<', $file or die "Could not open $file $ERRNO\n";
     #my @lines = <$fh>;
     #chomp @lines;
     #my $things = join("\n", @lines);
     #my @newlines = split("\n", $things);
     #print "newlines variable has been set.\n";
+    close $fh;
+    print 'File closed.';
     print "Starting loop...\n";
     while (my $line = <$fh>){
         #my $article = $_;
@@ -59,11 +62,10 @@ sub user{
             text   => $text,
             bot    => 1,
             minor  => 1
-        }) or die $mwapi->{error}->{code} . ": " . $mwapi->{error}->{details};
+        }) or die $mwapi->{error}->{code} . ': ' . $mwapi->{error}->{details};
         print "Page \'$line\' has been edited.\n";
     }
-    close $fh;
-    print "File closed.";
+    return 1;
 }
 
 sub talk{
@@ -79,4 +81,5 @@ sub talk{
 
 sub logout{
     $mw->logout();
+    return 1;
 }

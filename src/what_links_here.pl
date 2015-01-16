@@ -12,21 +12,21 @@ my $type = <>;
 my $mw = MediaWiki::Bot->new({
     protocol => 'http',
     host     => 'ftb.gamepedia.com',
-    path     => '/',
+    path     => q{/},
     operator => 'TheSatanicSanta',
     debug    => 2
 });
 
-my @users = $mw->what_links_here("User:SatanicSanta");
-my @talks = $mw->what_links_here("User talk:SatanicSanta");
+my @users = $mw->what_links_here('User:SatanicSanta');
+my @talks = $mw->what_links_here('User talk:SatanicSanta');
 
-if ($type == 'user'){
+if ($type eq 'user'){
     foreach (@users){
         Data::Dump->dump($_);
     }
 }
 
-if ($type == 'talk'){
+if ($type eq 'talk'){
     foreach (@talks){
         Data::Dump->dump($_);
     }
