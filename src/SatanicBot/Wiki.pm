@@ -10,10 +10,11 @@ use WWW::Mechanize;
 
 my $mw = MediaWiki::API->new();
 $mw->{config}->{api_url} = 'http://ftb.gamepedia.com/api.php';
+my $ERROR = $!;
 
 sub login{
     my $file = 'info/secure.txt';
-    open my $fh, '<', $file or die "Could not open '$file' $ERRNO\n";
+    open my $fh, '<', $file or die "Could not open '$file' $ERROR\n";
     my @lines = <$fh>;
     close $fh;
     chomp @lines;

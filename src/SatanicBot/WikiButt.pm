@@ -14,10 +14,11 @@ my $mw = MediaWiki::Bot->new({
     operator => 'TheSatanicSanta',
     debug    => 2
 });
+my $ERROR = $!;
 
 sub login{
     my $file = 'info/secure.txt';
-    open my $fh, '<', $file or die "Could not open '$file' $ERRNO\n";
+    open my $fh, '<', $file or die "Could not open '$file' $ERROR\n";
     my @lines = <$fh>;
     close $fh;
     chomp @lines;

@@ -5,7 +5,7 @@ use warnings;
 use strict;
 use diagnostics;
 use base qw(Bot::BasicBot);
-use Data::Random qw(:all);
+use Data::Random;
 use Weather::Underground;
 #use Data::Dumper;
 use SatanicBot::Wiki;
@@ -87,7 +87,7 @@ sub said{
     }
 
     if ($msg =~ m/^\$spookyscaryskeletons$/i){
-        my @random_words = rand_words(
+        my @random_words = Data::Random->rand_words(
             wordlist => 'info/spook.txt',
             min      => 10,
             max      => 20 #for whatever reason, this does not actually work. It only outputs one word. See issue tracker.
