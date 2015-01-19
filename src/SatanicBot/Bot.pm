@@ -165,7 +165,7 @@ sub said {
             my @weatherwords = split /\s/, $msg, 2;
             if ($weatherwords[1] =~ m/[\p{IsAlphabetic}\d,]/) {
                 my $weather = Weather::Underground->new(
-                place => $weatherwords[1]
+                    place => $weatherwords[1]
                 );
 
                 my $forecast = $weather->getweather();
@@ -558,42 +558,63 @@ sub said {
     #Super hard number guessing game
     #Make it less hard you fuccboi
     if ($msg =~ m/^\$game/i) {
-        my @gamewords = split /\s/, $msg, 3;
-        if ($gamewords[1] =~ m/int/i) {
+        if ($msg =~ m/^\$game [\d]/i){
+            my @gamewords = split /\s/, $msg, 2;
             my $num = int rand 101;
-            if ($gamewords[2] > 100) {
+            if ($gamewords[1] > 100) {
                 $self->say(
                     channel => $channel,
                     body    => 'Please provide a number lower than 100.'
                 );
-            } elsif ($gamewords[2] eq $num) {
+            } elsif ($gamewords[1] eq $num) {
                 $self->say(
                     channel => $channel,
                     body    => "Correct! The answer was $num"
                 );
-            } elsif ($gamewords[2] ne $num) {
+            } elsif ($gamewords[1] ne $num) {
                 $self->say(
                     channel => $channel,
                     body    => "Wrong! The answer was $num"
                 );
             }
-        } elsif ($gamewords[1] =~ m/float/i) {
-            my $num = rand 10;
-            if ($gamewords[2] > 10) {
-                $self->say(
-                    channel => $channel,
-                    body    => 'Please provide a number lower than 10.'
-                );
-            } elsif ($gamewords[2] eq $num) {
-                $self->say(
-                    channel => $channel,
-                    body    => "Correct! The answer was $num"
-                );
-            } elsif ($gamewords[2] ne $num) {
-                $self->say(
-                    channel => $channel,
-                    body    => "Wrong! The answer was $num"
-                );
+        } elsif ($msg =~ m/^\$game int [\d]/i or $msg =~ m/^\$game float [\d]/i) {
+            my @gamewords = split /\s/, $msg, 3;
+            if ($gamewords[1] =~ m/int/i) {
+                my $num = int rand 101;
+                if ($gamewords[2] > 100) {
+                    $self->say(
+                        channel => $channel,
+                        body    => 'Please provide a number lower than 100.'
+                        );
+                } elsif ($gamewords[2] eq $num) {
+                    $self->say(
+                        channel => $channel,
+                        body    => "Correct! The answer was $num"
+                    );
+                } elsif ($gamewords[2] ne $num) {
+                    $self->say(
+                        channel => $channel,
+                        body    => "Wrong! The answer was $num"
+                    );
+                }
+            } elsif ($gamewords[1] =~ m/float/i) {
+                my $num = rand 10;
+                if ($gamewords[2] > 10) {
+                    $self->say(
+                        channel => $channel,
+                        body    => 'Please provide a number lower than 10.'
+                    );
+                } elsif ($gamewords[2] eq $num) {
+                    $self->say(
+                        channel => $channel,
+                        body    => "Correct! The answer was $num"
+                    );
+                } elsif ($gamewords[2] ne $num) {
+                    $self->say(
+                        channel => $channel,
+                        body    => "Wrong! The answer was $num"
+                    );
+                }
             }
         } else {
             $self->say(
