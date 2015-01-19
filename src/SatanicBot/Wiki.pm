@@ -12,7 +12,7 @@ my $mw = MediaWiki::API->new();
 $mw->{config}->{api_url} = 'http://ftb.gamepedia.com/api.php';
 my $ERROR = $!;
 
-sub login{
+sub login {
     my $file = 'info/secure.txt';
     open my $fh, '<', $file or die "Could not open '$file' $ERROR\n";
     my @lines = <$fh>;
@@ -22,20 +22,20 @@ sub login{
     my $credentials = $www->get("http://ftb.gamepedia.com/api.php?action=login&lgname=$lines[0]&lgpassword=$lines[-1]&format=json") or die "Unable to get url.\n";
     my $decode = $credentials->decoded_content();
     my @loggedin = $decode =~ m{\"result\":(.*?)\}};
-    $mw->login({
+    $mw->login( {
         lgname     => $lines[0],
         lgpassword => $lines[1]
     }) || die $mw->{error}->{code} . ': ' . $mw->{error}->{details};
     return 1;
 }
 
-#sub edit_minor{
+#sub edit_minor {
 #    my ($self, $name) = @_;
 #    my $minormods = "User:TheSatanicSanta/Sandbox/Minor Mods"; #change this
 #    my $ref = $mw->get_page({title => $minormods});
 #    my $content = $ref->{'*'};
 #
-#    if ($content !~ m/\[\[$name\]\]/){
+#    if ($content !~ m/\[\[$name\]\]/) {
 #        $content =~ s/\[\[Additional Buildcraft Objects\]\] \{\{\*\}\}/\[\[Additional Buildcraft Objects\]\] \{\{\*\}\}\n\[\[$name\]\] \{\{\*\}\}/;
 #        my $filename = 'info/minor.txt';
 #        open my $fh, '+>', $filename or die "Could not open $filename $!\n";
@@ -44,7 +44,7 @@ sub login{
 #        my @sorted = sort @not_sorted;
 #        print $fh @sorted;
 #        close $fh;
-#    #    $mw->edit({
+#    #    $mw->edit( {
 #    #        action => 'edit',
 #    #        title  => $minormods,
 #    #        text   => $content,
@@ -60,7 +60,7 @@ sub login{
 #    }
 #}
 
-sub edit_gmods{
+sub edit_gmods {
     my ($self, $abbrev, $name) = @_;
     my $gmods     = 'Template:G/Mods';
     my $gmodsdoc  = 'Template:G/Mods/doc';
@@ -69,10 +69,10 @@ sub edit_gmods{
     my $replace_t = $firstref->{'*'};
     my $replace_d = $secondref->{'*'};
 
-    if ($replace_d !~ m/\|\| <code>\$abbrev/){
-        if ($replace_d !~ m/\| \[\[\$name\]\]/){
+    if ($replace_d !~ m/\|\| <code>\$abbrev/) {
+        if ($replace_d !~ m/\| \[\[\$name\]\]/) {
             $replace_t =~ s/\|#default/\|$abbrev = {{#if:{{{name\|}}}{{{code\|}}}\|\|_(}}{{#if:{{{name\|}}}{{{link\|}}}\|$name\|$abbrev}}{{#if:{{{name\|}}}{{{code\|}}}\|\|)}}\n\|$name = {{#if:{{{name\|}}}{{{code\|}}}\|\|_(}}{{#if:{{{name\|}}}{{{link\|}}}\|$name\|$abbrev}}{{#if:{{{name\|}}}{{{code\|}}}\|\|)}}\n\n\|#default/;
-            $mw->edit({
+            $mw->edit( {
                 action     => 'edit',
                 title      => $gmods,
                 text       => $replace_t,
@@ -81,7 +81,7 @@ sub edit_gmods{
             }) || die $mw->{error}->{code} . ': ' . $mw->{error}->{details};
 
             $replace_d =~ s/\|\}/\|-\n\| [[$name]] \|\| <code>$abbrev<\/code>\n\|\}/;
-            $mw->edit({
+            $mw->edit( {
                 action => 'edit',
                 title  => $gmodsdoc,
                 text   => $replace_d,
@@ -100,7 +100,7 @@ sub edit_gmods{
     }
 }
 
-sub logout{
+sub logout {
     $mw->logout();
     return 1;
 }

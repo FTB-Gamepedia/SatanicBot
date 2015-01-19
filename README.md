@@ -65,6 +65,14 @@ game
 ----
 Random number guessing game. Takes 2 arguments: <int or float> <number>. Integers will be from 0-100. Floats will be from 0-10.
 
+motivate
+--------
+Motivates the provided user, or, if none is provided, the user who sent the message.
+
+tweet
+-----
+Sends a tweet on the LittleHelperBot Twitter.
+
 quit
 ----
 The $quit command will stop the bot.
