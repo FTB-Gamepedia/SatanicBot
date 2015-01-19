@@ -24,7 +24,7 @@ sub login{
     chomp @lines;
     $mw->login({
         username => $lines[0],
-        password => $lines[-1]
+        password => $lines[1]
     }) or die 'Login failed!';
     return 1;
 }

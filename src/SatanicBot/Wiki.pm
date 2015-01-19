@@ -24,7 +24,7 @@ sub login{
     my @loggedin = $decode =~ m{\"result\":(.*?)\}};
     $mw->login({
         lgname     => $lines[0],
-        lgpassword => $lines[-1]
+        lgpassword => $lines[1]
     }) || die $mw->{error}->{code} . ': ' . $mw->{error}->{details};
     return 1;
 }
