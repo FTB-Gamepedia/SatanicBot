@@ -17,6 +17,13 @@ use Date::Parse;
 use File::RandomLine;
 use WWW::Twitter;
 
+sub separate_by_commas {
+    my ($string) = @_;
+    $string = reverse $string;
+    $string =~ s/(\d\d\d)(?=\d)(?!\d*\.)/$1,/g;
+    $string = reverse $string;
+}
+
 #Use this subroutine definition for adding commands.
 sub said {
     my ($self, $message) = @_;
@@ -275,9 +282,7 @@ sub said {
                     body    => 'Sorry, but IPs are not compatible.'
                 );
             } else {
-                my $contribs = reverse $contribs[0];
-                $contribs =~ s/(\d\d\d)(?=\d)(?!\d*\.)/$1,/g;
-                my $num_contribs = reverse $contribs;
+                my $num_contribs = separate_by_commas($contribs[0]);
 
                 if ($contribs[0] eq '1') {
                     $self->say(
@@ -371,9 +376,8 @@ sub said {
 
             if ($statwords[1] =~ m/^pages$/i) {
                 my @pages = $decode =~ m{\"pages\":(.*?),};
-                $pages[0] = reverse $pages[0];
-                $pages[0] =~ s/(\d\d\d)(?=\d)(?!\d*\.)/$1,/g;
-                my $num_pages = reverse $pages[0];
+                my $num_pages = separate_by_commas($pages[0]);
+
                 $self->say(
                     channel => $channel,
                     body    => "The wiki has $num_pages pages."
@@ -381,9 +385,8 @@ sub said {
             }
             if ($statwords[1] =~ m/^articles$/i) {
                 my @articulos = $decode =~ m{\"articles\":(.*?),};
-                $articulos[0] = reverse $articulos[0];
-                $articulos[0] =~ s/(\d\d\d)(?=\d)(?!\d*\.)/$1,/g;
-                my $num_articles = reverse $articulos[0];
+                my $num_articles = separate_by_commas($articulos[0]);
+
                 $self->say(
                     channel => $channel,
                     body    => "The wiki has $num_articles articles."
@@ -391,9 +394,8 @@ sub said {
             }
             if ($statwords[1] =~ m/^edits$/i) {
                 my @edits = $decode =~ m{\"edits\":(.*?),};
-                $edits[0] = reverse $edits[0];
-                $edits[0] =~ s/(\d\d\d)(?=\d)(?!\d*\.)/$1,/g;
-                my $num_edits = reverse $edits[0];
+                my $num_edits = separate_by_commas($edits[0]);
+
                 $self->say(
                     channel => $channel,
                     body    => "The wiki has $num_edits edits."
@@ -401,9 +403,8 @@ sub said {
             }
             if ($statwords[1] =~ m/^images$/i) {
                 my @images = $decode =~ m{\"images\":(.*?),};
-                $images[0] = reverse $images[0];
-                $images[0] =~ s/(\d\d\d)(?=\d)(?!\d*\.)/$1,/g;
-                my $num_images = reverse $images[0];
+                my $num_images = separate_by_commas($images[0]);
+
                 $self->say(
                     channel => $channel,
                     body    => "The wiki has $num_images images."
@@ -411,9 +412,8 @@ sub said {
             }
             if ($statwords[1] =~ m/^users$/i) {
                 my @users = $decode =~ m{\"users\":(.*?),};
-                $users[0] = reverse $users[0];
-                $users[0] =~ s/(\d\d\d)(?=\d)(?!\d*\.)/$1,/g;
-                my $num_users = reverse $users[0];
+                my $num_users = separate_by_commas($users[0]);
+
                 $self->say(
                     channel => $channel,
                     body    => "The wiki has $num_users users."
@@ -421,9 +421,7 @@ sub said {
             }
             if ($statwords[1] =~ m/^active users$/i) {
                 my @activeusers = $decode =~ m{\"activeusers\":(.*?),};
-                $activeusers[0] = reverse $activeusers[0];
-                $activeusers[0] =~ s/(\d\d\d)(?=\d)(?!\d*\.)/$1,/g;
-                my $num_active = reverse $activeusers[0];
+                my $num_active = separate_by_commas($activeusers[0]);
                 $self->say(
                     channel => $channel,
                     body    => "The wiki has $num_active active users."
@@ -431,54 +429,33 @@ sub said {
             }
             if ($statwords[1] =~ m/^admins$/i) {
                 my @admins = $decode =~ m{\"admins\":(.*?),};
-                $admins[0] = reverse $admins[0];
-                $admins[0] =~ s/(\d\d\d)(?=\d)(?!\d*\.)/$1,/g;
-                my $num_admins = reverse $admins[0];
+                my $num_admins = separate_by_commas($admins[0]);
+
                 $self->say(
                     channel => $channel,
                     body    => "The wiki has $num_admins admins."
                 );
             }
         } elsif ($msg =~ m/^\$stats$/i) {
-            my @statwords = split(/\s/, $msg, 2);
-            my $www = WWW::Mechanize->new();
-            my $stuff = $www->get('http://ftb.gamepedia.com/api.php?action=query&meta=siteinfo&siprop=statistics&format=json') or die "Unable to get url.\n";
-            my $decode = $stuff->decoded_content();
-            my @pages = $decode =~ m{\"pages\":(.*?),};
-            my @articulos = $decode =~ m{\"articles\":(.*?),};
-            my @edits = $decode =~ m{\"edits\":(.*?),};
-            my @images = $decode =~ m{\"images\":(.*?),};
-            my @users = $decode =~ m{\"users\":(.*?),};
+            my @statwords   = split(/\s/, $msg, 2);
+            my $www         = WWW::Mechanize->new();
+            my $stuff       = $www->get('http://ftb.gamepedia.com/api.php?action=query&meta=siteinfo&siprop=statistics&format=json') or die "Unable to get url.\n";
+            my $decode      = $stuff->decoded_content();
+            my @pages       = $decode =~ m{\"pages\":(.*?),};
+            my @articulos   = $decode =~ m{\"articles\":(.*?),};
+            my @edits       = $decode =~ m{\"edits\":(.*?),};
+            my @images      = $decode =~ m{\"images\":(.*?),};
+            my @users       = $decode =~ m{\"users\":(.*?),};
             my @activeusers = $decode =~ m{\"activeusers\":(.*?),};
-            my @admins = $decode =~ m{\"admins\":(.*?),};
+            my @admins      = $decode =~ m{\"admins\":(.*?),};
 
-            $pages[0] = reverse $pages[0];
-            $pages[0] =~ s/(\d\d\d)(?=\d)(?!\d*\.)/$1,/g;
-            my $num_pages = reverse $pages[0];
-
-            $articulos[0] = reverse $articulos[0];
-            $articulos[0] =~ s/(\d\d\d)(?=\d)(?!\d*\.)/$1,/g;
-            my $num_articles = reverse $articulos[0];
-
-            $edits[0] = reverse $edits[0];
-            $edits[0] =~ s/(\d\d\d)(?=\d)(?!\d*\.)/$1,/g;
-            my $num_edits = reverse $edits[0];
-
-            $images[0] = reverse $images[0];
-            $images[0] =~ s/(\d\d\d)(?=\d)(?!\d*\.)/$1,/g;
-            my $num_images = reverse $images[0];
-
-            $users[0] = reverse $users[0];
-            $users[0] =~ s/(\d\d\d)(?=\d)(?!\d*\.)/$1,/g;
-            my $num_users = reverse $users[0];
-
-            $activeusers[0] = reverse $activeusers[0];
-            $activeusers[0] =~ s/(\d\d\d)(?=\d)(?!\d*\.)/$1,/g;
-            my $num_active = reverse $activeusers[0];
-
-            $admins[0] = reverse $admins[0];
-            $admins[0] =~ s/(\d\d\d)(?=\d)(?!\d*\.)/$1,/g;
-            my $num_admins = reverse $admins[0];
+            my $num_pages    = separate_by_commas($pages[0]);
+            my $num_articles = separate_by_commas($articulos[0]);
+            my $num_edits    = separate_by_commas($edits[0]);
+            my $num_images   = separate_by_commas($images[0]);
+            my $num_users    = separate_by_commas($users[0]);
+            my $num_active   = separate_by_commas($activeusers[0]);
+            my $num_admins   = separate_by_commas($admins[0]);
 
             $self->say(
                 channel => $channel,
@@ -643,28 +620,30 @@ sub said {
         }
     }
 
-    #Twitter follow count. I really don't want to use Twitter::Badge cuz it sucks. I should use WWW::Twitter instead.
-    #if ($msg =~ m/^\$followers/i) {
-    #    if ($msg !~ m/\$followers$/i){
-    #        my @message = split /\s/, $msg, 2;
-    #        my $badge = Twitter::Badge->new(
-    #            screen_name => $message[1]
-    #        );
-    #        $badge->fetch();
-    #        $self->say(
-    #            channel => $channel,
-    #            body    => "$badge->name ($badge->screen_name) has $badge->followers_count followers."
-    #        );
-    #    } else {
-    #        $self->say(
-    #            channel => 'Please provide the required arguments.'
-    #        );
-    #    }
-    #}
+    #Twitter statistics for the provided user.
+    if ($msg =~ m/^\$twitterstats/i) {
+        if ($msg !~ m/^\$followers$/i) {
+            my @username = split /\s/, $msg, 2;
+
+            $ENV {PERL_LWP_SSL_VERIFY_HOSTNAME} = 0; #This is terrible.
+
+            my $twitter = WWW::Twitter->new(username => $username[1]);
+            my $stats = $twitter->stats;
+            $self->say(
+                channel => $channel,
+                body    => "$username[1] has $stats->{followers} followers and is following $stats->{following} scrubs. They have made $stats->{total_status} status updates, and have posted $stats->{total_media} forms of non-written media. They have favorited $stats->{favorites} things."
+            );
+        } else {
+            $self->say(
+                channel => $channel,
+                body    => 'Please provide the required arguments.'
+            );
+        }
+    }
 
     #Autotweet
     if ($msg =~ m/^\$tweet/i) {
-        if ($msg !~ m/\$tweet$/i) {
+        if ($msg !~ m/^\$tweet$/i) {
             my $lengthmsg = length $msg;
             if ($lengthmsg > 140) {
                 $self->say(
@@ -804,10 +783,16 @@ sub said {
                     body    => 'Tweets the first arg on the @LittleHelperBot Twitter account.'
                 );
             }
+            if ($helpwords[1] =~ m/twitterstas$/i) {
+                $self->say(
+                    channel => $channel,
+                    body    => 'Provides statistics for the given user. Takes one argument: the username.'
+                )
+            }
         } else {
             $self->say(
                 channel => $channel,
-                body    => 'Listing commands... quit, abbrv, spookyscaryskeletons, weather, upload, osrc, src, contribs, flip, 8ball, randquote, stats, calc, randnum, game, motivate, tweet'
+                body    => 'Listing commands... quit, abbrv, spookyscaryskeletons, weather, upload, osrc, src, contribs, flip, 8ball, randquote, stats, calc, randnum, game, motivate, tweet, twitterstats'
             );
         }
     }
