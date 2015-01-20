@@ -27,10 +27,9 @@ sub login {
 }
 
 sub upload {
-    my ($url, $name) = @_;
     $mw->upload_from_url( {
-        url     => $url,
-        title   => $name
+        url     => $SatanicBot::Bot::uploadwords[1],
+        title   => $SatanicBot::Bot::uploadwords[2]
     }) or die 'Upload failed!';
     return 1;
 }

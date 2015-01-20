@@ -16,13 +16,7 @@ use Math::Symbolic;
 use Date::Parse;
 use File::RandomLine;
 use WWW::Twitter;
-
-sub separate_by_commas {
-    my ($string) = @_;
-    $string = reverse $string;
-    $string =~ s/(\d\d\d)(?=\d)(?!\d*\.)/$1,/g;
-    $string = reverse $string;
-}
+use SatanicBot::Utils;
 
 #Use this subroutine definition for adding commands.
 sub said {
@@ -199,12 +193,12 @@ sub said {
 
     #Uploads the <first arg image> to the wiki as <second arg name>.
     if ($msg =~ m/^\$upload(?: )/i) {
-        my @uploadwords = split /\s/, $msg, 3;
+        our @uploadwords = split /\s/, $msg, 3;
         if ($uploadwords[1] =~ m/.+/) {
             if ($uploadwords[2] =~ m/.+/) {
                 if ($host =~ m/SatanicSa\@c/ or $host =~ m/retep998\@pool/ or $host =~ m/webchat\@81.168.2.162/ or $host =~ m/Wolfman12\@CPE/) {
                     SatanicBot::MediaWikiBot->login();
-                    SatanicBot::MediaWikiBot->upload($uploadwords[1], $uploadwords[2]);
+                    SatanicBot::MediaWikiBot->upload();
                     SatanicBot::MediaWikiBot->logout();
 
                     $self->say(
@@ -282,7 +276,7 @@ sub said {
                     body    => 'Sorry, but IPs are not compatible.'
                 );
             } else {
-                my $num_contribs = separate_by_commas($contribs[0]);
+                my $num_contribs = SatanicBot::Utils->separate_by_commas($contribs[0]);
 
                 if ($contribs[0] eq '1') {
                     $self->say(
@@ -376,7 +370,7 @@ sub said {
 
             if ($statwords[1] =~ m/^pages$/i) {
                 my @pages = $decode =~ m{\"pages\":(.*?),};
-                my $num_pages = separate_by_commas($pages[0]);
+                my $num_pages = SatanicBot::Utils->separate_by_commas($pages[0]);
 
                 $self->say(
                     channel => $channel,
@@ -385,7 +379,7 @@ sub said {
             }
             if ($statwords[1] =~ m/^articles$/i) {
                 my @articulos = $decode =~ m{\"articles\":(.*?),};
-                my $num_articles = separate_by_commas($articulos[0]);
+                my $num_articles = SatanicBot::Utils->separate_by_commas($articulos[0]);
 
                 $self->say(
                     channel => $channel,
@@ -394,7 +388,7 @@ sub said {
             }
             if ($statwords[1] =~ m/^edits$/i) {
                 my @edits = $decode =~ m{\"edits\":(.*?),};
-                my $num_edits = separate_by_commas($edits[0]);
+                my $num_edits = SatanicBot::Utils->separate_by_commas($edits[0]);
 
                 $self->say(
                     channel => $channel,
@@ -403,7 +397,7 @@ sub said {
             }
             if ($statwords[1] =~ m/^images$/i) {
                 my @images = $decode =~ m{\"images\":(.*?),};
-                my $num_images = separate_by_commas($images[0]);
+                my $num_images = SatanicBot::Utils->separate_by_commas($images[0]);
 
                 $self->say(
                     channel => $channel,
@@ -412,7 +406,7 @@ sub said {
             }
             if ($statwords[1] =~ m/^users$/i) {
                 my @users = $decode =~ m{\"users\":(.*?),};
-                my $num_users = separate_by_commas($users[0]);
+                my $num_users = SatanicBot::Utils->separate_by_commas($users[0]);
 
                 $self->say(
                     channel => $channel,
@@ -421,7 +415,7 @@ sub said {
             }
             if ($statwords[1] =~ m/^active users$/i) {
                 my @activeusers = $decode =~ m{\"activeusers\":(.*?),};
-                my $num_active = separate_by_commas($activeusers[0]);
+                my $num_active = SatanicBot::Utils->separate_by_commas($activeusers[0]);
                 $self->say(
                     channel => $channel,
                     body    => "The wiki has $num_active active users."
@@ -429,7 +423,7 @@ sub said {
             }
             if ($statwords[1] =~ m/^admins$/i) {
                 my @admins = $decode =~ m{\"admins\":(.*?),};
-                my $num_admins = separate_by_commas($admins[0]);
+                my $num_admins = SatanicBot::Utils->separate_by_commas($admins[0]);
 
                 $self->say(
                     channel => $channel,
@@ -449,13 +443,13 @@ sub said {
             my @activeusers = $decode =~ m{\"activeusers\":(.*?),};
             my @admins      = $decode =~ m{\"admins\":(.*?),};
 
-            my $num_pages    = separate_by_commas($pages[0]);
-            my $num_articles = separate_by_commas($articulos[0]);
-            my $num_edits    = separate_by_commas($edits[0]);
-            my $num_images   = separate_by_commas($images[0]);
-            my $num_users    = separate_by_commas($users[0]);
-            my $num_active   = separate_by_commas($activeusers[0]);
-            my $num_admins   = separate_by_commas($admins[0]);
+            my $num_pages    = SatanicBot::Utils->separate_by_commas($pages[0]);
+            my $num_articles = SatanicBot::Utils->separate_by_commas($articulos[0]);
+            my $num_edits    = SatanicBot::Utils->separate_by_commas($edits[0]);
+            my $num_images   = SatanicBot::Utils->separate_by_commas($images[0]);
+            my $num_users    = SatanicBot::Utils->separate_by_commas($users[0]);
+            my $num_active   = SatanicBot::Utils->separate_by_commas($activeusers[0]);
+            my $num_admins   = SatanicBot::Utils->separate_by_commas($admins[0]);
 
             $self->say(
                 channel => $channel,
@@ -625,7 +619,7 @@ sub said {
         if ($msg !~ m/^\$followers$/i) {
             my @username = split /\s/, $msg, 2;
 
-            $ENV {PERL_LWP_SSL_VERIFY_HOSTNAME} = 0; #This is terrible.
+            $ENV { PERL_LWP_SSL_VERIFY_HOSTNAME } = 0; #This is terrible.
 
             my $twitter = WWW::Twitter->new(username => $username[1]);
             my $stats = $twitter->stats;
@@ -652,15 +646,11 @@ sub said {
                 );
             } else {
                 my @tweet = split /\s/, $msg, 2;
-                my $file = 'info/secure.txt';
-                open my $fh, '<', $file or die "Could not open '$file' $ERROR\n";
-                my @lines = <$fh>;
-                close $fh;
-                chomp @lines;
+                SatanicBot::Utils->get_secure_contents();
                 $ENV {PERL_LWP_SSL_VERIFY_HOSTNAME} = 0; #This is terrible.
                 my $twitter = WWW::Twitter->new(
-                    username => $lines[2],
-                    password => $lines[1]
+                    username => $SatanicBot::Utils::LINES[2],
+                    password => $SatanicBot::Utils::LINES[1]
                     );
                 $twitter->login();
                 my $status_id = $twitter->tweet("[IRC] $tweet[1]");

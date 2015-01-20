@@ -13,18 +13,14 @@ $mw->{config}->{api_url} = 'http://ftb.gamepedia.com/api.php';
 my $ERROR = $!;
 
 sub login {
-    my $file = 'info/secure.txt';
-    open my $fh, '<', $file or die "Could not open '$file' $ERROR\n";
-    my @lines = <$fh>;
-    close $fh;
-    chomp @lines;
+    SatanicBot::Utils->get_secure_contents();
     my $www = WWW::Mechanize->new();
-    my $credentials = $www->get("http://ftb.gamepedia.com/api.php?action=login&lgname=$lines[0]&lgpassword=$lines[-1]&format=json") or die "Unable to get url.\n";
+    my $credentials = $www->get("http://ftb.gamepedia.com/api.php?action=login&lgname=$SatanicBot::Utils::LINES[0]&lgpassword=$SatanicBot::Utils::LINES[1]&format=json") or die "Unable to get url.\n";
     my $decode = $credentials->decoded_content();
     my @loggedin = $decode =~ m{\"result\":(.*?)\}};
     $mw->login( {
-        lgname     => $lines[0],
-        lgpassword => $lines[1]
+        lgname     => $SatanicBot::Utils::LINES[0],
+        lgpassword => $SatanicBot::Utils::LINES[1]
     }) || die $mw->{error}->{code} . ': ' . $mw->{error}->{details};
     return 1;
 }
