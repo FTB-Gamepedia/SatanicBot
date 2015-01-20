@@ -8,8 +8,8 @@ use base qw(Bot::BasicBot);
 use Data::Random;
 use Weather::Underground;
 use Data::Dumper;
-use SatanicBot::Wiki;
-use SatanicBot::WikiButt;
+use SatanicBot::MediaWikiAPI;
+use SatanicBot::MediaWikiBot;
 use LWP::Simple;
 use WWW::Mechanize;
 use Math::Symbolic;
@@ -61,15 +61,15 @@ sub said {
                         body    => "Abbreviating $abbrvwords[2] as $abbrvwords[1]"
                     );
 
-                    SatanicBot::Wiki->login();
-                    SatanicBot::Wiki->edit_gmods(@abbrvwords[1,2]);
+                    SatanicBot::MediaWikiAPI->login();
+                    SatanicBot::MediaWikiAPI->edit_gmods(@abbrvwords[1,2]);
 
-                    if ($SatanicBot::Wiki::CHECK eq 'false') {
+                    if ($SatanicBot::MediaWikiAPI::CHECK eq 'false') {
                         $self->say(
                             channel => $channel,
                             body    => 'Could not proceed. Abbreviation and/or name already on the list.'
                         );
-                    } elsif ($SatanicBot::Wiki::CHECK eq 'true') {
+                    } elsif ($SatanicBot::MediaWikiAPI::CHECK eq 'true') {
                         $self->say(
                             channel => $channel,
                             body    => 'Success!'
@@ -199,13 +199,13 @@ sub said {
 
     #Uploads the <first arg image> to the wiki as <second arg name>.
     if ($msg =~ m/^\$upload(?: )/i) {
-        our @uploadwords = split /\s/, $msg, 3;
+        my @uploadwords = split /\s/, $msg, 3;
         if ($uploadwords[1] =~ m/.+/) {
             if ($uploadwords[2] =~ m/.+/) {
                 if ($host =~ m/SatanicSa\@c/ or $host =~ m/retep998\@pool/ or $host =~ m/webchat\@81.168.2.162/ or $host =~ m/Wolfman12\@CPE/) {
-                    SatanicBot::WikiButt->login();
-                    SatanicBot::WikiButt->upload();
-                    SatanicBot::WikiButt->logout();
+                    SatanicBot::MediaWikiBot->login();
+                    SatanicBot::MediaWikiBot->upload($uploadwords[1], $uploadwords[2]);
+                    SatanicBot::MediaWikiBot->logout();
 
                     $self->say(
                         channel => $channel,
@@ -214,7 +214,7 @@ sub said {
                 } else {
                     $self->say(
                         channel => $channel,
-                        body    => 'You are not good enough.'
+                        body    => 'You are not good enough. If you believe this is not true, please request permission from Santa.'
                     );
                 }
             } else {
@@ -495,15 +495,15 @@ sub said {
 #                body    => "Adding $minormodswords[1] to the Minor Mods list."
 #            );
 #
-#            SatanicBot::Wiki->login();
-#            SatanicBot::Wiki->edit_minor($minormodswords[1]);
+#            SatanicBot::MediaWikiAPI->login();
+#            SatanicBot::MediaWikiAPI->edit_minor($minormodswords[1]);
 #
-#            if ($SatanicBot::Wiki::MINORCHECK eq 'false') {
+#            if ($SatanicBot::MediaWikiAPI::MINORCHECK eq 'false') {
 #                $self->say(
 #                    channel => $channel,
 #                    body    => 'Could not proceed. Mod already on the list.'
 #                );
-#            } elsif ($SatanicBot::Wiki::MINORCHECK eq 'true') {
+#            } elsif ($SatanicBot::MediaWikiAPI::MINORCHECK eq 'true') {
 #                $self->say(
 #                    channel => $channel,
 #                    body    => 'Success!'

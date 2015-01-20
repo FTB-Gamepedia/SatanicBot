@@ -4,8 +4,6 @@ use warnings;
 use strict;
 use diagnostics;
 use SatanicBot::Bot;
-use SatanicBot::Wiki;
-use SatanicBot::WikiButt;
 use Bot::BasicBot;
 
 my $chan = '#FTB-Wiki';

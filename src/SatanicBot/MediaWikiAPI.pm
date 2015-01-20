@@ -1,6 +1,6 @@
 # Copyright 2014 Eli Foster
 
-package SatanicBot::Wiki;
+package SatanicBot::MediaWikiAPI;
 use warnings;
 use strict;
 use diagnostics;
