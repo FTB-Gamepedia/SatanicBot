@@ -17,6 +17,7 @@ use Date::Parse;
 use File::RandomLine;
 use WWW::Twitter;
 use SatanicBot::Utils;
+use Geo::IP;
 
 #Use this subroutine definition for adding commands.
 sub said {
@@ -190,7 +191,23 @@ sub said {
             }
         }
     }
+=
+    if ($msg =~ m/^\$weather$/i) {
+        my $ip = $message->{raw_nick};
+        $ip =~ s/^[^\@]*\@//;
+        my $geoip = Geo::IP->new();
+        my $record_by_name = $geoip->record_by_name($ip);
+        my $weather = Weather::Underground->new(
+            place => $record_by_name->postal_code
+        );
+        my $forecast = $weather->getweather();
 
+        $self->say(
+            channel => $channel,
+            body    => "$forecast->[0]->{place}: $forecast->[0]->{conditions} || Temperature: $forecast->[0]->{fahrenheit} F || Humidity: $forecast->[0]->{humidity}% || Last updated: $forecast->[0]->{updated}"
+        );
+    }
+=cut
     #Uploads the <first arg image> to the wiki as <second arg name>.
     if ($msg =~ m/^\$upload(?: )/i) {
         our @uploadwords = split /\s/, $msg, 3;
@@ -480,36 +497,38 @@ sub said {
         }
     }
 
-#    my $minormodsmsg = $msg;
-#    my @minormodswords = split(/\s/, $minormodsmsg, 2);
-#    if ($minormodswords[0] eq '$addminor') {
-#        if ($minormodswords[1] =~ m/.+/) {
-#            $self->say(
-#                channel => $channel,
-#                body    => "Adding $minormodswords[1] to the Minor Mods list."
-#            );
-#
-#            SatanicBot::MediaWikiAPI->login();
-#            SatanicBot::MediaWikiAPI->edit_minor($minormodswords[1]);
-#
-#            if ($SatanicBot::MediaWikiAPI::MINORCHECK eq 'false') {
-#                $self->say(
-#                    channel => $channel,
-#                    body    => 'Could not proceed. Mod already on the list.'
-#                );
-#            } elsif ($SatanicBot::MediaWikiAPI::MINORCHECK eq 'true') {
-#                $self->say(
-#                    channel => $channel,
-#                    body    => 'Success!'
-#                );
-#            }
-#        } else {
-#            $self->say(
-#                channel => $channel,
-#                body    => 'Please provide the required arguments.'
-#            );
-#        }
-#    }
+=
+    my $minormodsmsg = $msg;
+    my @minormodswords = split(/\s/, $minormodsmsg, 2);
+    if ($minormodswords[0] eq '$addminor') {
+        if ($minormodswords[1] =~ m/.+/) {
+            $self->say(
+                channel => $channel,
+                body    => "Adding $minormodswords[1] to the Minor Mods list."
+            );
+
+            SatanicBot::MediaWikiAPI->login();
+            SatanicBot::MediaWikiAPI->edit_minor($minormodswords[1]);
+
+            if ($SatanicBot::MediaWikiAPI::MINORCHECK eq 'false') {
+                $self->say(
+                    channel => $channel,
+                    body    => 'Could not proceed. Mod already on the list.'
+                );
+            } elsif ($SatanicBot::MediaWikiAPI::MINORCHECK eq 'true') {
+                $self->say(
+                    channel => $channel,
+                    body    => 'Success!'
+                );
+            }
+        } else {
+            $self->say(
+                channel => $channel,
+                body    => 'Please provide the required arguments.'
+            );
+        }
+    }
+=cut
 
     if ($msg =~ m/^\$randnum/i) {
         my @randwords = split /\s/, $msg, 2;
