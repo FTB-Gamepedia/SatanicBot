@@ -25,36 +25,47 @@ sub login {
     return 1;
 }
 
-#sub edit_minor {
-#    my ($self, $name) = @_;
-#    my $minormods = "User:TheSatanicSanta/Sandbox/Minor Mods"; #change this
-#    my $ref = $mw->get_page({title => $minormods});
-#    my $content = $ref->{'*'};
-#
-#    if ($content !~ m/\[\[$name\]\]/) {
-#        $content =~ s/\[\[Additional Buildcraft Objects\]\] \{\{\*\}\}/\[\[Additional Buildcraft Objects\]\] \{\{\*\}\}\n\[\[$name\]\] \{\{\*\}\}/;
-#        my $filename = 'info/minor.txt';
-#        open my $fh, '+>', $filename or die "Could not open $filename $!\n";
-#        print $fh $content;
-#        my @not_sorted = <$fh>;
-#        my @sorted = sort @not_sorted;
-#        print $fh @sorted;
-#        close $fh;
-#    #    $mw->edit( {
-#    #        action => 'edit',
-#    #        title  => $minormods,
-#    #        text   => $content,
-#    #        bot    => 1,
-#    #        minor  => 1
-#    #    }) || die $mw->{error}->{code} . ': ' . $mw->{error}->{details};
-#
-#        our $MINORCHECK = 'true';
-#        return 1;
-#    } else {
-#        our $MINORCHECK = 'false';
-#        return 0;
-#    }
-#}
+sub edit_minor {
+    my ($self, $name) = @_;
+    my $minormods = "User:TheSatanicSanta/Sandbox/Minor Mods"; #change this
+    my $ref = $mw->get_page({title => $minormods});
+    my $content = $ref->{'*'};
+
+    if ($content !~ m/\[\[$name\]\]/g) {
+        #$content =~ s/\[\[Additional Buildcraft Objects\]\] \{\{\*\}\}/\[\[Additional Buildcraft Objects\]\] \{\{\*\}\}\n\[\[$name\]\] \{\{\*\}\}/;
+        #my $filename = 'info/minor.txt';
+        #open my $fh, '+>', $filename or die "Could not open $filename $!\n";
+        #print $fh $content;
+        #my @not_sorted = <$fh>;
+        #my @sorted = sort @not_sorted;
+        #print $fh @sorted;
+        #close $fh;
+        my $text = s/\[\[Additional Buildcraft Objects\]\] \{\{\*\}\}/\[\[Additional Buildcraft Objects\]\] \{\{\*\}\}\n\[\[$name\]\] \{\{\*\}\}/;
+        $mw->edit( {
+            action => 'edit',
+            title  => $minormods,
+            text   => $text,
+            bot    => 1,
+            minor  => 1
+        }) || die $mw->{error}->{code} . ': ' . $mw->{error}->{details};
+
+        my $ref_presort = $mw->get_page({title => $minormods});
+        my $content_presort = $ref_presort->{'*'};
+        my @split = split /\n/, $content_presort;
+        my $sort = sort @split;
+        $mw->edit( {
+            action => 'edit',
+            title  => $minormods,
+            text   => $sort,
+            bot    => 1,
+            minor  => 1
+        }) || die $mw->{error}->{code} . ': ' . $mw->{error}->{details};
+        return 1;
+    } else {
+        our $MINORCHECK = 'false';
+        return 0;
+    }
+}
 
 sub edit_gmods {
     my ($self, $abbrev, $name) = @_;

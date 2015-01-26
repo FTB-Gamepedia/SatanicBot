@@ -191,7 +191,7 @@ sub said {
             }
         }
     }
-=
+=pod
     if ($msg =~ m/^\$weather$/i) {
         my $ip = $message->{raw_nick};
         $ip =~ s/^[^\@]*\@//;
@@ -497,11 +497,10 @@ sub said {
         }
     }
 
-=
-    my $minormodsmsg = $msg;
-    my @minormodswords = split(/\s/, $minormodsmsg, 2);
-    if ($minormodswords[0] eq '$addminor') {
-        if ($minormodswords[1] =~ m/.+/) {
+=pod
+    if ($msg =~ m/^\$addminor/i) {
+        if ($msg =~ m/^\$addminor(?: )/i) {
+            my @minormodswords = split /\s/, $msg, 2;
             $self->say(
                 channel => $channel,
                 body    => "Adding $minormodswords[1] to the Minor Mods list."
