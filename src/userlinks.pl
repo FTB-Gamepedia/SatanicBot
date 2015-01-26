@@ -64,7 +64,7 @@ sub user{
                 bot    => 1,
                 minor  => 1
             })
-        }
+        };
         if ($@) {
             print $mwapi->{error}->{code} . ': ' . $mwapi->{error}->{details};
             continue;
