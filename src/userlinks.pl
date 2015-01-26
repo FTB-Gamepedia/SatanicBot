@@ -56,13 +56,19 @@ sub user{
         $text =~ s/\{\{U\|SatanicSanta/\{\{U\|TheSatanicSanta/g;
 
         print "Text and article variables have been set.\n";
-        $mwapi->edit({
-            action => 'edit',
-            title  => $line,
-            text   => $text,
-            bot    => 1,
-            minor  => 1
-        }) or die $mwapi->{error}->{code} . ': ' . $mwapi->{error}->{details};
+        eval {
+            $mwapi->edit({
+                action => 'edit',
+                title  => $line,
+                text   => $text,
+                bot    => 1,
+                minor  => 1
+            })
+        }
+        if ($@) {
+            print $mwapi->{error}->{code} . ': ' . $mwapi->{error}->{details};
+            continue;
+        }
         print "Page \'$line\' has been edited.\n";
     }
     return 1;
