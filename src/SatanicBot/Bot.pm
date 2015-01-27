@@ -53,7 +53,7 @@ sub said {
                 if ($host =~ m/SatanicSa\@c/ or $host =~ m/retep998\@pool/ or $host =~ m/webchat\@81.168.2.162/ or $host =~ m/Wolfman12\@CPE/) {
                     $self->say(
                         channel => $channel,
-                        body    => "Abbreviating $abbrvwords[2] as $abbrvwords[1]"
+                        body    => "Abbreviating \'$abbrvwords[2]\' as \'$abbrvwords[1]\'"
                     );
 
                     SatanicBot::MediaWikiAPI->login();
@@ -220,7 +220,7 @@ sub said {
 
                     $self->say(
                         channel => $channel,
-                        body    => "Uploaded $uploadwords[2] to the Wiki."
+                        body    => "Uploaded \'$uploadwords[2]\' to the Wiki."
                     );
                 } else {
                     $self->say(
@@ -503,7 +503,7 @@ sub said {
             my @minormodswords = split /\s/, $msg, 2;
             $self->say(
                 channel => $channel,
-                body    => "Adding $minormodswords[1] to the Minor Mods list."
+                body    => "Adding \'$minormodswords[1]\' to the Minor Mods list."
             );
 
             SatanicBot::MediaWikiAPI->login();
