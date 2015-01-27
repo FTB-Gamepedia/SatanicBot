@@ -52,11 +52,12 @@ sub edit_minor {
         my $ref_presort = $mw->get_page({title => $minormods});
         my $content_presort = $ref_presort->{'*'};
         my @split = split /\n/, $content_presort;
-        my $sort = sort @split;
+        my @sort = sort @split;
+        my $join = join @sort;
         $mw->edit( {
             action => 'edit',
             title  => $minormods,
-            text   => $sort,
+            text   => $join,
             bot    => 1,
             minor  => 1
         }) || die $mw->{error}->{code} . ': ' . $mw->{error}->{details};

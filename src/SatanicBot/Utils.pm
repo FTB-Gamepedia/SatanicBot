@@ -8,7 +8,7 @@ use warnings;
 my $ERROR = $!;
 
 sub separate_by_commas {
-    my ($string) = @_;
+    my ($self, $string) = @_;
     $string = reverse $string;
     $string =~ s/(\d\d\d)(?=\d)(?!\d*\.)/$1,/g;
     $string = reverse $string;
