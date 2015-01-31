@@ -30,10 +30,10 @@ sub said {
     my $args = 'Please provide the required arguments.';
     my %bot_stuff_hash = (
         ops       => [],
-        auth_pass => ''
+        auth_pass => 'swag'
     );
     my $bot_stuff = \%bot_stuff_hash;
-    
+
     if ($msg =~ m/^\$pass/i) {
         if ($msg !~ m/^\$pass$/i) {
             if ($host =~ m/!~SatanicSa\@c-73/) {
@@ -57,17 +57,18 @@ sub said {
     if ($msg =~ m/^\$auth/i) {
         if ($msg !~ m/^\$auth$/i) {
             my @authwords = split /\s/, $msg, 2;
-            if ($authwords[1] eq $bot_stuff->{ auth_pass }) {
-                push @{$bot_stuff->{ops}}, $host;
+            if ($authwords[1] eq $bot_stuff->{auth_pass}) {
                 $self->say(
                     channel => 'msg',
                     who     => $user,
                     body    => "$user, you are now logged in."
                 );
+                push @{$bot_stuff->{ops}}, $host;
             }
         } else {
             $self->say(
-                channel => $channel,
+                channel => 'who',
+                who     => $user,
                 body    => $args
             );
         }
