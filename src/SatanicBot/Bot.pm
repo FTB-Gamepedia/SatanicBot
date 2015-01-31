@@ -19,6 +19,12 @@ use WWW::Twitter;
 use SatanicBot::Utils;
 use Geo::IP;
 
+my %bot_stuff_hash = (
+    ops       => [],
+    auth_pass => ''
+);
+my $bot_stuff = \%bot_stuff_hash;
+
 #Use this subroutine definition for adding commands.
 sub said {
     my ($self, $message) = @_;
@@ -28,11 +34,7 @@ sub said {
     my $user = $message->{who};
     my $ERROR = $!;
     my $args = 'Please provide the required arguments.';
-    my %bot_stuff_hash = (
-        ops       => [],
-        auth_pass => 'swag'
-    );
-    my $bot_stuff = \%bot_stuff_hash;
+
 
     if ($msg =~ m/^\$pass/i) {
         if ($msg !~ m/^\$pass$/i) {
@@ -75,7 +77,7 @@ sub said {
     }
 
     if ($msg =~ m/^\$quit/i) {
-        if ($host eq @{$bot_stuff->{ops}}) {
+        if (grep { $_ eq $host } @{$bot_stuff->{ops}}) {
             if ($msg =~ m/^\$quit$/i) {
                 $self->say(
                     channel => $channel,
@@ -94,7 +96,7 @@ sub said {
 
             #Adds the <first arg abbreviation> to the G:Mods and doc as <second arg mod name>
     if ($msg =~  m/^\$abbrv/i) {
-        if ($host eq @{$bot_stuff->{ops}}) {
+        if (grep { $_ eq $host } @{$bot_stuff->{ops}}) {
             if ($msg =~ m/^\$abbrv(?: )/i) {
                 my @abbrvwords = split /\s/, $msg, 3;
                 if ($abbrvwords[1] =~ m/.+/ and $abbrvwords[2] =~ m/.+/) {
@@ -141,7 +143,7 @@ sub said {
 
             #Uploads the <first arg image> to the wiki as <second arg name>.
     if ($msg =~ m/^\$upload/i) {
-        if ($host eq @{$bot_stuff->{ops}}) {
+        if (grep { $_ eq $host } @{$bot_stuff->{ops}}) {
             if ($msg =~ m/^\$upload(?: )/i) {
                 our @uploadwords = split /\s/, $msg, 3;
                 if ($uploadwords[1] =~ m/.+/) {
@@ -299,7 +301,8 @@ sub said {
 
 
     #Outputs the open source report card link for the first argument username. Eventually I should actually do JSON parsing for this.
-    if ($msg =~ m/^\$osrc(?: )/i) {
+    if ($msg =~ m/^\$osrc/i) {
+=pod
         my @osrcwords = split /\s/, $msg, 2;
         my $url = "https://osrc.dfm.io/$osrcwords[1]";
         if (head($url)) {
@@ -313,6 +316,11 @@ sub said {
                 body    => 'Does not exist.'
             );
         }
+=cut
+        $self->say(
+            channel => $channel,
+            body    => ';-;'
+        )
     }
 
     #Outputs the link to this bot's source code.
