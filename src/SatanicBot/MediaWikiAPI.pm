@@ -108,6 +108,20 @@ sub edit_gmods {
     }
 }
 
+sub add_template {
+    my ($self, $name) = @_;
+    my $page = 'Feed The Beast Wiki:All templates';
+    my $text = s/\|\}\n\n==Miscellaneous templates==/\|-\n\|\{\{Tl\|Navbox $name\}\} \|\| \[\[$name\]\] \|\|\n\|\|\}\n\n==Miscellaneous templates==/;
+    $mw->edit( {
+        action  => 'edit',
+        title   => $page,
+        text    => $text,
+        bot     => 1,
+        minor   => 1
+    }) or die $mw->{error}->{code} . ': ' . $mw->{error}->{details};
+    return 1;
+}
+
 sub logout {
     $mw->logout();
     return 1;

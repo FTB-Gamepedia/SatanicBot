@@ -178,6 +178,38 @@ sub said {
         }
     }
 
+    if ($msg =~ m/^\$addtemplate/i) {
+        if (grep { $_ eq $host } @{$bot_stuff->{ops}}) {
+            if ($msg =~ m/^\$addtemplate(?: )/i) {
+                my @templatewords = split /\s/, $msg, 2;
+                if ($templatewords[1] =~ m/.+/) {
+                    $self->say(
+                        channel => $channel,
+                        body    => "Adding $templatewords[1] to the Navbox list."
+                    );
+
+                    SatanicBot::MediaWikiAPI->login();
+                    SatanicBot::MediaWikiAPI->add_template($templatewords[1]);
+                    SatanicBot::MediaWikiAPI->logout();
+
+                    $self->say(
+                        channel => $channel,
+                        body    => 'Success!'
+                    );
+                }
+            } else {
+                $self->say(
+                    channel => $channel,
+                    body    => $args
+                );
+            }
+        } else {
+            $self->say(
+                channel => $channel,
+                body    => 'FUCCBOIIIII'
+            );
+        }
+    }
 
 
     if ($msg =~ m/^\$spookyscaryskeletons$/i) {
@@ -756,13 +788,13 @@ sub said {
             if ($helpwords[1] =~ m/quit$/i) {
                 $self->say(
                     channel => $channel,
-                    body    => 'Stops the bot. No args.'
+                    body    => 'Stops the bot. An op-only command. No args.'
                 );
             }
             if ($helpwords[1] =~ m/abbrv$/i) {
                 $self->say(
                     channel => $channel,
-                    body    => 'Abbreivates a mod for the tilesheet extension. 2 Args: <abbreviation> <mod name>'
+                    body    => 'Abbreivates a mod for the tilesheet extension. An op-only command. 2 args: <abbreviation> <mod name>'
                 );
             }
             if ($helpwords[1] =~ m/spookyscaryskeletons$/i) {
@@ -780,13 +812,13 @@ sub said {
             if ($helpwords[1] =~ m/upload$/i) {
                 $self->say(
                     channel => $channel,
-                    body    => 'Uploads an image to the wiki. 2 args: <file link> <file name>'
+                    body    => 'Uploads an image to the wiki. An op-only command. 2 args: <file link> <file name>'
                 );
             }
             if ($helpwords[1] =~ m/osrc$/i) {
                 $self->say(
                     channel => $channel,
-                    body    => 'Links the open source report card for the user. 1 optional arg: <username>'
+                    body    => 'Links the open source report card for the user. 1 optional arg: <username> CURRENTLY DISABLED.'
                 );
             }
             if ($helpwords[1] =~ m/src$/i) {
@@ -855,16 +887,28 @@ sub said {
                     body    => 'Tweets the first arg on the @LittleHelperBot Twitter account.'
                 );
             }
-            if ($helpwords[1] =~ m/twitterstas$/i) {
+            if ($helpwords[1] =~ m/twitterstats$/i) {
                 $self->say(
                     channel => $channel,
                     body    => 'Provides statistics for the given user. Takes one argument: the username.'
                 )
             }
+            if ($helpwords[1] =~ m/pass$/i) {
+                $self->say(
+                    channel => $channel,
+                    body    => 'Sets the auth password. Only Santa can do this command.'
+                )
+            }
+            if ($helpwords[1] =~ m/auth$/i) {
+                $self->say(
+                    channel => $channel,
+                    body    => 'Logs the user in, allowing for op-only commands. 1 arg: $auth <password>'
+                )
+            }
         } else {
             $self->say(
                 channel => $channel,
-                body    => 'Listing commands... quit, abbrv, spookyscaryskeletons, weather, upload, osrc, src, contribs, flip, 8ball, randquote, stats, calc, randnum, game, motivate, tweet, twitterstats'
+                body    => 'Listing commands... quit, abbrv, spookyscaryskeletons, weather, upload, osrc, src, contribs, flip, 8ball, randquote, stats, calc, randnum, game, motivate, tweet, twitterstats, pass, auth'
             );
         }
     }

@@ -22,7 +22,7 @@ sub login {
     $mw->login( {
         username => $SatanicBot::Utils::LINES[0],
         password => $SatanicBot::Utils::LINES[1]
-    }) or die 'Login failed!';
+    }) or die "Login failed! $mw->{error}->{code}: $mw->{error}->{details}";
     return 1;
 }
 
@@ -30,7 +30,7 @@ sub upload {
     $mw->upload_from_url( {
         url     => $SatanicBot::Bot::uploadwords[1],
         title   => $SatanicBot::Bot::uploadwords[2]
-    }) or die 'Upload failed!';
+    }) or die "Upload failed! $mw->{error}->{code}: $mw->{error}->{details}";
     return 1;
 }
 
