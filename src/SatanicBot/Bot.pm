@@ -27,68 +27,132 @@ sub said {
     my $msg = $message->{body};
     my $user = $message->{who};
     my $ERROR = $!;
-
-    #Quit command. Only Santa can do it.
-    if ($msg =~ m/^\$quit$/i) {
-        if ($host =~ m/SatanicSa\@c/) {
-            $self->say(
-                channel => $channel,
-                body    => 'I don\'t love you anymore' #For some reason this does not get said before it quits in most cases.
-            );
-            $self->shutdown(); #Consider replacing the message said before it quits with an actual quit message.
-            exit;
+    my $args = 'Please provide the required arguments.';
+    my %bot_stuff_hash = (
+        ops       => [],
+        auth_pass => ''
+    );
+    my $bot_stuff = \%bot_stuff_hash;
+    
+    if ($msg =~ m/^\$pass/i) {
+        if ($msg !~ m/^\$pass$/i) {
+            if ($host =~ m/!~SatanicSa\@c-73/) {
+                my @password = split /\s/, $msg, 2;
+                $bot_stuff->{auth_pass} = $password[1];
+                $self->say(
+                    channel => 'msg',
+                    who     => $user,
+                    body    => "Password set to $bot_stuff->{auth_pass}"
+                );
+            }
         } else {
             $self->say(
-                channel => $channel,
-                body    => "$user: Fuck you, bitch ass."
+                channel => 'msg',
+                who     => $user,
+                body    => $args
             );
         }
     }
 
-    #Adds the <first arg abbreviation> to the G:Mods and doc as <second arg mod name>
-    if ($msg =~ m/^\$abbrv(?: )/i) {
-        my @abbrvwords = split /\s/, $msg, 3;
-        if ($abbrvwords[1] =~ m/.+/ and $abbrvwords[2] =~ m/.+/) {
-            if ($abbrvwords[1] =~ m/[\p{IsUpper}\d]/) {
-                if ($host =~ m/SatanicSa\@c/ or $host =~ m/retep998\@pool/ or $host =~ m/webchat\@81.168.2.162/ or $host =~ m/Wolfman12\@CPE/) {
-                    $self->say(
-                        channel => $channel,
-                        body    => "Abbreviating \'$abbrvwords[2]\' as \'$abbrvwords[1]\'"
-                    );
-
-                    SatanicBot::MediaWikiAPI->login();
-                    SatanicBot::MediaWikiAPI->edit_gmods(@abbrvwords[1,2]);
-
-                    if ($SatanicBot::MediaWikiAPI::CHECK eq 'false') {
-                        $self->say(
-                            channel => $channel,
-                            body    => 'Could not proceed. Abbreviation and/or name already on the list.'
-                        );
-                    } elsif ($SatanicBot::MediaWikiAPI::CHECK eq 'true') {
-                        $self->say(
-                            channel => $channel,
-                            body    => 'Success!'
-                        );
-                    }
-                } else {
-                    $self->say(
-                        channel => $channel,
-                        body    => "Blame $user."
-                    );
-                }
-            } else {
+    if ($msg =~ m/^\$auth/i) {
+        if ($msg !~ m/^\$auth$/i) {
+            my @authwords = split /\s/, $msg, 2;
+            if ($authwords[1] eq $bot_stuff->{ auth_pass }) {
+                push @{$bot_stuff->{ops}}, $host;
                 $self->say(
-                    channel => $channel,
-                    body    => 'Abbreviations can only be capital letters and digits.'
+                    channel => 'msg',
+                    who     => $user,
+                    body    => "$user, you are now logged in."
                 );
             }
         } else {
             $self->say(
                 channel => $channel,
-                body    => 'Please provide the required arguments.'
+                body    => $args
             );
         }
     }
+
+    foreach my $op (@{$bot_stuff->{ops}}) {
+        if ($host eq $op) {
+            if ($msg =~ m/^\$quit$/i) {
+                $self->say(
+                    channel => $channel,
+                    body    => 'I don\'t love you anymore' #For some reason this does not get said before it quits in most cases.
+                );
+                $self->shutdown(); #Consider replacing the message said before it quits with an actual quit message.
+                exit 0;
+            }
+
+            #Adds the <first arg abbreviation> to the G:Mods and doc as <second arg mod name>
+            if ($msg =~ m/^\$abbrv(?: )/i) {
+                my @abbrvwords = split /\s/, $msg, 3;
+                if ($abbrvwords[1] =~ m/.+/ and $abbrvwords[2] =~ m/.+/) {
+                    if ($abbrvwords[1] =~ m/[\p{IsUpper}\d]/) {
+                        $self->say(
+                            channel => $channel,
+                            body    => "Abbreviating \'$abbrvwords[2]\' as \'$abbrvwords[1]\'"
+                        );
+
+                        SatanicBot::MediaWikiAPI->login();
+                        SatanicBot::MediaWikiAPI->edit_gmods(@abbrvwords[1,2]);
+
+                        if ($SatanicBot::MediaWikiAPI::CHECK eq 'false') {
+                            $self->say(
+                                channel => $channel,
+                                body    => 'Could not proceed. Abbreviation and/or name already on the list.'
+                            );
+                        } elsif ($SatanicBot::MediaWikiAPI::CHECK eq 'true') {
+                            $self->say(
+                                channel => $channel,
+                                body    => 'Success!'
+                            );
+                        }
+                    } else {
+                        $self->say(
+                            channel => $channel,
+                            body    => 'Abbreviations can only be capital letters and digits.'
+                        );
+                    }
+                } else {
+                    $self->say(
+                        channel => $channel,
+                        body    => $args
+                    );
+                }
+            }
+
+            #Uploads the <first arg image> to the wiki as <second arg name>.
+            if ($msg =~ m/^\$upload(?: )/i) {
+                our @uploadwords = split /\s/, $msg, 3;
+                if ($uploadwords[1] =~ m/.+/) {
+                    if ($uploadwords[2] =~ m/.+/) {
+
+                        SatanicBot::MediaWikiBot->login();
+                        SatanicBot::MediaWikiBot->upload();
+                        SatanicBot::MediaWikiBot->logout();
+
+                        $self->say(
+                            channel => $channel,
+                            body    => "Uploaded \'$uploadwords[2]\' to the Wiki."
+                        );
+                    } else {
+                        $self->say(
+                            channel => $channel,
+                            body    => $args
+                        );
+                    }
+                } else {
+                    $self->say(
+                        channel => $channel,
+                        body    => $args
+                    );
+                }
+            }
+        }
+    }
+
+
 
     if ($msg =~ m/^\$spookyscaryskeletons$/i) {
         my @random_words = Data::Random->rand_words(
@@ -134,7 +198,7 @@ sub said {
             } else {
                 $self->say(
                     channel => $channel,
-                    body    => 'Please provide the required arguments.'
+                    body    => $args
                 );
             }
         } elsif ($msg =~ m/\$weather c(?: )/i) {
@@ -160,7 +224,7 @@ sub said {
             } else {
                 $self->say(
                     channel => $channel,
-                    body    => 'Please provide the required arguments.'
+                    body    => $args
                 );
             }
         } else {
@@ -186,7 +250,7 @@ sub said {
             } else {
                 $self->say(
                     channel => $channel,
-                    body    => 'Please provide the required arguments.'
+                    body    => $args
                 );
             }
         }
@@ -208,39 +272,7 @@ sub said {
         );
     }
 =cut
-    #Uploads the <first arg image> to the wiki as <second arg name>.
-    if ($msg =~ m/^\$upload(?: )/i) {
-        our @uploadwords = split /\s/, $msg, 3;
-        if ($uploadwords[1] =~ m/.+/) {
-            if ($uploadwords[2] =~ m/.+/) {
-                if ($host =~ m/SatanicSa\@c/ or $host =~ m/retep998\@pool/ or $host =~ m/webchat\@81.168.2.162/ or $host =~ m/Wolfman12\@CPE/) {
-                    SatanicBot::MediaWikiBot->login();
-                    SatanicBot::MediaWikiBot->upload();
-                    SatanicBot::MediaWikiBot->logout();
 
-                    $self->say(
-                        channel => $channel,
-                        body    => "Uploaded \'$uploadwords[2]\' to the Wiki."
-                    );
-                } else {
-                    $self->say(
-                        channel => $channel,
-                        body    => 'You are not good enough. If you believe this is not true, please request permission from Santa.'
-                    );
-                }
-            } else {
-                $self->say(
-                    channel => $channel,
-                    body    => 'Please provide the required arguments.'
-                );
-            }
-        } else {
-            $self->say(
-                channel => $channel,
-                body    => 'Please provide the required arguments.'
-            );
-        }
-    }
 
     #Outputs the open source report card link for the first argument username. Eventually I should actually do JSON parsing for this.
     if ($msg =~ m/^\$osrc(?: )/i) {
@@ -523,7 +555,7 @@ sub said {
         } else {
             $self->say(
                 channel => $channel,
-                body    => 'Please provide the required arguments.'
+                body    => $args
             );
         }
     }
@@ -608,7 +640,7 @@ sub said {
         } else {
             $self->say(
                 channel => $channel,
-                body    => 'Please provide the required arguments.'
+                body    => $args
             );
         }
     }
@@ -648,7 +680,7 @@ sub said {
         } else {
             $self->say(
                 channel => $channel,
-                body    => 'Please provide the required arguments.'
+                body    => $args
             );
         }
     }
@@ -680,7 +712,7 @@ sub said {
         } else {
             $self->say(
                 channel => $channel,
-                body    => 'Please provide the required arguments.'
+                body    => $args
             );
         }
     }

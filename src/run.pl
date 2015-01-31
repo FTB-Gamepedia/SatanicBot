@@ -6,7 +6,7 @@ use diagnostics;
 use SatanicBot::Bot;
 use Bot::BasicBot;
 
-my $chan = '#FTB-Wiki';
+my $chan = '#SatanicSanta';
 my $nick = 'LittleHelper';
 
 my $bot = SatanicBot::Bot->new(
