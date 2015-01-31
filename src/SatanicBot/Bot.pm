@@ -74,8 +74,8 @@ sub said {
         }
     }
 
-    foreach my $op (@{$bot_stuff->{ops}}) {
-        if ($host eq $op) {
+    if ($msg =~ m/^\$quit/i) {
+        if ($host eq @{$bot_stuff->{ops}}) {
             if ($msg =~ m/^\$quit$/i) {
                 $self->say(
                     channel => $channel,
@@ -84,8 +84,17 @@ sub said {
                 $self->shutdown(); #Consider replacing the message said before it quits with an actual quit message.
                 exit 0;
             }
+        } else {
+            $self->say(
+                channel => $channel,
+                body    => 'You are a garbage human.'
+            );
+        }
+    }
 
             #Adds the <first arg abbreviation> to the G:Mods and doc as <second arg mod name>
+    if ($msg =~  m/^\$abbrv/i) {
+        if ($host eq @{$bot_stuff->{ops}}) {
             if ($msg =~ m/^\$abbrv(?: )/i) {
                 my @abbrvwords = split /\s/, $msg, 3;
                 if ($abbrvwords[1] =~ m/.+/ and $abbrvwords[2] =~ m/.+/) {
@@ -122,8 +131,17 @@ sub said {
                     );
                 }
             }
+        } else {
+            $self->say(
+                channel => $channel,
+                body    => 'Fuck you'
+            );
+        }
+    }
 
             #Uploads the <first arg image> to the wiki as <second arg name>.
+    if ($msg =~ m/^\$upload/i) {
+        if ($host eq @{$bot_stuff->{ops}}) {
             if ($msg =~ m/^\$upload(?: )/i) {
                 our @uploadwords = split /\s/, $msg, 3;
                 if ($uploadwords[1] =~ m/.+/) {
@@ -150,6 +168,11 @@ sub said {
                     );
                 }
             }
+        } else {
+            $self->say(
+                channel => $channel,
+                body    => 'Swerve'
+            );
         }
     }
 
