@@ -178,6 +178,7 @@ sub said {
         }
     }
 
+=pod
     if ($msg =~ m/^\$addtemplate/i) {
         if (grep { $_ eq $host } @{$bot_stuff->{ops}}) {
             if ($msg =~ m/^\$addtemplate(?: )/i) {
@@ -210,7 +211,7 @@ sub said {
             );
         }
     }
-
+=cut
 
     if ($msg =~ m/^\$spookyscaryskeletons$/i) {
         my @random_words = Data::Random->rand_words(
@@ -593,28 +594,30 @@ sub said {
         }
     }
 
-=pod
     if ($msg =~ m/^\$addminor/i) {
         if ($msg =~ m/^\$addminor(?: )/i) {
-            my @minormodswords = split /\s/, $msg, 2;
-            $self->say(
-                channel => $channel,
-                body    => "Adding \'$minormodswords[1]\' to the Minor Mods list."
-            );
-
-            SatanicBot::MediaWikiAPI->login();
-            SatanicBot::MediaWikiAPI->edit_minor($minormodswords[1]);
-
-            if ($SatanicBot::MediaWikiAPI::MINORCHECK eq 'false') {
+            if (grep { $_ eq $host } @{$bot_stuff->{ops}}) {
+                our @minormodswords = split /\s/, $msg, 2;
                 $self->say(
                     channel => $channel,
-                    body    => 'Could not proceed. Mod already on the list.'
-                );
-            } elsif ($SatanicBot::MediaWikiAPI::MINORCHECK eq 'true') {
-                $self->say(
-                    channel => $channel,
-                    body    => 'Success!'
-                );
+                    body    => "Adding \'$minormodswords[1]\' to the Minor Mods list."
+                    );
+
+                SatanicBot::MediaWikiAPI->login();
+                SatanicBot::MediaWikiAPI->edit_minor($minormodswords[1]);
+                SatanicBot::MediaWikiAPI->logout();
+
+                if ($SatanicBot::MediaWikiAPI::MINORCHECK eq 'false') {
+                    $self->say(
+                        channel => $channel,
+                        body    => 'Could not proceed. Mod already on the list.'
+                    );
+                } elsif ($SatanicBot::MediaWikiAPI::MINORCHECK eq 'true') {
+                    $self->say(
+                        channel => $channel,
+                        body    => 'Success!'
+                        );
+                }
             }
         } else {
             $self->say(
@@ -623,7 +626,7 @@ sub said {
             );
         }
     }
-=cut
+
 
     if ($msg =~ m/^\$randnum/i) {
         my @randwords = split /\s/, $msg, 2;

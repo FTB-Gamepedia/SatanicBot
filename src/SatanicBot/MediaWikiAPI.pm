@@ -14,10 +14,10 @@ my $ERROR = $!;
 
 sub login {
     SatanicBot::Utils->get_secure_contents();
-    my $www = WWW::Mechanize->new();
-    my $credentials = $www->get("http://ftb.gamepedia.com/api.php?action=login&lgname=$SatanicBot::Utils::LINES[0]&lgpassword=$SatanicBot::Utils::LINES[1]&format=json") or die "Unable to get url.\n";
-    my $decode = $credentials->decoded_content();
-    my @loggedin = $decode =~ m{\"result\":(.*?)\}};
+    #my $www = WWW::Mechanize->new();
+    #my $credentials = $www->get("http://ftb.gamepedia.com/api.php?action=login&lgname=$SatanicBot::Utils::LINES[0]&lgpassword=$SatanicBot::Utils::LINES[1]&format=json") or die "Unable to get url.\n";
+    #my $decode = $credentials->decoded_content();
+    #my @loggedin = $decode =~ m{\"result\":(.*?)\}};
     $mw->login( {
         lgname     => $SatanicBot::Utils::LINES[0],
         lgpassword => $SatanicBot::Utils::LINES[1]
@@ -26,12 +26,11 @@ sub login {
 }
 
 sub edit_minor {
-    my ($self, $name) = @_;
     my $minormods = "User:TheSatanicSanta/Sandbox/Minor Mods"; #change this
     my $ref = $mw->get_page({title => $minormods});
     my $content = $ref->{'*'};
 
-    if ($content !~ m/\[\[$name\]\]/g) {
+    if ($content !~ m/\[\[$SatanicBot::Bot::minormodswords[1]\]\]/g) {
         #$content =~ s/\[\[Additional Buildcraft Objects\]\] \{\{\*\}\}/\[\[Additional Buildcraft Objects\]\] \{\{\*\}\}\n\[\[$name\]\] \{\{\*\}\}/;
         #my $filename = 'info/minor.txt';
         #open my $fh, '+>', $filename or die "Could not open $filename $!\n";
@@ -40,20 +39,17 @@ sub edit_minor {
         #my @sorted = sort @not_sorted;
         #print $fh @sorted;
         #close $fh;
-        my $text = s/\[\[Additional Buildcraft Objects\]\] \{\{\*\}\}/\[\[Additional Buildcraft Objects\]\] \{\{\*\}\}\n\[\[$name\]\] \{\{\*\}\}/;
-        $mw->edit( {
-            action => 'edit',
-            title  => $minormods,
-            text   => $text,
-            bot    => 1,
-            minor  => 1
-        }) || die $mw->{error}->{code} . ': ' . $mw->{error}->{details};
+        my $text = s/<\/onlyinclude>/\[\[$SatanicBot::Bot::minormodswords[1]\]\] \{\{\*\}\}\n<\/onlyinclude>/;
 
         my $ref_presort = $mw->get_page({title => $minormods});
-        my $content_presort = $ref_presort->{'*'};
-        my @split = split /\n/, $content_presort;
+        my $content_thing = $ref_presort->{'*'};
+        $content_thing =~ $text;
+        die $content_thing;
+        my @split = split /\n/, $content_thing;
         my @sort = sort @split;
         my $join = join @sort;
+        die $join;
+=pod
         $mw->edit( {
             action => 'edit',
             title  => $minormods,
@@ -61,6 +57,8 @@ sub edit_minor {
             bot    => 1,
             minor  => 1
         }) || die $mw->{error}->{code} . ': ' . $mw->{error}->{details};
+=cut
+        our $MINORCHECK = 'true';
         return 1;
     } else {
         our $MINORCHECK = 'false';
