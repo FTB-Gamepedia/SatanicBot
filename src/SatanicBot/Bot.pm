@@ -34,6 +34,7 @@ sub said {
     my $user = $message->{who};
     my $ERROR = $!;
     my $args = 'Please provide the required arguments.';
+    my $authorized = 'You must be authorized.';
 
 
     if ($msg =~ m/^\$pass/i) {
@@ -89,7 +90,7 @@ sub said {
         } else {
             $self->say(
                 channel => $channel,
-                body    => 'You are a garbage human.'
+                body    => $authorized
             );
         }
     }
@@ -173,7 +174,7 @@ sub said {
         } else {
             $self->say(
                 channel => $channel,
-                body    => 'Swerve'
+                body    => $authorized
             );
         }
     }
@@ -616,14 +617,56 @@ sub said {
                     $self->say(
                         channel => $channel,
                         body    => 'Success!'
-                        );
+                    );
                 }
+            } else {
+                $self->say(
+                    channel => $channel,
+                    body    => $authorized
+                );
             }
         } else {
             $self->say(
                 channel => $channel,
                 body    => $args
             );
+        }
+    }
+
+    if ($msg =~ m/^\$addmod/i) {
+        if ($msg =~ m/^\$addmod(?: )/i) {
+            if (grep { $_ eq $host } @{ $bot_stuff->{ops} }) {
+                my @modwords = split /\s/, $msg, 2;
+                $self->say(
+                    channel => $channel,
+                    body    => "Adding \'$modwords[1]\' to the Mods list."
+                );
+
+                SatanicBot::MediaWikiAPI->login();
+                SatanicBot::MediaWikiAPI->edit_mods($modwords[1]);
+
+                if ($SatanicBot::MediaWikiAPI::MODCHECK eq 'false') {
+                    $self->say(
+                        channel => $channel,
+                        body    => 'Could not proceed. Mod already on the list.'
+                    );
+                } elsif ($SatanicBot::MediaWikiAPI::MODCHECK eq 'true') {
+                    $self->say(
+                        channel => $channel,
+                        body    => 'Success!'
+                    );
+                }
+            } else {
+                $self->say(
+                    channel => $channel,
+                    body    => $authorized
+                );
+            }
+        } else {
+            $self->say(
+                channel => $channel,
+                body    => $args
+            )
         }
     }
 
@@ -824,7 +867,7 @@ sub said {
                     body    => 'Links the open source report card for the user. 1 optional arg: <username> CURRENTLY DISABLED.'
                 );
             }
-            if ($helpwords[1] =~ m/src$/i) {
+            if ($msg =~ m/^\$help src$/i) { # I have to do it this way due to a bug caused by $help osrc.
                 $self->say(
                     channel => $channel,
                     body    => 'Links the source code for this bot. No args.'
@@ -914,10 +957,16 @@ sub said {
                     body    => 'Adds a mod to the list of minor mods on the main page. 1 arg: $addminor <mod name>'
                 );
             }
+            if ($helpwords[1] =~ m/addmod$/i) {
+                $self->say(
+                    channel => $channel,
+                    body    => 'Adds a mod to the list of mods on the main page. 1 arg: $addmod <mod name>'
+                );
+            }
         } else {
             $self->say(
                 channel => $channel,
-                body    => 'Listing commands... quit, abbrv, spookyscaryskeletons, weather, upload, osrc, src, contribs, flip, 8ball, randquote, stats, calc, randnum, game, motivate, tweet, twitterstats, addminor, pass, auth'
+                body    => 'Listing commands... quit, abbrv, spookyscaryskeletons, weather, upload, osrc, src, contribs, flip, 8ball, randquote, stats, calc, randnum, game, motivate, tweet, twitterstats, addminor, addmod, pass, auth'
             );
         }
     }

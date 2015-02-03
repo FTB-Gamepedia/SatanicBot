@@ -32,10 +32,8 @@ sub edit_minor {
     my $content = $ref->{'*'};
 
     if ($content !~ m/\[\[$name\]\]/g) {
-        my $ref_presort = $mw->get_page({title => $minormods});
-        my $content_thing = $ref_presort->{'*'};
-        $content_thing =~ s/\n<\/onlyinclude>/ \{\{\*\}\}\n\[\[$name\]\]\n<\/onlyinclude>/;
-        my @split = split /\n/, $content_thing;
+        $content =~ s/\n<\/onlyinclude>/ \{\{\*\}\}\n\[\[$name\]\]\n<\/onlyinclude>/;
+        my @split = split /\n/, $content;
         my @sort = sort @split;
         my $join = join "\n", @sort;
 
@@ -57,6 +55,40 @@ sub edit_minor {
         return 1;
     } else {
         our $MINORCHECK = 'false';
+        return 0;
+    }
+}
+
+sub edit_mods {
+    my ($self, $name) = @_;
+    my $mods = 'User:TheSatanicSanta/Sandbox/Mods';
+    my $ref = $mw->get_page({title => $mods});
+    my $content = $ref->{'*'};
+
+    if ($content !~ m/\[\[$name\]\]/g) {
+        $content =~ s/\n<\/onlyinclude>/ \{\{\*\}\}\n\[\[$name\]\]\n<\/onlyinclude>/;
+        my @split = split /\n/, $content;
+        my @sort = sort @split;
+        my $join = join "\n", @sort;
+
+        $join =~ s/\]\]\n\[\[/\]\] \{\{\*\}\}\n\[\[/g;
+        $join =~ s/<onlyinclude>//;
+        $join =~ s/<\/onlyinclude>//;
+        $join = '<onlyinclude>' . $join . "\n</onlyinclude>";
+        $join =~ s/ \{\{\*\}\}\n<\/onlyinclude>/\n<\/onlyinclude>/;
+
+        $mw->edit( {
+            action => 'edit',
+            title  => $mods,
+            text   => $join,
+            bot    => 1,
+            minor  => 1
+        }) || die $mw->{error}->{code} . ': ' . $mw->{error}->{details};
+
+        our $MODCHECK = 'true';
+        return 1;
+    } else {
+        our $MODCHECK = 'false';
         return 0;
     }
 }
