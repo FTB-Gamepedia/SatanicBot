@@ -26,30 +26,25 @@ sub login {
 }
 
 sub edit_minor {
-    my $minormods = "User:TheSatanicSanta/Sandbox/Minor Mods"; #change this
+    my ($self, $name) = @_;
+    my $minormods = 'Template:Minor Mods';
     my $ref = $mw->get_page({title => $minormods});
     my $content = $ref->{'*'};
 
-    if ($content !~ m/\[\[$SatanicBot::Bot::minormodswords[1]\]\]/g) {
-        #$content =~ s/\[\[Additional Buildcraft Objects\]\] \{\{\*\}\}/\[\[Additional Buildcraft Objects\]\] \{\{\*\}\}\n\[\[$name\]\] \{\{\*\}\}/;
-        #my $filename = 'info/minor.txt';
-        #open my $fh, '+>', $filename or die "Could not open $filename $!\n";
-        #print $fh $content;
-        #my @not_sorted = <$fh>;
-        #my @sorted = sort @not_sorted;
-        #print $fh @sorted;
-        #close $fh;
-        my $text = s/<\/onlyinclude>/\[\[$SatanicBot::Bot::minormodswords[1]\]\] \{\{\*\}\}\n<\/onlyinclude>/;
-
+    if ($content !~ m/\[\[$name\]\]/g) {
         my $ref_presort = $mw->get_page({title => $minormods});
         my $content_thing = $ref_presort->{'*'};
-        $content_thing =~ $text;
-        die $content_thing;
+        $content_thing =~ s/\n<\/onlyinclude>/ \{\{\*\}\}\n\[\[$name\]\]\n<\/onlyinclude>/;
         my @split = split /\n/, $content_thing;
         my @sort = sort @split;
-        my $join = join @sort;
-        die $join;
-=pod
+        my $join = join "\n", @sort;
+
+        $join =~ s/\]\]\n\[\[/\]\] \{\{\*\}\}\n\[\[/g;
+        $join =~ s/<onlyinclude>//;
+        $join =~ s/<\/onlyinclude>//;
+        $join = '<onlyinclude>' . $join . "\n</onlyinclude>";
+        $join =~ s/ \{\{\*\}\}\n<\/onlyinclude>/\n<\/onlyinclude>/;
+
         $mw->edit( {
             action => 'edit',
             title  => $minormods,
@@ -57,7 +52,7 @@ sub edit_minor {
             bot    => 1,
             minor  => 1
         }) || die $mw->{error}->{code} . ': ' . $mw->{error}->{details};
-=cut
+
         our $MINORCHECK = 'true';
         return 1;
     } else {

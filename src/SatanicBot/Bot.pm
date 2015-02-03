@@ -597,7 +597,7 @@ sub said {
     if ($msg =~ m/^\$addminor/i) {
         if ($msg =~ m/^\$addminor(?: )/i) {
             if (grep { $_ eq $host } @{$bot_stuff->{ops}}) {
-                our @minormodswords = split /\s/, $msg, 2;
+                my @minormodswords = split /\s/, $msg, 2;
                 $self->say(
                     channel => $channel,
                     body    => "Adding \'$minormodswords[1]\' to the Minor Mods list."
@@ -908,10 +908,16 @@ sub said {
                     body    => 'Logs the user in, allowing for op-only commands. 1 arg: $auth <password>'
                 )
             }
+            if ($helpwords[1] =~ m/addminor$/i) {
+                $self->say(
+                    channel => $channel,
+                    body    => 'Adds a mod to the list of minor mods on the main page. 1 arg: $addminor <mod name>'
+                );
+            }
         } else {
             $self->say(
                 channel => $channel,
-                body    => 'Listing commands... quit, abbrv, spookyscaryskeletons, weather, upload, osrc, src, contribs, flip, 8ball, randquote, stats, calc, randnum, game, motivate, tweet, twitterstats, pass, auth'
+                body    => 'Listing commands... quit, abbrv, spookyscaryskeletons, weather, upload, osrc, src, contribs, flip, 8ball, randquote, stats, calc, randnum, game, motivate, tweet, twitterstats, addminor, pass, auth'
             );
         }
     }
