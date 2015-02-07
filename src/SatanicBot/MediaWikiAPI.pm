@@ -27,21 +27,23 @@ sub login {
 
 sub edit_minor {
     my ($self, $name) = @_;
-    my $minormods = 'User:TheSatanicSanta/Bot Test Page';
+    my $minormods = 'Template:Minor Mods';
     my $ref = $mw->get_page({title => $minormods});
     my $content = $ref->{'*'};
 
     if ($content !~ m/\[\[$name\]\]/g) {
-        $content =~ s/\n<\/onlyinclude>/ \{\{\*\}\}\n\[\[$name\]\]\n<\/onlyinclude>/;
+        $content =~ s/\n<!--/ \{\{\*\}\}\n\[\[$name\]\]\n<!--/;
         my @split = split /\n/, $content;
-        my @sort = sort @split;
+        my @sort = sort { "\L$a" cmp "\L$b" } @split; # Should be case-insensitive sorting.
         my $join = join "\n", @sort;
 
         $join =~ s/\]\]\n\[\[/\]\] \{\{\*\}\}\n\[\[/g;
-        $join =~ s/<onlyinclude>//;
-        $join =~ s/<\/onlyinclude>//;
-        $join = '<onlyinclude>' . $join . "\n</onlyinclude>";
-        $join =~ s/ \{\{\*\}\}\n<\/onlyinclude>/\n<\/onlyinclude>/;
+
+        # I need to remove it then add it again because it gets sorted wrong.
+        $join =~ s/\<!-- DO NOT EDIT THIS LINE -->//;
+        $join = $join . "\n<!-- DO NOT EDIT THIS LINE -->";
+        $join =~ s/ \{\{\*\}\}\n<!--/\n<!--/;
+        $join =~ s/^\n//;
 
         $mw->edit( {
             action => 'edit',
@@ -61,21 +63,23 @@ sub edit_minor {
 
 sub edit_mods {
     my ($self, $name) = @_;
-    my $mods = 'User:TheSatanicSanta/Sandbox/Mods';
+    my $mods = 'Template:Mods';
     my $ref = $mw->get_page({title => $mods});
     my $content = $ref->{'*'};
 
     if ($content !~ m/\[\[$name\]\]/g) {
-        $content =~ s/\n<\/onlyinclude>/ \{\{\*\}\}\n\[\[$name\]\]\n<\/onlyinclude>/;
+        $content =~ s/\n<!--/ \{\{\*\}\}\n\[\[$name\]\]\n<!--/;
         my @split = split /\n/, $content;
-        my @sort = sort @split;
+        my @sort = sort { "\L$a" cmp "\L$b" } @split;
         my $join = join "\n", @sort;
 
         $join =~ s/\]\]\n\[\[/\]\] \{\{\*\}\}\n\[\[/g;
-        $join =~ s/<onlyinclude>//;
-        $join =~ s/<\/onlyinclude>//;
-        $join = '<onlyinclude>' . $join . "\n</onlyinclude>";
-        $join =~ s/ \{\{\*\}\}\n<\/onlyinclude>/\n<\/onlyinclude>/;
+
+        #See comment in edit_minor.
+        $join =~ s/<!-- DO NOT EDIT THIS LINE -->//;
+        $join = $join . "\n<!-- DO NOT EDIT THIS LINE -->";
+        $join =~ s/ \{\{\*\}\}\n<!--/\n<!--/;
+        $join =~ s/^\n//;
 
         $mw->edit( {
             action => 'edit',
