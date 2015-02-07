@@ -27,7 +27,7 @@ sub login {
 
 sub edit_minor {
     my ($self, $name) = @_;
-    my $minormods = 'Template:Minor Mods';
+    my $minormods = 'User:TheSatanicSanta/Bot Test Page';
     my $ref = $mw->get_page({title => $minormods});
     my $content = $ref->{'*'};
 
