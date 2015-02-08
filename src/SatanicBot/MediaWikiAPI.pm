@@ -25,13 +25,24 @@ sub login {
     return 1;
 }
 
+sub test {
+    my $page = 'User:TheSatanicSanta/Sandbox/gdfgdffg';
+    my $content = $mw->get_page( { title => $page });
+    if (exists $content->{missing}){
+        die $content->{missing};
+    }
+}
+
 sub edit_minor {
     my ($self, $name) = @_;
     my $minormods = 'Template:Minor Mods';
     my $ref = $mw->get_page({title => $minormods});
     my $content = $ref->{'*'};
+    my $editref = $mw->get_page({ title => $name });
 
-    if ($content !~ m/\[\[$name\]\]/g) {
+    if (exists $editref->{missing}) {
+        return 0;
+    } elsif ($content !~ m/\[\[$name\]\]/g) {
         $content =~ s/\n<!--/ \{\{\*\}\}\n\[\[$name\]\]\n<!--/;
         my @split = split /\n/, $content;
         my @sort = sort { "\L$a" cmp "\L$b" } @split; # Should be case-insensitive sorting.
@@ -53,21 +64,22 @@ sub edit_minor {
             minor  => 1
         }) || die $mw->{error}->{code} . ': ' . $mw->{error}->{details};
 
-        our $MINORCHECK = 'true';
         return 1;
     } else {
-        our $MINORCHECK = 'false';
         return 0;
     }
 }
 
 sub edit_mods {
     my ($self, $name) = @_;
-    my $mods = 'Template:Mods';
+    my $mods = 'User:TheSatanicSanta/Sandbox';
     my $ref = $mw->get_page({title => $mods});
     my $content = $ref->{'*'};
+    my $editref = $mw->get_page({ title => $name });
 
-    if ($content !~ m/\[\[$name\]\]/g) {
+    if (exists $editref->{missing}) {
+        return 0;
+    } elsif ($content !~ m/\[\[$name\]\]/g) {
         $content =~ s/\n<!--/ \{\{\*\}\}\n\[\[$name\]\]\n<!--/;
         my @split = split /\n/, $content;
         my @sort = sort { "\L$a" cmp "\L$b" } @split;

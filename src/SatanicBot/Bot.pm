@@ -610,15 +610,15 @@ sub said {
                     );
 
                 SatanicBot::MediaWikiAPI->login();
-                SatanicBot::MediaWikiAPI->edit_minor($minormodswords[1]);
+                my $edit = SatanicBot::MediaWikiAPI->edit_minor($minormodswords[1]);
                 SatanicBot::MediaWikiAPI->logout();
 
-                if ($SatanicBot::MediaWikiAPI::MINORCHECK eq 'false') {
+                if ($edit == 0) {
                     $self->say(
                         channel => $channel,
-                        body    => 'Could not proceed. Mod already on the list.'
+                        body    => 'Could not proceed. Mod already on the list or mod page returned missing.'
                     );
-                } elsif ($SatanicBot::MediaWikiAPI::MINORCHECK eq 'true') {
+                } else {
                     $self->say(
                         channel => $channel,
                         body    => 'Success!'
@@ -648,14 +648,14 @@ sub said {
                 );
 
                 SatanicBot::MediaWikiAPI->login();
-                SatanicBot::MediaWikiAPI->edit_mods($modwords[1]);
+                my $edit = SatanicBot::MediaWikiAPI->edit_mods($modwords[1]);
 
-                if ($SatanicBot::MediaWikiAPI::MODCHECK eq 'false') {
+                if ($edit == 0) {
                     $self->say(
                         channel => $channel,
-                        body    => 'Could not proceed. Mod already on the list.'
+                        body    => 'Could not proceed. Mod already on the list or mod page returned missing.'
                     );
-                } elsif ($SatanicBot::MediaWikiAPI::MODCHECK eq 'true') {
+                } else {
                     $self->say(
                         channel => $channel,
                         body    => 'Success!'
