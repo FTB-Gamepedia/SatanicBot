@@ -367,7 +367,6 @@ sub said {
 
     #Outputs how many contributions the user has made to the wiki.
     #Consider using a JSON parser instead of regular expression.
-    #Duplicated contribs code. Consider refactoring.
     if ($msg =~ m/^\$contribs(?: )/i) {
         my @contribwords = split /\s/, $msg, 2;
         if ($contribwords[1] =~ m/.+/) {
@@ -416,36 +415,25 @@ sub said {
     }
 
     if ($msg =~ m/^\$contribs$/i) {
-        my $www = WWW::Mechanize->new();
-        my $contriburl = $www->get("http://ftb.gamepedia.com/api.php?action=query&list=users&ususers=$user&usprop=editcount&format=json") or die "Unable to get url.\n";
-        my $decodecontribs = $contriburl->decoded_content();
-        my @contribs = $decodecontribs =~ m{\"editcount\":(.*?)\}};
-        my $registerurl = $www->get("http://ftb.gamepedia.com/api.php?action=query&list=users&ususers=$user&usprop=registration&format=json") or die "Unable to get url.\n";
-        my $decodereg = $registerurl->decoded_content();
-        my @register = $decodereg =~ m{\"registration\":\"(.*?)T};
+        my $contribs = SatanicBot::Utils->get_contribs($user);
+        my $register = SatanicBot::Utils->get_registration_date($user);
 
-        if ($decodecontribs !~ m{\"missing\"}) {
-            my $num_contribs = SatanicBot::Utils->separate_by_commas($contribs[0]);
-            if ($contribs[0] eq '1') {
+        if ($contribs != 0) {
+            if ($contribs eq '1') {
                 $self->say(
                     channel => $channel,
-                    body    => "$user, you have made 1 contribution to the wiki and registered on $register[0]."
+                    body    => "$user, you have made 1 contribution to the wiki and registered on $register."
                 );
             } else {
                 $self->say(
                     channel => $channel,
-                    body    => "$user, you have made $num_contribs contributions to the wiki and registered on $register[0]."
+                    body    => "$user, you have made $contribs contributions to the wiki and registered on $register."
                 );
             }
-        } elsif ($decodecontribs =~ m{\"missing\"}) {
+        } elsif ($contribs == 0) {
             $self->say(
                 channel => $channel,
-                body    => 'Please provide a username.'
-            );
-        } else {
-            $self->say(
-                channel => $channel,
-                body    => 'An unexpected thing happened.'
+                body    => 'Something went wrong. You may have entered an invalid username (such as an IP) or a nonexistant username.'
             );
         }
     }

@@ -12,6 +12,7 @@ sub separate_by_commas {
     $string = reverse $string;
     $string =~ s/(\d\d\d)(?=\d)(?!\d*\.)/$1,/g;
     $string = reverse $string;
+    return $string;
 }
 
 sub get_secure_contents {
@@ -32,7 +33,7 @@ sub get_contribs {
         return 0;
     } else {
         my @contribs = $decodecontribs =~ m{\"editcount\":(.*?)\}};
-        my $contribs = separate_by_commas($contribs[0]);
+        my $contribs = SatanicBot::Utils->separate_by_commas($contribs[0]);
         return $contribs;
     }
 }
