@@ -371,57 +371,44 @@ sub said {
     if ($msg =~ m/^\$contribs(?: )/i) {
         my @contribwords = split /\s/, $msg, 2;
         if ($contribwords[1] =~ m/.+/) {
-            my $www = WWW::Mechanize->new();
-            my $contriburl = $www->get("http://ftb.gamepedia.com/api.php?action=query&list=users&ususers=$contribwords[1]&usprop=editcount&format=json") or die "Unable to get url.\n";
-            my $decodecontribs = $contriburl->decoded_content();
-            my @contribs = $decodecontribs =~ m{\"editcount\":(.*?)\}};
-            my @name = $decodecontribs =~ m{\"name\":\"(.*?)\"};
-            my $registerurl = $www->get("http://ftb.gamepedia.com/api.php?action=query&list=users&ususers=$contribwords[1]&usprop=registration&format=json") or die "Unable to get url.\n";
-            my $decodereg = $registerurl->decoded_content();
-            my @register = $decodereg =~ m{\"registration\":\"(.*?)T};
+            my $contribs = SatanicBot::Utils->get_contribs($contribwords[1]);
+            my $register = SatanicBot::Utils->get_registration_date($contribwords[1]);
 
-            if ($decodecontribs =~ m{\"missing\"}) {
+            if ($contribs == 0) {
                 $self->say(
                     channel => $channel,
-                    body    => 'Please enter a valid username.'
-                );
-            } elsif ($decodecontribs =~ m{\"invalid\"}) {
-                $self->say(
-                    channel => $channel,
-                    body    => 'Sorry, but IPs are not compatible.'
+                    body    => 'Something went wrong. You may have entered an invalid username (such as an IP) or a nonexistant username.'
                 );
             } else {
-                my $num_contribs = SatanicBot::Utils->separate_by_commas($contribs[0]);
-
-                if ($contribs[0] eq '1') {
+                if ($contribs eq '1') {
                     $self->say(
                         channel => $channel,
-                        body    => "$name[0] has made 1 contribution to the wiki and registered on $register[0]."
+                        body    => "$contribwords[1] has made 1 contribution to the wiki and registered on $register."
                     );
                 } elsif ($contribwords[1] eq 'SatanicBot' or $contribwords[1] eq 'satanicBot') {
                     $self->say(
                         channel => $channel,
-                        body    => "I have made $num_contribs contributions to the wiki and registered on $register[0]."
+                        body    => "I have made $contribs contributions to the wiki and registered on $register."
                     );
                 } elsif ($contribwords[1] eq 'TheSatanicSanta' or $contribwords[1] eq 'theSatanicSanta') {
                     $self->say(
                         channel => $channel,
-                        body    => "The second hottest babe in the channel has made $num_contribs contributions to the wiki and registered on $register[0]."
+                        body    => "The second hottest babe in the channel has made $contribs contributions to the wiki and registered on $register."
                     );
                 } elsif ($contribwords[1] eq 'Retep998' or $contribwords[1] eq 'retep998') {
                     $self->say(
                         channel => $channel,
-                        body    => "The hottest babe in the channel has made $num_contribs contributions to the wiki and registered on $register[0]."
+                        body    => "The hottest babe in the channel has made $contribs contributions to the wiki and registered on $register."
                     );
                 } elsif ($contribwords[1] eq 'PonyButt' or $contribwords[1] eq 'ponyButt') {
                     $self->say(
                         channel => $channel,
-                        body    => "Some bitch ass nigga has made $num_contribs contributions to the wiki and registered on $register[0]."
+                        body    => "Some bitch ass nigga has made $contribs contributions to the wiki and registered on $register."
                     );
                 } else {
                     $self->say(
                         channel => $channel,
-                        body    => "$name[0] has made $num_contribs contributions to the wiki and registered on $register[0]."
+                        body    => "$contribwords[1] has made $contribs contributions to the wiki and registered on $register."
                     );
                 }
             }

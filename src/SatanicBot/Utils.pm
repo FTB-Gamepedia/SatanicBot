@@ -22,4 +22,30 @@ sub get_secure_contents {
     chomp @LINES;
     return 1;
 }
+
+sub get_contribs {
+    my ($self, $user) = @_;
+    my $www = WWW::Mechanize->new();
+    my $contriburl = $www->get("http://ftb.gamepedia.com/api.php?action=query&list=users&ususers=$user&usprop=editcount&format=json") or die "Unable to get url.\n";
+    my $decodecontribs = $contriburl->decoded_content();
+    if ($decodecontribs =~ m{\"missing\"} or $decodecontribs =~ m{\"invalid\"}) {
+        return 0;
+    } else {
+        my @contribs = $decodecontribs =~ m{\"editcount\":(.*?)\}};
+        my $contribs = separate_by_commas($contribs[0]);
+        return $contribs;
+    }
+}
+
+sub get_registration_date {
+    my ($self, $user) = @_;
+    my $www = WWW::Mechanize->new();
+    my $registerurl = $www->get("http://ftb.gamepedia.com/api.php?action=query&list=users&ususers=$user&usprop=registration&format=json") or die "Unable to get url.\n";
+    my $decodereg = $registerurl->decoded_content();
+    if ($decodereg =~ m{\"missing\"} or $decodereg =~ m{\"invalid\"}) {
+        return 0;
+    }
+    my @register = $decodereg =~ m{\"registration\":\"(.*?)T};
+    return $register[0];
+}
 1;
