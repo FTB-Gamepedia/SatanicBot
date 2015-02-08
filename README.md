@@ -3,20 +3,12 @@ SatanicBot
 
 SatanicBot written in Perl. This is an IRC and FTB Wiki bot (MediaWiki API) that can help do things easier.
 
-IRC Commands
+Normal commands
 ========
 
 help
 ----
-The $help command will output a list of commands to the channel.
-
-abbrv
------
-The $abbrv command is used to add abbreviations to Template:G/Mods and its documentation. It takes two arguments, the abbreviation and the mod name. It will output the following to the channel (first line is before it runs the MediaWiki stuff, the second is after it is complete):
-
-Abbreviating \<mod name\> as \<abbreviation\>
-
-Abbreviation and documentation added.
+The $help command will output a list of commands to the channel. It can take a single argument of a command's name to provide information on how it is used.
 
 weather
 -------
@@ -73,6 +65,36 @@ tweet
 -----
 Sends a tweet on the LittleHelperBot Twitter.
 
+twitterstats
+------------
+Gets statistics for the Twitter user given in the first arg. It's sort of broken due to a crappy Twitter module.
+
+auth
+----
+Logs the user in, allowing for op-only commands. It requires the password set by the $pass command.
+
+
+
+Restricted commands
+===================
+These commands can only be used by authorized users or Santa specifically.
+
 quit
 ----
-The $quit command will stop the bot.
+The $quit command will stop the bot. All authorized users can use this command.
+
+pass
+----
+Used to set the password for authorization. Only Santa can use this command.
+
+abbrv
+-----
+The $abbrv command is used to add abbreviations to Template:G/Mods and its documentation. It takes two arguments, the abbreviation and the mod name.
+
+addminor
+--------
+Adds the mod provided with the first argument to the list of Minor Mods on the Main Page.
+
+addmod
+------
+Adds the mod provided with the first argument to the list of Mods on the Main Page.

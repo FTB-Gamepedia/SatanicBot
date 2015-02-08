@@ -367,6 +367,7 @@ sub said {
 
     #Outputs how many contributions the user has made to the wiki.
     #Consider using a JSON parser instead of regular expression.
+    #Duplicated contribs code. Consider refactoring.
     if ($msg =~ m/^\$contribs(?: )/i) {
         my @contribwords = split /\s/, $msg, 2;
         if ($contribwords[1] =~ m/.+/) {
@@ -375,7 +376,6 @@ sub said {
             my $decodecontribs = $contriburl->decoded_content();
             my @contribs = $decodecontribs =~ m{\"editcount\":(.*?)\}};
             my @name = $decodecontribs =~ m{\"name\":\"(.*?)\"};
-
             my $registerurl = $www->get("http://ftb.gamepedia.com/api.php?action=query&list=users&ususers=$contribwords[1]&usprop=registration&format=json") or die "Unable to get url.\n";
             my $decodereg = $registerurl->decoded_content();
             my @register = $decodereg =~ m{\"registration\":\"(.*?)T};
@@ -425,10 +425,40 @@ sub said {
                     );
                 }
             }
-        } else {
+        }
+    }
+
+    if ($msg =~ m/^\$contribs$/i) {
+        my $www = WWW::Mechanize->new();
+        my $contriburl = $www->get("http://ftb.gamepedia.com/api.php?action=query&list=users&ususers=$user&usprop=editcount&format=json") or die "Unable to get url.\n";
+        my $decodecontribs = $contriburl->decoded_content();
+        my @contribs = $decodecontribs =~ m{\"editcount\":(.*?)\}};
+        my $registerurl = $www->get("http://ftb.gamepedia.com/api.php?action=query&list=users&ususers=$user&usprop=registration&format=json") or die "Unable to get url.\n";
+        my $decodereg = $registerurl->decoded_content();
+        my @register = $decodereg =~ m{\"registration\":\"(.*?)T};
+
+        if ($decodecontribs !~ m{\"missing\"}) {
+            my $num_contribs = SatanicBot::Utils->separate_by_commas($contribs[0]);
+            if ($contribs[0] eq '1') {
+                $self->say(
+                    channel => $channel,
+                    body    => "$user, you have made 1 contribution to the wiki and registered on $register[0]."
+                );
+            } else {
+                $self->say(
+                    channel => $channel,
+                    body    => "$user, you have made $num_contribs contributions to the wiki and registered on $register[0]."
+                );
+            }
+        } elsif ($decodecontribs =~ m{\"missing\"}) {
             $self->say(
                 channel => $channel,
                 body    => 'Please provide a username.'
+            );
+        } else {
+            $self->say(
+                channel => $channel,
+                body    => 'An unexpected thing happened.'
             );
         }
     }
@@ -876,7 +906,7 @@ sub said {
             if ($helpwords[1] =~ m/contribs$/i) {
                 $self->say(
                     channel => $channel,
-                    body    => 'Provides some user information including num of contribs to the wiki and registration date. 1 arg: <username>'
+                    body    => 'Provides some user information including num of contribs to the wiki and registration date. 1 optional arg: <username>. If no arg is given, it will use the user\'s IRC nickname.'
                 );
             }
             if ($helpwords[1] =~ m/flip$/i) {
