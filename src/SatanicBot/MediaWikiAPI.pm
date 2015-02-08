@@ -66,7 +66,7 @@ sub edit_minor {
 
 sub edit_mods {
     my ($self, $name) = @_;
-    my $mods = 'User:TheSatanicSanta/Sandbox';
+    my $mods = 'Template:Mods';
     my $ref = $mw->get_page({title => $mods});
     my $content = $ref->{'*'};
     my $editref = $mw->get_page({ title => $name });
