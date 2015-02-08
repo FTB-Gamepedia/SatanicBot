@@ -18,10 +18,10 @@ sub separate_by_commas {
 sub get_secure_contents {
     my $file = 'info/secure.txt';
     open my $fh, '<', $file or die "Could not open '$file' $ERROR\n";
-    our @LINES = <$fh>;
+    my @lines = <$fh>;
     close $fh;
-    chomp @LINES;
-    return 1;
+    chomp @lines;
+    return @lines;
 }
 
 sub get_contribs {

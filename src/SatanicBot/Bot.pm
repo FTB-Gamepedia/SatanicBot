@@ -108,14 +108,14 @@ sub said {
                         );
 
                         SatanicBot::MediaWikiAPI->login();
-                        SatanicBot::MediaWikiAPI->edit_gmods(@abbrvwords[1,2]);
+                        my $edit = SatanicBot::MediaWikiAPI->edit_gmods(@abbrvwords[1,2]);
 
-                        if ($SatanicBot::MediaWikiAPI::CHECK eq 'false') {
+                        if ($edit == 0) {
                             $self->say(
                                 channel => $channel,
                                 body    => 'Could not proceed. Abbreviation and/or name already on the list.'
                             );
-                        } elsif ($SatanicBot::MediaWikiAPI::CHECK eq 'true') {
+                        } else {
                             $self->say(
                                 channel => $channel,
                                 body    => 'Success!'
@@ -146,12 +146,12 @@ sub said {
     if ($msg =~ m/^\$upload/i) {
         if (grep { $_ eq $host } @{$bot_stuff->{ops}}) {
             if ($msg =~ m/^\$upload(?: )/i) {
-                our @uploadwords = split /\s/, $msg, 3;
+                my @uploadwords = split /\s/, $msg, 3;
                 if ($uploadwords[1] =~ m/.+/) {
                     if ($uploadwords[2] =~ m/.+/) {
 
                         SatanicBot::MediaWikiBot->login();
-                        SatanicBot::MediaWikiBot->upload();
+                        SatanicBot::MediaWikiBot->upload($uploadwords[1], $uploadwords[2]);
                         SatanicBot::MediaWikiBot->logout();
 
                         $self->say(
@@ -813,9 +813,10 @@ sub said {
                 my @tweet = split /\s/, $msg, 2;
                 SatanicBot::Utils->get_secure_contents();
                 $ENV {PERL_LWP_SSL_VERIFY_HOSTNAME} = 0; #This is terrible.
+                my @secure = SatanicBot::Utils->get_secure_content();
                 my $twitter = WWW::Twitter->new(
-                    username => $SatanicBot::Utils::LINES[2],
-                    password => $SatanicBot::Utils::LINES[1]
+                    username => $secure[2],
+                    password => $secure[1]
                     );
                 $twitter->login();
                 my $status_id = $twitter->tweet("[IRC] $tweet[1]");

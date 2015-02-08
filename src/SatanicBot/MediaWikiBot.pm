@@ -18,18 +18,19 @@ my $mw = MediaWiki::Bot->new( {
 my $ERROR = $!;
 
 sub login {
-    SatanicBot::Utils->get_secure_contents();
+    my @secure = SatanicBot::Utils->get_secure_contents();
     $mw->login( {
-        username => $SatanicBot::Utils::LINES[0],
-        password => $SatanicBot::Utils::LINES[1]
+        username => $secure[0],
+        password => $secure[1]
     }) or die "Login failed! $mw->{error}->{code}: $mw->{error}->{details}";
     return 1;
 }
 
 sub upload {
+    my ($self, $url, $title) = @_;
     $mw->upload_from_url( {
-        url     => $SatanicBot::Bot::uploadwords[1],
-        title   => $SatanicBot::Bot::uploadwords[2]
+        url     => $url,
+        title   => $title
     }) or die "Upload failed! $mw->{error}->{code}: $mw->{error}->{details}";
     return 1;
 }

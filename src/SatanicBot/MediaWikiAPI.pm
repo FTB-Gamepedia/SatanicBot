@@ -13,25 +13,19 @@ $mw->{config}->{api_url} = 'http://ftb.gamepedia.com/api.php';
 my $ERROR = $!;
 
 sub login {
-    SatanicBot::Utils->get_secure_contents();
+    my @secure = SatanicBot::Utils->get_secure_contents();
+    #This is removed because it's broken or something.
     #my $www = WWW::Mechanize->new();
-    #my $credentials = $www->get("http://ftb.gamepedia.com/api.php?action=login&lgname=$SatanicBot::Utils::LINES[0]&lgpassword=$SatanicBot::Utils::LINES[1]&format=json") or die "Unable to get url.\n";
+    #my $credentials = $www->get("http://ftb.gamepedia.com/api.php?action=login&lgname=$secure[0]&lgpassword=$secure[1]&format=json") or die "Unable to get url.\n";
     #my $decode = $credentials->decoded_content();
     #my @loggedin = $decode =~ m{\"result\":(.*?)\}};
     $mw->login( {
-        lgname     => $SatanicBot::Utils::LINES[0],
-        lgpassword => $SatanicBot::Utils::LINES[1]
+        lgname     => $secure[0],
+        lgpassword => $secure[1]
     }) || die $mw->{error}->{code} . ': ' . $mw->{error}->{details};
     return 1;
 }
 
-sub test {
-    my $page = 'User:TheSatanicSanta/Sandbox/gdfgdffg';
-    my $content = $mw->get_page( { title => $page });
-    if (exists $content->{missing}){
-        die $content->{missing};
-    }
-}
 
 sub edit_minor {
     my ($self, $name) = @_;
@@ -101,10 +95,8 @@ sub edit_mods {
             minor  => 1
         }) || die $mw->{error}->{code} . ': ' . $mw->{error}->{details};
 
-        our $MODCHECK = 'true';
         return 1;
     } else {
-        our $MODCHECK = 'false';
         return 0;
     }
 }
@@ -137,18 +129,16 @@ sub edit_gmods {
                 bot    => 1,
                 minor  => 1
             }) || die $mw->{error}->{code} . ': ' . $mw->{error}->{details};
-            our $CHECK = 'true';
             return 1;
         } else {
-            our $CHECK = 'false';
             return 0;
         }
     } else {
-        our $CHECK = 'false';
         return 0;
     }
 }
 
+#This is not yet functional.
 sub add_template {
     my ($self, $name) = @_;
     my $page = 'Feed The Beast Wiki:All templates';
