@@ -35,6 +35,28 @@ sub said {
     my $ERROR = $!;
     my $args = 'Please provide the required arguments.';
     my $authorized = 'You must be authorized.';
+    my @commands = ( #This isn't really used a whole lot yet because I'm lazy.
+        'pass',
+        'quit',
+        'abbrv',
+        'spookyscaryskeletons',
+        'weather',
+        'upload',
+        'osrc',
+        'src',
+        'contribs',
+        'flip',
+        '8ball',
+        'randquote',
+        'stats',
+        'randnum',
+        'game',
+        'motivate',
+        'tweet',
+        'addminor',
+        'addmod',
+        'auth'
+    );
 
 
     if ($msg =~ m/^\$pass/i) {
@@ -584,28 +606,6 @@ sub said {
         }
     }
 
-    if ($msg =~ m/^\$calc(?: )/i) {
-        my @calcwords = split /\s/, $msg, 2;
-        if ($calcwords[1] =~ m/\d/) {
-            my $out = eval $calcwords[1];
-            $self->say(
-                channel => $channel,
-                body    => "$calcwords[1] = $out"
-            );
-        } elsif ($calcwords[1] =~ m/\D/) {
-            my $algebra = Math::Symbolic->parse_from_string($calcwords[1]);
-            $self->say(
-                channel => $channel,
-                body    => "$calcwords[1] = $algebra"
-            );
-        } else {
-            $self->say(
-                channel => $channel,
-                body    => 'Please provide an equation.'
-            );
-        }
-    }
-
     if ($msg =~ m/^\$addminor/i) {
         if ($msg =~ m/^\$addminor(?: )/i) {
             if (grep { $_ eq $host } @{$bot_stuff->{ops}}) {
@@ -785,27 +785,6 @@ sub said {
         }
     }
 
-    #Twitter statistics for the provided user.
-    if ($msg =~ m/^\$twitterstats/i) {
-        if ($msg !~ m/^\$followers$/i) {
-            my @username = split /\s/, $msg, 2;
-
-            $ENV { PERL_LWP_SSL_VERIFY_HOSTNAME } = 0; #This is terrible.
-
-            my $twitter = WWW::Twitter->new(username => $username[1]);
-            my $stats = $twitter->stats;
-            $self->say(
-                channel => $channel,
-                body    => "$username[1] has $stats->{followers} followers and is following $stats->{following} scrubs. They have made $stats->{total_status} status updates, and have posted $stats->{total_media} forms of non-written media. They have favorited $stats->{favorites} things."
-            );
-        } else {
-            $self->say(
-                channel => $channel,
-                body    => $args
-            );
-        }
-    }
-
     #Autotweet
     if ($msg =~ m/^\$tweet/i) {
         if ($msg !~ m/^\$tweet$/i) {
@@ -976,9 +955,11 @@ sub said {
                 );
             }
         } else {
+            my @sort = sort @commands;
+            my $join = join ', ', @sort;
             $self->say(
                 channel => $channel,
-                body    => 'Listing commands... quit, abbrv, spookyscaryskeletons, weather, upload, osrc, src, contribs, flip, 8ball, randquote, stats, calc, randnum, game, motivate, tweet, twitterstats, addminor, addmod, pass, auth'
+                body    => 'My activation char is $. Listing commands... ' . $join
             );
         }
     }
