@@ -17,10 +17,6 @@ logout();
 
 sub login{
     my @login = SatanicBot::Utils->get_secure_contents();
-    #$mw->login({
-    #    username => $lines[0],
-    #    password => $lines[-1]
-    #}) or die $mw->{error}->{code} . ": " . $mw->{error}->{details};
     $mwapi->login({
         lgname => $login[0],
         lgpassword => $login[1]
@@ -71,6 +67,6 @@ sub talk{
 }
 
 sub logout{
-    $mw->logout();
+    $mwapi->logout();
     return 1;
 }
