@@ -3,18 +3,10 @@
 use warnings;
 use diagnostics;
 use strict;
-use MediaWiki::Bot qw(:constants);
 use MediaWiki::API;
 use SatanicBot::Utils;
 
 my $ERRNO = $!;
-my $mw = MediaWiki::Bot->new({
-    protocol => 'http',
-    host     => 'ftb.gamepedia.com',
-    path     => q{/},
-    operator => 'TheSatanicSanta',
-    debug    => 2
-});
 my $mwapi = MediaWiki::API->new();
 $mwapi->{config}->{api_url} = 'http://ftb.gamepedia.com/api.php';
 
@@ -39,16 +31,11 @@ sub login{
 sub user{
     my $file = 'info/list_user.txt';
     open my $fh, '<', $file or die "Could not open $file $ERRNO\n";
-    #my @lines = <$fh>;
-    #chomp @lines;
-    #my $things = join("\n", @lines);
-    #my @newlines = split("\n", $things);
-    #print "newlines variable has been set.\n";
     print "Starting loop...\n";
     while (my $line = <$fh>){
-        #my $article = $_;
         chomp $line;
-        my $text = $mw->get_text($line);
+        my $ref = $mwapi->get_page({title => $line});
+        my $text = $ref->{'*'};
         $text =~ s/\{\{U\|SatanicSanta/\{\{U\|TheSatanicSanta/g;
 
         print "Text and article variables have been set.\n";
