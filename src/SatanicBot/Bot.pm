@@ -119,7 +119,6 @@ sub said {
 
             #Adds the <first arg abbreviation> to the G:Mods and doc as <second arg mod name>
     if ($msg =~  m/^\$abbrv/i) {
-=pod
         if (grep { $_ eq $host } @{$bot_stuff->{ops}}) {
             if ($msg =~ m/^\$abbrv(?: )/i) {
                 my @abbrvwords = split /\s/, $msg, 3;
@@ -163,11 +162,6 @@ sub said {
                 body    => 'Fuck you'
             );
         }
-=cut
-    $self->say(
-        channel => $channel,
-        body    => 'Sorry. This command is currently disabled.'
-    );
     }
 
             #Uploads the <first arg image> to the wiki as <second arg name>.

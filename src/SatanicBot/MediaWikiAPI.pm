@@ -102,33 +102,23 @@ sub edit_mods {
 }
 
 sub edit_gmods {
-    my ($self, $abbrev, $name) = @_;
-    my $gmods     = 'Template:G/Mods';
-    my $gmodsdoc  = 'Template:G/Mods/doc';
-    my $firstref  = $mw->get_page({title => $gmods});
-    my $secondref = $mw->get_page({title => $gmodsdoc});
-    my $replace_t = $firstref->{'*'};
-    my $replace_d = $secondref->{'*'};
+    my ($self, $abbrv, $name) = @_;
+    my $gmods   = 'User:TheSatanicSanta/Sandbox/Bot';
+    my $ref     = $mw->get_page({title => $gmods});
+    my $replace = $ref->{'*'};
+    $name =~ s/\'/\\'/g;
 
-    if ($replace_d !~ m/\|\| <code>\$abbrev/) {
-        if ($replace_d !~ m/\| \[\[\$name\]\]/) {
-            $replace_t =~ s/\|#default/\|$abbrev = {{#if:{{{name\|}}}{{{code\|}}}\|\|_(}}{{#if:{{{name\|}}}{{{link\|}}}\|$name\|$abbrev}}{{#if:{{{name\|}}}{{{code\|}}}\|\|)}}\n\|$name = {{#if:{{{name\|}}}{{{code\|}}}\|\|_(}}{{#if:{{{name\|}}}{{{link\|}}}\|$name\|$abbrev}}{{#if:{{{name\|}}}{{{code\|}}}\|\|)}}\n\n\|#default/;
+    if ($replace !~ m/$abbrv = /g) {
+        if ($replace !~ m/\{\'$name\'/g) {
+            $replace =~ s/local modsByAbbrv = \{/local modsByAbbrv = \{\t$abbrv = \{\'$name\', \[=\[<translate>$name<\/translate>\]=\]\},/;
             $mw->edit( {
                 action     => 'edit',
                 title      => $gmods,
-                text       => $replace_t,
+                text       => $replace,
                 bot        => 1,
                 minor      => 1
             }) || die $mw->{error}->{code} . ': ' . $mw->{error}->{details};
 
-            $replace_d =~ s/\|\}/\|-\n\| [[$name]] \|\| <code>$abbrev<\/code>\n\|\}/;
-            $mw->edit( {
-                action => 'edit',
-                title  => $gmodsdoc,
-                text   => $replace_d,
-                bot    => 1,
-                minor  => 1
-            }) || die $mw->{error}->{code} . ': ' . $mw->{error}->{details};
             return 1;
         } else {
             return 0;
