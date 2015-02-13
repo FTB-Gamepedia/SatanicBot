@@ -108,9 +108,9 @@ sub edit_gmods {
     my $replace = $ref->{'*'};
     $name =~ s/\'/\\'/g;
 
-    if ($replace !~ m/$abbrv = /g) {
-        if ($replace !~ m/\{\'$name\'/g) {
-            $replace =~ s/local modsByAbbrv = \{/local modsByAbbrv = \{\t$abbrv = \{\'$name\', \[=\[<translate>$name<\/translate>\]=\]\},/;
+    if ($replace !~ m/$abbrv = /) {
+        if ($replace !~ m/\{\'$name\'/) {
+            $replace =~ s/local modsByAbbrv = \{/local modsByAbbrv = \{\n    $abbrv = \{\'$name\', \[=\[<translate>$name<\/translate>\]=\]\},/;
             $mw->edit( {
                 action     => 'edit',
                 title      => $gmods,
