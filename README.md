@@ -98,3 +98,7 @@ Adds the mod provided with the first argument to the list of Minor Mods on the M
 addmod
 ------
 Adds the mod provided with the first argument to the list of Mods on the Main Page.
+
+addquote
+--------
+Adds the quote provided with the first argument to the list of quotes used by the randquote command.

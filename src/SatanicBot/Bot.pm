@@ -55,7 +55,8 @@ sub said {
         'tweet',
         'addminor',
         'addmod',
-        'auth'
+        'auth',
+        'addquote'
     );
 
 
@@ -159,7 +160,33 @@ sub said {
         } else {
             $self->say(
                 channel => $channel,
-                body    => 'Fuck you'
+                body    => $authorized
+            );
+        }
+    }
+
+    if ($msg =~ m/^\$addquote/i) {
+        if (grep { $_ eq $host } @{$bot_stuff->{ops}}) {
+            if ($msg =~ m/^\$addquote(?: )/i) {
+                my @quotewords = split /\s/, $msg, 2;
+                my $file = 'info/ircquotes.txt';
+                open my $fh, '>>', $file or die "Could not open '$file' $ERROR\n";
+                print $fh "$quotewords[1]\n";
+                close $fh;
+                $self->say(
+                    channel => $channel,
+                    body    => 'Added to the quote list.'
+                );
+            } else {
+                $self->say(
+                    channel => $channel,
+                    body    => $args
+                );
+            }
+        } else {
+            $self->say(
+                channel => $channel,
+                body    => $authorized
             );
         }
     }
@@ -947,6 +974,12 @@ sub said {
                     channel => $channel,
                     body    => 'Adds a mod to the list of mods on the main page. 1 arg: $addmod <mod name>'
                 );
+            }
+            if ($helpwords[1] =~ m/addquote$/i) {
+                $self->say(
+                    channel => $channel,
+                    body    => 'Adds the first argument to the list of quotes used by $randquote.'
+                )
             }
         } else {
             my @sort = sort @commands;
