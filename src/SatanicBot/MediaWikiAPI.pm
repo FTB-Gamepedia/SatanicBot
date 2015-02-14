@@ -13,17 +13,24 @@ $mw->{config}->{api_url} = 'http://ftb.gamepedia.com/api.php';
 my $ERROR = $!;
 
 sub login {
-    my @secure = SatanicBot::Utils->get_secure_contents();
-    #This is removed because it's broken or something.
-    #my $www = WWW::Mechanize->new();
-    #my $credentials = $www->get("http://ftb.gamepedia.com/api.php?action=login&lgname=$secure[0]&lgpassword=$secure[1]&format=json") or die "Unable to get url.\n";
-    #my $decode = $credentials->decoded_content();
-    #my @loggedin = $decode =~ m{\"result\":(.*?)\}};
-    $mw->login( {
-        lgname     => $secure[0],
-        lgpassword => $secure[1]
-    }) || die $mw->{error}->{code} . ': ' . $mw->{error}->{details};
-    return 1;
+    my $www = WWW::Mechanize->new();
+    my $ui = $www->get("http://ftb.gamepedia.com/api.php?action=query&meta=userinfo&format=json");
+    my $decode = $ui->decoded_content();
+    if ($decode !~ m/\"id\"\:0/) {
+        return 1;
+    } else {
+        my @secure = SatanicBot::Utils->get_secure_contents();
+        #This is removed because it's broken or something.
+        #my $www = WWW::Mechanize->new();
+        #my $credentials = $www->get("http://ftb.gamepedia.com/api.php?action=login&lgname=$secure[0]&lgpassword=$secure[1]&format=json") or die "Unable to get url.\n";
+        #my $decode = $credentials->decoded_content();
+        #my @loggedin = $decode =~ m{\"result\":(.*?)\}};
+        $mw->login( {
+            lgname     => $secure[0],
+            lgpassword => $secure[1]
+        }) || die $mw->{error}->{code} . ': ' . $mw->{error}->{details};
+        return 1;
+    }
 }
 
 

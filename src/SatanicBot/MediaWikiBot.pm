@@ -18,12 +18,19 @@ my $mw = MediaWiki::Bot->new( {
 my $ERROR = $!;
 
 sub login {
-    my @secure = SatanicBot::Utils->get_secure_contents();
-    $mw->login( {
-        username => $secure[0],
-        password => $secure[1]
-    }) or die "Login failed! $mw->{error}->{code}: $mw->{error}->{details}";
-    return 1;
+    my $www = WWW::Mechanize->new();
+    my $ui = $www->get("http://ftb.gamepedia.com/api.php?action=query&meta=userinfo&format=json");
+    my $decode = $ui->decoded_content();
+    if ($decode !~ m/\"id\"\:0/) {
+        return 1;
+    } else {
+        my @secure = SatanicBot::Utils->get_secure_contents();
+        $mw->login( {
+            username => $secure[0],
+            password => $secure[1]
+        }) or die "Login failed! $mw->{error}->{code}: $mw->{error}->{details}";
+        return 1;
+    }
 }
 
 sub upload {

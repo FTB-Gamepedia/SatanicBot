@@ -201,7 +201,6 @@ sub said {
 
                         SatanicBot::MediaWikiBot->login();
                         SatanicBot::MediaWikiBot->upload($uploadwords[1], $uploadwords[2]);
-                        SatanicBot::MediaWikiBot->logout();
 
                         $self->say(
                             channel => $channel,
@@ -638,7 +637,6 @@ sub said {
 
                 SatanicBot::MediaWikiAPI->login();
                 my $edit = SatanicBot::MediaWikiAPI->edit_minor($minormodswords[1]);
-                SatanicBot::MediaWikiAPI->logout();
 
                 if ($edit == 0) {
                     $self->say(
