@@ -56,7 +56,8 @@ sub said {
         'addminor',
         'addmod',
         'auth',
-        'addquote'
+        'addquote',
+        'checkpage'
     );
 
 
@@ -161,6 +162,34 @@ sub said {
             $self->say(
                 channel => $channel,
                 body    => $authorized
+            );
+        }
+    }
+
+    if ($msg =~ m/^\$checkpage/i) {
+        if ($msg =~ m/^\$checkpage(?: )/i) {
+            my @pagewords = split /\s/, $msg, 2;
+            my $check = SatanicBot::MediaWikiAPI->check_page($pagewords[1]);
+            if ($check == 0) {
+                $self->say(
+                    channel => $channel,
+                    body    => "$pagewords[1] does not exist."
+                );
+            } elsif ($check == 1) {
+                $self->say(
+                    channel => $channel,
+                    body    => "$pagewords[1] does exist: http://ftb.gamepedia.com/$pagewords[1]"
+                );
+            } else {
+                $self->say(
+                    channel => $channel,
+                    body    => 'I have literally no idea what happened.'
+                );
+            }
+        } else {
+            $self->say(
+                channel => $channel,
+                body    => $args
             );
         }
     }
@@ -978,6 +1007,12 @@ sub said {
                     channel => $channel,
                     body    => 'Adds the first argument to the list of quotes used by $randquote.'
                 )
+            }
+            if ($helpwords[1] =~ m/checkpage$/i) {
+                $self->say(
+                    channel => $channel,
+                    body    => 'Checks if the first argument is a valid page.'
+                );
             }
         } else {
             my @sort = sort @commands;

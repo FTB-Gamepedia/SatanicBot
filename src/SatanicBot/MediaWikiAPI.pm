@@ -117,13 +117,13 @@ sub edit_gmods {
 
     if ($replace !~ m/$abbrv = /) {
         if ($replace !~ m/\{\'$name\'/) {
-            $replace =~ s/local modsByAbbrv = \{/local modsByAbbrv = \{\n    $abbrv = \{\'$name\', \[=\[<translate>$name<\/translate>\]=\]\},/;
+            $replace =~ s/local modsByAbbrv = \{/local modsByAbbrv = \{\n    $abbrv = \{\'$name\', \[=\[$name\]=\]\},/;
             $mw->edit( {
-                action     => 'edit',
-                title      => $gmods,
-                text       => $replace,
-                bot        => 1,
-                minor      => 1
+                action => 'edit',
+                title  => $gmods,
+                text   => $replace,
+                bot    => 1,
+                minor  => 1
             }) || die $mw->{error}->{code} . ': ' . $mw->{error}->{details};
 
             return 1;
@@ -148,6 +148,16 @@ sub add_template {
         minor   => 1
     }) or die $mw->{error}->{code} . ': ' . $mw->{error}->{details};
     return 1;
+}
+
+sub check_page {
+    my ($self, $page) = @_;
+    my $ref = $mw->get_page( { title => $page } );
+    if (exists $ref->{missing}) {
+        return 0;
+    } else {
+        return 1;
+    }
 }
 
 sub logout {

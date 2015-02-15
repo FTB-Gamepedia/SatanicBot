@@ -27,7 +27,7 @@ The $upload command will upload the first argument file to the wiki with the fil
 
 contribs
 --------
-The $contribs command will state the first argument's number of contributions to the wiki.
+The $contribs command will state the first argument's number of contributions to the wiki. If no arg is given, it will use the user's nick.
 
 flip
 ----
@@ -72,6 +72,10 @@ Gets statistics for the Twitter user given in the first arg. It's sort of broken
 auth
 ----
 Logs the user in, allowing for op-only commands. It requires the password set by the $pass command.
+
+checkpage
+---------
+Checks if the page provided in the first argument is valid.
 
 
 
