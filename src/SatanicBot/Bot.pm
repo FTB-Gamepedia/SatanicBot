@@ -59,6 +59,8 @@ sub said {
         'addquote',
         'checkpage'
     );
+    my @content = SatanicBot::Utils->get_secure_contents();
+    $bot_stuff->{auth_pass} = $content[3];
 
 
     if ($msg =~ m/^\$pass/i) {
