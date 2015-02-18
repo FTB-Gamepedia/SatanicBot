@@ -452,7 +452,7 @@ sub said {
             my $contribs = SatanicBot::Utils->get_contribs($contribwords[1]);
             my $register = SatanicBot::Utils->get_registration_date($contribwords[1]);
 
-            if ($contribs == 0) {
+            if ($contribs eq '0') {
                 $self->say(
                     channel => $channel,
                     body    => 'Something went wrong. You may have entered an invalid username (such as an IP) or a nonexistant username.'
