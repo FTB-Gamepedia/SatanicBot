@@ -121,7 +121,7 @@ sub said {
         }
     }
 
-            #Adds the <first arg abbreviation> to the G:Mods and doc as <second arg mod name>
+    #Adds the <first arg abbreviation> to the G:Mods and doc as <second arg mod name>
     if ($msg =~  m/^\$abbrv/i) {
         if (grep { $_ eq $host } @{$bot_stuff->{ops}}) {
             if ($msg =~ m/^\$abbrv(?: )/i) {
@@ -134,7 +134,7 @@ sub said {
                         );
 
                         SatanicBot::MediaWikiAPI->login();
-                        my $edit = SatanicBot::MediaWikiAPI->edit_gmods(@abbrvwords[1,2]);
+                        my $edit = SatanicBot::MediaWikiAPI->edit_gmods($abbrvwords[1], $abbrvwords[2]);
 
                         if ($edit == 0) {
                             $self->say(

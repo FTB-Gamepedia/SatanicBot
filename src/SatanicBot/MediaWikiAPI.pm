@@ -112,16 +112,16 @@ sub edit_gmods {
     my ($self, $abbrv, $name) = @_;
     my $gmods   = 'User:TheSatanicSanta/Sandbox/Bot';
     my $ref     = $mw->get_page({title => $gmods});
-    my $replace = $ref->{'*'};
+    my $content = $ref->{'*'};
     $name =~ s/\'/\\'/g;
 
-    if ($replace !~ m/$abbrv = /) {
-        if ($replace !~ m/\{\'$name\'/) {
-            $replace =~ s/local modsByAbbrv = \{/local modsByAbbrv = \{\n    $abbrv = \{\'$name\', \[=\[$name\]=\]\},/;
+    if ($content !~ m/$abbrv = /) {
+        if ($content !~ m/\{\'$name\'/) {
+            $content =~ s/local modsByAbbrv = \{/local modsByAbbrv = \{\n    $abbrv = \{\'$name\', \[=\[<translate>$name<\/translate>\]=\]\},/;
             $mw->edit( {
                 action => 'edit',
                 title  => $gmods,
-                text   => $replace,
+                text   => $content,
                 bot    => 1,
                 minor  => 1
             }) || die $mw->{error}->{code} . ': ' . $mw->{error}->{details};
