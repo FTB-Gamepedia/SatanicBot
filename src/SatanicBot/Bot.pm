@@ -178,9 +178,10 @@ sub said {
                     body    => "$pagewords[1] does not exist."
                 );
             } elsif ($check == 1) {
+                my $pageurl = $pagewords[1] =~ s/\s/_/gr;
                 $self->say(
                     channel => $channel,
-                    body    => "$pagewords[1] does exist: http://ftb.gamepedia.com/$pagewords[1]"
+                    body    => "$pagewords[1] does exist: http://ftb.gamepedia.com/$pageurl"
                 );
             } else {
                 $self->say(
