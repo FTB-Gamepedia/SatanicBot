@@ -57,7 +57,7 @@ sub said {
         'auth',
         'addquote',
         'checkpage',
-        'addmodnav'
+        'addnav'
     );
     my @content = SatanicBot::Utils->get_secure_contents();
     $bot_stuff->{auth_pass} = $content[3];
@@ -254,9 +254,9 @@ sub said {
         }
     }
 
-    if ($msg =~ m/^\$addmodnav/i) {
+    if ($msg =~ m/^\$addnav/i) {
         if (grep { $_ eq $host } @{$bot_stuff->{ops}}) {
-            if ($msg =~ m/^\$addmodnav(?: )/i) {
+            if ($msg =~ m/^\$addnav(?: )/i) {
                 my @templatewords = split /\s/, $msg, 2;
                 if ($templatewords[1] =~ m/.+/) {
                     $self->say(
@@ -296,6 +296,11 @@ sub said {
                         }
                     }
                 }
+            } else {
+                $self->say(
+                    channel => $channel,
+                    body    => $args
+                );
             }
         } else {
             $self->say(
@@ -1002,6 +1007,12 @@ sub said {
                 $self->say(
                     channel => $channel,
                     body    => 'Checks if the first argument is a valid page.'
+                );
+            }
+            if ($helpwords[1] =~ m/addnav$/i) {
+                $self->say(
+                    channel => $channel,
+                    body    => 'If the template and page are both valid, adds the navbox in the first arg to the template list.'
                 );
             }
         } else {
