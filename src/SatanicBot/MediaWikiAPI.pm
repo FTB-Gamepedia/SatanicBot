@@ -20,11 +20,6 @@ sub login {
         return 1;
     } else {
         my @secure = SatanicBot::Utils->get_secure_contents();
-        #This is removed because it's broken or something.
-        #my $www = WWW::Mechanize->new();
-        #my $credentials = $www->get("http://ftb.gamepedia.com/api.php?action=login&lgname=$secure[0]&lgpassword=$secure[1]&format=json") or die "Unable to get url.\n";
-        #my $decode = $credentials->decoded_content();
-        #my @loggedin = $decode =~ m{\"result\":(.*?)\}};
         $mw->login( {
             lgname     => $secure[0],
             lgpassword => $secure[1]
@@ -66,9 +61,7 @@ sub edit_minor {
         }) || die $mw->{error}->{code} . ': ' . $mw->{error}->{details};
 
         return 1;
-    } else {
-        return 0;
-    }
+    } else { return 0; }
 }
 
 sub edit_mods {
@@ -103,9 +96,7 @@ sub edit_mods {
         }) || die $mw->{error}->{code} . ': ' . $mw->{error}->{details};
 
         return 1;
-    } else {
-        return 0;
-    }
+    } else { return 0; }
 }
 
 sub edit_gmods {
@@ -127,27 +118,28 @@ sub edit_gmods {
             }) || die $mw->{error}->{code} . ': ' . $mw->{error}->{details};
 
             return 1;
-        } else {
-            return 0;
-        }
-    } else {
-        return 0;
-    }
+        } else { return 0; }
+    } else { return 0; }
 }
 
-#This is not yet functional.
 sub add_template {
     my ($self, $name) = @_;
-    my $page = 'Feed The Beast Wiki:All templates';
-    my $text = s/\|\}\n\n==Miscellaneous templates==/\|-\n\|\{\{Tl\|Navbox $name\}\} \|\| \[\[$name\]\] \|\|\n\|\|\}\n\n==Miscellaneous templates==/;
-    $mw->edit( {
-        action  => 'edit',
-        title   => $page,
-        text    => $text,
-        bot     => 1,
-        minor   => 1
-    }) or die $mw->{error}->{code} . ': ' . $mw->{error}->{details};
-    return 1;
+    my $page = 'User:TheSatanicSanta/Sandbox/Butt';
+    my $ref = $mw->get_page({title => $page});
+    my $content = $ref->{'*'};
+
+    if ($content !~ m/\{\{Tl\|Navbox $name\}\}/ or $content !~ m/\{\{L\|$name\}\}/) {
+        my $text = s/\|\}/\|-\n| \{\{Tl\|Navbox $name\}\} \|\| \{\{L\|$name\}\} \|\|\n\|\}/;
+        $mw->edit( {
+            action  => 'edit',
+            title   => $page,
+            text    => $text,
+            bot     => 1,
+            minor   => 1
+        }) or die $mw->{error}->{code} . ': ' . $mw->{error}->{details};
+        return 1;
+    } else { return 0; }
+
 }
 
 sub check_page {
@@ -155,9 +147,7 @@ sub check_page {
     my $ref = $mw->get_page( { title => $page } );
     if (exists $ref->{missing}) {
         return 0;
-    } else {
-        return 1;
-    }
+    } else { return 1; }
 }
 
 sub logout {

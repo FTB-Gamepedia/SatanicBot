@@ -42,7 +42,6 @@ sub said {
         'spookyscaryskeletons',
         'weather',
         'upload',
-        'osrc',
         'src',
         'contribs',
         'flip',
@@ -57,7 +56,8 @@ sub said {
         'addmod',
         'auth',
         'addquote',
-        'checkpage'
+        'checkpage',
+        'addmodnav'
     );
     my @content = SatanicBot::Utils->get_secure_contents();
     $bot_stuff->{auth_pass} = $content[3];
@@ -183,11 +183,6 @@ sub said {
                     channel => $channel,
                     body    => "$pagewords[1] does exist: http://ftb.gamepedia.com/$pageurl"
                 );
-            } else {
-                $self->say(
-                    channel => $channel,
-                    body    => 'I have literally no idea what happened.'
-                );
             }
         } else {
             $self->say(
@@ -223,7 +218,7 @@ sub said {
         }
     }
 
-            #Uploads the <first arg image> to the wiki as <second arg name>.
+    #Uploads the <first arg image> to the wiki as <second arg name>.
     if ($msg =~ m/^\$upload/i) {
         if (grep { $_ eq $host } @{$bot_stuff->{ops}}) {
             if ($msg =~ m/^\$upload(?: )/i) {
@@ -259,10 +254,9 @@ sub said {
         }
     }
 
-=pod
-    if ($msg =~ m/^\$addtemplate/i) {
+    if ($msg =~ m/^\$addmodnav/i) {
         if (grep { $_ eq $host } @{$bot_stuff->{ops}}) {
-            if ($msg =~ m/^\$addtemplate(?: )/i) {
+            if ($msg =~ m/^\$addmodnav(?: )/i) {
                 my @templatewords = split /\s/, $msg, 2;
                 if ($templatewords[1] =~ m/.+/) {
                     $self->say(
@@ -271,28 +265,45 @@ sub said {
                     );
 
                     SatanicBot::MediaWikiAPI->login();
-                    SatanicBot::MediaWikiAPI->add_template($templatewords[1]);
-                    SatanicBot::MediaWikiAPI->logout();
+                    my $template = "Template:Navbox $templatewords[1]";
+                    my $pagecheck = SatanicBot::MediaWikiAPI->check_page($templatewords[1]);
 
-                    $self->say(
-                        channel => $channel,
-                        body    => 'Success!'
-                    );
+                    if ($pagecheck == 0) {
+                        $self->say(
+                            channel => $channel,
+                            body    => 'Mod page returned missing. Could not proceed.'
+                        );
+                    } else {
+                        my $templatecheck = SatanicBot::MediaWikiAPI->check_page($template);
+                        if ($templatecheck == 0) {
+                            $self->say(
+                                channel => $channel,
+                                body    => 'Mod page returned existing, but template returned missing. Could not proceed.'
+                            );
+                        } else {
+                            my $func = SatanicBot::MediaWikiAPI->add_template($templatewords[1]);
+                            if ($func == 0) {
+                                $self->say(
+                                    channel => $channel,
+                                    body    => 'That is already on the list.'
+                                );
+                            } else {
+                                $self->say(
+                                    channel => $channel,
+                                    body    => 'Success!'
+                                );
+                            }
+                        }
+                    }
                 }
-            } else {
-                $self->say(
-                    channel => $channel,
-                    body    => $args
-                );
             }
         } else {
             $self->say(
                 channel => $channel,
-                body    => 'FUCCBOIIIII'
+                body    => $authorized
             );
         }
     }
-=cut
 
     if ($msg =~ m/^\$spookyscaryskeletons$/i) {
         my @random_words = Data::Random->rand_words(
@@ -412,30 +423,6 @@ sub said {
         );
     }
 =cut
-
-
-    #Outputs the open source report card link for the first argument username. Eventually I should actually do JSON parsing for this.
-    if ($msg =~ m/^\$osrc/i) {
-=pod
-        my @osrcwords = split /\s/, $msg, 2;
-        my $url = "https://osrc.dfm.io/$osrcwords[1]";
-        if (head($url)) {
-            $self->say(
-                channel => $channel,
-                body    => $url
-            );
-        } else {
-            $self->say(
-                channel => $channel,
-                body    => 'Does not exist.'
-            );
-        }
-=cut
-        $self->say(
-            channel => $channel,
-            body    => ';-;'
-        )
-    }
 
     #Outputs the link to this bot's source code.
     if ($msg =~ m/^\$src$/i) {
