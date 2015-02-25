@@ -129,17 +129,16 @@ sub add_template {
     my $content = $ref->{'*'};
 
     if ($content !~ m/\{\{Tl\|Navbox $name\}\}/ or $content !~ m/\{\{L\|$name\}\}/) {
-        my $text = s/\|\}/\|-\n| \{\{Tl\|Navbox $name\}\} \|\| \{\{L\|$name\}\} \|\|\n\|\}/;
+        $content =~ s/\|\}/\|-\n| \{\{Tl\|Navbox $name\}\} \|\| \{\{L\|$name\}\} \|\|\n\|\}/;
         $mw->edit( {
             action  => 'edit',
             title   => $page,
-            text    => $text,
+            text    => $content,
             bot     => 1,
             minor   => 1
         }) or die $mw->{error}->{code} . ': ' . $mw->{error}->{details};
         return 1;
     } else { return 0; }
-
 }
 
 sub check_page {
