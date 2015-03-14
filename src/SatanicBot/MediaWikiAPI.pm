@@ -143,24 +143,24 @@ sub add_template {
 
 sub create_mod_category {
     my ($self, $name) = @_;
-    my $page = "Category:$name"
+    my $page = "Category:$name";
     $mw->edit( {
         action => 'edit',
         title  => $page,
-        text   => "[[Category:Mod categories]]\n[[Category:Mods]]"
-        bot    => 1,
+        text   => "[[Category:Mod categories]]\n[[Category:Mods]]",
+        bot    => 1
     }) or die $mw->{error}->{code} . ': ' . $mw->{error}->{details};
     return 1;
 }
 
 sub create_minor_category {
     my ($self, $name) = @_;
-    my $page = "Category:$name"
+    my $page = "Category:$name";
     $mw->edit( {
         action => 'edit',
         title  => $page,
-        text   => "[[Category:Mod categories]]\n[[Category:Minor Mods]]"
-        bot    => 1,
+        text   => "[[Category:Mod categories]]\n[[Category:Minor Mods]]",
+        bot    => 1
     }) or die $mw->{error}->{code} . ': ' . $mw->{error}->{details};
     return 1;
 }
