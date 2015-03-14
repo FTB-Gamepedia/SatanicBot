@@ -106,3 +106,11 @@ Adds the mod provided with the first argument to the list of Mods on the Main Pa
 addquote
 --------
 Adds the quote provided with the first argument to the list of quotes used by the randquote command.
+
+newmodcat
+---------
+Creates a new category for the mod given in the first arg.
+
+newminorcat
+-----------
+Creates a new category for the minor mod given in the first arg.

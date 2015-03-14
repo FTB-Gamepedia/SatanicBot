@@ -124,7 +124,7 @@ sub edit_gmods {
 
 sub add_template {
     my ($self, $name) = @_;
-    my $page = 'User:TheSatanicSanta/Sandbox/Butt';
+    my $page = 'Template:Navbox List';
     my $ref = $mw->get_page({title => $page});
     my $content = $ref->{'*'};
 
@@ -139,6 +139,30 @@ sub add_template {
         }) or die $mw->{error}->{code} . ': ' . $mw->{error}->{details};
         return 1;
     } else { return 0; }
+}
+
+sub create_mod_category {
+    my ($self, $name) = @_;
+    my $page = "Category:$name"
+    $mw->edit( {
+        action => 'edit',
+        title  => $page,
+        text   => "[[Category:Mod categories]]\n[[Category:Mods]]"
+        bot    => 1,
+    }) or die $mw->{error}->{code} . ': ' . $mw->{error}->{details};
+    return 1;
+}
+
+sub create_minor_category {
+    my ($self, $name) = @_;
+    my $page = "Category:$name"
+    $mw->edit( {
+        action => 'edit',
+        title  => $page,
+        text   => "[[Category:Mod categories]]\n[[Category:Minor Mods]]"
+        bot    => 1,
+    }) or die $mw->{error}->{code} . ': ' . $mw->{error}->{details};
+    return 1;
 }
 
 sub check_page {

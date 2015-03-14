@@ -57,7 +57,9 @@ sub said {
         'auth',
         'addquote',
         'checkpage',
-        'addnav'
+        'addnav',
+        'newmodcat',
+        'newminorcat'
     );
     my @content = SatanicBot::Utils->get_secure_contents();
     $bot_stuff->{auth_pass} = $content[3];
@@ -183,6 +185,88 @@ sub said {
                     channel => $channel,
                     body    => "$pagewords[1] does exist: http://ftb.gamepedia.com/$pageurl"
                 );
+            }
+        } else {
+            $self->say(
+                channel => $channel,
+                body    => $args
+            );
+        }
+    }
+
+    if ($msg =~ m/^\$newmodcat/i) {
+        if ($msg =~ m/^\$newmodcat(?: )/i) {
+            if (grep { $_ eq $host } @{$bot_stuff->{ops}}) {
+                my @catwords = split /\s/, $msg, 2;
+                my $check = SatanicBot::MediaWikiAPI->check_page($catwords[1]);
+                my $catcheck = SatanicBot::MediaWikiAPI->check_page("Category:$catwords[1]");
+                if ($check == 0) {
+                    $self->say(
+                        channel => $channel,
+                        body    => "$catwords[1] page does not exist. Not creating category for it."
+                    );
+                } elsif ($check == 1) {
+                    if ($catcheck == 1) {
+                        $self->say(
+                            channel => $channel,
+                            body    => "Creating mod category Category:$catwords[1]"
+                        );
+
+                        SatanicBot::MediaWikiAPI->login();
+                        my $new = SatanicBot::MediaWikiAPI->create_mod_category($catwords[1]);
+
+                        $self->say(
+                            channel => $channel,
+                            body    => "$catwords[1] category created."
+                        );
+                    } else {
+                        $self->say(
+                            channel => $channel,
+                            body    => 'Category already exists.'
+                        );
+                    }
+                }
+            }
+        } else {
+            $self->say(
+                channel => $channel,
+                body    => $args
+            );
+        }
+    }
+
+    if ($msg =~ m/^\$newminorcat/i) {
+        if ($msg =~ m/^\$newminorcat(?: )/i) {
+            if (grep { $_ eq $host } @{$bot_stuff->{ops}}) {
+                my @catwords = split /\s/, $msg, 2;
+                my $check = SatanicBot::MediaWikiAPI->check_page($catwords[1]);
+                my $catcheck = SatanicBot::MediaWikiAPI->check_page("Category:$catwords[1]");
+                if ($check == 0) {
+                    $self->say(
+                        channel => $channel,
+                        body    => "$catwords[1] page does not exist. Not creating category for it."
+                    );
+                } elsif ($check == 1) {
+                    if ($catcheck == 1) {
+                        $self->say(
+                            channel => $channel,
+                            body    => "Creating mod category Category:$catwords[1]"
+                        );
+
+                        SatanicBot::MediaWikiAPI->login();
+                        my $new = SatanicBot::MediaWikiAPI->create_minor_category($catwords[1]);
+
+                        $self->say(
+                            channel => $channel,
+                            body    => "$catwords[1] category created."
+                        );
+                    } else {
+                        $self->say(
+                            channel => $channel,
+                            body    => 'Category already exists.'
+                        );
+                    }
+                }
             }
         } else {
             $self->say(
@@ -1013,6 +1097,18 @@ sub said {
                 $self->say(
                     channel => $channel,
                     body    => 'If the template and page are both valid, adds the navbox in the first arg to the template list.'
+                );
+            }
+            if ($helpwords[1] =~ m/newmodcat$/i) {
+                $self->say(
+                    channel => $channel,
+                    body    => 'Creates a new category for the mod given in the first arg.'
+                );
+            }
+            if ($helpwords[1] =~ m/newminorcat$/i) {
+                $self->say(
+                    channel => $channel,
+                    body    => 'Creates a new category for the minor mod given in the first arg.'
                 );
             }
         } else {
