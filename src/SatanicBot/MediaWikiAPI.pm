@@ -168,7 +168,7 @@ sub create_minor_category {
 sub check_page {
     my ($self, $page) = @_;
     my $ref = $mw->get_page( { title => $page } );
-    if (exists $ref->{missing}) {
+    if (exists $ref->{missing}) { #If the page does NOT exist, it returns 0. Else 1
         return 0;
     } else { return 1; }
 }

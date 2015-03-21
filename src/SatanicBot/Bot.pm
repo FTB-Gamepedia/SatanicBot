@@ -206,7 +206,7 @@ sub said {
                         body    => "$catwords[1] page does not exist. Not creating category for it."
                     );
                 } elsif ($check == 1) {
-                    if ($catcheck == 1) {
+                    if ($catcheck == 0) {
                         $self->say(
                             channel => $channel,
                             body    => "Creating mod category Category:$catwords[1]"
@@ -247,7 +247,7 @@ sub said {
                         body    => "$catwords[1] page does not exist. Not creating category for it."
                     );
                 } elsif ($check == 1) {
-                    if ($catcheck == 1) {
+                    if ($catcheck == 0) {
                         $self->say(
                             channel => $channel,
                             body    => "Creating mod category Category:$catwords[1]"
@@ -517,7 +517,7 @@ sub said {
     if ($msg =~ m/^\$src$/i) {
         $self->say(
             channel => $channel,
-            body    => 'https://github.com/satanicsanta/SatanicBot'
+            body    => 'This bot was created by SatanicSanta, or Eli Foster: https://github.com/elifoster/SatanicBot'
         );
     }
 
