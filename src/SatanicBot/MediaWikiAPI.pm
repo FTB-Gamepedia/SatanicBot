@@ -101,7 +101,7 @@ sub edit_mods {
 
 sub edit_gmods {
     my ($self, $abbrv, $name) = @_;
-    my $gmods   = 'Template:Navbox List';
+    my $gmods   = 'Module:Mods/list';
     my $ref     = $mw->get_page({title => $gmods});
     my $content = $ref->{'*'};
     $name =~ s/\'/\\'/g;
