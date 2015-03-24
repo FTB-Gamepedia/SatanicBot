@@ -854,7 +854,7 @@ sub said {
                     body    => "Wrong! The answer was $num"
                 );
             }
-        } elsif ($msg =~ m/^\$game int [\d]/i or $msg =~ m/^\$game float [\d]/i) {
+        } elsif ($msg =~ m/^\$game int [\d]$/i or $msg =~ m/^\$game float [\d]$/i) {
             my @gamewords = split /\s/, $msg, 3;
             if ($gamewords[1] =~ m/int/i) {
                 my $num = int rand 101;
