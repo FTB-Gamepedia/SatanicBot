@@ -89,12 +89,20 @@ sub said {
         if ($msg !~ m/^\$auth$/i) {
             my @authwords = split /\s/, $msg, 2;
             if ($authwords[1] eq $bot_stuff->{auth_pass}) {
-                $self->say(
-                    channel => 'msg',
-                    who     => $user,
-                    body    => "$user, you are now logged in."
-                );
-                push @{$bot_stuff->{ops}}, $host;
+                unless (grep { $_ eq $host } @{$bot_stuff->{ops}}) {
+                    $self->say(
+                        channel => 'msg',
+                        who     => $user,
+                        body    => "$user, you are now logged in."
+                    );
+                    push @{$bot_stuff->{ops}}, $host;
+                } else {
+                    $self->say(
+                        channel => 'msg',
+                        who     => $user,
+                        body    => "$user, you are already logged in."
+                    );
+                }
             }
         } else {
             $self->say(
