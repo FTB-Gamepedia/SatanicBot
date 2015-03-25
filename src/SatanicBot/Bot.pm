@@ -146,7 +146,12 @@ sub said {
                         SatanicBot::MediaWikiAPI->login();
                         my $edit = SatanicBot::MediaWikiAPI->edit_gmods($abbrvwords[1], $abbrvwords[2]);
 
-                        if ($edit == 0) {
+                        if ($edit =~ m/\w/) {
+                            $self->say(
+                                channel => $channel,
+                                body    => $edit
+                            );
+                        } elsif ($edit == 0) {
                             $self->say(
                                 channel => $channel,
                                 body    => 'Could not proceed. Abbreviation and/or name already on the list.'
@@ -155,11 +160,6 @@ sub said {
                             $self->say(
                                 channel => $channel,
                                 body    => 'Success!'
-                            );
-                        } elsif ($edit =~ m/\w/) {
-                            $self->say(
-                                channel => $channel,
-                                body    => $edit
                             );
                         }
                     } else {
@@ -329,15 +329,15 @@ sub said {
                         SatanicBot::MediaWikiBot->login();
                         my $upload = SatanicBot::MediaWikiBot->upload($uploadwords[1], $uploadwords[2]);
 
-                        if ($upload == 1) {
-                            $self->say(
-                                channel => $channel,
-                                body    => "Uploaded \'$uploadwords[2]\' to the Wiki."
-                            );
-                        } elsif ($upload =~ m/\w/) {
+                        if ($upload =~ m/\w/) {
                             $self->say(
                                 channel => $channel,
                                 body    => $upload
+                            );
+                        } elsif ($upload == 1) {
+                            $self->say(
+                                channel => $channel,
+                                body    => "Uploaded \'$uploadwords[2]\' to the Wiki."
                             );
                         }
                     } else {
@@ -772,7 +772,12 @@ sub said {
                 SatanicBot::MediaWikiAPI->login();
                 my $edit = SatanicBot::MediaWikiAPI->edit_minor($minormodswords[1]);
 
-                if ($edit == 0) {
+                if ($edit =~ m/\w/) {
+                    $self->say(
+                        channel => $channel,
+                        body    => $edit
+                    );
+                } elsif ($edit == 0) {
                     $self->say(
                         channel => $channel,
                         body    => 'Could not proceed. Mod already on the list or mod page returned missing.'
@@ -781,11 +786,6 @@ sub said {
                     $self->say(
                         channel => $channel,
                         body    => 'Success!'
-                    );
-                } elsif ($edit =~ m/\w/) {
-                    $self->say(
-                        channel => $channel,
-                        body    => $edit
                     );
                 }
             } else {
