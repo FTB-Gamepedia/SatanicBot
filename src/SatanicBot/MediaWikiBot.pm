@@ -38,7 +38,7 @@ sub upload {
     $mw->upload_from_url( {
         url     => $url,
         title   => $title
-    }) or die "Upload failed! $mw->{error}->{code}: $mw->{error}->{details}";
+    }) or return $mw->{error}->{code} . ':' . $mw->{error}->{details};
     return 1;
 }
 

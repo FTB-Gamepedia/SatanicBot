@@ -58,7 +58,7 @@ sub edit_minor {
             text   => $join,
             bot    => 1,
             minor  => 1
-        }) || die $mw->{error}->{code} . ': ' . $mw->{error}->{details};
+        }) || return $mw->{error}->{code} . ': ' . $mw->{error}->{details};
 
         return 1;
     } else { return 0; }
@@ -115,7 +115,7 @@ sub edit_gmods {
                 text   => $content,
                 bot    => 1,
                 minor  => 1
-            }) || die $mw->{error}->{code} . ': ' . $mw->{error}->{details};
+            }) || return $mw->{error}->{code} . ': ' . $mw->{error}->{details};
 
             return 1;
         } else { return 0; }

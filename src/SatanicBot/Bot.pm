@@ -151,10 +151,15 @@ sub said {
                                 channel => $channel,
                                 body    => 'Could not proceed. Abbreviation and/or name already on the list.'
                             );
-                        } else {
+                        } elsif ($edit == 1) {
                             $self->say(
                                 channel => $channel,
                                 body    => 'Success!'
+                            );
+                        } elsif ($edit =~ m/\w/) {
+                            $self->say(
+                                channel => $channel,
+                                body    => $edit
                             );
                         }
                     } else {
@@ -289,7 +294,10 @@ sub said {
             if ($msg =~ m/^\$addquote(?: )/i) {
                 my @quotewords = split /\s/, $msg, 2;
                 my $file = 'info/ircquotes.txt';
-                open my $fh, '>>', $file or die "Could not open '$file' $ERROR\n";
+                open my $fh, '>>', $file or $self->say(
+                    channel => $channel,
+                    body    => "Could not open $file $ERROR"
+                );
                 print $fh "$quotewords[1]\n";
                 close $fh;
                 $self->say(
@@ -319,12 +327,19 @@ sub said {
                     if ($uploadwords[2] =~ m/.+/) {
 
                         SatanicBot::MediaWikiBot->login();
-                        SatanicBot::MediaWikiBot->upload($uploadwords[1], $uploadwords[2]);
+                        my $upload = SatanicBot::MediaWikiBot->upload($uploadwords[1], $uploadwords[2]);
 
-                        $self->say(
-                            channel => $channel,
-                            body    => "Uploaded \'$uploadwords[2]\' to the Wiki."
-                        );
+                        if ($upload == 1) {
+                            $self->say(
+                                channel => $channel,
+                                body    => "Uploaded \'$uploadwords[2]\' to the Wiki."
+                            );
+                        } elsif ($upload =~ m/\w/) {
+                            $self->say(
+                                channel => $channel,
+                                body    => $upload
+                            );
+                        }
                     } else {
                         $self->say(
                             channel => $channel,
@@ -649,7 +664,10 @@ sub said {
         if ($msg =~ m/^\$stats(?: )/i) {
             my @statwords = split /\s/, $msg, 2;
             my $www = WWW::Mechanize->new();
-            my $stuff = $www->get('http://ftb.gamepedia.com/api.php?action=query&meta=siteinfo&siprop=statistics&format=json') or die "Unable to get url.\n";
+            my $stuff = $www->get('http://ftb.gamepedia.com/api.php?action=query&meta=siteinfo&siprop=statistics&format=json') or $self->say(
+                channel => $channel,
+                body    => "Unable to get URL."
+            );
             my $decode = $stuff->decoded_content();
 
             if ($statwords[1] =~ m/^pages$/i) {
@@ -759,10 +777,15 @@ sub said {
                         channel => $channel,
                         body    => 'Could not proceed. Mod already on the list or mod page returned missing.'
                     );
-                } else {
+                } elsif ($edit == 1) {
                     $self->say(
                         channel => $channel,
                         body    => 'Success!'
+                    );
+                } elsif ($edit =~ m/\w/) {
+                    $self->say(
+                        channel => $channel,
+                        body    => $edit
                     );
                 }
             } else {
