@@ -106,7 +106,7 @@ sub edit_gmods {
     my $content = $ref->{'*'};
     $name =~ s/\'/\\'/g;
 
-    if ($content !~ m/$abbrv = /) {
+    if ($content !~ m/\s$abbrv = /) {
         if ($content !~ m/\{\'$name\'/) {
             $content =~ s/local modsByAbbrv = \{/local modsByAbbrv = \{\n    $abbrv = \{\'$name\', \[=\[<translate>$name<\/translate>\]=\]\},/;
             $mw->edit( {
