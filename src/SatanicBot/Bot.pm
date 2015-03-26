@@ -146,7 +146,7 @@ sub said {
                         SatanicBot::MediaWikiAPI->login();
                         my $edit = SatanicBot::MediaWikiAPI->edit_gmods($abbrvwords[1], $abbrvwords[2]);
 
-                        if ($edit =~ m/\w/) {
+                        if ($edit =~ m/\W/) {
                             $self->say(
                                 channel => $channel,
                                 body    => $edit
@@ -329,7 +329,7 @@ sub said {
                         SatanicBot::MediaWikiBot->login();
                         my $upload = SatanicBot::MediaWikiBot->upload($uploadwords[1], $uploadwords[2]);
 
-                        if ($upload =~ m/\w/) {
+                        if ($upload =~ m/\W/) {
                             $self->say(
                                 channel => $channel,
                                 body    => $upload
@@ -772,7 +772,7 @@ sub said {
                 SatanicBot::MediaWikiAPI->login();
                 my $edit = SatanicBot::MediaWikiAPI->edit_minor($minormodswords[1]);
 
-                if ($edit =~ m/\w/) {
+                if ($edit =~ m/\W/) {
                     $self->say(
                         channel => $channel,
                         body    => $edit
