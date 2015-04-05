@@ -4,19 +4,20 @@ package SatanicBot::Bot;
 use warnings;
 use strict;
 use diagnostics;
+
 use base qw(Bot::BasicBot);
 use Data::Random;
-use Weather::Underground;
 use Data::Dumper;
+use Weather::Underground;
 use SatanicBot::MediaWikiAPI;
 use SatanicBot::MediaWikiBot;
+use SatanicBot::Utils;
 use LWP::Simple;
 use WWW::Mechanize;
+use WWW::Twitter;
 use Math::Symbolic;
 use Date::Parse;
 use File::RandomLine;
-use WWW::Twitter;
-use SatanicBot::Utils;
 use Geo::IP;
 
 my %bot_stuff_hash = (
@@ -597,7 +598,7 @@ sub said {
         my $contribs = SatanicBot::Utils->get_contribs($user);
         my $register = SatanicBot::Utils->get_registration_date($user);
 
-        if ($contribs != 0) {
+        if ($contribs ne '0') {
             if ($contribs eq '1') {
                 $self->say(
                     channel => $channel,
