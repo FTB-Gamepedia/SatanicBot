@@ -19,6 +19,7 @@ use Math::Symbolic;
 use Date::Parse;
 use File::RandomLine;
 use Geo::IP;
+use Switch;
 
 my %bot_stuff_hash = (
     ops       => [],
@@ -982,168 +983,86 @@ sub said {
     if ($msg =~ m/^\$help/i) {
         if ($msg !~ m/\$help$/i) {
             my @helpwords = split /\s/, $msg, 2;
-            if ($helpwords[1] =~ m/quit$/i) {
-                $self->say(
-                    channel => $channel,
-                    body    => 'Stops the bot. An op-only command. No args.'
-                );
+            my $helpfulmessage;
+
+            switch ($helpwords[1]) {
+                case m/quit$/i {
+                    $helpfulmessage = 'Murders me. An op-only command. No args.';
+                }
+                case m/abbrv$/i {
+                    $helpfulmessage = 'Abbreivates a mod for the tilesheet extension. An op-only command. 2 args: <abbreviation> <mod name>';
+                }
+                case m/spookyscaryskeletons$/i {
+                    $helpfulmessage = 'Very spooky. No args. This command is broken.';
+                }
+                case m/weather$/i {
+                    $helpfulmessage = 'Provides weather information for the given place. 1 required arg, 1 optional arg: <(optional) f or c> <place>';
+                }
+                case m/upload$/i {
+                    $helpfulmessage = 'Uploads an image to the wiki. An op-only command. 2 args: <file link> <file name>';
+                }
+                case m/src$/i {
+                    $helpfulmessage = 'Links the source code for myself. No args.';
+                }
+                case m/contribs$/i {
+                    $helpfulmessage = 'Provides some user information including num of contribs to the wiki and registration date. 1 optional arg: <username>. If no arg is given, I will use the user\'s IRC nickname.';
+                }
+                case m/flip$/i {
+                    $helpfulmessage = 'Heads or tails! No args';
+                }
+                case m/8ball$/i {
+                    $helpfulmessage = 'Determines your fortune. No args';
+                }
+                case m/randquote$/i {
+                    $helpfulmessage = 'Gives a random quote from the #FTB-Wiki IRC channel. No args';
+                }
+                case m/stats$/i {
+                    $helpfulmessage = 'Gives wiki stats. 1 optional arg: <pages or articles or edits or images or users or active users or admins>';
+                }
+                case m/randnum$/i {
+                    $helpfulmessage = 'Generates a random number. 1 optional arg, if not provided I will assume 0-100: <max num>';
+                }
+                case m/game$/i {
+                    $helpfulmessage = 'Number guessing game. 2 args: <int or float (optional)> <guess>. If no first arg is given I will assume int.';
+                }
+                case m/motivate$/i {
+                    $helpfulmessage = 'Motivates you or the user you provide in the first arg.';
+                }
+                case m/tweet$/i {
+                    $helpfulmessage = 'Tweets the first arg on the @LittleHelperBot Twitter account.';
+                }
+                case m/pass$/i {
+                    $helpfulmessage = 'Sets the auth password. Only Santa can do this command.';
+                }
+                case m/auth$/i {
+                    $helpfulmessage = 'Logs the user in, allowing for op-only commands. 1 arg: $auth <password>';
+                }
+                case m/addminor$/i {
+                    $helpfulmessage = 'Adds a mod to the list of minor mods on the main page. 1 arg: $addminor <mod name>';
+                }
+                case m/addmod$/i {
+                    $helpfulmessage = 'Adds a mod to the list of mods on the main page. 1 arg: $addmod <mod name>';
+                }
+                case m/addquote$/i {
+                    $helpfulmessage = 'Adds the first argument to the list of quotes used by $randquote.';
+                }
+                case m/checkpage$/i {
+                    $helpfulmessage = 'Checks if the first argument is a valid page.';
+                }
+                case m/addnav$/i {
+                    $helpfulmessage = 'If the template and page are both valid, adds the navbox in the first arg to the template list.';
+                }
+                case m/newmodcat$/i {
+                    $helpfulmessage = 'Creates a new category for the mod given in the first arg.';
+                }
+                case m/newminorcat$/i {
+                    $helpfulmessage = 'Creates a new category for the minor mod given in the first arg.';
+                }
             }
-            if ($helpwords[1] =~ m/abbrv$/i) {
-                $self->say(
-                    channel => $channel,
-                    body    => 'Abbreivates a mod for the tilesheet extension. An op-only command. 2 args: <abbreviation> <mod name>'
-                );
-            }
-            if ($helpwords[1] =~ m/spookyscaryskeletons$/i) {
-                $self->say(
-                    channel => $channel,
-                    body    => 'Very spooky. No args. This command is broken.'
-                );
-            }
-            if ($helpwords[1] =~ m/weather$/i) {
-                $self->say(
-                    channel => $channel,
-                    body    => 'Provides weather information for the given place. 1 required arg, 1 optional arg: <(optional) f or c> <place>'
-                );
-            }
-            if ($helpwords[1] =~ m/upload$/i) {
-                $self->say(
-                    channel => $channel,
-                    body    => 'Uploads an image to the wiki. An op-only command. 2 args: <file link> <file name>'
-                );
-            }
-            if ($helpwords[1] =~ m/osrc$/i) {
-                $self->say(
-                    channel => $channel,
-                    body    => 'Links the open source report card for the user. 1 optional arg: <username> CURRENTLY DISABLED.'
-                );
-            }
-            if ($msg =~ m/^\$help src$/i) { # I have to do it this way due to a bug caused by $help osrc.
-                $self->say(
-                    channel => $channel,
-                    body    => 'Links the source code for this bot. No args.'
-                );
-            }
-            if ($helpwords[1] =~ m/contribs$/i) {
-                $self->say(
-                    channel => $channel,
-                    body    => 'Provides some user information including num of contribs to the wiki and registration date. 1 optional arg: <username>. If no arg is given, it will use the user\'s IRC nickname.'
-                );
-            }
-            if ($helpwords[1] =~ m/flip$/i) {
-                $self->say(
-                    channel => $channel,
-                    body    => 'Heads or tails! No args'
-                );
-            }
-            if ($helpwords[1] =~ m/8ball$/i) {
-                $self->say(
-                    channel => $channel,
-                    body    => 'Determines your fortune. No args'
-                );
-            }
-            if ($helpwords[1] =~ m/randquote$/i) {
-                $self->say(
-                    channel => $channel,
-                    body    => 'Gives a random quote from the #FTB-Wiki IRC channel. No args'
-                );
-            }
-            if ($helpwords[1] =~ m/stats$/i) {
-                $self->say(
-                    channel => $channel,
-                    body    => 'Gives wiki stats. 1 optional arg: <pages or articles or edits or images or users or active users or admins>'
-                );
-            }
-            if ($helpwords[1] =~ m/calc$/i) {
-                $self->say(
-                    channel => $channel,
-                    body    => 'Derpy calculator. Takes an equation. This performs eval; if it doesn\'t work blame eval'
-                );
-            }
-            if ($helpwords[1] =~ m/randnum$/i) {
-                $self->say(
-                    channel => $channel,
-                    body    => 'Generates a random number. 1 optional arg, if not provided it will assume 0-100: <max num>'
-                );
-            }
-            if ($helpwords[1] =~ m/game$/i) {
-                $self->say(
-                    channel => $channel,
-                    body    => 'Number guessing game. 2 args: <int or float> <guess>'
-                );
-            }
-            if ($helpwords[1] =~ m/motivate$/i) {
-                $self->say(
-                    channel => $channel,
-                    body    => 'Motivates you or the user you provide in the first arg.'
-                );
-            }
-            if ($helpwords[1] =~ m/tweet$/i) {
-                $self->say(
-                    channel => $channel,
-                    body    => 'Tweets the first arg on the @LittleHelperBot Twitter account.'
-                );
-            }
-            if ($helpwords[1] =~ m/twitterstats$/i) {
-                $self->say(
-                    channel => $channel,
-                    body    => 'Provides statistics for the given user. Takes one argument: the username.'
-                )
-            }
-            if ($helpwords[1] =~ m/pass$/i) {
-                $self->say(
-                    channel => $channel,
-                    body    => 'Sets the auth password. Only Santa can do this command.'
-                )
-            }
-            if ($helpwords[1] =~ m/auth$/i) {
-                $self->say(
-                    channel => $channel,
-                    body    => 'Logs the user in, allowing for op-only commands. 1 arg: $auth <password>'
-                )
-            }
-            if ($helpwords[1] =~ m/addminor$/i) {
-                $self->say(
-                    channel => $channel,
-                    body    => 'Adds a mod to the list of minor mods on the main page. 1 arg: $addminor <mod name>'
-                );
-            }
-            if ($helpwords[1] =~ m/addmod$/i) {
-                $self->say(
-                    channel => $channel,
-                    body    => 'Adds a mod to the list of mods on the main page. 1 arg: $addmod <mod name>'
-                );
-            }
-            if ($helpwords[1] =~ m/addquote$/i) {
-                $self->say(
-                    channel => $channel,
-                    body    => 'Adds the first argument to the list of quotes used by $randquote.'
-                )
-            }
-            if ($helpwords[1] =~ m/checkpage$/i) {
-                $self->say(
-                    channel => $channel,
-                    body    => 'Checks if the first argument is a valid page.'
-                );
-            }
-            if ($helpwords[1] =~ m/addnav$/i) {
-                $self->say(
-                    channel => $channel,
-                    body    => 'If the template and page are both valid, adds the navbox in the first arg to the template list.'
-                );
-            }
-            if ($helpwords[1] =~ m/newmodcat$/i) {
-                $self->say(
-                    channel => $channel,
-                    body    => 'Creates a new category for the mod given in the first arg.'
-                );
-            }
-            if ($helpwords[1] =~ m/newminorcat$/i) {
-                $self->say(
-                    channel => $channel,
-                    body    => 'Creates a new category for the minor mod given in the first arg.'
-                );
-            }
+            $self->say(
+                channel => $channel,
+                body    => $helpfulmessage
+            );
         } else {
             my @sort = sort @commands;
             my $join = join ', ', @sort;
