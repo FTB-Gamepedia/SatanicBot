@@ -67,6 +67,7 @@ sub said {
     $bot_stuff->{auth_pass} = $content[3];
 
 
+
     if ($msg =~ m/^\$pass/i) {
         if ($msg !~ m/^\$pass$/i) {
             if ($host =~ m/!~SatanicSa\@c-73/) {
@@ -661,103 +662,60 @@ sub said {
 
     #Wiki statistics.
     #Consider using a real JSON parser rather than regular expression.
-    #This could definitely be less verbose. Just not sure how yet.
     if ($msg =~ m/^\$stats/i) {
-        if ($msg =~ m/^\$stats(?: )/i) {
-            my @statwords = split /\s/, $msg, 2;
-            my $www = WWW::Mechanize->new();
-            my $stuff = $www->get('http://ftb.gamepedia.com/api.php?action=query&meta=siteinfo&siprop=statistics&format=json') or $self->say(
-                channel => $channel,
-                body    => "Unable to get URL."
-            );
-            my $decode = $stuff->decoded_content();
+        my $www         = WWW::Mechanize->new();
+        my $stuff       = $www->get('http://ftb.gamepedia.com/api.php?action=query&meta=siteinfo&siprop=statistics&format=json') or die "Unable to get url.\n";
+        my $decode      = $stuff->decoded_content();
+        my $pages       = $decode =~ m{\"pages\":(.*?),};
+        my @articulos   = $decode =~ m{\"articles\":(.*?),};
+        my @edits       = $decode =~ m{\"edits\":(.*?),};
+        my @images      = $decode =~ m{\"images\":(.*?),};
+        my @users       = $decode =~ m{\"users\":(.*?),};
+        my @activeusers = $decode =~ m{\"activeusers\":(.*?),};
+        my @admins      = $decode =~ m{\"admins\":(.*?),};
 
-            if ($statwords[1] =~ m/^pages$/i) {
-                my @pages = $decode =~ m{\"pages\":(.*?),};
-                my $num_pages = SatanicBot::Utils->separate_by_commas($pages[0]);
+        my $num_pages    = SatanicBot::Utils->separate_by_commas($pages[0]);
+        my $num_articles = SatanicBot::Utils->separate_by_commas($articulos[0]);
+        my $num_edits    = SatanicBot::Utils->separate_by_commas($edits[0]);
+        my $num_images   = SatanicBot::Utils->separate_by_commas($images[0]);
+        my $num_users    = SatanicBot::Utils->separate_by_commas($users[0]);
+        my $num_active   = SatanicBot::Utils->separate_by_commas($activeusers[0]);
+        my $num_admins   = SatanicBot::Utils->separate_by_commas($admins[0]);
 
-                $self->say(
-                    channel => $channel,
-                    body    => "The wiki has $num_pages pages."
-                );
-            }
-            if ($statwords[1] =~ m/^articles$/i) {
-                my @articulos = $decode =~ m{\"articles\":(.*?),};
-                my $num_articles = SatanicBot::Utils->separate_by_commas($articulos[0]);
-
-                $self->say(
-                    channel => $channel,
-                    body    => "The wiki has $num_articles articles."
-                );
-            }
-            if ($statwords[1] =~ m/^edits$/i) {
-                my @edits = $decode =~ m{\"edits\":(.*?),};
-                my $num_edits = SatanicBot::Utils->separate_by_commas($edits[0]);
-
-                $self->say(
-                    channel => $channel,
-                    body    => "The wiki has $num_edits edits."
-                );
-            }
-            if ($statwords[1] =~ m/^images$/i) {
-                my @images = $decode =~ m{\"images\":(.*?),};
-                my $num_images = SatanicBot::Utils->separate_by_commas($images[0]);
-
-                $self->say(
-                    channel => $channel,
-                    body    => "The wiki has $num_images images."
-                );
-            }
-            if ($statwords[1] =~ m/^users$/i) {
-                my @users = $decode =~ m{\"users\":(.*?),};
-                my $num_users = SatanicBot::Utils->separate_by_commas($users[0]);
-
-                $self->say(
-                    channel => $channel,
-                    body    => "The wiki has $num_users users."
-                );
-            }
-            if ($statwords[1] =~ m/^active users$/i) {
-                my @activeusers = $decode =~ m{\"activeusers\":(.*?),};
-                my $num_active = SatanicBot::Utils->separate_by_commas($activeusers[0]);
-                $self->say(
-                    channel => $channel,
-                    body    => "The wiki has $num_active active users."
-                );
-            }
-            if ($statwords[1] =~ m/^admins$/i) {
-                my @admins = $decode =~ m{\"admins\":(.*?),};
-                my $num_admins = SatanicBot::Utils->separate_by_commas($admins[0]);
-
-                $self->say(
-                    channel => $channel,
-                    body    => "The wiki has $num_admins admins."
-                );
-            }
-        } elsif ($msg =~ m/^\$stats$/i) {
-            my @statwords   = split(/\s/, $msg, 2);
-            my $www         = WWW::Mechanize->new();
-            my $stuff       = $www->get('http://ftb.gamepedia.com/api.php?action=query&meta=siteinfo&siprop=statistics&format=json') or die "Unable to get url.\n";
-            my $decode      = $stuff->decoded_content();
-            my @pages       = $decode =~ m{\"pages\":(.*?),};
-            my @articulos   = $decode =~ m{\"articles\":(.*?),};
-            my @edits       = $decode =~ m{\"edits\":(.*?),};
-            my @images      = $decode =~ m{\"images\":(.*?),};
-            my @users       = $decode =~ m{\"users\":(.*?),};
-            my @activeusers = $decode =~ m{\"activeusers\":(.*?),};
-            my @admins      = $decode =~ m{\"admins\":(.*?),};
-
-            my $num_pages    = SatanicBot::Utils->separate_by_commas($pages[0]);
-            my $num_articles = SatanicBot::Utils->separate_by_commas($articulos[0]);
-            my $num_edits    = SatanicBot::Utils->separate_by_commas($edits[0]);
-            my $num_images   = SatanicBot::Utils->separate_by_commas($images[0]);
-            my $num_users    = SatanicBot::Utils->separate_by_commas($users[0]);
-            my $num_active   = SatanicBot::Utils->separate_by_commas($activeusers[0]);
-            my $num_admins   = SatanicBot::Utils->separate_by_commas($admins[0]);
-
+        if ($msg =~ m/^\$stats$/i) {
             $self->say(
                 channel => $channel,
                 body    => "$num_pages pages || $num_articles articles || $num_edits edits || $num_images images || $num_users users || $num_active active users || $num_admins admins"
+            );
+        } elsif ($msg =~ m/^\$stats(?: )/i) {
+            my @statwords = split /\s/, $msg, 2;
+            my $message;
+            switch ($statwords[1]) {
+                case m/^pages$/i {
+                    $message = "The wiki has $num_pages pages.";
+                }
+                case m/^articles$/i {
+                    $message = "The wiki has $num_articles articles.";
+                }
+                case m/^edits$/i {
+                    $message = "The wiki has $num_edits edits.";
+                }
+                case m/^images$/i {
+                    $message = "The wiki has $num_images images.";
+                }
+                case m/^users$/i {
+                    $message = "The wiki has $num_users users.";
+                }
+                case m/^active users$/i {
+                    $message = "The wiki has $num_active active users.";
+                }
+                case m/^admins$/i {
+                    $message = "The wiki has $num_admins admins.";
+                }
+            }
+            $self->say(
+                channel => $channel,
+                body    => $message
             );
         }
     }
