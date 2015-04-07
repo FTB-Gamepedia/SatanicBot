@@ -121,6 +121,7 @@ sub said {
             if ($msg =~ m/^\$quit$/i) {
                 $self->say(
                     channel => $channel,
+                    who     => $user,
                     body    => 'I don\'t love you anymore' #For some reason this does not get said before it quits in most cases.
                 );
                 $self->shutdown(); #Consider replacing the message said before it quits with an actual quit message.
@@ -129,6 +130,7 @@ sub said {
         } else {
             $self->say(
                 channel => $channel,
+                who     => $user,
                 body    => $authorized
             );
         }
@@ -143,6 +145,7 @@ sub said {
                     if ($abbrvwords[1] =~ m/[\p{IsUpper}\d]/) {
                         $self->say(
                             channel => $channel,
+                            who     => $user,
                             body    => "Abbreviating \'$abbrvwords[2]\' as \'$abbrvwords[1]\'"
                         );
 
@@ -152,28 +155,33 @@ sub said {
                         if ($edit =~ m/\W/) {
                             $self->say(
                                 channel => $channel,
+                                who     => $user,
                                 body    => $edit
                             );
                         } elsif ($edit == 0) {
                             $self->say(
                                 channel => $channel,
+                                who     => $user,
                                 body    => 'Could not proceed. Abbreviation and/or name already on the list.'
                             );
                         } elsif ($edit == 1) {
                             $self->say(
                                 channel => $channel,
+                                who     => $user,
                                 body    => 'Success!'
                             );
                         }
                     } else {
                         $self->say(
                             channel => $channel,
+                            who     => $user,
                             body    => 'Abbreviations can only be capital letters and digits.'
                         );
                     }
                 } else {
                     $self->say(
                         channel => $channel,
+                        who     => $user,
                         body    => $args
                     );
                 }
@@ -193,18 +201,21 @@ sub said {
             if ($check == 0) {
                 $self->say(
                     channel => $channel,
+                    who     => $user,
                     body    => "$pagewords[1] does not exist."
                 );
             } elsif ($check == 1) {
                 my $pageurl = $pagewords[1] =~ s/\s/_/gr;
                 $self->say(
                     channel => $channel,
+                    who     => $user,
                     body    => "$pagewords[1] does exist: http://ftb.gamepedia.com/$pageurl"
                 );
             }
         } else {
             $self->say(
                 channel => $channel,
+                who     => $user,
                 body    => $args
             );
         }
@@ -219,12 +230,14 @@ sub said {
                 if ($check == 0) {
                     $self->say(
                         channel => $channel,
+                        who     => $user,
                         body    => "$catwords[1] page does not exist. Not creating category for it."
                     );
                 } elsif ($check == 1) {
                     if ($catcheck == 0) {
                         $self->say(
                             channel => $channel,
+                            who     => $user,
                             body    => "Creating mod category Category:$catwords[1]"
                         );
 
@@ -233,11 +246,13 @@ sub said {
 
                         $self->say(
                             channel => $channel,
+                            who     => $user,
                             body    => "$catwords[1] category created."
                         );
                     } else {
                         $self->say(
                             channel => $channel,
+                            who     => $user,
                             body    => 'Category already exists.'
                         );
                     }
@@ -246,6 +261,7 @@ sub said {
         } else {
             $self->say(
                 channel => $channel,
+                who     => $user,
                 body    => $args
             );
         }
@@ -260,12 +276,14 @@ sub said {
                 if ($check == 0) {
                     $self->say(
                         channel => $channel,
+                        who     => $user,
                         body    => "$catwords[1] page does not exist. Not creating category for it."
                     );
                 } elsif ($check == 1) {
                     if ($catcheck == 0) {
                         $self->say(
                             channel => $channel,
+                            who     => $user,
                             body    => "Creating mod category Category:$catwords[1]"
                         );
 
@@ -274,11 +292,13 @@ sub said {
 
                         $self->say(
                             channel => $channel,
+                            who     => $user,
                             body    => "$catwords[1] category created."
                         );
                     } else {
                         $self->say(
                             channel => $channel,
+                            who     => $user,
                             body    => 'Category already exists.'
                         );
                     }
@@ -287,6 +307,7 @@ sub said {
         } else {
             $self->say(
                 channel => $channel,
+                who     => $user,
                 body    => $args
             );
         }
@@ -299,23 +320,27 @@ sub said {
                 my $file = 'info/ircquotes.txt';
                 open my $fh, '>>', $file or $self->say(
                     channel => $channel,
+                    who     => $user,
                     body    => "Could not open $file $ERROR"
                 );
                 print $fh "$quotewords[1]\n";
                 close $fh;
                 $self->say(
                     channel => $channel,
+                    who     => $user,
                     body    => 'Added to the quote list.'
                 );
             } else {
                 $self->say(
                     channel => $channel,
+                    who     => $user,
                     body    => $args
                 );
             }
         } else {
             $self->say(
                 channel => $channel,
+                who     => $user,
                 body    => $authorized
             );
         }
@@ -335,23 +360,27 @@ sub said {
                         if ($upload =~ m/\W/) {
                             $self->say(
                                 channel => $channel,
+                                who     => $user,
                                 body    => $upload
                             );
                         } elsif ($upload == 1) {
                             $self->say(
                                 channel => $channel,
+                                who     => $user,
                                 body    => "Uploaded \'$uploadwords[2]\' to the Wiki."
                             );
                         }
                     } else {
                         $self->say(
                             channel => $channel,
+                            who     => $user,
                             body    => $args
                         );
                     }
                 } else {
                     $self->say(
                         channel => $channel,
+                        who     => $user,
                         body    => $args
                     );
                 }
@@ -359,6 +388,7 @@ sub said {
         } else {
             $self->say(
                 channel => $channel,
+                who     => $user,
                 body    => $authorized
             );
         }
@@ -371,6 +401,7 @@ sub said {
                 if ($templatewords[1] =~ m/.+/) {
                     $self->say(
                         channel => $channel,
+                        who     => $user,
                         body    => "Adding $templatewords[1] to the Navbox list."
                     );
 
@@ -381,6 +412,7 @@ sub said {
                     if ($pagecheck == 0) {
                         $self->say(
                             channel => $channel,
+                            who     => $user,
                             body    => 'Mod page returned missing. Could not proceed.'
                         );
                     } else {
@@ -388,6 +420,7 @@ sub said {
                         if ($templatecheck == 0) {
                             $self->say(
                                 channel => $channel,
+                                who     => $user,
                                 body    => 'Mod page returned existing, but template returned missing. Could not proceed.'
                             );
                         } else {
@@ -395,11 +428,13 @@ sub said {
                             if ($func == 0) {
                                 $self->say(
                                     channel => $channel,
+                                    who     => $user,
                                     body    => 'That is already on the list.'
                                 );
                             } else {
                                 $self->say(
                                     channel => $channel,
+                                    who     => $user,
                                     body    => 'Success!'
                                 );
                             }
@@ -409,12 +444,14 @@ sub said {
             } else {
                 $self->say(
                     channel => $channel,
+                    who     => $user,
                     body    => $args
                 );
             }
         } else {
             $self->say(
                 channel => $channel,
+                who     => $user,
                 body    => $authorized
             );
         }
@@ -429,6 +466,7 @@ sub said {
 
         $self->say(
             channel => $channel,
+            who     => $user,
             body    => @random_words
         );
 
@@ -453,8 +491,103 @@ sub said {
                 if (exists $forecast->[0]->{place}) {
                     $self->say(
                         channel => $channel,
+                        who     => $user,
                         body    => "$forecast->[0]->{place}: $forecast->[0]->{conditions} || Temperature: $forecast->[0]->{fahrenheit} F || Humidity: $forecast->[0]->{humidity}% || Last updated: $forecast->[0]->{updated}"
                     );
+                } else {
+                    $self->say(
+                        channel => $channel,
+                        who     => $user,
+                        body    => "\'$weatherwords[2]\' is not a valid place."
+                    );
+                }
+            } else {
+                $self->say(
+                    channel => $channel,
+                    who     => $user,
+                    body    => $args
+                );
+            }
+        } elsif ($msg =~ m/\$weather c(?: )/i) {
+            my @weatherwords = split /\s/, $msg, 3;
+            if ($weatherwords[2] =~ m/[\p{IsAlphabetic}\d,]/) {
+                my $weather = Weather::Underground->new(
+                    place => $weatherwords[2]
+                );
+
+                my $forecast = $weather->getweather();
+
+                if (exists $forecast->[0]->{place}) {
+                    $self->say(
+                        channel => $channel,
+                        who     => $user,
+                        body    => "$forecast->[0]->{place}: $forecast->[0]->{conditions} || Temperature: $forecast->[0]->{celsius} C || Humidity: $forecast->[0]->{humidity}% || Last updated: $forecast->[0]->{updated}"
+                    );
+                } else {
+                    $self->say(
+                        channel => $channel,
+                        who     => $user,
+                        body    => "\'$weatherwords[2]\' is not a valid place."
+                    );
+                }
+            } else {
+                $self->say(
+                    channel => $channel,
+                    who     => $user,
+                    body    => $args
+                );
+            }
+        } else {
+            my @weatherwords = split /\s/, $msg, 2;
+            if ($weatherwords[1] =~ m/[\p{IsAlphabetic}\d,]/) {
+                my $weather = Weather::Underground->new(
+                    place => $weatherwords[1]
+                );
+
+                my $forecast = $weather->getweather();
+
+                if (exists $forecast->[0]->{place}) {
+                    $self->say(
+                        channel => $channel,
+                        who     => $user,
+                        body    => "$forecast->[0]->{place}: $forecast->[0]->{conditions} || Temperature: $forecast->[0]->{fahrenheit} F || Humidity: $forecast->[0]->{humidity}% || Last updated: $forecast->[0]->{updated}"
+                    );
+                } else {
+                    $self->say(
+                        channel => $channel,
+                        who     => $user,
+                        body    => "\'$weatherwords[1]\' is not a valid place."
+                    );
+                }
+            } else {
+                $self->say(
+                    channel => $channel,
+                    who     => $user,
+                    body    => $args
+                );
+            }
+        }
+    }
+=pod
+    if ($msg =~ m/^\$weatherforecast(?: )/i) {
+        if ($msg =~ m/\$weatherforecast f(?: )/i) {
+            my @weatherwords = split /\s/, $msg, 3;
+            if ($weatherwords[2] =~ m/[\p{IsAlphabetic}\d,]/) {
+                my $weather = Weather::Underground->new(
+                    place => $weatherwords[2]
+                );
+
+                my $forecast = $weather->getweather();
+
+                if (exists $forecast->[0]->{place}) {
+                    for (my $day = 0; $day < 7; $day++) {
+                        my $daysay = $day + 1;
+                        $self->say(
+                            channel => 'msg',
+                            who => $user,
+                            body    => "Day $daysay: $forecast->[$day]->{place}: $forecast->[$day]->{conditions} || Temperature: $forecast->[$day]->{fahrenheit} F || Humidity: $forecast->[$day]->{humidity}% || Last updated: $forecast->[$day]->{updated}"
+                        );
+                    }
                 } else {
                     $self->say(
                         channel => $channel,
@@ -467,7 +600,7 @@ sub said {
                     body    => $args
                 );
             }
-        } elsif ($msg =~ m/\$weather c(?: )/i) {
+        } elsif ($msg =~ m/\$weatherforecast c(?: )/i) {
             my @weatherwords = split /\s/, $msg, 3;
             if ($weatherwords[2] =~ m/[\p{IsAlphabetic}\d,]/) {
                 my $weather = Weather::Underground->new(
@@ -521,7 +654,7 @@ sub said {
             }
         }
     }
-=pod
+
     if ($msg =~ m/^\$weather$/i) {
         my $ip = $message->{raw_nick};
         $ip =~ s/^[^\@]*\@//;
@@ -543,6 +676,7 @@ sub said {
     if ($msg =~ m/^\$src$/i) {
         $self->say(
             channel => $channel,
+            who     => $user,
             body    => 'This bot was created by SatanicSanta, or Eli Foster: https://github.com/elifoster/SatanicBot'
         );
     }
@@ -558,37 +692,44 @@ sub said {
             if ($contribs eq '0') {
                 $self->say(
                     channel => $channel,
+                    who     => $user,
                     body    => 'Something went wrong. You may have entered an invalid username (such as an IP) or a nonexistant username.'
                 );
             } else {
                 if ($contribs eq '1') {
                     $self->say(
                         channel => $channel,
+                        who     => $user,
                         body    => "$contribwords[1] has made 1 contribution to the wiki and registered on $register."
                     );
                 } elsif ($contribwords[1] eq 'SatanicBot' or $contribwords[1] eq 'satanicBot') {
                     $self->say(
                         channel => $channel,
+                        who     => $user,
                         body    => "I have made $contribs contributions to the wiki and registered on $register."
                     );
                 } elsif ($contribwords[1] eq 'TheSatanicSanta' or $contribwords[1] eq 'theSatanicSanta') {
                     $self->say(
                         channel => $channel,
+                        who     => $user,
                         body    => "The second hottest babe in the channel has made $contribs contributions to the wiki and registered on $register."
                     );
                 } elsif ($contribwords[1] eq 'Retep998' or $contribwords[1] eq 'retep998') {
                     $self->say(
                         channel => $channel,
+                        who     => $user,
                         body    => "The hottest babe in the channel has made $contribs contributions to the wiki and registered on $register."
                     );
                 } elsif ($contribwords[1] eq 'PonyButt' or $contribwords[1] eq 'ponyButt') {
                     $self->say(
                         channel => $channel,
+                        who     => $user,
                         body    => "Some bitch ass nigga has made $contribs contributions to the wiki and registered on $register."
                     );
                 } else {
                     $self->say(
                         channel => $channel,
+                        who     => $user,
                         body    => "$contribwords[1] has made $contribs contributions to the wiki and registered on $register."
                     );
                 }
@@ -604,17 +745,20 @@ sub said {
             if ($contribs eq '1') {
                 $self->say(
                     channel => $channel,
+                    who     => $user,
                     body    => "$user, you have made 1 contribution to the wiki and registered on $register."
                 );
             } else {
                 $self->say(
                     channel => $channel,
+                    who     => $user,
                     body    => "$user, you have made $contribs contributions to the wiki and registered on $register."
                 );
             }
         } elsif ($contribs == 0) {
             $self->say(
                 channel => $channel,
+                who     => $user,
                 body    => 'Something went wrong. You may have entered an invalid username (such as an IP) or a nonexistant username.'
             );
         }
@@ -628,6 +772,7 @@ sub said {
         chomp $fortune;
         $self->say(
             channel => $channel,
+            who     => $user,
             body    => $fortune
         );
     }
@@ -638,11 +783,13 @@ sub said {
         if ($coin eq 1) {
             $self->say(
                 channel => $channel,
+                who     => $user,
                 body    => 'Heads!'
             );
         } else {
             $self->say(
                 channel => $channel,
+                who     => $user,
                 body    => 'Tails!'
             );
         }
@@ -656,6 +803,7 @@ sub said {
         chomp $quote;
         $self->say(
             channel => $channel,
+            who     => $user,
             body    => $quote
         );
     }
@@ -685,6 +833,7 @@ sub said {
         if ($msg =~ m/^\$stats$/i) {
             $self->say(
                 channel => $channel,
+                who     => $user,
                 body    => "$num_pages pages || $num_articles articles || $num_edits edits || $num_images images || $num_users users || $num_active active users || $num_admins admins"
             );
         } elsif ($msg =~ m/^\$stats(?: )/i) {
@@ -715,6 +864,7 @@ sub said {
             }
             $self->say(
                 channel => $channel,
+                who     => $user,
                 body    => $message
             );
         }
@@ -726,6 +876,7 @@ sub said {
                 my @minormodswords = split /\s/, $msg, 2;
                 $self->say(
                     channel => $channel,
+                    who     => $user,
                     body    => "Adding \'$minormodswords[1]\' to the Minor Mods list."
                     );
 
@@ -735,28 +886,33 @@ sub said {
                 if ($edit =~ m/\W/) {
                     $self->say(
                         channel => $channel,
+                        who     => $user,
                         body    => $edit
                     );
                 } elsif ($edit == 0) {
                     $self->say(
                         channel => $channel,
+                        who     => $user,
                         body    => 'Could not proceed. Mod already on the list or mod page returned missing.'
                     );
                 } elsif ($edit == 1) {
                     $self->say(
                         channel => $channel,
+                        who     => $user,
                         body    => 'Success!'
                     );
                 }
             } else {
                 $self->say(
                     channel => $channel,
+                    who     => $user,
                     body    => $authorized
                 );
             }
         } else {
             $self->say(
                 channel => $channel,
+                who     => $user,
                 body    => $args
             );
         }
@@ -768,6 +924,7 @@ sub said {
                 my @modwords = split /\s/, $msg, 2;
                 $self->say(
                     channel => $channel,
+                    who     => $user,
                     body    => "Adding \'$modwords[1]\' to the Mods list."
                 );
 
@@ -777,23 +934,27 @@ sub said {
                 if ($edit == 0) {
                     $self->say(
                         channel => $channel,
+                        who     => $user,
                         body    => 'Could not proceed. Mod already on the list or mod page returned missing.'
                     );
-                } else {
+                } elsif ($edit == 1) {
                     $self->say(
                         channel => $channel,
+                        who     => $user,
                         body    => 'Success!'
                     );
                 }
             } else {
                 $self->say(
                     channel => $channel,
+                    who     => $user,
                     body    => $authorized
                 );
             }
         } else {
             $self->say(
                 channel => $channel,
+                who     => $user,
                 body    => $args
             )
         }
@@ -805,11 +966,13 @@ sub said {
         if ($randwords[1] =~ m/\d/) {
             $self->say(
                 channel => $channel,
+                who     => $user,
                 body    => int rand $randwords[1] + 1
             );
         } else {
             $self->say(
                 channel => $channel,
+                who     => $user,
                 body    => 'No argument provided. Using 100... ' . int rand 101
             );
         }
@@ -824,16 +987,19 @@ sub said {
             if ($gamewords[1] > 100) {
                 $self->say(
                     channel => $channel,
+                    who     => $user,
                     body    => 'Please provide a number lower than 100.'
                 );
             } elsif ($gamewords[1] eq $num) {
                 $self->say(
                     channel => $channel,
+                    who     => $user,
                     body    => "Correct! The answer was $num"
                 );
             } elsif ($gamewords[1] ne $num) {
                 $self->say(
                     channel => $channel,
+                    who     => $user,
                     body    => "Wrong! The answer was $num"
                 );
             }
@@ -845,16 +1011,19 @@ sub said {
                 if ($gamewords[2] > 100) {
                     $self->say(
                         channel => $channel,
+                        who     => $user,
                         body    => 'Please provide a number lower than 100.'
                         );
                 } elsif ($gamewords[2] eq $num) {
                     $self->say(
                         channel => $channel,
+                        who     => $user,
                         body    => "Correct! The answer was $num"
                     );
                 } elsif ($gamewords[2] ne $num) {
                     $self->say(
                         channel => $channel,
+                        who     => $user,
                         body    => "Wrong! The answer was $num"
                     );
                 }
@@ -863,16 +1032,19 @@ sub said {
                 if ($gamewords[2] > 10) {
                     $self->say(
                         channel => $channel,
+                        who     => $user,
                         body    => 'Please provide a number lower than 10.'
                     );
                 } elsif ($gamewords[2] eq $num) {
                     $self->say(
                         channel => $channel,
+                        who     => $user,
                         body    => "Correct! The answer was $num"
                     );
                 } elsif ($gamewords[2] ne $num) {
                     $self->say(
                         channel => $channel,
+                        who     => $user,
                         body    => "Wrong! The answer was $num"
                     );
                 }
@@ -880,6 +1052,7 @@ sub said {
         } else {
             $self->say(
                 channel => $channel,
+                who     => $user,
                 body    => $args
             );
         }
@@ -894,11 +1067,13 @@ sub said {
             my @who = split /\s/, $msg, 2;
             $self->say(
                 channel => $channel,
+                who     => $user,
                 body    => "$mess, $who[1]"
             );
         } elsif ($msg =~ m/^\$motivate$/i) {
             $self->say(
                 channel => $channel,
+                who     => $user,
                 body    => "$mess, $user"
             );
         }
@@ -911,6 +1086,7 @@ sub said {
             if ($lengthmsg > 140) {
                 $self->say(
                     channel => $channel,
+                    who     => $user,
                     body    => 'Sorry, that\'s too long.'
                 );
             } else {
@@ -921,17 +1097,19 @@ sub said {
                 my $twitter = WWW::Twitter->new(
                     username => $secure[2],
                     password => $secure[1]
-                    );
+                );
                 $twitter->login();
                 my $status_id = $twitter->tweet("[IRC] $tweet[1]");
                 $self->say(
                     channel => $channel,
+                    who     => $user,
                     body    => "Tweeted '$tweet[1]' https://twitter.com/LittleHelperBot/status/$status_id"
                 );
             }
         } else {
             $self->say(
                 channel => $channel,
+                who     => $user,
                 body    => $args
             );
         }
@@ -1019,6 +1197,7 @@ sub said {
             }
             $self->say(
                 channel => $channel,
+                who     => $user,
                 body    => $helpfulmessage
             );
         } else {
@@ -1026,6 +1205,7 @@ sub said {
             my $join = join ', ', @sort;
             $self->say(
                 channel => $channel,
+                who     => $user,
                 body    => 'My activation char is $. Listing commands... ' . $join
             );
         }
