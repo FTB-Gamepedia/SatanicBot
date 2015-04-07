@@ -666,7 +666,7 @@ sub said {
         my $www         = WWW::Mechanize->new();
         my $stuff       = $www->get('http://ftb.gamepedia.com/api.php?action=query&meta=siteinfo&siprop=statistics&format=json') or die "Unable to get url.\n";
         my $decode      = $stuff->decoded_content();
-        my $pages       = $decode =~ m{\"pages\":(.*?),};
+        my @pages       = $decode =~ m{\"pages\":(.*?),};
         my @articulos   = $decode =~ m{\"articles\":(.*?),};
         my @edits       = $decode =~ m{\"edits\":(.*?),};
         my @images      = $decode =~ m{\"images\":(.*?),};
