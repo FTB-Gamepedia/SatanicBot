@@ -14,7 +14,7 @@ my $ERROR = $!;
 
 sub login {
     my $www = WWW::Mechanize->new();
-    my $ui = $www->get("http://ftb.gamepedia.com/api.php?action=query&meta=userinfo&format=json");
+    my $ui = $www->get("https://ftb.gamepedia.com/api.php?action=query&meta=userinfo&format=json");
     my $decode = $ui->decoded_content();
     if ($decode !~ m/\"id\"\:0/) {
         return 1;

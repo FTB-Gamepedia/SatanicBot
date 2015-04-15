@@ -9,7 +9,7 @@ use SatanicBot::Bot;
 use SatanicBot::Utils;
 
 my $mw = MediaWiki::Bot->new( {
-    protocol => 'http',
+    protocol => 'https',
     host     => 'ftb.gamepedia.com',
     path     => q{/},
     operator => 'TheSatanicSanta',
