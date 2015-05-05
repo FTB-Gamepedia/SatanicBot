@@ -18,6 +18,7 @@ my $mw = MediaWiki::Bot->new( {
 my $ERROR = $!;
 
 sub login {
+    $ENV {PERL_LWP_SSL_VERIFY_HOSTNAME} = 0; #This is terrible.
     my $www = WWW::Mechanize->new();
     my $ui = $www->get("http://ftb.gamepedia.com/api.php?action=query&meta=userinfo&format=json");
     my $decode = $ui->decoded_content();

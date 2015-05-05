@@ -13,6 +13,7 @@ $mw->{config}->{api_url} = 'http://ftb.gamepedia.com/api.php';
 my $ERROR = $!;
 
 sub login {
+    $ENV {PERL_LWP_SSL_VERIFY_HOSTNAME} = 0; #This is terrible.
     my $www = WWW::Mechanize->new();
     my $ui = $www->get("https://ftb.gamepedia.com/api.php?action=query&meta=userinfo&format=json");
     my $decode = $ui->decoded_content();
@@ -39,12 +40,12 @@ sub edit_minor {
     if (exists $editref->{missing}) {
         return 0;
     } elsif ($content !~ m/\[\[$name\]\]/g) {
-        $content =~ s/\n<!--/ \{\{\*\}\}\n\[\[$name\]\]\n<!--/;
+        $content =~ s/\n<!--/ \{\{\*\}\}\n\{\{L\|$name\}\}\n<!--/;
         my @split = split /\n/, $content;
         my @sort = sort { "\L$a" cmp "\L$b" } @split; # Should be case-insensitive sorting.
         my $join = join "\n", @sort;
 
-        $join =~ s/\]\]\n\[\[/\]\] \{\{\*\}\}\n\[\[/g;
+        $join =~ s/\}\}\n\{\{L/\}\} \{\{\*\}\}\n\{\{/g;
 
         # I need to remove it then add it again because it gets sorted wrong.
         $join =~ s/\<!-- DO NOT EDIT THIS LINE -->//;
@@ -74,12 +75,12 @@ sub edit_mods {
     if (exists $editref->{missing}) {
         return 0;
     } elsif ($content !~ m/\[\[$name\]\]/g) {
-        $content =~ s/\n<!--/ \{\{\*\}\}\n\[\[$name\]\]\n<!--/;
+        $content =~ s/\n<!--/ \{\{\*\}\}\n\{\{L\|$name\}\}\n<!--/;
         my @split = split /\n/, $content;
         my @sort = sort { "\L$a" cmp "\L$b" } @split;
         my $join = join "\n", @sort;
 
-        $join =~ s/\]\]\n\[\[/\]\] \{\{\*\}\}\n\[\[/g;
+        $join =~ s/\}\}\n\{\{L/\}\} \{\{\*\}\}\n\{\{L/g;
 
         #See comment in edit_minor.
         $join =~ s/<!-- DO NOT EDIT THIS LINE -->//;
