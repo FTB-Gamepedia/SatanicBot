@@ -2,8 +2,27 @@ require 'mediawiki_api'
 require_relative 'wikiutils'
 require_relative 'generalutils'
 
+def edit(page_name, nav_type)
+  JSON.parse($other_mw.get_wikitext(page_name))["query"]["pages"].each do |revid, data |
+    $revid = revid
+    break
+  end
+  text = JSON.parse($other_mw.get_wikitext(page_name))["query"]["pages"][$revid]["revisions"][0]["*"]
+  case nav_type
+    when "Races"
+      @text = text.gsub(/\{\{[Rr]aces\}\}/, "{{Navbox Races}}")
+    when "Skills"
+      @text = text.gsub(/\{\{[Ss]kills\}\}/, "{{Navbox Skills}}")
+    when "Cities"
+      @text = text.gsub(/\{\{[Cc]ity nav\}\}/, "{{Navbox Cities}}")
+    when "Houses"
+      @text = text.gsub(/\{\{[Hh]ouses\}\}/, "{{Navbox Houses}}")
+    $mw.edit(title: page_name, text: text)
+  end
+end
+
 $mw = MediawikiApi::Client.new('http://skyrim.gamepedia.com/api.php')
-$mw.log_in(General_Utils::File_Utils.get_secure(0), General_Utils::File_Utils.get_secure(1))
+$mw.log_in(General_Utils::File_Utils.get_secure(0).chomp, General_Utils::File_Utils.get_secure(1).chomp)
 $other_mw = Wiki_Utils::Client.new('http://skyrim.gamepedia.com/api.php')
 
 puts "Which type of navbox would you like to change?\n"
@@ -39,17 +58,4 @@ def get_file(nav_type)
     else
       abort('What the hell?')
   end
-end
-
-def edit(page_name, nav_type)
-  JSON.parse($other_mw.get_wikitext(page_name))["query"]["pages"].each do |revid, data |
-    $revid = revid
-    break
-  end
-  text = JSON.parse($other_mw.get_wikitext(page_name))["query"]["pages"][$revid]["revisions"][0]["*"]
-  text = text.gsub(/\{\{[Rr]aces\}\}/, "{{Navbox Races}}")
-  text = text.gsub(/\{\{[Ss]kills\}\}/, "{{Navbox Skills}}")
-  text = text.gsub(/\{\{[Cc]ity nav\}\}/, "{{Navbox Cities}}")
-  text = text.gsub(/\{\{[Hh]ouses\}\}/, "{{Navbox Houses}}")
-  $mw.edit(title: page_name, text: text)
 end

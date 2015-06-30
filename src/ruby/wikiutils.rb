@@ -1,6 +1,6 @@
 module Wiki_Utils
   class Client
-    def init(api_page, debug = false)
+    def initialize(api_page, debug = false)
       @api_page = api_page
       @debug = debug
     end
@@ -11,7 +11,7 @@ module Wiki_Utils
         prop: 'revisions',
         rvprop: 'content',
         format: 'json',
-        titles: 'page_name'
+        titles: page_name
       }
 
       request = URI(@api_page)
