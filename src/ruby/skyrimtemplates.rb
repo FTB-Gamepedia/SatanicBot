@@ -30,7 +30,7 @@ def determine_file(nav_type)
 end
 
 def edit(page_name, nav_type)
-  JSON.parse($other_mw.get_wikitext(page_name))["query"]["pages"].each do |revid, data |
+  JSON.parse($other_mw.get_wikitext(page_name))["query"]["pages"].each do |revid, data|
     $revid = revid
     break
   end

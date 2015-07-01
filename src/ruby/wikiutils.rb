@@ -1,8 +1,7 @@
 module Wiki_Utils
   class Client
-    def initialize(api_page, debug = false)
+    def initialize(api_page)
       @api_page = api_page
-      @debug = debug
     end
 
     def get_wikitext(page_name)
@@ -20,28 +19,30 @@ module Wiki_Utils
       if response.is_a? Net::HTTPSuccess
         return response.body
       else
-        @debug ? response : nil
+        return false
       end
     end
-    
+
     def get_backlinks(bltitle, *blnamespace)
       if defined?(blnamespace).nil?
         params = {
           action: 'query',
           list: 'backlinks',
           bltitle: bltitle,
-          blnamespace: blnamespace
+          blnamespace: blnamespace,
+          format: 'json',
           bllimit: 5000,
         }
       else
         params = {
           action: 'query',
           list: 'backlinks',
-          bltitle: bltitle
+          bltitle: bltitle,
+          format: 'json',
           bllimit: 5000
         }
       end
-      
+
       request = URI(@api_page)
       request.query = URI.encode_www_form(params)
       response = Net::HTTP.get_response(request)

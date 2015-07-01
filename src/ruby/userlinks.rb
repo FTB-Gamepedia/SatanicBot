@@ -7,22 +7,26 @@ $mw.log_in(General_Utils::File_Utils.get_secure(0).chomp, General_Utils::File_Ut
 $other_mw = Wiki_Utils::Client.new('http://ftb.gamepedia.com/api.php')
 
 def edit(page_name)
-  decoded_json = JSON.decode($other_mw.get_backlinks(page_name))
-  backlinks = decoded_json["query"]["backlinks"] do |title|
-    title["title"]
+  backlinkarray = []
+  JSON.parse($other_mw.get_backlinks(page_name))["query"]["backlinks"].each do |title|
+    backlinkarray.push(title["title"])
   end
-  
-  backlinks.each do |wlh|
-    JSON.parse($other_mw.get_wikitext(wlh))["query"]["pages"].each do |revid, data |
-      $revid = revid
-      break
+  backlinkarray.each do |i|
+    if $other_mw.get_wikitext(i) == false
+      puts i + " could not be edited because it's content is nil. Continuing...\n"
+      next
+    else
+      JSON.parse($other_mw.get_wikitext(i))["query"]["pages"].each do |revid, data|
+        $revid = revid
+      end
+      text = JSON.parse($other_mw.get_wikitext(i))["query"]["pages"][$revid]["revisions"][0]["*"]
+      text = text.gsub(/\{\{[Uu]\|SatanicSanta/, "{{U|TheSatanicSanta")
+      text = text.gsub(/\[\[[Uu]ser\:SatanicSanta/, "[[User:TheSatanicSanta")
+      text = text.gsub(/\[\[[Uu]ser talk\:SatanicSanta/, "[[User talk:TheSatanicSanta")
+      text = text.gsub(/[Ss]pecial\:Contributions\/SatanicSanta/, "Special:Contributions/TheSatanicSanta")
+      $mw.edit(title: i, text: text, bot: 1, summary: "Fixing my master's user links")
+      puts i + " has been edited.\n"
     end
-    text = JSON.parse($other_mw.get_wikitext(wlh))["query"]["pages"][$revid]["revisions"][0]["*"]
-    text = text.gsub(/\{\{U|SatanicSanta/, "{{U|TheSatanicSanta")
-    text = text.gsub(/\[\[[Uu]ser:SatanicSanta/, "[[User:TheSatanicSanta")
-    text = text.gsub(/\[\[[Uu]ser talk:SatanicSanta/, "[[User talk:TheSatanicSanta")
-    $mw.edit(title: wlh, text: text, bot: 1, summary: "Fixing my master's user links")
-    puts wlh + " has been edited.\n"
   end
 end
 
