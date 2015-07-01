@@ -2,9 +2,9 @@ require 'mediawiki_api'
 require_relative 'wikiutils'
 require_relative 'generalutils'
 
-$mw = MediawikiApi::Client.new('http://skyrim.gamepedia.com/api.php')
+$mw = MediawikiApi::Client.new('http://ftb.gamepedia.com/api.php')
 $mw.log_in(General_Utils::File_Utils.get_secure(0).chomp, General_Utils::File_Utils.get_secure(1).chomp)
-$other_mw = Wiki_Utils::Client.new('http://skyrim.gamepedia.com/api.php')
+$other_mw = Wiki_Utils::Client.new('http://ftb.gamepedia.com/api.php')
 
 # This has not yet been tested.
 def edit(page_name)
