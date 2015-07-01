@@ -24,14 +24,23 @@ module Wiki_Utils
       end
     end
     
-    def get_backlinks(bltitle, blnamespace)
-      params = {
-        action: 'query',
-        list: 'backlinks',
-        bltitle: bltitle,
-        blnamespace: blnamespace
-        bllimit: 5000,
-      }
+    def get_backlinks(bltitle, *blnamespace)
+      if defined?(blnamespace).nil?
+        params = {
+          action: 'query',
+          list: 'backlinks',
+          bltitle: bltitle,
+          blnamespace: blnamespace
+          bllimit: 5000,
+        }
+      else
+        params = {
+          action: 'query',
+          list: 'backlinks',
+          bltitle: bltitle
+          bllimit: 5000
+        }
+      end
       
       request = URI(@api_page)
       request.query = URI.encode_www_form(params)
