@@ -9,7 +9,7 @@ $other_mw = Wiki_Utils::Client.new('http://skyrim.gamepedia.com/api.php')
 def get_file_lines(filename, nav_type)
   File.open(filename, 'r') do |file_handle|
     file_handle.each_line do |line|
-      edit(line, nav_type)
+      edit(line.chomp, nav_type)
     end
   end
 end
@@ -37,20 +37,22 @@ def edit(page_name, nav_type)
   text = JSON.parse($other_mw.get_wikitext(page_name))["query"]["pages"][$revid]["revisions"][0]["*"]
   case nav_type
     when "Races"
-      puts $other_mw.get_wikitext(page_name)
       text = text.gsub(/\{\{[Rr]aces\}\}/, "{{Navbox Races}}")
-      $mw.edit(title: page_name, text: text)
-      puts $other_mw.get_wikitext(page_name)
+      $mw.edit(title: page_name, text: text, bot: 1, summary: "Preparing pages for Navbox move.")
     when "Skills"
       text = text.gsub(/\{\{[Ss]kills\}\}/, "{{Navbox Skills}}")
+      $mw.edit(title: page_name, text: text, bot: 1, summary: "Preparing pages for Navbox move.")
     when "Cities"
       text = text.gsub(/\{\{[Cc]ity nav\}\}/, "{{Navbox Cities}}")
+      $mw.edit(title: page_name, text: text, bot: 1, summary: "Preparing pages for Navbox move.")
     when "Houses"
       text = text.gsub(/\{\{[Hh]ouses\}\}/, "{{Navbox Houses}}")
+      $mw.edit(title: page_name, text: text, bot: 1, summary: "Preparing pages for Navbox move.")
   end
+  puts page_name + " has been edited.\n"
 end
 
 puts "Which type of navbox would you like to change?\n"
 nav_type = gets.chomp
-edit('User:TheSatanicSanta/Sandbox/BotTesting', nav_type)
+determine_file(nav_type)
 exit
