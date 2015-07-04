@@ -54,8 +54,8 @@ sub said {
         'game',
         'motivate',
         'tweet',
-        'addminor',
-        'addmod',
+        # 'addminor',
+        # 'addmod',
         'auth',
         'addquote',
         'checkpage',
@@ -142,40 +142,25 @@ sub said {
             if ($msg =~ m/^\$abbrv(?: )/i) {
                 my @abbrvwords = split /\s/, $msg, 3;
                 if ($abbrvwords[1] =~ m/.+/ and $abbrvwords[2] =~ m/.+/) {
-                    if ($abbrvwords[1] =~ m/[\p{IsUpper}\d]/) {
+                    $self->say(
+                        channel => $channel,
+                        who     => $user,
+                        body    => "Abbreviating \'$abbrvwords[2]\' as \'$abbrvwords[1]\'"
+                    );
+
+                    my $edit = system "ruby", "ftbcommands.rb", 'modmodule', $abbrvwords[1], $abbrvwords[2];
+
+                    if ($edit == 0) {
                         $self->say(
                             channel => $channel,
                             who     => $user,
-                            body    => "Abbreviating \'$abbrvwords[2]\' as \'$abbrvwords[1]\'"
+                            body    => 'Could not proceed. Abbreviation and/or name already on the list.'
                         );
-
-                        SatanicBot::MediaWikiAPI->login();
-                        my $edit = SatanicBot::MediaWikiAPI->edit_gmods($abbrvwords[1], $abbrvwords[2]);
-
-                        if ($edit =~ m/\W/) {
-                            $self->say(
-                                channel => $channel,
-                                who     => $user,
-                                body    => $edit
-                            );
-                        } elsif ($edit == 0) {
-                            $self->say(
-                                channel => $channel,
-                                who     => $user,
-                                body    => 'Could not proceed. Abbreviation and/or name already on the list.'
-                            );
-                        } elsif ($edit == 1) {
-                            $self->say(
-                                channel => $channel,
-                                who     => $user,
-                                body    => 'Success!'
-                            );
-                        }
-                    } else {
+                    } elsif ($edit == 1) {
                         $self->say(
                             channel => $channel,
                             who     => $user,
-                            body    => 'Abbreviations can only be capital letters and digits.'
+                            body    => 'Success!'
                         );
                     }
                 } else {
@@ -197,7 +182,7 @@ sub said {
     if ($msg =~ m/^\$checkpage/i) {
         if ($msg =~ m/^\$checkpage(?: )/i) {
             my @pagewords = split /\s/, $msg, 2;
-            my $check = SatanicBot::MediaWikiAPI->check_page($pagewords[1]);
+            my $check = system "ruby", "ftbcommands.rb", 'check', $pagewords[1];
             if ($check == 0) {
                 $self->say(
                     channel => $channel,
@@ -225,37 +210,20 @@ sub said {
         if ($msg =~ m/^\$newmodcat(?: )/i) {
             if (grep { $_ eq $host } @{$bot_stuff->{ops}}) {
                 my @catwords = split /\s/, $msg, 2;
-                my $check = SatanicBot::MediaWikiAPI->check_page($catwords[1]);
-                my $catcheck = SatanicBot::MediaWikiAPI->check_page("Category:$catwords[1]");
-                if ($check == 0) {
+                my $create = system "ruby", "ftbcommands.rb", 'cat', $catwords[1], 'major';
+
+                if ($create == 1) {
                     $self->say(
                         channel => $channel,
                         who     => $user,
-                        body    => "$catwords[1] page does not exist. Not creating category for it."
+                        body    => "$catwords[1] category created."
                     );
-                } elsif ($check == 1) {
-                    if ($catcheck == 0) {
-                        $self->say(
-                            channel => $channel,
-                            who     => $user,
-                            body    => "Creating mod category Category:$catwords[1]"
-                        );
-
-                        SatanicBot::MediaWikiAPI->login();
-                        my $new = SatanicBot::MediaWikiAPI->create_mod_category($catwords[1]);
-
-                        $self->say(
-                            channel => $channel,
-                            who     => $user,
-                            body    => "$catwords[1] category created."
-                        );
-                    } else {
-                        $self->say(
-                            channel => $channel,
-                            who     => $user,
-                            body    => 'Category already exists.'
-                        );
-                    }
+                } else {
+                    $self->say(
+                        channel => $channel,
+                        who     => $user,
+                        body    => "Did not create $catwords[1] category."
+                    );
                 }
             }
         } else {
@@ -271,37 +239,20 @@ sub said {
         if ($msg =~ m/^\$newminorcat(?: )/i) {
             if (grep { $_ eq $host } @{$bot_stuff->{ops}}) {
                 my @catwords = split /\s/, $msg, 2;
-                my $check = SatanicBot::MediaWikiAPI->check_page($catwords[1]);
-                my $catcheck = SatanicBot::MediaWikiAPI->check_page("Category:$catwords[1]");
-                if ($check == 0) {
+                my $create = system "ruby", "ftbcommands.rb", 'cat', $catwords[1], 'minor';
+
+                if ($create == 0) {
                     $self->say(
                         channel => $channel,
                         who     => $user,
-                        body    => "$catwords[1] page does not exist. Not creating category for it."
+                        body    => "$catwords[1] category created."
                     );
-                } elsif ($check == 1) {
-                    if ($catcheck == 0) {
-                        $self->say(
-                            channel => $channel,
-                            who     => $user,
-                            body    => "Creating mod category Category:$catwords[1]"
-                        );
-
-                        SatanicBot::MediaWikiAPI->login();
-                        my $new = SatanicBot::MediaWikiAPI->create_minor_category($catwords[1]);
-
-                        $self->say(
-                            channel => $channel,
-                            who     => $user,
-                            body    => "$catwords[1] category created."
-                        );
-                    } else {
-                        $self->say(
-                            channel => $channel,
-                            who     => $user,
-                            body    => 'Category already exists.'
-                        );
-                    }
+                } else {
+                    $self->say(
+                        channel => $channel,
+                        who     => $user,
+                        body    => "Did not create $catwords[1] category."
+                    );
                 }
             }
         } else {
@@ -353,29 +304,37 @@ sub said {
                 my @uploadwords = split /\s/, $msg, 3;
                 if ($uploadwords[1] =~ m/.+/) {
                     if ($uploadwords[2] =~ m/.+/) {
+                        my $upload = system "ruby", "ftbcommands.rb", 'upload', $uploadwords[1], $uploadwords[2];
 
-                        SatanicBot::MediaWikiBot->login();
-                        my $upload = SatanicBot::MediaWikiBot->upload($uploadwords[1], $uploadwords[2]);
-
-                        if ($upload =~ m/\W/) {
-                            $self->say(
-                                channel => $channel,
-                                who     => $user,
-                                body    => $upload
-                            );
-                        } elsif ($upload == 1) {
+                        if ($upload == 1) {
                             $self->say(
                                 channel => $channel,
                                 who     => $user,
                                 body    => "Uploaded \'$uploadwords[2]\' to the Wiki."
                             );
+                        } else {
+                          $self->say(
+                              channel => $channel,
+                              who     => $user,
+                              body    => "Could not upload \'$uploadwords[2]\' to the Wiki."
+                          );
                         }
                     } else {
-                        $self->say(
-                            channel => $channel,
-                            who     => $user,
-                            body    => $args
-                        );
+                        my $upload = system "ruby", "ftbcommands.rb", 'upload', $uploadwords[1];
+
+                        if ($upload == 1) {
+                            $self->say(
+                                channel => $channel,
+                                who     => $user,
+                                body    => "Uploaded \'$uploadwords[1]\' to the Wiki."
+                            );
+                        } else {
+                          $self->say(
+                              channel => $channel,
+                              who     => $user,
+                              body    => "Could not upload \'$uploadwords[1]\' to the Wiki."
+                          );
+                        }
                     }
                 } else {
                     $self->say(
@@ -405,40 +364,19 @@ sub said {
                         body    => "Adding $templatewords[1] to the Navbox list."
                     );
 
-                    SatanicBot::MediaWikiAPI->login();
-                    my $template = "Template:Navbox $templatewords[1]";
-                    my $pagecheck = SatanicBot::MediaWikiAPI->check_page($templatewords[1]);
-
-                    if ($pagecheck == 0) {
+                    my $add = system "ruby", "ftbcommands.rb", 'nav', $templatewords[1], $templatewords[2];
+                    if ($add == 0) {
                         $self->say(
                             channel => $channel,
                             who     => $user,
-                            body    => 'Mod page returned missing. Could not proceed.'
+                            body    => 'That is already on the list.'
                         );
                     } else {
-                        my $templatecheck = SatanicBot::MediaWikiAPI->check_page($template);
-                        if ($templatecheck == 0) {
-                            $self->say(
-                                channel => $channel,
-                                who     => $user,
-                                body    => 'Mod page returned existing, but template returned missing. Could not proceed.'
-                            );
-                        } else {
-                            my $func = SatanicBot::MediaWikiAPI->add_template($templatewords[1]);
-                            if ($func == 0) {
-                                $self->say(
-                                    channel => $channel,
-                                    who     => $user,
-                                    body    => 'That is already on the list.'
-                                );
-                            } else {
-                                $self->say(
-                                    channel => $channel,
-                                    who     => $user,
-                                    body    => 'Success!'
-                                );
-                            }
-                        }
+                        $self->say(
+                            channel => $channel,
+                            who     => $user,
+                            body    => 'Success!'
+                        );
                     }
                 }
             } else {
@@ -686,15 +624,16 @@ sub said {
     if ($msg =~ m/^\$contribs(?: )/i) {
         my @contribwords = split /\s/, $msg, 2;
         if ($contribwords[1] =~ m/.+/) {
-            my $contribs = SatanicBot::Utils->get_contribs($contribwords[1]);
-            my $register = SatanicBot::Utils->get_registration_date($contribwords[1]);
+            my $contribs = system "ruby", "ftbcommands.rb", 'contribs', $contribwords[1]
+            my $register = system "ruby", "ftbcommands.rb", 'registrationdate', $contribwords[1]
 
-            if ($contribs eq '0') {
+            if ($contribs eq 'nouser') {
                 $self->say(
                     channel => $channel,
                     who     => $user,
                     body    => 'Something went wrong. You may have entered an invalid username (such as an IP) or a nonexistant username.'
                 );
+            }
             } else {
                 if ($contribs eq '1') {
                     $self->say(
@@ -738,10 +677,10 @@ sub said {
     }
 
     if ($msg =~ m/^\$contribs$/i) {
-        my $contribs = SatanicBot::Utils->get_contribs($user);
-        my $register = SatanicBot::Utils->get_registration_date($user);
+        my $contribs = system "ruby", "ftbcommands.rb", 'contribs', $user
+        my $register = system "ruby", "ftbcommands.rb", 'registrationdate', $user
 
-        if ($contribs ne '0') {
+        if ($contribs ne 'nouser') {
             if ($contribs eq '1') {
                 $self->say(
                     channel => $channel,
@@ -755,7 +694,7 @@ sub said {
                     body    => "$user, you have made $contribs contributions to the wiki and registered on $register."
                 );
             }
-        } elsif ($contribs == 0) {
+        } elsif ($contribs eq 'nouser') {
             $self->say(
                 channel => $channel,
                 who     => $user,
@@ -810,6 +749,7 @@ sub said {
 
     #Wiki statistics.
     #Consider using a real JSON parser rather than regular expression.
+    #Refactor into Ruby code.
     if ($msg =~ m/^\$stats/i) {
         my $www         = WWW::Mechanize->new();
         my $stuff       = $www->get('http://ftb.gamepedia.com/api.php?action=query&meta=siteinfo&siprop=statistics&format=json') or die "Unable to get url.\n";
@@ -870,6 +810,7 @@ sub said {
         }
     }
 
+=pod
     if ($msg =~ m/^\$addminor/i) {
         if ($msg =~ m/^\$addminor(?: )/i) {
             if (grep { $_ eq $host } @{$bot_stuff->{ops}}) {
@@ -959,7 +900,7 @@ sub said {
             )
         }
     }
-
+=cut
 
     if ($msg =~ m/^\$randnum/i) {
         my @randwords = split /\s/, $msg, 2;
@@ -1173,12 +1114,12 @@ sub said {
                 case m/auth$/i {
                     $helpfulmessage = 'Logs the user in, allowing for op-only commands. 1 arg: $auth <password>';
                 }
-                case m/addminor$/i {
-                    $helpfulmessage = 'Adds a mod to the list of minor mods on the main page. 1 arg: $addminor <mod name>';
-                }
-                case m/addmod$/i {
-                    $helpfulmessage = 'Adds a mod to the list of mods on the main page. 1 arg: $addmod <mod name>';
-                }
+                #case m/addminor$/i {
+                #    $helpfulmessage = 'Adds a mod to the list of minor mods on the main page. 1 arg: $addminor <mod name>';
+                #}
+                # case m/addmod$/i {
+                    # $helpfulmessage = 'Adds a mod to the list of mods on the main page. 1 arg: $addmod <mod name>';
+                # }
                 case m/addquote$/i {
                     $helpfulmessage = 'Adds the first argument to the list of quotes used by $randquote.';
                 }

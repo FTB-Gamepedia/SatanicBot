@@ -52,5 +52,24 @@ module Wiki_Utils
         @debug ? response : nil
       end
     end
+
+    def get_user_info(username, usprop)
+      params = {
+        action: 'query',
+        list: 'users',
+        ususers: username,
+        usprop: usprop,
+        format: 'json'
+      }
+
+      request = URI(@api_page)
+      request.query = URI.encode_www_form(params)
+      response = Net::HTTP.get_response(request)
+      if response.is_a? Net::HTTPSuccess
+        return response.body
+      else
+        return false
+      end
+    end
   end
 end
