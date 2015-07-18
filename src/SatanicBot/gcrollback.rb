@@ -25,6 +25,9 @@ def do_stuff(page, username, comment)
     }
     if ($mw.edit(params) == false)
       puts "#{page} was not rolled back.\n"
+      open('../info/gcrollback_failures.txt', 'a') { |f|
+        f.puts "#{page}\n"
+      }
       return
     else
       puts "#{page} was rolled back.\n"
@@ -32,6 +35,9 @@ def do_stuff(page, username, comment)
     end
   else
     puts "#{page} was not able to be rolled back. Wrong username or summary for latest revision.\n"
+    open('../info/gcrollback_failures.txt', 'a') { |f|
+      f.puts "#{page}\n"
+    }
     return
   end
 end
