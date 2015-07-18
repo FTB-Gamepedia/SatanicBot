@@ -1,3 +1,5 @@
+require_relative 'generalutils'
+
 module Wiki_Utils
   class Client
     def initialize(api_page)
@@ -59,6 +61,25 @@ module Wiki_Utils
         list: 'users',
         ususers: username,
         usprop: usprop,
+        format: 'json'
+      }
+
+      request = URI(@api_page)
+      request.query = URI.encode_www_form(params)
+      response = Net::HTTP.get_response(request)
+      if response.is_a? Net::HTTPSuccess
+        return response.body
+      else
+        return false
+      end
+    end
+
+    def get_rev_data(page)
+      params = {
+        action: 'query',
+        prop: 'revisions',
+        titles: page,
+        rvprop: 'user|comment|ids',
         format: 'json'
       }
 
