@@ -6,6 +6,17 @@ module Wiki_Utils
       @api_page = api_page
     end
 
+    def make_request_get_response(params)
+      request = URI(@api_page)
+      request.query = URI.encode_www_form(params)
+      response = Net::HTTP.get_response(request)
+      if response.is_a? Net::HTTPSuccess
+        return response
+      else
+        return false
+      end
+    end
+
     def get_wikitext(page_name)
       params = {
         action: 'query',
@@ -15,11 +26,12 @@ module Wiki_Utils
         titles: page_name
       }
 
-      request = URI(@api_page)
-      request.query = URI.encode_www_form(params)
-      response = Net::HTTP.get_response(request)
-      if response.is_a? Net::HTTPSuccess
-        return response.body
+      response = make_request_get_response(params)
+      if response != false
+        JSON.parse(response.body)["query"]["pages"].each do |revid, data|
+          $revid = revid
+        end
+        return JSON.parse(response.body)["query"]["pages"][$revid]["revisions"][0]["*"]
       else
         return false
       end
@@ -45,13 +57,11 @@ module Wiki_Utils
         }
       end
 
-      request = URI(@api_page)
-      request.query = URI.encode_www_form(params)
-      response = Net::HTTP.get_response(request)
-      if response.is_a? Net::HTTPSuccess
+      response = make_request_get_response(params)
+      if response != false
         return response.body
       else
-        @debug ? response : nil
+        return false
       end
     end
 
@@ -64,10 +74,8 @@ module Wiki_Utils
         format: 'json'
       }
 
-      request = URI(@api_page)
-      request.query = URI.encode_www_form(params)
-      response = Net::HTTP.get_response(request)
-      if response.is_a? Net::HTTPSuccess
+      response = make_request_get_response(params)
+      if response != false
         return response.body
       else
         return false
@@ -83,10 +91,25 @@ module Wiki_Utils
         format: 'json'
       }
 
-      request = URI(@api_page)
-      request.query = URI.encode_www_form(params)
-      response = Net::HTTP.get_response(request)
-      if response.is_a? Net::HTTPSuccess
+      response = make_request_get_response(params)
+      if response != false
+        return response.body
+      else
+        return false
+      end
+    end
+
+    def get_pages_in_category(category)
+      params = {
+        action: 'query',
+        list: 'categorymembers',
+        cmtitle: category,
+        cmprop: 'title',
+        format: 'json'
+      }
+
+      response = make_request_get_response(params)
+      if response != false
         return response.body
       else
         return false

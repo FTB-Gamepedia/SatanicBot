@@ -8,11 +8,7 @@ $other_mw = Wiki_Utils::Client.new('http://ftb.gamepedia.com/api.php')
 
 def edit_modlist(mod_name, page)
   if $other_mw.get_wikitext(page) == true
-    JSON.parse($other_mw.get_wikitext(page))["query"]["pages"].each do |revid, data|
-      $revid = revid
-      break
-    end
-    text = JSON.parse($other_mw.get_wikitext(page))["query"]["pages"][$revid]["revisions"][0]["*"]
+    text = $other_mw.get_wikitext(page)
     if /{{L|#{mod_name}}}/.match(text)
       exit 0
     else
@@ -42,11 +38,7 @@ end
 
 def edit_modmodule(abbrv, mod_name)
   page = "Module:Mods/list"
-  JSON.parse($other_mw.get_wikitext(page))["query"]["pages"].each do |revid, data|
-    $revid = revid
-    break
-  end
-  text = JSON.parse($other_mw.get_wikitext(page))["query"]["pages"][$revid]["revisions"][0]["*"]
+  text = $other_mw.get_wikitext(page)
   if /\s#{abbrv} = /.match(text) || /\{\'#{mod_name}\'/.match(text)
     exit 0
   else
@@ -58,11 +50,7 @@ end
 
 def add_navbox(navbox, content)
   page = "Template:Navbox List"
-  JSON.parse($other_mw.get_wikitext(page))["query"]["pages"].each do |revid, data|
-    $revid = revid
-    break
-  end
-  text = JSON.parse($other_mw.get_wikitext(page))["query"]["pages"][$revid]["revisions"][0]["*"]
+  text = $other_mw.get_wikitext(page)
   if /\{\{Tl\|Navbox #{navbox}\}\}/.match(text) || /\{\{L\|#{content}\}\}/.match(text)
     exit 0
   else

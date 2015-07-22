@@ -16,10 +16,7 @@ def edit(page_name)
       puts i + " could not be edited because it's content is nil. Continuing...\n"
       next
     else
-      JSON.parse($other_mw.get_wikitext(i))["query"]["pages"].each do |revid, data|
-        $revid = revid
-      end
-      text = JSON.parse($other_mw.get_wikitext(i))["query"]["pages"][$revid]["revisions"][0]["*"]
+      text = $other_mw.get_wikitext(i)
       text = text.gsub(/\{\{[Uu]\|SatanicSanta/, "{{U|TheSatanicSanta")
       text = text.gsub(/\[\[[Uu]ser\:SatanicSanta/, "[[User:TheSatanicSanta")
       text = text.gsub(/\[\[[Uu]ser talk\:SatanicSanta/, "[[User talk:TheSatanicSanta")
