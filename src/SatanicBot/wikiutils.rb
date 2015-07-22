@@ -105,6 +105,7 @@ module Wiki_Utils
         list: 'categorymembers',
         cmtitle: category,
         cmprop: 'title',
+        cmlimit: 5000,
         format: 'json'
       }
 
