@@ -55,7 +55,7 @@ def add_navbox(navbox, content)
   if /\{\{Tl\|Navbox #{navbox}\}\}/ =~ text || /\{\{L\|#{content}\}\}/ =~ text
     exit 0
   else
-    text = text.gsub(/\|\}/, "|-\n| {{Tl|Navbox #{navbox}}} || {{L|#{content}}} ||\n|}"
+    text = text.gsub(/\|\}/, "|-\n| {{Tl|Navbox #{navbox}}} || {{L|#{content}}} ||\n|}")
     $mw.edit(title: page, text: text, bot: 1, summary: "Added the #{content} navbox (Navbox #{navbox})")
     exit 1
   end
