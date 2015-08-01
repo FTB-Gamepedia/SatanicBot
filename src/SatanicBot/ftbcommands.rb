@@ -1,4 +1,5 @@
 require 'mediawiki_api'
+require 'benchmark'
 require_relative 'wikiutils'
 require_relative 'generalutils'
 
@@ -9,7 +10,7 @@ $other_mw = Wiki_Utils::Client.new('http://ftb.gamepedia.com/api.php')
 def edit_modlist(mod_name, page)
   if $other_mw.get_wikitext(page) == true
     text = $other_mw.get_wikitext(page)
-    if /{{L|#{mod_name}}}/.match(text)
+    if /{{L|#{mod_name}}}/ =~ text
       exit 0
     else
       firstline = "<noinclude><translate><!--T:1-->"
@@ -39,7 +40,7 @@ end
 def edit_modmodule(abbrv, mod_name)
   page = "Module:Mods/list"
   text = $other_mw.get_wikitext(page)
-  if /\s#{abbrv} = /.match(text) || /\{\'#{mod_name}\'/.match(text)
+  if /\s#{abbrv} = / =~ text || /\{\'#{mod_name}\'/ =~ text
     exit 0
   else
     text = text.gsub(/local modsByAbbrv = \{/, "local modsByAbbrv = {\n    #{abbrv} = {#{mod_name}, [=[<translate>#{mod_name}</translate>]=]},")
@@ -51,7 +52,7 @@ end
 def add_navbox(navbox, content)
   page = "Template:Navbox List"
   text = $other_mw.get_wikitext(page)
-  if /\{\{Tl\|Navbox #{navbox}\}\}/.match(text) || /\{\{L\|#{content}\}\}/.match(text)
+  if /\{\{Tl\|Navbox #{navbox}\}\}/ =~ text || /\{\{L\|#{content}\}\}/ =~ text
     exit 0
   else
     text = text.gsub(/\|\}/, "|-\n| {{Tl|Navbox #{navbox}}} || {{L|#{content}}} ||\n|}"
@@ -77,7 +78,7 @@ def create_mod_cat(name, type)
 end
 
 def does_page_exit(page)
-  if $other_mw.get_wikitext(page) == true then exit 1 else exit 0
+  if $other_mw.get_wikitext(page) == true then exit 1 else exit 0 end
 end
 
 def upload(url, *filename)
@@ -118,9 +119,20 @@ def get_registration_date(username)
   end
 end
 
-def update_mod_version(title)
+def update_mod_version(title, version)
   text = $other_mw.get_wikitext(title)
-  # TODO
+  if /version=/ =~ text || /version =/ =~ text
+    if /version=#{version}/ !~ text and /version =#{version}/ !~ text
+      text = text.gsub(/version=.*/, "version=#{version}")
+      text = text.gsub(/version =.*/, "version=#{version}")
+      $mw.edit(title: title, text: text, bot: 1, summary: 'Update vesion.')
+      exit 1
+    else
+      exit 0
+    end
+  else
+    exit 0
+  end
 end
 
 case ARGV[0]
@@ -144,5 +156,7 @@ when 'contribs'
   get_contribs(ARGV[1])
 when 'registrationdate'
   get_registration_date(ARGV[1])
+when 'updateversion'
+  update_mod_version(ARGV[1], ARGV[2])
 end
 exit

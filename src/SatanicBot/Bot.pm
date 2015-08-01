@@ -18,6 +18,7 @@ use Date::Parse;
 use File::RandomLine;
 use Geo::IP;
 use Switch;
+use Cwd;
 
 my %bot_stuff_hash = (
     ops       => [],
@@ -59,12 +60,12 @@ sub said {
         'checkpage',
         'addnav',
         'newmodcat',
-        'newminorcat'
+        'newminorcat',
+        'updatever'
     );
     my @content = SatanicBot::Utils->get_secure_contents();
     $bot_stuff->{auth_pass} = $content[3];
-
-
+    my $ftbcommands = cwd() . "/SatanicBot/ftbcommands.rb";
 
     if ($msg =~ m/^\$pass/i) {
         if ($msg !~ m/^\$pass$/i) {
@@ -134,6 +135,30 @@ sub said {
         }
     }
 
+    if ($msg =~ m/^\$updatevers/i) {
+        if (grep { $_ eq $host } @{$bot_stuff->{ops}}) {
+            if ($msg =~ m/^\$updatevers(?: )/i) {
+                my @versionwords = split /\s/, $msg, 2;
+                my @otherwords = split ";", $versionwords[1];
+                my $edit = system "ruby", "ftbcommands.rb", "updateversion", $versionwords[1], $otherwords[1];
+
+                if ($edit == 0) {
+                    $self->say(
+                        channel => $channel,
+                        who     => $user,
+                        body    => 'Could not proceed. Page either does not have a version parameter or the version you provided is already the current version on the page.'
+                    );
+                } else {
+                    $self->say(
+                        channel => $channel,
+                        who     => $user,
+                        body    => 'Success!'
+                    );
+                }
+            }
+        }
+    }
+
     #Adds the <first arg abbreviation> to the G:Mods and doc as <second arg mod name>
     if ($msg =~  m/^\$abbrv/i) {
         if (grep { $_ eq $host } @{$bot_stuff->{ops}}) {
@@ -180,7 +205,7 @@ sub said {
     if ($msg =~ m/^\$checkpage/i) {
         if ($msg =~ m/^\$checkpage(?: )/i) {
             my @pagewords = split /\s/, $msg, 2;
-            my $check = system "ruby", "ftbcommands.rb", 'check', $pagewords[1];
+            my $check = system "ruby", $ftbcommands, 'check', $pagewords[1];
             if ($check == 0) {
                 $self->say(
                     channel => $channel,
