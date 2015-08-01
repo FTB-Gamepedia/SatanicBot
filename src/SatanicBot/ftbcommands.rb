@@ -118,6 +118,11 @@ def get_registration_date(username)
   end
 end
 
+def update_mod_version(title)
+  text = $other_mw.get_wikitext(title)
+  # TODO
+end
+
 case ARGV[0]
 when 'modlist'
   edit_modlist(ARGV[1], ARGV[2])
