@@ -28,7 +28,7 @@ def edit_modlist(mod_name, page)
       end
       newpage = pagelines.join("\n")
       newpage.prepend("#{firstline}\n#{secondline}\n")
-      newpage + "\n#{thirdline}"
+      newpage += "\n#{thirdline}"
       $mw.edit(title: page, text: newpage, bot: 1, summary: "Adding #{mod_name}")
       exit 1
     end
