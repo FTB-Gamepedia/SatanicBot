@@ -9,8 +9,6 @@ use base qw(Bot::BasicBot);
 use Data::Random;
 use Data::Dumper;
 use Weather::Underground;
-use SatanicBot::MediaWikiAPI;
-use SatanicBot::MediaWikiBot;
 use SatanicBot::Utils;
 use LWP::Simple;
 use WWW::Mechanize;
@@ -624,8 +622,8 @@ sub said {
     if ($msg =~ m/^\$contribs(?: )/i) {
         my @contribwords = split /\s/, $msg, 2;
         if ($contribwords[1] =~ m/.+/) {
-            my $contribs = system "ruby", "ftbcommands.rb", 'contribs', $contribwords[1]
-            my $register = system "ruby", "ftbcommands.rb", 'registrationdate', $contribwords[1]
+            my $contribs = system "ruby", "ftbcommands.rb", 'contribs', $contribwords[1];
+            my $register = system "ruby", "ftbcommands.rb", 'registrationdate', $contribwords[1];
 
             if ($contribs eq 'nouser') {
                 $self->say(
@@ -633,7 +631,6 @@ sub said {
                     who     => $user,
                     body    => 'Something went wrong. You may have entered an invalid username (such as an IP) or a nonexistant username.'
                 );
-            }
             } else {
                 if ($contribs eq '1') {
                     $self->say(
@@ -677,8 +674,8 @@ sub said {
     }
 
     if ($msg =~ m/^\$contribs$/i) {
-        my $contribs = system "ruby", "ftbcommands.rb", 'contribs', $user
-        my $register = system "ruby", "ftbcommands.rb", 'registrationdate', $user
+        my $contribs = system "ruby", "ftbcommands.rb", 'contribs', $user;
+        my $register = system "ruby", "ftbcommands.rb", 'registrationdate', $user;
 
         if ($contribs ne 'nouser') {
             if ($contribs eq '1') {
