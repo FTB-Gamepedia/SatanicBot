@@ -140,7 +140,7 @@ sub said {
             if ($msg =~ m/^\$updatevers(?: )/i) {
                 my @versionwords = split /\s/, $msg, 2;
                 my @otherwords = split ";", $versionwords[1];
-                my $edit = system "ruby", "ftbcommands.rb", "updateversion", $versionwords[1], $otherwords[1];
+                my $edit = system "ruby", "caller.rb", "ftb", "updateversion", $versionwords[1], $otherwords[1];
 
                 if ($edit == 0) {
                     $self->say(
@@ -171,7 +171,7 @@ sub said {
                         body    => "Abbreviating \'$abbrvwords[2]\' as \'$abbrvwords[1]\'"
                     );
 
-                    my $edit = system "ruby", "ftbcommands.rb", 'modmodule', $abbrvwords[1], $abbrvwords[2];
+                    my $edit = system "ruby", "caller.rb", "ftb", 'modmodule', $abbrvwords[1], $abbrvwords[2];
 
                     if ($edit == 0) {
                         $self->say(
@@ -205,14 +205,14 @@ sub said {
     if ($msg =~ m/^\$checkpage/i) {
         if ($msg =~ m/^\$checkpage(?: )/i) {
             my @pagewords = split /\s/, $msg, 2;
-            my $check = system "ruby", $ftbcommands, 'check', $pagewords[1];
+            my $check = system "ruby $ftbcommands ftb check $pagewords[1]";
             if ($check == 0) {
                 $self->say(
                     channel => $channel,
                     who     => $user,
                     body    => "$pagewords[1] does not exist."
                 );
-            } elsif ($check == 1) {
+            } else {
                 my $pageurl = $pagewords[1] =~ s/\s/_/gr;
                 $self->say(
                     channel => $channel,
@@ -233,7 +233,7 @@ sub said {
         if ($msg =~ m/^\$newmodcat(?: )/i) {
             if (grep { $_ eq $host } @{$bot_stuff->{ops}}) {
                 my @catwords = split /\s/, $msg, 2;
-                my $create = system "ruby", "ftbcommands.rb", 'cat', $catwords[1], 'major';
+                my $create = system "ruby", "caller.rb", "ftb", 'cat', $catwords[1], 'major';
 
                 if ($create == 1) {
                     $self->say(
@@ -262,7 +262,7 @@ sub said {
         if ($msg =~ m/^\$newminorcat(?: )/i) {
             if (grep { $_ eq $host } @{$bot_stuff->{ops}}) {
                 my @catwords = split /\s/, $msg, 2;
-                my $create = system "ruby", "ftbcommands.rb", 'cat', $catwords[1], 'minor';
+                my $create = system "ruby", "caller.rb", "ftb", 'cat', $catwords[1], 'minor';
 
                 if ($create == 0) {
                     $self->say(
@@ -327,7 +327,7 @@ sub said {
                 my @uploadwords = split /\s/, $msg, 3;
                 if ($uploadwords[1] =~ m/.+/) {
                     if ($uploadwords[2] =~ m/.+/) {
-                        my $upload = system "ruby", "ftbcommands.rb", 'upload', $uploadwords[1], $uploadwords[2];
+                        my $upload = system "ruby", "caller.rb", "ftb", 'upload', $uploadwords[1], $uploadwords[2];
 
                         if ($upload == 1) {
                             $self->say(
@@ -343,7 +343,7 @@ sub said {
                           );
                         }
                     } else {
-                        my $upload = system "ruby", "ftbcommands.rb", 'upload', $uploadwords[1];
+                        my $upload = system "ruby", "caller.rb", "ftb", 'upload', $uploadwords[1];
 
                         if ($upload == 1) {
                             $self->say(
@@ -387,7 +387,7 @@ sub said {
                         body    => "Adding $templatewords[1] to the Navbox list."
                     );
 
-                    my $add = system "ruby", "ftbcommands.rb", 'nav', $templatewords[1], $templatewords[2];
+                    my $add = system "ruby", "caller.rb", "ftb", 'nav', $templatewords[1], $templatewords[2];
                     if ($add == 0) {
                         $self->say(
                             channel => $channel,
@@ -647,8 +647,8 @@ sub said {
     if ($msg =~ m/^\$contribs(?: )/i) {
         my @contribwords = split /\s/, $msg, 2;
         if ($contribwords[1] =~ m/.+/) {
-            my $contribs = system "ruby", "ftbcommands.rb", 'contribs', $contribwords[1];
-            my $register = system "ruby", "ftbcommands.rb", 'registrationdate', $contribwords[1];
+            my $contribs = system "ruby", "caller.rb", "ftb", 'contribs', $contribwords[1];
+            my $register = system "ruby", "caller.rb", "ftb", 'registrationdate', $contribwords[1];
 
             if ($contribs eq 'nouser') {
                 $self->say(
@@ -699,8 +699,8 @@ sub said {
     }
 
     if ($msg =~ m/^\$contribs$/i) {
-        my $contribs = system "ruby", "ftbcommands.rb", 'contribs', $user;
-        my $register = system "ruby", "ftbcommands.rb", 'registrationdate', $user;
+        my $contribs = system "ruby", "caller.rb", "ftb", 'contribs', $user;
+        my $register = system "ruby", "caller.rb", "ftb", 'registrationdate', $user;
 
         if ($contribs ne 'nouser') {
             if ($contribs eq '1') {
