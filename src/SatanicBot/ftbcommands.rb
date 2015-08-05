@@ -84,7 +84,11 @@ module Wiki
     end
 
     def does_page_exist(page)
-      if $other_mw.get_wikitext(page) == true then return 1 else return 0 end
+      if $other_mw.get_wikitext(page) == false
+        return 1
+      else
+        return 0
+      end
     end
 
     def upload(url, *filename)

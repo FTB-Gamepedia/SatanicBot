@@ -1,5 +1,3 @@
-require_relative 'generalutils'
-
 module Wiki_Utils
   class Client
     def initialize(api_page)
@@ -27,11 +25,15 @@ module Wiki_Utils
       }
 
       response = make_request_get_response(params)
-      if response != false
+      if response != false or response == nil
         JSON.parse(response.body)["query"]["pages"].each do |revid, data|
           $revid = revid
         end
-        return JSON.parse(response.body)["query"]["pages"][$revid]["revisions"][0]["*"]
+        if JSON.parse(response.body)["query"]["pages"][$revid]["revisions"][0]["*"] == nil
+          return false
+        else
+          return JSON.parse(response.body)["query"]["pages"][$revid]["revision"][0]["*"]
+        end
       else
         return false
       end

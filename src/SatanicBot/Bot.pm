@@ -65,7 +65,7 @@ sub said {
     );
     my @content = SatanicBot::Utils->get_secure_contents();
     $bot_stuff->{auth_pass} = $content[3];
-    my $ftbcommands = cwd() . "/SatanicBot/ftbcommands.rb";
+    my $ftbcommands = cwd() . "/SatanicBot/caller.rb";
 
     if ($msg =~ m/^\$pass/i) {
         if ($msg !~ m/^\$pass$/i) {
@@ -205,8 +205,8 @@ sub said {
     if ($msg =~ m/^\$checkpage/i) {
         if ($msg =~ m/^\$checkpage(?: )/i) {
             my @pagewords = split /\s/, $msg, 2;
-            my $check = system "ruby $ftbcommands ftb check $pagewords[1]";
-            if ($check == 0) {
+            system "ruby $ftbcommands ftb check $pagewords[1]";
+            if ($? == 1) {
                 $self->say(
                     channel => $channel,
                     who     => $user,
