@@ -1,6 +1,6 @@
 require 'mediawiki_api'
-require_relative 'wikiutils'
-require_relative 'generalutils'
+require_relative '../wikiutils'
+require_relative '../generalutils'
 
 $mw = MediawikiApi::Client.new('http://ftb.gamepedia.com/api.php')
 $mw.log_in(General_Utils::File_Utils.get_secure(0).chomp, General_Utils::File_Utils.get_secure(1).chomp)

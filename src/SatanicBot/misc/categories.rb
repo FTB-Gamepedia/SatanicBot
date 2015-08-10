@@ -1,10 +1,6 @@
 require 'mediawiki_api'
-require_relative 'wikiutils'
-require_relative 'generalutils'
-
-$mw = MediawikiApi::Client.new('http://ftb.gamepedia.com/api.php')
-$mw.log_in(General_Utils::File_Utils.get_secure(0).chomp, General_Utils::File_Utils.get_secure(1).chomp)
-$other_mw = Wiki_Utils::Client.new('http://ftb.gamepedia.com/api.php')
+require_relative '../wikiutils'
+require_relative '../generalutils'
 
 def change_pages(category, new_category_name)
   pagearray = []
@@ -37,10 +33,32 @@ def change_backlinks(category, new_category_name)
   end
 end
 
-change_pages("Category:Passive Animals", "Category:Passive Creatures")
-change_pages("Category:Angry Monsters", "Category:Hostile Creatures")
-change_pages("Category:Neutral Animals", "Category:Neutral Creatures")
-change_backlinks("Passive Animals", "Passive Creatures")
-change_backlinks("Angry Monsters", "Hostile Creatures")
-change_backlinks("Neutral Animals", "Neutral Creatures")
-exit
+puts "Which Wiki would you like to edit?\n"
+wiki = gets.chomp
+puts "How many categories would you like to change this session?\n"
+num = gets.chomp.to_i
+initial = 0
+
+puts "Signing into #{wiki}..."
+$mw = MediawikiApi::Client.new("http://#{wiki}.gamepedia.com/api.php")
+$mw.log_in(General_Utils::File_Utils.get_secure(0).chomp, General_Utils::File_Utils.get_secure(1).chomp)
+$other_mw = Wiki_Utils::Client.new("http://#{wiki}.gamepedia.com/api.php")
+puts "Successfully signed into #{wiki}!"
+
+if num.is_a? Numeric
+  while initial < num
+    puts "Which category would you like to change?\n"
+    cat = gets.chomp
+    puts "What would you like to replace the category with?\n"
+    new_cat = gets.chomp
+
+    change_pages("Category:#{cat}", "Category:#{new_cat}")
+    change_backlinks(cat, new_cat)
+    initial += 1
+  end
+  puts "Successfully completed changing categories provided by user. Exiting with exit code 0."
+else
+  puts "SEVERE: NUMBER OF CATEGORIES PROVIDED IS NOT A VALID NUMBER. EXITING WITH EXIT CODE 1"
+  exit 1
+end
+exit 0
