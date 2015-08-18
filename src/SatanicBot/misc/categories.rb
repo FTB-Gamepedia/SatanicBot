@@ -8,15 +8,21 @@ def change_pages(category, new_category_name)
     #pagearray.push(i["title"])
     title = i["title"]
     text = $other_mw.get_wikitext(title)
-    text = text.gsub(/#{category}/, new_category_name)
-    $mw.edit(title: title, text: text, bot: 1, summary: "Changing #{category} to #{new_category_name}")
-    puts "#{title} has been edited.\n"
+    if text != false
+      text = text.gsub(/#{category}/, new_category_name)
+      $mw.edit(title: title, text: text, bot: 1, summary: "Changing #{category} to #{new_category_name}")
+      puts "#{title} has been edited.\n"
+    else
+      puts "#{title} could not be edited. Content found as nil. Continuing without editing...\n"
+      next
+    end
   end
 end
 
 def change_backlinks(category, new_category_name)
   backlinkarray = []
   JSON.parse($other_mw.get_backlinks("Category:#{category}"))["query"]["backlinks"].each do |title|
+    next if title != "Feed The Beast Wiki:Staff's Noticeboard"
     backlinkarray.push(title["title"])
   end
   backlinkarray.each do |i|
@@ -26,7 +32,7 @@ def change_backlinks(category, new_category_name)
     else
       text = $other_mw.get_wikitext(i)
       text = text.gsub(/\{\{C\|#{category}/, "\{\{C\|#{new_category_name}")
-      text = text.gsub(/#{category}/, "#{new_category_name}")
+      text = text.gsub(/\[\[\:#{category}/, "\[\[\:#{new_category_name}")
       $mw.edit(title: i, text: text, bot: 1, summary: "Changing #{category} to #{new_category_name}")
       puts "#{i} has been edited.\n"
     end

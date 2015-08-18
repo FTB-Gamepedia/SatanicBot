@@ -24,16 +24,14 @@ module Wiki_Utils
         titles: page_name
       }
 
-      response = make_request_get_response(params)
-      if response != false or response == nil
+      request = URI(@api_page)
+      request.query = URI.encode_www_form(params)
+      response = Net::HTTP.get_response(request)
+      if response.is_a? Net::HTTPSuccess
         JSON.parse(response.body)["query"]["pages"].each do |revid, data|
           $revid = revid
         end
-        if JSON.parse(response.body)["query"]["pages"][$revid]["revisions"][0]["*"] == nil
-          return false
-        else
-          return JSON.parse(response.body)["query"]["pages"][$revid]["revision"][0]["*"]
-        end
+        return JSON.parse(response.body)["query"]["pages"][$revid]["revisions"][0]["*"]
       else
         return false
       end
