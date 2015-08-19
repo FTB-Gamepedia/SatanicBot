@@ -39,17 +39,24 @@ def change_backlinks(category, new_category_name)
   end
 end
 
+def move_category(old_cat, new_cat)
+  if $other_mw.get_wikitext(new_cat) == false && $other_mw.get_wikitext(old_cat) != false
+    old_cat_text = $other_mw.get_wikitext(old_cat)
+    $other_mw.delete_page(old_cat)
+    $mw.edit(title: new_cat, text: old_cat_text, bot: 1, summary: "Moving #{old_cat} to #{new_cat}")
+  end
+end
+
 puts "Which Wiki would you like to edit?\n"
 wiki = gets.chomp
-puts "How many categories would you like to change this session?\n"
-num = gets.chomp.to_i
-initial = 0
-
 puts "Signing into #{wiki}..."
 $mw = MediawikiApi::Client.new("http://#{wiki}.gamepedia.com/api.php")
 $mw.log_in(General_Utils::File_Utils.get_secure(0).chomp, General_Utils::File_Utils.get_secure(1).chomp)
 $other_mw = Wiki_Utils::Client.new("http://#{wiki}.gamepedia.com/api.php")
-puts "Successfully signed into #{wiki}!"
+puts "Successfully signed into #{wiki}.gamepedia.com!\n"
+puts "How many categories would you like to change this session?\n"
+num = gets.chomp.to_i
+initial = 0
 
 if num.is_a? Numeric
   while initial < num
@@ -58,9 +65,16 @@ if num.is_a? Numeric
     puts "What would you like to replace the category with?\n"
     new_cat = gets.chomp
 
-    change_pages("Category:#{cat}", "Category:#{new_cat}")
-    change_backlinks(cat, new_cat)
-    initial += 1
+    if cat != new_cat
+
+      #change_pages("Category:#{cat}", "Category:#{new_cat}")
+      #change_backlinks(cat, new_cat)
+      move_category("User:TheSatanicSanta/Sandbox/MoveTest Start", "User:TheSatanicSanta/Sandbox/MoveTest End")
+      initial += 1
+    else
+      puts "SEVERE: THE TWO CATEGORIES CANNOT BE THE SAME. EXITIING WITH EXIT CODE 1"
+      exit 1
+    end
   end
   puts "Successfully completed changing categories provided by user. Exiting with exit code 0."
 else

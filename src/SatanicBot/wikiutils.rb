@@ -1,18 +1,10 @@
+require 'net/http'
+require 'json'
+
 module Wiki_Utils
   class Client
     def initialize(api_page)
       @api_page = api_page
-    end
-
-    def make_request_get_response(params)
-      request = URI(@api_page)
-      request.query = URI.encode_www_form(params)
-      response = Net::HTTP.get_response(request)
-      if response.is_a? Net::HTTPSuccess
-        return response
-      else
-        return false
-      end
     end
 
     def get_wikitext(page_name)
@@ -57,8 +49,10 @@ module Wiki_Utils
         }
       end
 
-      response = make_request_get_response(params)
-      if response != false
+      request = URI(@api_page)
+      request.query = URI.encode_www_form(params)
+      response = Net::HTTP.get_response(request)
+      if response.is_a? Net::HTTPSuccess
         return response.body
       else
         return false
@@ -74,8 +68,10 @@ module Wiki_Utils
         format: 'json'
       }
 
-      response = make_request_get_response(params)
-      if response != false
+      request = URI(@api_page)
+      request.query = URI.encode_www_form(params)
+      response = Net::HTTP.get_response(request)
+      if response.is_a? Net::HTTPSuccess
         return response.body
       else
         return false
@@ -91,8 +87,10 @@ module Wiki_Utils
         format: 'json'
       }
 
-      response = make_request_get_response(params)
-      if response != false
+      request = URI(@api_page)
+      request.query = URI.encode_www_form(params)
+      response = Net::HTTP.get_response(request)
+      if response.is_a? Net::HTTPSuccess
         return response.body
       else
         return false
@@ -109,8 +107,28 @@ module Wiki_Utils
         format: 'json'
       }
 
-      response = make_request_get_response(params)
-      if response != false
+      request = URI(@api_page)
+      request.query = URI.encode_www_form(params)
+      response = Net::HTTP.get_response(request)
+      if response.is_a? Net::HTTPSuccess
+        return response.body
+      else
+        return false
+      end
+    end
+
+    def delete_page(page)
+      params = {
+        action: 'delete',
+        title: page,
+        reason: '[[wikipedia:WP:CSD#C2|C2]]: Speedy renaming or merging',
+        format: 'json'
+      }
+
+      request = URI(@api_page)
+      request.query = URI.encode_www_form(params)
+      response = Net::HTTP.get_response(request)
+      if response.is_a? Net::HTTPSuccess
         return response.body
       else
         return false
