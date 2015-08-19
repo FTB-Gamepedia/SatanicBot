@@ -32,18 +32,10 @@ def change_backlinks(category, new_category_name)
     else
       text = $other_mw.get_wikitext(i)
       text = text.gsub(/\{\{C\|#{category}/, "\{\{C\|#{new_category_name}")
-      text = text.gsub(/\[\[\:#{category}/, "\[\[\:#{new_category_name}")
+      text = text.gsub(/\[\[\:#{category}/, "\[\[\:Category\:#{new_category_name}")
       $mw.edit(title: i, text: text, bot: 1, summary: "Changing #{category} to #{new_category_name}")
       puts "#{i} has been edited.\n"
     end
-  end
-end
-
-def move_category(old_cat, new_cat)
-  if $other_mw.get_wikitext(new_cat) == false && $other_mw.get_wikitext(old_cat) != false
-    old_cat_text = $other_mw.get_wikitext(old_cat)
-    $other_mw.delete_page(old_cat)
-    $mw.edit(title: new_cat, text: old_cat_text, bot: 1, summary: "Moving #{old_cat} to #{new_cat}")
   end
 end
 
@@ -64,12 +56,9 @@ if num.is_a? Numeric
     cat = gets.chomp
     puts "What would you like to replace the category with?\n"
     new_cat = gets.chomp
-
     if cat != new_cat
-
-      #change_pages("Category:#{cat}", "Category:#{new_cat}")
-      #change_backlinks(cat, new_cat)
-      move_category("User:TheSatanicSanta/Sandbox/MoveTest Start", "User:TheSatanicSanta/Sandbox/MoveTest End")
+      change_pages("Category:#{cat}", "Category:#{new_cat}")
+      change_backlinks(cat, new_cat)
       initial += 1
     else
       puts "SEVERE: THE TWO CATEGORIES CANNOT BE THE SAME. EXITIING WITH EXIT CODE 1"

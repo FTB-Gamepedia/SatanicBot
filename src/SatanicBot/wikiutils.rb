@@ -116,23 +116,5 @@ module Wiki_Utils
         return false
       end
     end
-
-    def delete_page(page)
-      params = {
-        action: 'delete',
-        title: page,
-        reason: '[[wikipedia:WP:CSD#C2|C2]]: Speedy renaming or merging',
-        format: 'json'
-      }
-
-      request = URI(@api_page)
-      request.query = URI.encode_www_form(params)
-      response = Net::HTTP.get_response(request)
-      if response.is_a? Net::HTTPSuccess
-        return response.body
-      else
-        return false
-      end
-    end
   end
 end
