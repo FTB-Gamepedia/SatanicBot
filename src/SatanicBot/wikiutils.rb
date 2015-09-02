@@ -23,7 +23,11 @@ module Wiki_Utils
         JSON.parse(response.body)["query"]["pages"].each do |revid, data|
           $revid = revid
         end
-        return JSON.parse(response.body)["query"]["pages"][$revid]["revisions"][0]["*"]
+        if JSON.parse(response.body)["query"]["pages"][$revid]["missing"] == ""
+          return nil
+        else
+          return JSON.parse(response.body)["query"]["pages"][$revid]["revisions"][0]["*"]
+        end
       else
         return false
       end
