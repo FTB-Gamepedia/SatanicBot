@@ -70,10 +70,10 @@ module Wiki
     def create_mod_cat(name, type)
       if $other_mw.get_wikitext("Category:#{name}") == false
         if type == "major"
-          $mw.create_page("Category:#{name}", "[[Category:Mod categories]]\n[[Category:Mods]]")
+          $mw.edit(title: "Category:#{name}", text: "[[Category:Mod categories]]\n[[Category:Mods]]", bot: 1)
           return 1
         elsif type == "minor"
-          $mw.create_page("Category:#{name}", "[[Category:Mod categories]]\n[[Category:Minor Mods]]")
+          $mw.edit(title: "Category:#{name}", text: "[[Category:Mod categories]]\n[[Category:Minor Mods]]", bot: 1)
           return 1
         else
           return 0
