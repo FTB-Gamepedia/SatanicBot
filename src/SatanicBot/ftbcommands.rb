@@ -1,41 +1,52 @@
-require 'mediawiki_api'
+require 'mediawiki-butt'
 require 'benchmark'
-require_relative 'wikiutils'
 require_relative 'generalutils'
 
 module Wiki
   class Commands
+    # Note that things must return 1 or 0 because Perl does not have standard
+    #   boolean values.
+    #   1 = true, 0 = false.
+
+    # Creates a new Wiki::Commands object.
+    # @param wiki [String] The Gamepedia wiki name, e.g., ftb, skyrim, minecraft
     def initialize(wiki)
-      $mw = MediawikiApi::Client.new("http://#{wiki}.gamepedia.com/api.php")
-      $mw.log_in(General_Utils::File_Utils.get_secure(0).chomp, General_Utils::File_Utils.get_secure(1).chomp)
-      $other_mw = Wiki_Utils::Client.new("http://#{wiki}.gamepedia.com/api.php")
+      $mw = MediaWiki::Butt.new("http://#{wiki}.gamepedia.com/api.php")
+      username = GeneralUtils::Files.get_secure(0).chomp
+      password = GeneralUtils::Files.get_secure(1).chomp
+      $mw.login(username, password)
     end
 
+    # Adds the mod to the page
+    # @param mod_name [String] The mod to add.
+    # @param page [String] The page to add. i.e., 'Template:Mods' or
+    #   'Template:Minor Mods'.
+    # @return [Int] 1 if successful, 0 if not.
     def edit_modlist(mod_name, page)
-      if $other_mw.get_wikitext(page) == true
-        text = $other_mw.get_wikitext(page)
+      if $mw.get_text(page) == true
+        text = $mw.get_text(page)
         if /{{L|#{mod_name}}}/ =~ text
           return 0
         else
-          firstline = "<noinclude><translate><!--T:1-->"
-          secondline = "</noinclude>"
-          thirdline = "<noinclude></translate></noinclude>"
+          firstline = '<noinclude><translate><!--T:1-->'
+          secondline = '</noinclude>'
+          thirdline = '<noinclude></translate></noinclude>'
           lowertext = text.downcase
           pagelines = lowertext.split("\n")
           pagelines.push("{{L|#{mod_name}}}{{*}}")
           pagelines.sort
-          pagelines.delete("<noinclude><translate><!--T:1-->")
-          pagelines.delete("</noinclude>")
-          pagelines.delete("<noinclude></translate></noinclude>")
+          pagelines.delete('<noinclude><translate><!--T:1-->')
+          pagelines.delete('</noinclude>')
+          pagelines.delete('<noinclude></translate></noinclude>')
 
           if pagelines.at(pagelines.length) == "{{L|#{mod_name}}}{{*}}"
-            pagelines[pagelines.length].gsub("}}{{*}}", "}}")
+            pagelines[pagelines.length].gsub('}}{{*}}', '}}')
           end
 
           newpage = pagelines.join("\n")
           newpage.prepend("#{firstline}\n#{secondline}\n")
           newpage += "\n#{thirdline}"
-          $mw.edit(title: page, text: newpage, bot: 1, summary: "Adding #{mod_name}")
+          $mw.edit(page, newpage, "Adding #{mod_name}", true)
           return 1
         end
       else
@@ -43,37 +54,53 @@ module Wiki
       end
     end
 
+    # Edits the Mods/list module by adding a new mod and abbreviation.
+    # @param abbrv [String] The abbreviation for the mod.
+    # @param mod_name [String] The mod's name.
+    # @return [Int] 1 if successful, 0 if not.
     def edit_modmodule(abbrv, mod_name)
-      page = "Module:Mods/list"
-      text = $other_mw.get_wikitext(page)
+      page = 'Module:Mods/list'
+      text = $mw.get_text(page)
       if /\s#{abbrv} = / =~ text || /\{\'#{mod_name}\'/ =~ text
         return 0
       else
-        text = text.gsub(/local modsByAbbrv = \{/, "local modsByAbbrv = {\n    #{abbrv} = {#{mod_name}, [=[<translate>#{mod_name}</translate>]=]},")
-        $mw.edit(title: page, text: text, bot: 1, summary: "Adding #{mod_name}")
+        text = text.gsub(/local modsByAbbrv = \{/,
+                         "local modsByAbbrv = {\n    #{abbrv} = {#{mod_name},' \
+                         ' [=[<translate>#{mod_name}</translate>]=]},")
+        $mw.edit(page, text, "Adding #{mod_name}", true)
         return 1
       end
     end
 
+    # Adds a navbox to the navbox list template
+    # @param navbox [String] The navbox's name (excluding the Navbox prefix)
+    # @param content [String] What the navbox is of.
+    #   e.g., 'Flaxbeard's Steam Power'. Basically the title link.
+    # @return [Int] 1 if successful, 0 if not.
     def add_navbox(navbox, content)
-      page = "Template:Navbox List"
-      text = $other_mw.get_wikitext(page)
-      if /\{\{Tl\|Navbox #{navbox}\}\}/ =~ text || /\{\{L\|#{content}\}\}/ =~ text
+      page = 'Template:Navbox List'
+      text = $mw.get_text(page)
+      if /\{\{[Tt]l\|Navbox #{navbox}\}\}/ =~ text ||
+         /\{\{[Ll]\|#{content}\}\}/ =~ text
         return 0
       else
-        text = text.gsub(/\|\}/, "|-\n| {{Tl|Navbox #{navbox}}} || {{L|#{content}}} ||\n|}")
-        $mw.edit(title: page, text: text, bot: 1, summary: "Added the #{content} navbox (Navbox #{navbox})")
+        addition = "|-\n {{Tl|Navbox #{navbox}}} || {{L|#{content}}} || \n|}"
+        text = text.gsub(/\|\}/, addition)
+        summary = "Add the #{content} navbox (Navbox #{navbox})"
+        $mw.edit(page, text, summary, true)
         return 1
       end
     end
 
     def create_mod_cat(name, type)
       if $other_mw.get_wikitext("Category:#{name}") == false
-        if type == "major"
-          $mw.edit(title: "Category:#{name}", text: "[[Category:Mod categories]]\n[[Category:Mods]]", bot: 1)
+        if type == 'major'
+          text = "[[Category:Mod categories]]\n[[Category:Mods]"
+          $mw.edit("Category:#{name}", text, 'New mod category.')
           return 1
-        elsif type == "minor"
-          $mw.edit(title: "Category:#{name}", text: "[[Category:Mod categories]]\n[[Category:Minor Mods]]", bot: 1)
+        elsif type == 'minor'
+          text = "[[Category:Mod categories]]\n[[Category:Minor Mods]"
+          $mw.create_page("Category:#{name}", text, 'New minor mod category.')
           return 1
         else
           return 0
@@ -83,59 +110,62 @@ module Wiki
       end
     end
 
+    # Checks if the page exists
+    # @param page [String] The page title.
+    # @return [Int] 1 if it exists, 0 if not.
     def does_page_exist(page)
-      if $other_mw.get_wikitext(page) == false
-        return 1
-      else
+      pagetext = $mw.get_wikitext(page)
+      if pagetext.nil?
         return 0
+      else
+        return 1
       end
     end
 
+    # Uploads the file
+    # @param url [String] The file to upload.
+    # @param filename [String] The desired file name.
+    # @return [Int/String] Returns 1 if successful, or the warning if not.
     def upload(url, *filename)
       if defined? filename
-        $mw.upload(filename: filename, url: url)
+        up = $mw.upload(url, filename)
+      else
+        up = $mw.upload(url)
+      end
+      if up == true
         return 1
       else
-        filename = url.split('/')[-1]
-        $mw.upload(filename: filename, url: url)
-        return 1
+        return up
       end
     end
 
+    # Consider getting rid of this and simply doing it via caller.rb for
+    #   slightly better performance.
+    # Gets the amount of contributions a user has made.
+    # @param username [String] The user.
+    # @return [String] The return value of get_contrib_count.
     def get_contribs(username)
-      if $other_mw.get_user_info(username, 'editcount') == true
-        JSON.parse($other_mw.get_user_info(username, 'editcount'))["query"]["users"].each do |userid, data|
-          $userid = userid
-          break
-        end
-        count = JSON.parse($other_mw.get_user_info(username, 'editcount'))["query"]["users"][$userid]["name"]["editcount"]
-        return count
-      else
-        return 'failed'
-      end
+      $mw.get_contrib_count(username)
     end
 
+    # Gets the date the user registered on.
+    # @param username [String] The user.
+    # @return [DateTime] The return value of get_registration_time.
     def get_registration_date(username)
-      if $other_mw.get_user_info(username, 'registration') == true
-        JSON.parse($other_mw.get_user_info(username, 'registration'))["query"]["users"].each do |userid, data|
-          $userid = userid
-          break
-        end
-        count = JSON.parse($other_mw.get_user_info(username, 'registration'))["query"]["users"][$userid]["name"]["registration"]
-        countarray = count.split("T")
-        return countarray[0]
-      else
-        return 0
-      end
+      $mw.get_registration_time(username)
     end
 
+    # Updates the mod version on the page.
+    # @param title [String] The page name.
+    # @param version [String] The new version.
+    # @return [Int] 1 if successful, 0 if not.
     def update_mod_version(title, version)
-      text = $other_mw.get_wikitext(title)
+      text = $mw.get_text(title)
       if /version=/ =~ text || /version =/ =~ text
-        if /version=#{version}/ !~ text and /version =#{version}/ !~ text
+        if /version=#{version}/ !~ text && /version =#{version}/ !~ text
           text = text.gsub(/version=.*/, "version=#{version}")
           text = text.gsub(/version =.*/, "version=#{version}")
-          $mw.edit(title: title, text: text, bot: 1, summary: 'Update vesion.')
+          $mw.edit(title, text, 'Update vesion.', true)
           return 1
         else
           return 0

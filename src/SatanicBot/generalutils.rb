@@ -1,8 +1,9 @@
-module General_Utils
-  class File_Utils
+module GeneralUtils
+  class Files
     def self.get_secure(line_num)
-      line = IO.readlines(File.expand_path("../../info/secure.txt", Dir.pwd))[line_num]
-      return line
+      read = IO.readlines(File.expand_path('../../info/secure.txt', Dir.pwd))
+      line = read[line_num]
+      line
     end
   end
 end

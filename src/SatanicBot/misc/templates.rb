@@ -1,23 +1,20 @@
-require 'mediawiki_api'
-require_relative '../wikiutils'
+require 'mediawiki-butt'
 require_relative '../generalutils'
 
 def edit(old, new)
-  backlinkarray = []
-  JSON.parse($other_mw.get_backlinks("Template:#{old}"))["query"]["backlinks"].each do |title|
-    backlinkarray.push(title["title"])
-  end
-  backlinkarray.each do |i|
-    if $other_mw.get_wikitext(i) == false
-      puts "#{i} could not be edited because its content is nil. Continuing...\n"
+  backlinks = $mw.what_links_here("Template:#{old}")
+  backlinks.each do |i|
+    if $mw.get_text(i).nil?
+      puts "#{i} couldn't be edited because its content is nil. Continuing...\n"
       next
     else
-      text = $other_mw.get_wikitext(i)
+      text = $mw.get_text(i)
       text = text.gsub(/\{\{Tl\|#{old}/, "{{Tl|#{new}}}")
       text = text.gsub(/\{\{#{old}/, "{{#{new}}}")
       text = text.gsub(/\[\[Template:#{old}/, "[[Template:#{new}]]")
       text = text.gsub(/\{\{L\|Template:#{old}/, "{{L|Template:#{new}}}")
-      $mw.edit(title: i, text: text, bot: 1, summary: "Fixing user links.")
+      $mw.edit(i, text,
+               "Changing #{old} template calls to #{new} template calls.", true)
       puts "#{i} has been edited.\n"
     end
   end
@@ -28,11 +25,11 @@ wiki = gets.chomp
 puts "How many temlpate links would you like to change this session?\n"
 num = gets.chomp.to_i
 initial = 0
-
 puts "Signing into #{wiki}..."
-$mw = MediawikiApi::Client.new("http://#{wiki}.gamepedia.com/api.php")
-$mw.log_in(General_Utils::File_Utils.get_secure(0).chomp, General_Utils::File_Utils.get_secure(1).chomp)
-$other_mw = Wiki_Utils::Client.new("http://#{wiki}.gamepedia.com/api.php")
+$mw = MediaWiki::Butt.new("http://#{wiki}.gamepedia.com/api.php")
+username = GeneralUtils::Files.get_secure(0).chomp
+password = GeneralUtils::Files.get_secure(1).chomp
+$mw.login(username, password)
 puts "Successfully signed into #{wiki}!"
 
 if num.is_a? Numeric
@@ -45,9 +42,11 @@ if num.is_a? Numeric
     edit(template, new_template)
     initial += 1
   end
-  puts "Successfully completed changing template links provided by user. Exiting with exit code 0."
+  puts 'Successfully completed changing template links provided by user.' \
+       ' Exiting with exit code 0.'
 else
-  puts "SEVERE: NUMBER OF TEMPLATES PROVIDED IS NOT A VALID NUMBER. EXITING WITH EXIT CODE 1"
+  puts 'SEVERE: NUMBER OF TEMPLATES PROVIDED IS NOT A VALID NUMBER.' \
+       ' EXITING WITH EXIT CODE 1'
   exit 1
 end
 exit 0

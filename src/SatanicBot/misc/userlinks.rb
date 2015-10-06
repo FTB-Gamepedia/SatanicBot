@@ -1,23 +1,20 @@
-require 'mediawiki_api'
-require_relative '../wikiutils'
+require 'mediawiki-butt'
 require_relative '../generalutils'
 
 def edit(old, new)
-  backlinkarray = []
-  JSON.parse($other_mw.get_backlinks(old))["query"]["backlinks"].each do |title|
-    backlinkarray.push(title["title"])
-  end
-  backlinkarray.each do |i|
-    if $other_mw.get_wikitext(i) == false
-      puts "#{i} could not be edited because its content is nil. Continuing...\n"
+  backlinks = $mw.what_links_here(old)
+  backlinks.each do |i|
+    if $mw.get_text(i).nil?
+      puts "#{i} couldn't be edited because its content is nil. Continuing...\n"
       next
     else
-      text = $other_mw.get_wikitext(i)
+      text = $mw.get_text(i)
       text = text.gsub(/\{\{[Uu]\|#{old}/, "{{U|#{new}")
       text = text.gsub(/\[\[[Uu]ser\:#{old}/, "[[User:#{new}")
       text = text.gsub(/\[\[[Uu]ser talk\:#{old}/, "[[User talk:#{new}")
-      text = text.gsub(/[Ss]pecial\:Contributions\/#{old}/, "Special:Contributions/#{new}")
-      $mw.edit(title: i, text: text, bot: 1, summary: "Fixing user links.")
+      text = text.gsub(/[Ss]pecial\:Contributions\/#{old}/,
+                       "Special:Contributions/#{new}")
+      $mw.edit(i, text, 'Fixing user links.', true)
       puts "#{i} has been edited.\n"
     end
   end
@@ -30,9 +27,10 @@ num = gets.chomp.to_i
 initial = 0
 
 puts "Signing into #{wiki}..."
-$mw = MediawikiApi::Client.new("http://#{wiki}.gamepedia.com/api.php")
-$mw.log_in(General_Utils::File_Utils.get_secure(0).chomp, General_Utils::File_Utils.get_secure(1).chomp)
-$other_mw = Wiki_Utils::Client.new("http://#{wiki}.gamepedia.com/api.php")
+$mw = MediaWiki::Butt.new("http://#{wiki}.gamepedia.com/api.php")
+username = GeneralUtils::Files.get_secure(0).chomp
+password = GeneralUtils::Files.get_secure(1).chomp
+$mw.login(username, password)
 puts "Successfully signed into #{wiki}!"
 
 if num.is_a? Numeric
@@ -45,9 +43,11 @@ if num.is_a? Numeric
     edit(name, new_name)
     initial += 1
   end
-  puts "Successfully completed changing username links provided by user. Exiting with exit code 0."
+  puts 'Successfully completed changing username links provided by user.' \
+       ' Exiting with exit code 0.'
 else
-  puts "SEVERE: NUMBER OF USERNAMES PROVIDED IS NOT A VALID NUMBER. EXITING WITH EXIT CODE 1"
+  puts 'SEVERE: NUMBER OF USERNAMES PROVIDED IS NOT A VALID NUMBER.' \
+       ' EXITING WITH EXIT CODE 1'
   exit 1
 end
 exit 0

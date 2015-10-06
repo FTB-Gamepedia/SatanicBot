@@ -6,6 +6,7 @@ use strict;
 use diagnostics;
 
 use base qw(Bot::BasicBot);
+
 use Data::Random;
 use Data::Dumper;
 use Weather::Underground;
