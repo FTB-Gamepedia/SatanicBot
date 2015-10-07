@@ -4,8 +4,7 @@ package SatanicBot::Utils;
 use warnings;
 use strict;
 use warnings;
-
-my $ERROR = $!;
+use Cwd;
 
 sub separate_by_commas {
     my ($self, $string) = @_;
@@ -16,8 +15,9 @@ sub separate_by_commas {
 }
 
 sub get_secure_contents {
-    my $file = 'info/secure.txt';
-    open my $fh, '<', $file or die "Could not open '$file' $ERROR\n";
+    my $cwd = fastcwd();
+    my $file = "$cwd/src/info/secure.txt";
+    open my $fh, '<', $file or die "Could not open '$file' $!\n";
     my @lines = <$fh>;
     close $fh;
     chomp @lines;

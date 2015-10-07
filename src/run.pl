@@ -1,23 +1,27 @@
-# Copyright 2014 Eli Foster
+# Copyright 2015 Eli Foster
 
 use warnings;
 use strict;
 use diagnostics;
-use SatanicBot::Bot;
+
 use Bot::BasicBot;
 
-my $chan = '#FTB-Wiki';
+use Cwd qw(abs_path);
+use FindBin;
+use lib abs_path("$FindBin::Bin");
+use SatanicBot::Bot;
+
+my $chan = '#SatanicSanta';
 my $nick = 'LittleHelper';
 
 my $bot = SatanicBot::Bot->new(
-server    => 'irc.esper.net',
-port      => '6667',
-channels  => [$chan],
-
-nick      => $nick,
-alt_nicks => ['SatanicButt', 'SatanicBooty'],
-username  => 'SatanicBot',
-name      => 'SatanicSanta\'s IRC bot'
+  server    => 'irc.esper.net',
+  port      => '6667',
+  channels  => [$chan],
+  nick      => $nick,
+  alt_nicks => ['SatanicButt', 'SatanicBooty'],
+  username  => 'SatanicBot',
+  name      => 'SatanicSanta\'s IRC bot'
 );
 
 $bot->run();

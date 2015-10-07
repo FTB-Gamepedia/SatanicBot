@@ -13,17 +13,17 @@ use Weather::Underground;
 use SatanicBot::Utils;
 use LWP::Simple;
 use WWW::Mechanize;
-use WWW::Twitter;
-use Math::Symbolic;
-use Date::Parse;
+# use WWW::Twitter;
+# use Math::Symbolic;
+# use Date::Parse;
 use File::RandomLine;
 use Geo::IP;
 use Switch;
 use Cwd;
 
 my %bot_stuff_hash = (
-    ops       => [],
-    auth_pass => ''
+  ops       => [],
+  auth_pass => ''
 );
 my $bot_stuff = \%bot_stuff_hash;
 
@@ -34,7 +34,6 @@ sub said {
     my $host = $message->{raw_nick};
     my $msg = $message->{body};
     my $user = $message->{who};
-    my $ERROR = $!;
     my $args = 'Please provide the required arguments.';
     my $authorized = 'You must be authorized.';
     my @commands = ( #This isn't really used a whole lot yet because I'm lazy.
@@ -296,7 +295,7 @@ sub said {
                 open my $fh, '>>', $file or $self->say(
                     channel => $channel,
                     who     => $user,
-                    body    => "Could not open $file $ERROR"
+                    body    => "Could not open $file $!"
                 );
                 print $fh "$quotewords[1]\n";
                 close $fh;
@@ -1044,40 +1043,40 @@ sub said {
     }
 
     #Autotweet
-    if ($msg =~ m/^\$tweet/i) {
-        if ($msg !~ m/^\$tweet$/i) {
-            my $lengthmsg = length $msg;
-            if ($lengthmsg > 140) {
-                $self->say(
-                    channel => $channel,
-                    who     => $user,
-                    body    => 'Sorry, that\'s too long.'
-                );
-            } else {
-                my @tweet = split /\s/, $msg, 2;
-                SatanicBot::Utils->get_secure_contents();
-                $ENV {PERL_LWP_SSL_VERIFY_HOSTNAME} = 0; #This is terrible.
-                my @secure = SatanicBot::Utils->get_secure_contents();
-                my $twitter = WWW::Twitter->new(
-                    username => $secure[2],
-                    password => $secure[1]
-                );
-                $twitter->login();
-                my $status_id = $twitter->tweet("[IRC] $tweet[1]");
-                $self->say(
-                    channel => $channel,
-                    who     => $user,
-                    body    => "Tweeted '$tweet[1]' https://twitter.com/LittleHelperBot/status/$status_id"
-                );
-            }
-        } else {
-            $self->say(
-                channel => $channel,
-                who     => $user,
-                body    => $args
-            );
-        }
-    }
+    # if ($msg =~ m/^\$tweet/i) {
+    #     if ($msg !~ m/^\$tweet$/i) {
+    #         my $lengthmsg = length $msg;
+    #         if ($lengthmsg > 140) {
+    #             $self->say(
+    #                 channel => $channel,
+    #                 who     => $user,
+    #                 body    => 'Sorry, that\'s too long.'
+    #             );
+    #         } else {
+    #             my @tweet = split /\s/, $msg, 2;
+    #             SatanicBot::Utils->get_secure_contents();
+    #             $ENV {PERL_LWP_SSL_VERIFY_HOSTNAME} = 0; #This is terrible.
+    #             my @secure = SatanicBot::Utils->get_secure_contents();
+    #             my $twitter = WWW::Twitter->new(
+    #                 username => $secure[2],
+    #                 password => $secure[1]
+    #             );
+    #             $twitter->login();
+    #             my $status_id = $twitter->tweet("[IRC] $tweet[1]");
+    #             $self->say(
+    #                 channel => $channel,
+    #                 who     => $user,
+    #                 body    => "Tweeted '$tweet[1]' https://twitter.com/LittleHelperBot/status/$status_id"
+    #             );
+    #         }
+    #     } else {
+    #         $self->say(
+    #             channel => $channel,
+    #             who     => $user,
+    #             body    => $args
+    #         );
+    #     }
+    # }
 
     #Provides the user with a command list.
     if ($msg =~ m/^\$help/i) {
