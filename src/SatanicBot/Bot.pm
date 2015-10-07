@@ -1,4 +1,4 @@
-# Copyright 2014 Eli Foster
+# Copyright 2015 Eli Foster
 
 package SatanicBot::Bot;
 use warnings;

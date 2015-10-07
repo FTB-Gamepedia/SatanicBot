@@ -11,8 +11,8 @@ use FindBin;
 use lib abs_path("$FindBin::Bin");
 use SatanicBot::Bot;
 
-my $chan = '#SatanicSanta';
-my $nick = 'LittleHelper';
+my $channels = ['#SatanicSanta', '#FTB-Wiki', '#FTB-Wiki-Dev'];
+my $nick     = 'LittleHelper';
 
 my $bot = SatanicBot::Bot->new(
   server    => 'irc.esper.net',
