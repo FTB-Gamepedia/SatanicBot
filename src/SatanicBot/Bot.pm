@@ -26,6 +26,17 @@ my %bot_stuff_hash = (
   auth_pass => ''
 );
 my $bot_stuff = \%bot_stuff_hash;
+my $rubycaller = fastcwd() . "/src/SatanicBot/caller.rb";
+my $rubyoutput = fastcwd() . '/src/info/out.txt';
+
+sub read_rubyoutput {
+    open my $fh, '<', $rubyoutput or die "Could not open '$rubyoutput' $!\n";
+    my @lines = <$fh>;
+    close $fh;
+    unlink $rubyoutput;
+    chomp @lines;
+    return @lines;
+}
 
 #Use this subroutine definition for adding commands.
 sub said {
@@ -61,7 +72,7 @@ sub said {
         'addnav',
         'newmodcat',
         'newminorcat',
-        'updatever'
+        'updatevers'
     );
     my @content = SatanicBot::Utils->get_secure_contents();
     $bot_stuff->{auth_pass} = $content[3];
@@ -140,9 +151,10 @@ sub said {
             if ($msg =~ m/^\$updatevers(?: )/i) {
                 my @versionwords = split /\s/, $msg, 2;
                 my @otherwords = split ";", $versionwords[1];
-                my $edit = system "ruby", "caller.rb", "ftb", "updateversion", $versionwords[1], $otherwords[1];
+                system "ruby", $rubycaller, "ftb", "updateversion", $versionwords[1], $otherwords[1];
+                my @results = read_rubyoutput;
 
-                if ($edit == 0) {
+                if ($results[0] == 'fail') {
                     $self->say(
                         channel => $channel,
                         who     => $user,
@@ -171,15 +183,16 @@ sub said {
                         body    => "Abbreviating \'$abbrvwords[2]\' as \'$abbrvwords[1]\'"
                     );
 
-                    my $edit = system "ruby", "caller.rb", "ftb", 'modmodule', $abbrvwords[1], $abbrvwords[2];
+                    system "ruby", $rubycaller, "ftb", 'modmodule', $abbrvwords[1], $abbrvwords[2];
+                    my @results = read_rubyoutput;
 
-                    if ($edit == 0) {
+                    if ($results[0] == 'present') {
                         $self->say(
                             channel => $channel,
                             who     => $user,
                             body    => 'Could not proceed. Abbreviation and/or name already on the list.'
                         );
-                    } elsif ($edit == 1) {
+                    } else {
                         $self->say(
                             channel => $channel,
                             who     => $user,
@@ -206,7 +219,9 @@ sub said {
         if ($msg =~ m/^\$checkpage(?: )/i) {
             my @pagewords = split /\s/, $msg, 2;
             system "ruby $ftbcommands ftb check $pagewords[1]";
-            if ($? == 1) {
+            my @results = read_rubyoutput;
+
+            if ($results[0] eq 'no') {
                 $self->say(
                     channel => $channel,
                     who     => $user,
@@ -233,9 +248,10 @@ sub said {
         if ($msg =~ m/^\$newmodcat(?: )/i) {
             if (grep { $_ eq $host } @{$bot_stuff->{ops}}) {
                 my @catwords = split /\s/, $msg, 2;
-                my $create = system "ruby", "caller.rb", "ftb", 'cat', $catwords[1], 'major';
+                system "ruby", $rubycaller, "ftb", 'cat', $catwords[1], 'major';
+                my @results = read_rubyoutput;
 
-                if ($create == 1) {
+                if ($results[0] eq 'success') {
                     $self->say(
                         channel => $channel,
                         who     => $user,
@@ -262,9 +278,10 @@ sub said {
         if ($msg =~ m/^\$newminorcat(?: )/i) {
             if (grep { $_ eq $host } @{$bot_stuff->{ops}}) {
                 my @catwords = split /\s/, $msg, 2;
-                my $create = system "ruby", "caller.rb", "ftb", 'cat', $catwords[1], 'minor';
+                system "ruby", $rubycaller, "ftb", 'cat', $catwords[1], 'minor';
+                my @results = read_rubyoutput;
 
-                if ($create == 0) {
+                if ($results[0] eq 'success') {
                     $self->say(
                         channel => $channel,
                         who     => $user,
@@ -327,9 +344,10 @@ sub said {
                 my @uploadwords = split /\s/, $msg, 3;
                 if ($uploadwords[1] =~ m/.+/) {
                     if ($uploadwords[2] =~ m/.+/) {
-                        my $upload = system "ruby", "caller.rb", "ftb", 'upload', $uploadwords[1], $uploadwords[2];
+                        system "ruby", $rubycaller, "ftb", 'upload', $uploadwords[1], $uploadwords[2];
+                        my @results = read_rubyoutput;
 
-                        if ($upload == 1) {
+                        if ($results[0] eq 'success') {
                             $self->say(
                                 channel => $channel,
                                 who     => $user,
@@ -339,13 +357,14 @@ sub said {
                           $self->say(
                               channel => $channel,
                               who     => $user,
-                              body    => "Could not upload \'$uploadwords[2]\' to the Wiki."
+                              body    => "Could not upload \'$uploadwords[2]\' to the Wiki. Error: $results[0]"
                           );
                         }
                     } else {
-                        my $upload = system "ruby", "caller.rb", "ftb", 'upload', $uploadwords[1];
+                        system "ruby", $rubycaller, "ftb", 'upload', $uploadwords[1];
+                        my @results = read_rubyoutput;
 
-                        if ($upload == 1) {
+                        if ($results[0] eq 'success') {
                             $self->say(
                                 channel => $channel,
                                 who     => $user,
@@ -355,7 +374,7 @@ sub said {
                           $self->say(
                               channel => $channel,
                               who     => $user,
-                              body    => "Could not upload \'$uploadwords[1]\' to the Wiki."
+                              body    => "Could not upload \'$uploadwords[1]\' to the Wiki. Error: $results[0]"
                           );
                         }
                     }
@@ -381,14 +400,10 @@ sub said {
             if ($msg =~ m/^\$addnav(?: )/i) {
                 my @templatewords = split /\s/, $msg, 2;
                 if ($templatewords[1] =~ m/.+/) {
-                    $self->say(
-                        channel => $channel,
-                        who     => $user,
-                        body    => "Adding $templatewords[1] to the Navbox list."
-                    );
+                    system "ruby", $rubycaller, "ftb", 'nav', $templatewords[1], $templatewords[2];
+                    my @results = read_rubyoutput;
 
-                    my $add = system "ruby", "caller.rb", "ftb", 'nav', $templatewords[1], $templatewords[2];
-                    if ($add == 0) {
+                    if ($results[0] eq 'present') {
                         $self->say(
                             channel => $channel,
                             who     => $user,
@@ -647,82 +662,86 @@ sub said {
     if ($msg =~ m/^\$contribs(?: )/i) {
         my @contribwords = split /\s/, $msg, 2;
         if ($contribwords[1] =~ m/.+/) {
-            my $contribs = system "ruby", "caller.rb", "ftb", 'contribs', $contribwords[1];
-            my $register = system "ruby", "caller.rb", "ftb", 'registrationdate', $contribwords[1];
+            system "ruby", $rubycaller, "ftb", 'contribs', $contribwords[1];
+            my @contribresults = read_rubyoutput;
+            system "ruby", $rubycaller, "ftb", 'registrationdate', $contribwords[1];
+            my @dateresults = read_rubyoutput;
 
-            if ($contribs eq 'nouser') {
-                $self->say(
-                    channel => $channel,
-                    who     => $user,
-                    body    => 'Something went wrong. You may have entered an invalid username (such as an IP) or a nonexistant username.'
-                );
-            } else {
-                if ($contribs eq '1') {
+            # if ($contribs eq 'nouser') {
+            #     $self->say(
+            #         channel => $channel,
+            #         who     => $user,
+            #         body    => 'Something went wrong. You may have entered an invalid username (such as an IP) or a nonexistant username.'
+            #     );
+            # } else {
+                if ($contribresults[0] eq '1') {
                     $self->say(
                         channel => $channel,
                         who     => $user,
-                        body    => "$contribwords[1] has made 1 contribution to the wiki and registered on $register."
+                        body    => "$contribwords[1] has made 1 contribution to the wiki and registered on $dateresults[1]."
                     );
                 } elsif ($contribwords[1] eq 'SatanicBot' or $contribwords[1] eq 'satanicBot') {
                     $self->say(
                         channel => $channel,
                         who     => $user,
-                        body    => "I have made $contribs contributions to the wiki and registered on $register."
+                        body    => "I have made $contribresults[0] contributions to the wiki and registered on $dateresults[0]."
                     );
                 } elsif ($contribwords[1] eq 'TheSatanicSanta' or $contribwords[1] eq 'theSatanicSanta') {
                     $self->say(
                         channel => $channel,
                         who     => $user,
-                        body    => "The second hottest babe in the channel has made $contribs contributions to the wiki and registered on $register."
+                        body    => "The second hottest babe in the channel has made $contribresults[0] contributions to the wiki and registered on $dateresults[0]."
                     );
                 } elsif ($contribwords[1] eq 'Retep998' or $contribwords[1] eq 'retep998') {
                     $self->say(
                         channel => $channel,
                         who     => $user,
-                        body    => "The hottest babe in the channel has made $contribs contributions to the wiki and registered on $register."
+                        body    => "The hottest babe in the channel has made $contribresults[0] contributions to the wiki and registered on $dateresults[0]."
                     );
                 } elsif ($contribwords[1] eq 'PonyButt' or $contribwords[1] eq 'ponyButt') {
                     $self->say(
                         channel => $channel,
                         who     => $user,
-                        body    => "Some bitch ass nigga has made $contribs contributions to the wiki and registered on $register."
+                        body    => "Some bitch ass nigga has made $contribresults[0] contributions to the wiki and registered on $dateresults[0]."
                     );
                 } else {
                     $self->say(
                         channel => $channel,
                         who     => $user,
-                        body    => "$contribwords[1] has made $contribs contributions to the wiki and registered on $register."
+                        body    => "$contribwords[1] has made $contribresults[0] contributions to the wiki and registered on $dateresults[0]."
                     );
                 }
-            }
+            # }
         }
     }
 
     if ($msg =~ m/^\$contribs$/i) {
-        my $contribs = system "ruby", "caller.rb", "ftb", 'contribs', $user;
-        my $register = system "ruby", "caller.rb", "ftb", 'registrationdate', $user;
+        system "ruby", $rubycaller, "ftb", 'contribs', $user;
+        my @contribresults = read_rubyoutput;
+        system "ruby", $rubycaller, "ftb", 'registrationdate', $user;
+        my @dateresults = read_rubyoutput;
 
-        if ($contribs ne 'nouser') {
-            if ($contribs eq '1') {
+        # if ($contribs ne 'nouser') {
+            if ($contribresults[0] eq '1') {
                 $self->say(
                     channel => $channel,
                     who     => $user,
-                    body    => "$user, you have made 1 contribution to the wiki and registered on $register."
+                    body    => "$user, you have made 1 contribution to the wiki and registered on $contribresults[0]."
                 );
             } else {
                 $self->say(
                     channel => $channel,
                     who     => $user,
-                    body    => "$user, you have made $contribs contributions to the wiki and registered on $register."
+                    body    => "$user, you have made $contribresults[0] contributions to the wiki and registered on $dateresults[0]."
                 );
             }
-        } elsif ($contribs eq 'nouser') {
-            $self->say(
-                channel => $channel,
-                who     => $user,
-                body    => 'Something went wrong. You may have entered an invalid username (such as an IP) or a nonexistant username.'
-            );
-        }
+        # } elsif ($contribs eq 'nouser') {
+        #     $self->say(
+        #         channel => $channel,
+        #         who     => $user,
+        #         body    => 'Something went wrong. You may have entered an invalid username (such as an IP) or a nonexistant username.'
+        #     );
+        # }
     }
 
     #Outputs a random sentence from 8ball.txt.
@@ -1156,6 +1175,9 @@ sub said {
                 }
                 case m/newminorcat$/i {
                     $helpfulmessage = 'Creates a new category for the minor mod given in the first arg.';
+                }
+                case m/updatevers$/i {
+                    $helpfulmessage = 'Updates the version for the mod given in the second parameter. Split first parameter (new version) and the second parameter with a semicolon.';
                 }
             }
             $self->say(

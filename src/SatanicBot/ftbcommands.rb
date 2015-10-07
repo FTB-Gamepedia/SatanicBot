@@ -4,8 +4,8 @@ require_relative 'generalutils'
 
 module Wiki
   class Commands
-    # Note that things must return 1 or 0 because Perl does not have standard
-    #   boolean values.
+    # Note that things must return 1 or 0, or strings because Perl does not
+    #   have standard boolean values. Strings are easiest to work with in Perl.
     #   1 = true, 0 = false.
 
     # Creates a new Wiki::Commands object.
@@ -62,13 +62,13 @@ module Wiki
       page = 'Module:Mods/list'
       text = $mw.get_text(page)
       if /\s#{abbrv} = / =~ text || /\{\'#{mod_name}\'/ =~ text
-        return 0
+        return 'present'
       else
         text = text.gsub(/local modsByAbbrv = \{/,
                          "local modsByAbbrv = {\n    #{abbrv} = {#{mod_name},' \
                          ' [=[<translate>#{mod_name}</translate>]=]},")
         $mw.edit(page, text, "Adding #{mod_name}", true)
-        return 1
+        return 'added'
       end
     end
 
@@ -82,13 +82,13 @@ module Wiki
       text = $mw.get_text(page)
       if /\{\{[Tt]l\|Navbox #{navbox}\}\}/ =~ text ||
          /\{\{[Ll]\|#{content}\}\}/ =~ text
-        return 0
+        return 'present'
       else
         addition = "|-\n {{Tl|Navbox #{navbox}}} || {{L|#{content}}} || \n|}"
         text = text.gsub(/\|\}/, addition)
         summary = "Add the #{content} navbox (Navbox #{navbox})"
         $mw.edit(page, text, summary, true)
-        return 1
+        return 'success'
       end
     end
 
@@ -96,29 +96,28 @@ module Wiki
       if $other_mw.get_wikitext("Category:#{name}") == false
         if type == 'major'
           text = "[[Category:Mod categories]]\n[[Category:Mods]"
-          $mw.edit("Category:#{name}", text, 'New mod category.')
-          return 1
+          $mw.create_page("Category:#{name}", text, 'New mod category.')
+          return 'success'
         elsif type == 'minor'
           text = "[[Category:Mod categories]]\n[[Category:Minor Mods]"
           $mw.create_page("Category:#{name}", text, 'New minor mod category.')
-          return 1
+          return 'success'
         else
-          return 0
+          return 'fail'
         end
       else
-        return 0
+        return 'fail'
       end
     end
 
     # Checks if the page exists
     # @param page [String] The page title.
-    # @return [Int] 1 if it exists, 0 if not.
-    def does_page_exist(page)
-      pagetext = $mw.get_wikitext(page)
-      if pagetext.nil?
-        return 0
+    # @return [String] 'yes' if it exists, 'no' if not.
+    def page_exists?(page)
+      if $mw.get_text(page).nil?
+        return 'no'
       else
-        return 1
+        return 'yes'
       end
     end
 
@@ -133,7 +132,7 @@ module Wiki
         up = $mw.upload(url)
       end
       if up == true
-        return 1
+        return 'success'
       else
         return up
       end
@@ -158,7 +157,7 @@ module Wiki
     # Updates the mod version on the page.
     # @param title [String] The page name.
     # @param version [String] The new version.
-    # @return [Int] 1 if successful, 0 if not.
+    # @return [String] 'success' if successful, 'fail' if not.
     def update_mod_version(title, version)
       text = $mw.get_text(title)
       if /version=/ =~ text || /version =/ =~ text
@@ -166,12 +165,12 @@ module Wiki
           text = text.gsub(/version=.*/, "version=#{version}")
           text = text.gsub(/version =.*/, "version=#{version}")
           $mw.edit(title, text, 'Update vesion.', true)
-          return 1
+          return 'success'
         else
-          return 0
+          return 'fail'
         end
       else
-        return 0
+        return 'fail'
       end
     end
   end
