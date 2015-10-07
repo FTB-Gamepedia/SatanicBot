@@ -38,7 +38,6 @@ sub read_rubyoutput {
     return @lines;
 }
 
-#Use this subroutine definition for adding commands.
 sub said {
     my ($self, $message) = @_;
     my $channel = $message->{channel};
@@ -129,12 +128,6 @@ sub said {
     if ($msg =~ m/^\$quit/i) {
         if (grep { $_ eq $host } @{$bot_stuff->{ops}}) {
             if ($msg =~ m/^\$quit$/i) {
-                $self->say(
-                    channel => $channel,
-                    who     => $user,
-                    body    => 'I don\'t love you anymore' #For some reason this does not get said before it quits in most cases.
-                );
-                $self->shutdown(); #Consider replacing the message said before it quits with an actual quit message.
                 exit 0;
             }
         } else {
@@ -171,7 +164,6 @@ sub said {
         }
     }
 
-    #Adds the <first arg abbreviation> to the G:Mods and doc as <second arg mod name>
     if ($msg =~  m/^\$abbrv/i) {
         if (grep { $_ eq $host } @{$bot_stuff->{ops}}) {
             if ($msg =~ m/^\$abbrv(?: )/i) {
@@ -337,7 +329,6 @@ sub said {
         }
     }
 
-    #Uploads the <first arg image> to the wiki as <second arg name>.
     if ($msg =~ m/^\$upload/i) {
         if (grep { $_ eq $host } @{$bot_stuff->{ops}}) {
             if ($msg =~ m/^\$upload(?: )/i) {
@@ -434,10 +425,12 @@ sub said {
     }
 
     if ($msg =~ m/^\$spookyscaryskeletons$/i) {
+        # For some reason, this does not actually work. It only outputs a single
+        #   word. See the issue tracker.
         my @random_words = Data::Random->rand_words(
             wordlist => 'info/spook.txt',
             min      => 10,
-            max      => 20 #for whatever reason, this does not actually work. It only outputs one word. See issue tracker.
+            max      => 20
         );
 
         $self->say(
@@ -446,14 +439,13 @@ sub said {
             body    => @random_words
         );
 
-        #my $dump = Data::Dumper->new([$random_words[0]]);
-        #$self->say(
-        #    channel => $channel,
-        #    body    => $dump
-        #);
+        # my $dump = Data::Dumper->new([$random_words[0]]);
+        # $self->say(
+          #  channel => $channel,
+          #  body    => $dump
+        # );
     }
 
-    #Outputs the weather for the <first arg location>.
     if ($msg =~ m/^\$weather(?: )/i) {
         if ($msg =~ m/\$weather f(?: )/i) {
             my @weatherwords = split /\s/, $msg, 3;
@@ -544,111 +536,109 @@ sub said {
             }
         }
     }
-=pod
-    if ($msg =~ m/^\$weatherforecast(?: )/i) {
-        if ($msg =~ m/\$weatherforecast f(?: )/i) {
-            my @weatherwords = split /\s/, $msg, 3;
-            if ($weatherwords[2] =~ m/[\p{IsAlphabetic}\d,]/) {
-                my $weather = Weather::Underground->new(
-                    place => $weatherwords[2]
-                );
 
-                my $forecast = $weather->getweather();
+    # if ($msg =~ m/^\$weatherforecast(?: )/i) {
+    #     if ($msg =~ m/\$weatherforecast f(?: )/i) {
+    #         my @weatherwords = split /\s/, $msg, 3;
+    #         if ($weatherwords[2] =~ m/[\p{IsAlphabetic}\d,]/) {
+    #             my $weather = Weather::Underground->new(
+    #                 place => $weatherwords[2]
+    #             );
+    #
+    #             my $forecast = $weather->getweather();
+    #
+    #             if (exists $forecast->[0]->{place}) {
+    #                 for (my $day = 0; $day < 7; $day++) {
+    #                     my $daysay = $day + 1;
+    #                     $self->say(
+    #                         channel => 'msg',
+    #                         who => $user,
+    #                         body    => "Day $daysay: $forecast->[$day]->{place}: $forecast->[$day]->{conditions} || Temperature: $forecast->[$day]->{fahrenheit} F || Humidity: $forecast->[$day]->{humidity}% || Last updated: $forecast->[$day]->{updated}"
+    #                     );
+    #                 }
+    #             } else {
+    #                 $self->say(
+    #                     channel => $channel,
+    #                     body    => "\'$weatherwords[2]\' is not a valid place."
+    #                 );
+    #             }
+    #         } else {
+    #             $self->say(
+    #                 channel => $channel,
+    #                 body    => $args
+    #             );
+    #         }
+    #     } elsif ($msg =~ m/\$weatherforecast c(?: )/i) {
+    #         my @weatherwords = split /\s/, $msg, 3;
+    #         if ($weatherwords[2] =~ m/[\p{IsAlphabetic}\d,]/) {
+    #             my $weather = Weather::Underground->new(
+    #                 place => $weatherwords[2]
+    #             );
+    #
+    #             my $forecast = $weather->getweather();
+    #
+    #             if (exists $forecast->[0]->{place}) {
+    #                 $self->say(
+    #                     channel => $channel,
+    #                     body    => "$forecast->[0]->{place}: $forecast->[0]->{conditions} || Temperature: $forecast->[0]->{celsius} C || Humidity: $forecast->[0]->{humidity}% || Last updated: $forecast->[0]->{updated}"
+    #                 );
+    #             } else {
+    #                 $self->say(
+    #                     channel => $channel,
+    #                     body    => "\'$weatherwords[2]\' is not a valid place."
+    #                 );
+    #             }
+    #         } else {
+    #             $self->say(
+    #                 channel => $channel,
+    #                 body    => $args
+    #             );
+    #         }
+    #     } else {
+    #         my @weatherwords = split /\s/, $msg, 2;
+    #         if ($weatherwords[1] =~ m/[\p{IsAlphabetic}\d,]/) {
+    #             my $weather = Weather::Underground->new(
+    #                 place => $weatherwords[1]
+    #             );
+    #
+    #             my $forecast = $weather->getweather();
+    #
+    #             if (exists $forecast->[0]->{place}) {
+    #                 $self->say(
+    #                     channel => $channel,
+    #                     body    => "$forecast->[0]->{place}: $forecast->[0]->{conditions} || Temperature: $forecast->[0]->{fahrenheit} F || Humidity: $forecast->[0]->{humidity}% || Last updated: $forecast->[0]->{updated}"
+    #                 );
+    #             } else {
+    #                 $self->say(
+    #                     channel => $channel,
+    #                     body    => "\'$weatherwords[1]\' is not a valid place."
+    #                 );
+    #             }
+    #         } else {
+    #             $self->say(
+    #                 channel => $channel,
+    #                 body    => $args
+    #             );
+    #         }
+    #     }
+    # }
 
-                if (exists $forecast->[0]->{place}) {
-                    for (my $day = 0; $day < 7; $day++) {
-                        my $daysay = $day + 1;
-                        $self->say(
-                            channel => 'msg',
-                            who => $user,
-                            body    => "Day $daysay: $forecast->[$day]->{place}: $forecast->[$day]->{conditions} || Temperature: $forecast->[$day]->{fahrenheit} F || Humidity: $forecast->[$day]->{humidity}% || Last updated: $forecast->[$day]->{updated}"
-                        );
-                    }
-                } else {
-                    $self->say(
-                        channel => $channel,
-                        body    => "\'$weatherwords[2]\' is not a valid place."
-                    );
-                }
-            } else {
-                $self->say(
-                    channel => $channel,
-                    body    => $args
-                );
-            }
-        } elsif ($msg =~ m/\$weatherforecast c(?: )/i) {
-            my @weatherwords = split /\s/, $msg, 3;
-            if ($weatherwords[2] =~ m/[\p{IsAlphabetic}\d,]/) {
-                my $weather = Weather::Underground->new(
-                    place => $weatherwords[2]
-                );
+    # if ($msg =~ m/^\$weather$/i) {
+    #     my $ip = $message->{raw_nick};
+    #     $ip =~ s/^[^\@]*\@//;
+    #     my $geoip = Geo::IP->new();
+    #     my $record_by_name = $geoip->record_by_name($ip);
+    #     my $weather = Weather::Underground->new(
+    #         place => $record_by_name->postal_code
+    #     );
+    #     my $forecast = $weather->getweather();
+    #
+    #     $self->say(
+    #         channel => $channel,
+    #         body    => "$forecast->[0]->{place}: $forecast->[0]->{conditions} || Temperature: $forecast->[0]->{fahrenheit} F || Humidity: $forecast->[0]->{humidity}% || Last updated: $forecast->[0]->{updated}"
+    #     );
+    # }
 
-                my $forecast = $weather->getweather();
-
-                if (exists $forecast->[0]->{place}) {
-                    $self->say(
-                        channel => $channel,
-                        body    => "$forecast->[0]->{place}: $forecast->[0]->{conditions} || Temperature: $forecast->[0]->{celsius} C || Humidity: $forecast->[0]->{humidity}% || Last updated: $forecast->[0]->{updated}"
-                    );
-                } else {
-                    $self->say(
-                        channel => $channel,
-                        body    => "\'$weatherwords[2]\' is not a valid place."
-                    );
-                }
-            } else {
-                $self->say(
-                    channel => $channel,
-                    body    => $args
-                );
-            }
-        } else {
-            my @weatherwords = split /\s/, $msg, 2;
-            if ($weatherwords[1] =~ m/[\p{IsAlphabetic}\d,]/) {
-                my $weather = Weather::Underground->new(
-                    place => $weatherwords[1]
-                );
-
-                my $forecast = $weather->getweather();
-
-                if (exists $forecast->[0]->{place}) {
-                    $self->say(
-                        channel => $channel,
-                        body    => "$forecast->[0]->{place}: $forecast->[0]->{conditions} || Temperature: $forecast->[0]->{fahrenheit} F || Humidity: $forecast->[0]->{humidity}% || Last updated: $forecast->[0]->{updated}"
-                    );
-                } else {
-                    $self->say(
-                        channel => $channel,
-                        body    => "\'$weatherwords[1]\' is not a valid place."
-                    );
-                }
-            } else {
-                $self->say(
-                    channel => $channel,
-                    body    => $args
-                );
-            }
-        }
-    }
-
-    if ($msg =~ m/^\$weather$/i) {
-        my $ip = $message->{raw_nick};
-        $ip =~ s/^[^\@]*\@//;
-        my $geoip = Geo::IP->new();
-        my $record_by_name = $geoip->record_by_name($ip);
-        my $weather = Weather::Underground->new(
-            place => $record_by_name->postal_code
-        );
-        my $forecast = $weather->getweather();
-
-        $self->say(
-            channel => $channel,
-            body    => "$forecast->[0]->{place}: $forecast->[0]->{conditions} || Temperature: $forecast->[0]->{fahrenheit} F || Humidity: $forecast->[0]->{humidity}% || Last updated: $forecast->[0]->{updated}"
-        );
-    }
-=cut
-
-    #Outputs the link to this bot's source code.
     if ($msg =~ m/^\$src$/i) {
         $self->say(
             channel => $channel,
@@ -657,8 +647,6 @@ sub said {
         );
     }
 
-    #Outputs how many contributions the user has made to the wiki.
-    #Consider using a JSON parser instead of regular expression.
     if ($msg =~ m/^\$contribs(?: )/i) {
         my @contribwords = split /\s/, $msg, 2;
         if ($contribwords[1] =~ m/.+/) {
@@ -744,7 +732,6 @@ sub said {
         # }
     }
 
-    #Outputs a random sentence from 8ball.txt.
     if ($msg =~ m/^\$8ball$/i) {
         my $file = 'info/8ball.txt';
         my $rl = File::RandomLine->new($file);
@@ -757,7 +744,6 @@ sub said {
         );
     }
 
-    #50/50 chance of outputting heads or tails.
     if ($msg =~ m/^\$flip$/i) {
         my $coin = int rand 2;
         if ($coin eq 1) {
@@ -775,7 +761,6 @@ sub said {
         }
     }
 
-    #Outputs a random quote from ircquotes.txt.
     if ($msg =~ m/^\$randquote$/i) {
         my $file = 'info/ircquotes.txt';
         my $rl = File::RandomLine->new($file);
@@ -788,9 +773,7 @@ sub said {
         );
     }
 
-    #Wiki statistics.
-    #Consider using a real JSON parser rather than regular expression.
-    #Refactor into Ruby code.
+    # TODO: Refactor into Ruby code.
     if ($msg =~ m/^\$stats/i) {
         my $www         = WWW::Mechanize->new();
         my $stuff       = $www->get('http://ftb.gamepedia.com/api.php?action=query&meta=siteinfo&siprop=statistics&format=json') or die "Unable to get url.\n";
@@ -803,6 +786,7 @@ sub said {
         my @activeusers = $decode =~ m{\"activeusers\":(.*?),};
         my @admins      = $decode =~ m{\"admins\":(.*?),};
 
+        # These can be replaced with my Ruby String-Utility #separate method.
         my $num_pages    = SatanicBot::Utils->separate_by_commas($pages[0]);
         my $num_articles = SatanicBot::Utils->separate_by_commas($articulos[0]);
         my $num_edits    = SatanicBot::Utils->separate_by_commas($edits[0]);
@@ -851,97 +835,96 @@ sub said {
         }
     }
 
-=pod
-    if ($msg =~ m/^\$addminor/i) {
-        if ($msg =~ m/^\$addminor(?: )/i) {
-            if (grep { $_ eq $host } @{$bot_stuff->{ops}}) {
-                my @minormodswords = split /\s/, $msg, 2;
-                $self->say(
-                    channel => $channel,
-                    who     => $user,
-                    body    => "Adding \'$minormodswords[1]\' to the Minor Mods list."
-                    );
-
-                SatanicBot::MediaWikiAPI->login();
-                my $edit = SatanicBot::MediaWikiAPI->edit_minor($minormodswords[1]);
-
-                if ($edit =~ m/\W/) {
-                    $self->say(
-                        channel => $channel,
-                        who     => $user,
-                        body    => $edit
-                    );
-                } elsif ($edit == 0) {
-                    $self->say(
-                        channel => $channel,
-                        who     => $user,
-                        body    => 'Could not proceed. Mod already on the list or mod page returned missing.'
-                    );
-                } elsif ($edit == 1) {
-                    $self->say(
-                        channel => $channel,
-                        who     => $user,
-                        body    => 'Success!'
-                    );
-                }
-            } else {
-                $self->say(
-                    channel => $channel,
-                    who     => $user,
-                    body    => $authorized
-                );
-            }
-        } else {
-            $self->say(
-                channel => $channel,
-                who     => $user,
-                body    => $args
-            );
-        }
-    }
-
-    if ($msg =~ m/^\$addmod/i) {
-        if ($msg =~ m/^\$addmod(?: )/i) {
-            if (grep { $_ eq $host } @{ $bot_stuff->{ops} }) {
-                my @modwords = split /\s/, $msg, 2;
-                $self->say(
-                    channel => $channel,
-                    who     => $user,
-                    body    => "Adding \'$modwords[1]\' to the Mods list."
-                );
-
-                SatanicBot::MediaWikiAPI->login();
-                my $edit = SatanicBot::MediaWikiAPI->edit_mods($modwords[1]);
-
-                if ($edit == 0) {
-                    $self->say(
-                        channel => $channel,
-                        who     => $user,
-                        body    => 'Could not proceed. Mod already on the list or mod page returned missing.'
-                    );
-                } elsif ($edit == 1) {
-                    $self->say(
-                        channel => $channel,
-                        who     => $user,
-                        body    => 'Success!'
-                    );
-                }
-            } else {
-                $self->say(
-                    channel => $channel,
-                    who     => $user,
-                    body    => $authorized
-                );
-            }
-        } else {
-            $self->say(
-                channel => $channel,
-                who     => $user,
-                body    => $args
-            )
-        }
-    }
-=cut
+    # TODO: Refactor into Ruby code.
+    # if ($msg =~ m/^\$addminor/i) {
+    #     if ($msg =~ m/^\$addminor(?: )/i) {
+    #         if (grep { $_ eq $host } @{$bot_stuff->{ops}}) {
+    #             my @minormodswords = split /\s/, $msg, 2;
+    #             $self->say(
+    #                 channel => $channel,
+    #                 who     => $user,
+    #                 body    => "Adding \'$minormodswords[1]\' to the Minor Mods list."
+    #                 );
+    #
+    #             SatanicBot::MediaWikiAPI->login();
+    #             my $edit = SatanicBot::MediaWikiAPI->edit_minor($minormodswords[1]);
+    #
+    #             if ($edit =~ m/\W/) {
+    #                 $self->say(
+    #                     channel => $channel,
+    #                     who     => $user,
+    #                     body    => $edit
+    #                 );
+    #             } elsif ($edit == 0) {
+    #                 $self->say(
+    #                     channel => $channel,
+    #                     who     => $user,
+    #                     body    => 'Could not proceed. Mod already on the list or mod page returned missing.'
+    #                 );
+    #             } elsif ($edit == 1) {
+    #                 $self->say(
+    #                     channel => $channel,
+    #                     who     => $user,
+    #                     body    => 'Success!'
+    #                 );
+    #             }
+    #         } else {
+    #             $self->say(
+    #                 channel => $channel,
+    #                 who     => $user,
+    #                 body    => $authorized
+    #             );
+    #         }
+    #     } else {
+    #         $self->say(
+    #             channel => $channel,
+    #             who     => $user,
+    #             body    => $args
+    #         );
+    #     }
+    # }
+    #
+    # if ($msg =~ m/^\$addmod/i) {
+    #     if ($msg =~ m/^\$addmod(?: )/i) {
+    #         if (grep { $_ eq $host } @{ $bot_stuff->{ops} }) {
+    #             my @modwords = split /\s/, $msg, 2;
+    #             $self->say(
+    #                 channel => $channel,
+    #                 who     => $user,
+    #                 body    => "Adding \'$modwords[1]\' to the Mods list."
+    #             );
+    #
+    #             SatanicBot::MediaWikiAPI->login();
+    #             my $edit = SatanicBot::MediaWikiAPI->edit_mods($modwords[1]);
+    #
+    #             if ($edit == 0) {
+    #                 $self->say(
+    #                     channel => $channel,
+    #                     who     => $user,
+    #                     body    => 'Could not proceed. Mod already on the list or mod page returned missing.'
+    #                 );
+    #             } elsif ($edit == 1) {
+    #                 $self->say(
+    #                     channel => $channel,
+    #                     who     => $user,
+    #                     body    => 'Success!'
+    #                 );
+    #             }
+    #         } else {
+    #             $self->say(
+    #                 channel => $channel,
+    #                 who     => $user,
+    #                 body    => $authorized
+    #             );
+    #         }
+    #     } else {
+    #         $self->say(
+    #             channel => $channel,
+    #             who     => $user,
+    #             body    => $args
+    #         )
+    #     }
+    # }
 
     if ($msg =~ m/^\$randnum/i) {
         my @randwords = split /\s/, $msg, 2;
@@ -960,8 +943,7 @@ sub said {
         }
     }
 
-    #Super hard number guessing game
-    #Make it less hard you fuccboi
+    #TODO: Make it less hard, so that the player can ACTUALLY win.
     if ($msg =~ m/^\$game/i) {
         if ($msg =~ m/^\$game [\d]/i){
             my @gamewords = split /\s/, $msg, 2;
@@ -1040,7 +1022,7 @@ sub said {
         }
     }
 
-    #LittleHelper is a LittleMotivational too. Suggested by Peter to motivate Kyth.
+    # LittleHelper is a LittleMotivational too. Suggested by Peter to motivate Kyth.
     if ($msg =~ m/^\$motivate/i) {
         my $file = File::RandomLine->new('info/motivate.txt');
         my $mess = $file->next(1);
@@ -1061,7 +1043,8 @@ sub said {
         }
     }
 
-    #Autotweet
+    # Autotweet
+    # FIXME: libwww doesn't install correctly. Find some alternative.
     # if ($msg =~ m/^\$tweet/i) {
     #     if ($msg !~ m/^\$tweet$/i) {
     #         my $lengthmsg = length $msg;
@@ -1097,7 +1080,6 @@ sub said {
     #     }
     # }
 
-    #Provides the user with a command list.
     if ($msg =~ m/^\$help/i) {
         if ($msg !~ m/\$help$/i) {
             my @helpwords = split /\s/, $msg, 2;
@@ -1155,9 +1137,9 @@ sub said {
                 case m/auth$/i {
                     $helpfulmessage = 'Logs the user in, allowing for op-only commands. 1 arg: $auth <password>';
                 }
-                #case m/addminor$/i {
-                #    $helpfulmessage = 'Adds a mod to the list of minor mods on the main page. 1 arg: $addminor <mod name>';
-                #}
+                # case m/addminor$/i {
+                  #  $helpfulmessage = 'Adds a mod to the list of minor mods on the main page. 1 arg: $addminor <mod name>';
+                # }
                 # case m/addmod$/i {
                     # $helpfulmessage = 'Adds a mod to the list of mods on the main page. 1 arg: $addmod <mod name>';
                 # }
