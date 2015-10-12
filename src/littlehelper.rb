@@ -1,7 +1,7 @@
 require 'cinch'
 require_relative 'generalutils'
 
-require_relative 'plugins/pass'
+require_relative 'plugins/authentication'
 
 $wikiuser = GeneralUtils::Files.get_secure(0)
 $password = GeneralUtils::Files.get_secure(1)
@@ -11,8 +11,8 @@ $authpass = GeneralUtils::Files.get_secure(3)
 $authedusers = []
 
 def init_wiki
-  $butt = MediaWiki::Butt.new 'http://ftb.gamepedia.com'
-  $butt.login('SatanicBot', )
+   $butt = MediaWiki::Butt.new 'http://ftb.gamepedia.com'
+   $butt.login('SatanicBot', $password)
 end
 
 
@@ -26,7 +26,11 @@ bot = Cinch::Bot.new do
     c.user = 'LittleHelper'
     c.password = $password
     c.realname = 'SatanicSanta\'s Big Fat Butt'
-    c.plugins.plugins = [Plugins::Pass, Plugins::Auth]
+    c.plugins.plugins = [
+      Plugins::Authentication::SetPass,
+      Plugins::Authentication::Login,
+      Plugins::Authentication::Logout
+    ]
     c.plugins.prefix = /^\$/
     c
   end
