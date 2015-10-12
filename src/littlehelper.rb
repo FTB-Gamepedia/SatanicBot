@@ -1,7 +1,8 @@
 require 'cinch'
 require_relative 'generalutils'
 
-require_relative 'plugins/authentication'
+require_relative 'plugins/commands/authentication'
+require_relative 'plugins/commands/quit'
 
 $wikiuser = GeneralUtils::Files.get_secure(0)
 $password = GeneralUtils::Files.get_secure(1)
@@ -27,9 +28,10 @@ bot = Cinch::Bot.new do
     c.password = $password
     c.realname = 'SatanicSanta\'s Big Fat Butt'
     c.plugins.plugins = [
-      Plugins::Authentication::SetPass,
-      Plugins::Authentication::Login,
-      Plugins::Authentication::Logout
+      Plugins::Commands::Authentication::SetPass,
+      Plugins::Commands::Authentication::Login,
+      Plugins::Commands::Authentication::Logout,
+      Plugins::Commands::Quit
     ]
     c.plugins.prefix = /^\$/
     c
