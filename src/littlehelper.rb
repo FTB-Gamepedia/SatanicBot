@@ -23,9 +23,9 @@ module LittleHelper
     configure do |c|
       c.server = 'irc.esper.net'
       c.port = 6667
-      c.channels = ['#FTB-Wiki-Dev']
-      # c.channels = ['#FTB-Wiki', '#SatanicSanta', '#FTB-Wiki-Dev']
-      c.nicks = ['LittleHelper', 'SatanicBot', 'SatanicButt']
+      c.channels = %w(#FTB-Wiki-Dev)
+      # c.channels = %w(#FTB-Wiki #SatanicSanta #FTB-Wiki-Dev)
+      c.nicks = %w(LittleHelper SatanicBot SatanicButt)
       c.user = 'LittleHelper'
       c.password = Variables::Constants::PASSWORD
       c.realname = 'SatanicSanta\'s Big Fat Butt'
@@ -49,7 +49,7 @@ module LittleHelper
     end
 
     on :unban do |msg, ban|
-      msg.reply("And here I was thinking we were going to have some permanent " \
+      msg.reply('And here I was thinking we were going to have some ' \
                 "peace and quiet, but now #{ban.mask} is unbanned by #{ban.by}")
     end
   end

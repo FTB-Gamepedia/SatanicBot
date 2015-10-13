@@ -7,7 +7,7 @@ module Plugins
       class Word
         include Cinch::Plugin
 
-        match /word/i
+        match(/word/i)
 
         def execute(msg)
           msg.reply(LiterateRandomizer.word)
@@ -17,7 +17,7 @@ module Plugins
       class Sentence
         include Cinch::Plugin
 
-        match /sentence/i
+        match(/sentence/i)
 
         def execute(msg)
           msg.reply(LiterateRandomizer.sentence)

@@ -7,7 +7,7 @@ module Plugins
     class UpdateVersion
       include Cinch::Plugin
 
-      match /updatevers <(.+)> <(.+)>/i
+      match(/updatevers <(.+)> <(.+)>/i)
 
       def execute(msg, mod, version)
         msg.reply("Trying to update #{mod} to #{version}.")
@@ -22,7 +22,7 @@ module Plugins
               butt.edit(mod, text, 'Update vesion.', true)
               msg.reply("Sucessfully updated #{mod} to #{version}!")
             else
-              msg.reply("#{version} is already the current version on the page.")
+              msg.reply("#{version} is the current version on the page.")
             end
           else
             msg.reply('That page does not have the param, trying to make one.')
@@ -35,8 +35,8 @@ module Plugins
                 msg.reply("Failed! Error code: #{edit}")
               end
             else
-              msg.reply('Could not find Infobox in the page. Please make sure ' \
-                        'that you entered the page name correctly and try again.')
+              msg.reply('Could not find Infobox in the page. Please be sure ' \
+                        'that you entered the page name correctly.')
             end
           end
         else

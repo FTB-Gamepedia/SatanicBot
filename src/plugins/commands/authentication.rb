@@ -7,7 +7,7 @@ module Plugins
       class Login
         include Cinch::Plugin
 
-        match /login (.+)/i
+        match(/login (.+)/i)
 
         def execute(msg, pass)
           authedusers = Variables::NonConstants.get_authenticated_users
@@ -27,7 +27,7 @@ module Plugins
       class Logout
         include Cinch::Plugin
 
-        match /logout/i
+        match(/logout/i)
 
         def execute(msg)
           authedusers = Variables::NonConstants.get_authenticated_users
@@ -43,7 +43,7 @@ module Plugins
       class SetPass
         include Cinch::Plugin
 
-        match /setpass (.+)/i
+        match(/setpass (.+)/i)
 
         def execute(msg, new_pass)
           if msg.user.authname == 'SatanicSanta'

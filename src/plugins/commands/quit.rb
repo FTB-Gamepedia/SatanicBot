@@ -5,7 +5,7 @@ module Plugins
     class Quit
       include Cinch::Plugin
 
-      match /quit/i
+      match(/quit/i)
 
       def execute(msg)
         if msg.user.authname == 'SatanicSanta'
