@@ -1,4 +1,5 @@
 require 'cinch'
+require_relative '../../variables'
 
 module Plugins
   module Commands
@@ -9,7 +10,7 @@ module Plugins
         match /help/i
 
         def execute(msg)
-          command_names = $commands.keys.join(', ')
+          command_names = Variables::Constants::COMMANDS.keys.join(', ')
           msg.reply("My activation char is $. Listing commands... " \
                     "#{command_names}")
         end
@@ -32,8 +33,9 @@ module Plugins
         match /command (.+)/i
 
         def execute(msg, command)
-          if $commands.keys.include? command
-            msg.reply("Command: #{command}. Info: #{$commands[command]}")
+          if Variables::Constants::COMMANDS.keys.include? command
+            command_info = Variables::Constants::COMMANDS[command]
+            msg.reply("Command: #{command}. Info: #{command_info}")
           end
         end
       end
