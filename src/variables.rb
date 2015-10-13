@@ -1,11 +1,13 @@
+require_relative 'generalutils'
+
 module Variables
   module Constants
-    WIKIUSER = GeneralUtils::Files.get_secure(0)
-    PASSWORD = GeneralUtils::Files.get_secure(1)
-    TWITUSER = GeneralUtils::Files.get_secure(2)
+    WIKIUSER = 'SatanicBot'
+    PASSWORD = GeneralUtils::Files.get_secure(0)
+    TWITUSER = 'LittleHelperBot'
     COMMANDS = {
       'login' => 'Logs the user in, allowing for op-only commands. ' \
-                '1 arg: $auth <password>',
+                '1 arg: $login <password>',
       'logout' => 'Logs the user out. No args.',
       'setpass' => 'Sets the auth password. Santa-only command. ' \
                    '1 arg: $setpass <newpassword>',
@@ -14,13 +16,15 @@ module Variables
       'src' => 'Outputs my creator\'s name and the repository for me.',
       'command' => 'Gets information on a command. 1 arg: $command <commandname>',
       'word' => 'Outputs a random word. No args.',
-      'sentence' => 'Outputs a random sentence. No args.'
+      'sentence' => 'Outputs a random sentence. No args.',
+      'updatevers' => 'Updates a mod version on the wiki. Op-only command. ' \
+                      '2 args: $updatevers <mod page> <mod version>'
     }
   end
 
   module NonConstants
     extend self
-    @@authpass = GeneralUtils::Files.get_secure(3)
+    @@authpass = GeneralUtils::Files.get_secure(1)
     @@authedusers = []
 
     def get_authentication_password

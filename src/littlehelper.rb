@@ -1,4 +1,5 @@
 require 'cinch'
+require 'mediawiki-butt'
 
 require_relative 'generalutils'
 require_relative 'variables'
@@ -7,13 +8,15 @@ require_relative 'plugins/commands/authentication'
 require_relative 'plugins/commands/quit'
 require_relative 'plugins/commands/random'
 require_relative 'plugins/commands/info'
+require_relative 'plugins/commands/update_version'
 
 module LittleHelper
   extend self
-  
+
   def init_wiki
-    $butt = MediaWiki::Butt.new 'http://ftb.gamepedia.com'
-    $butt.login('SatanicBot', $password)
+    butt = MediaWiki::Butt.new 'http://ftb.gamepedia.com'
+    butt.login('SatanicBot', Variables::Constants::PASSWORD)
+    butt
   end
 
   BOT = Cinch::Bot.new do
@@ -35,7 +38,8 @@ module LittleHelper
         Plugins::Commands::Info::Src,
         Plugins::Commands::Info::Command,
         Plugins::Commands::Random::Word,
-        Plugins::Commands::Random::Sentence
+        Plugins::Commands::Random::Sentence,
+        Plugins::Commands::UpdateVersion
       ]
       c.plugins.prefix = /^\$/
     end
