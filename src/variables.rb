@@ -14,11 +14,15 @@ module Variables
       'quit' => 'Murders me. Santa-only command. No args.',
       'help' => 'Gets basic usage information on the bot.',
       'src' => 'Outputs my creator\'s name and the repository for me.',
-      'command' => 'Gets information on a command. 1 arg: $command <commandname>',
+      'command' => 'Gets info on a command. 1 arg: $command <commandname>',
       'word' => 'Outputs a random word. No args.',
       'sentence' => 'Outputs a random sentence. No args.',
       'updatevers' => 'Updates a mod version on the wiki. Op-only command. ' \
-                      '2 args: $updatevers <mod page> <mod version>'
+                      '2 args: $updatevers <mod page> <mod version>. Args ' \
+                      'must be wrapped in <> for this command.',
+      'abbrv' => 'Abbreivates a mod for the tilesheet extension. ' \
+                 'An op-only command. 2 args: $abbrv <abbreviation> <mod_name>',
+      'checkpage' => 'Checks if the page exists. 1 arg: $checkpage <page>'
     }
   end
 

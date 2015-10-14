@@ -10,6 +10,7 @@ require_relative 'plugins/commands/random'
 require_relative 'plugins/commands/info'
 require_relative 'plugins/commands/update_version'
 require_relative 'plugins/commands/abbreviate'
+require_relative 'plugins/commands/check_page'
 
 module LittleHelper
   extend self
@@ -41,7 +42,8 @@ module LittleHelper
         Plugins::Commands::Random::Word,
         Plugins::Commands::Random::Sentence,
         Plugins::Commands::UpdateVersion,
-        Plugins::Commands::Abbreviate
+        Plugins::Commands::Abbreviate,
+        Plugins::Commands::CheckPage
       ]
       c.plugins.prefix = /^\$/
     end

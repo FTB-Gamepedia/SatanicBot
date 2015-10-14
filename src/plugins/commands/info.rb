@@ -11,7 +11,7 @@ module Plugins
 
         def execute(msg)
           command_names = Variables::Constants::COMMANDS.keys.join(', ')
-          msg.reply('My activation char is $. Commands with multiple ' \
+          msg.reply('My activation char is $. Some commands with multiple ' \
                     'arguments are surrounded with <>. For example: ' \
                     '$updatevers <GregTech> <69>.')
           msg.reply("Listing commands... #{command_names}")
