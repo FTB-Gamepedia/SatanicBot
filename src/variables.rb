@@ -26,7 +26,11 @@ module Variables
       'newminorcat' => 'Creates a new minor mod category. 1 arg: ' \
                         '$newminorcat <name>',
       'newmodcat' => 'Creates a standard mod category. 1 arg: $newmodcat ' \
-                      '<name>'
+                      '<name>',
+      'addquote' => 'Adds a string to the quote list. Op-only. 1 arg: ' \
+                      '$addquote <quote>',
+      'upload' => 'Uploads a web file to the wiki. Op-only. 2 args: $upload ' \
+                  '<url> <filename>'
     }
   end
 

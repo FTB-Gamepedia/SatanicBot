@@ -1,17 +1,9 @@
 require 'cinch'
 require 'mediawiki-butt'
-
+require 'require_all'
 require_relative 'generalutils'
 require_relative 'variables'
-
-require_relative 'plugins/commands/authentication'
-require_relative 'plugins/commands/quit'
-require_relative 'plugins/commands/random'
-require_relative 'plugins/commands/info'
-require_relative 'plugins/commands/update_version'
-require_relative 'plugins/commands/abbreviate'
-require_relative 'plugins/commands/check_page'
-require_relative 'plugins/commands/mod_category'
+require_rel 'plugins'
 
 module LittleHelper
   extend self
@@ -46,7 +38,9 @@ module LittleHelper
         Plugins::Commands::Abbreviate,
         Plugins::Commands::CheckPage,
         Plugins::Commands::MajorCategory,
-        Plugins::Commands::MinorCategory
+        Plugins::Commands::MinorCategory,
+        Plugins::Commands::AddQuote,
+        Plugins::Commands::Upload
       ]
       c.plugins.prefix = /^\$/
     end
