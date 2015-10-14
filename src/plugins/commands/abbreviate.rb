@@ -5,7 +5,7 @@ module Plugins
     class Abbreviate
       include Cinch::Plugin
 
-      match(/abbrv ([A-Z0-9]+) (.+)/i)
+      match(/abbrv ([A-Z0-9\-]+) (.+)/i)
 
       def execute(msg, abbreviation, mod)
         abbreviation = abbreviation.upcase

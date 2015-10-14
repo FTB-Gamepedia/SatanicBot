@@ -22,7 +22,11 @@ module Variables
                       'must be wrapped in <> for this command.',
       'abbrv' => 'Abbreivates a mod for the tilesheet extension. ' \
                  'An op-only command. 2 args: $abbrv <abbreviation> <mod_name>',
-      'checkpage' => 'Checks if the page exists. 1 arg: $checkpage <page>'
+      'checkpage' => 'Checks if the page exists. 1 arg: $checkpage <page>',
+      'newminorcat' => 'Creates a new minor mod category. 1 arg: ' \
+                        '$newminorcat <name>',
+      'newmodcat' => 'Creates a standard mod category. 1 arg: $newmodcat ' \
+                      '<name>'
     }
   end
 
