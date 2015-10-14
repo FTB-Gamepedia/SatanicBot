@@ -10,7 +10,6 @@ module Plugins
       match(/updatevers <(.+)> <(.+)>/i)
 
       def execute(msg, mod, version)
-        msg.reply("Trying to update #{mod} to #{version}.")
         authedusers = Variables::NonConstants.get_authenticated_users
         if authedusers.include?(msg.user.authname)
           butt = LittleHelper.init_wiki
@@ -29,7 +28,7 @@ module Plugins
             if /{{[Ii]nfobox mod}}/ =~ text
               text = text.sub(/}}/, "version=#{version}\n}}")
               edit = butt.edit(mod, text, 'Add version parameter', true)
-              if /\d/ =~ edit
+              if edit.is_a?(Fixnum)
                 msg.reply("Successfully updated #{mod} to #{version}!")
               else
                 msg.reply("Failed! Error code: #{edit}")
