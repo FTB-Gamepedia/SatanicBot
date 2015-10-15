@@ -7,14 +7,24 @@ module Plugins
       class Help
         include Cinch::Plugin
 
-        match(/help/i)
+        match(/help$/i, method: :help)
+        match(/help (.+)/i, method: :command)
 
-        def execute(msg)
+        def help(msg)
           command_names = Variables::Constants::COMMANDS.keys.join(', ')
           msg.reply('My activation char is $. Some commands with multiple ' \
                     'arguments are surrounded with <>. For example: ' \
                     '$updatevers <GregTech> <69>.')
           msg.reply("Listing commands... #{command_names}")
+        end
+
+        def command(msg, command)
+          if Variables::Constants::COMMANDS.keys.include? command
+            command_info = Variables::Constants::COMMANDS[command]
+            msg.reply("Command: #{command}. Info: #{command_info}")
+          else
+            msg.reply('That is not a command.')
+          end
         end
       end
 
@@ -26,21 +36,6 @@ module Plugins
         def execute(msg)
           msg.reply('This bot was created by SatanicSanta, or Eli Foster: ' \
                     'https://github.com/elifoster/SatanicBot')
-        end
-      end
-
-      class Command
-        include Cinch::Plugin
-
-        match(/command (.+)/i)
-
-        def execute(msg, command)
-          if Variables::Constants::COMMANDS.keys.include? command
-            command_info = Variables::Constants::COMMANDS[command]
-            msg.reply("Command: #{command}. Info: #{command_info}")
-          else
-            msg.reply('That is not a command.')
-          end
         end
       end
     end

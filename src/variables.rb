@@ -12,9 +12,9 @@ module Variables
       'setpass' => 'Sets the auth password. Santa-only command. ' \
                    '1 arg: $setpass <newpassword>',
       'quit' => 'Murders me. Santa-only command. No args.',
-      'help' => 'Gets basic usage information on the bot.',
+      'help' => 'Gets basic usage information on the bot. 1 optional arg: ' \
+                '$help <command> to get info on a command.',
       'src' => 'Outputs my creator\'s name and the repository for me.',
-      'command' => 'Gets info on a command. 1 arg: $command <commandname>',
       'word' => 'Outputs a random word. No args.',
       'sentence' => 'Outputs a random sentence. No args.',
       'updatevers' => 'Updates a mod version on the wiki. Op-only command. ' \
@@ -33,7 +33,12 @@ module Variables
                   '<url> <filename>',
       'addnav' => 'Adds the navbox to the template list. Op-only. 2 args: ' \
                   '$addnav <navbox> <page>. Args must be wrapped in <> ' \
-                  'for this command.'
+                  'for this command.',
+      'contribs' => 'Provides the user\'s number of contribs to the wiki and ' \
+                    'registration date. 1 optional arg: <username>. If no ' \
+                    'arg is given, I will use the user\'s IRC nickname.',
+      '8ball' => 'Determines your fortune. No args',
+      'flip' => 'Heads or tails! No args'
     }
   end
 
