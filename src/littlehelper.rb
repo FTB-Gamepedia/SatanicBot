@@ -18,8 +18,11 @@ module LittleHelper
     configure do |c|
       c.server = 'irc.esper.net'
       c.port = 6667
-      c.channels = %w(#FTB-Wiki-Dev)
-      # c.channels = %w(#FTB-Wiki #SatanicSanta #FTB-Wiki-Dev)
+      if ARGV[0] == '-d'
+        c.channels = %w(#FTB-Wiki-Dev)
+      else
+        c.channels = %w(#FTB-Wiki #SatanicSanta #FTB-Wiki-Dev)
+      end
       c.nicks = %w(LittleHelper SatanicBot SatanicButt)
       c.user = 'LittleHelper'
       c.password = Variables::Constants::PASSWORD
