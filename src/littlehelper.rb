@@ -34,8 +34,7 @@ module LittleHelper
         Plugins::Commands::Quit,
         Plugins::Commands::Info::Help,
         Plugins::Commands::Info::Src,
-        Plugins::Commands::Random::Word,
-        Plugins::Commands::Random::Sentence,
+        Plugins::Commands::Random,
         Plugins::Commands::UpdateVersion,
         Plugins::Commands::Abbreviate,
         Plugins::Commands::CheckPage,
@@ -46,7 +45,9 @@ module LittleHelper
         Plugins::Commands::AddNavbox,
         Plugins::Commands::GetContribs,
         Plugins::Commands::EightBall,
-        Plugins::Commands::FlipCoin
+        Plugins::Commands::FlipCoin,
+        Plugins::Commands::WikiStatistics,
+        Plugins::Commands::NumberGame
       ]
       c.plugins.prefix = /^\$/
     end
