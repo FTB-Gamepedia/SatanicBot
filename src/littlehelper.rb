@@ -43,7 +43,8 @@ module LittleHelper
         Plugins::Commands::MajorCategory,
         Plugins::Commands::MinorCategory,
         Plugins::Commands::AddQuote,
-        Plugins::Commands::Upload
+        Plugins::Commands::Upload,
+        Plugins::Commands::AddNavbox
       ]
       c.plugins.prefix = /^\$/
     end

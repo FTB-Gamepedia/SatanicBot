@@ -30,7 +30,10 @@ module Variables
       'addquote' => 'Adds a string to the quote list. Op-only. 1 arg: ' \
                       '$addquote <quote>',
       'upload' => 'Uploads a web file to the wiki. Op-only. 2 args: $upload ' \
-                  '<url> <filename>'
+                  '<url> <filename>',
+      'addnav' => 'Adds the navbox to the template list. Op-only. 2 args: ' \
+                  '$addnav <navbox> <page>. Args must be wrapped in <> ' \
+                  'for this command.'
     }
   end
 
