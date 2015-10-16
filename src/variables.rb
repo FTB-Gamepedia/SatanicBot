@@ -46,7 +46,14 @@ module Variables
                  'edits or images or users or activeusers or admins>.',
       'game' => 'Number guessing game. Initialize with $game start. Then ' \
                 'guess numbers by doing $game guess <number>. You can exit ' \
-                'a game by doing $game quit.'
+                'a game by doing $game quit.',
+      'motivate' => 'Motivates you or the user you provide in the first arg. ' \
+                    'If the user in the first arg is not in the channel, I ' \
+                    'will motivate you instead <3.',
+      'addmod' => 'Adds a mod to the list of mods on the main page. ' \
+                  'Op-only. 1 arg: $addmod <mod name>'
+      'addminor' => 'Adds a mod to the list of minor mods on the main page. ' \
+                    'Op-only. 1 arg: $addminor <mod name>'
     }
   end
 

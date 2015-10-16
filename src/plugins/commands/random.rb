@@ -13,6 +13,8 @@ module Plugins
       match(/randquote/i, method: :random_quote)
       match(/randnum$/i, method: :random_number)
       match(/randnum (\d+)/i, method: :random_number_max)
+      match(/motivate$/i, method: :motivate_you)
+      match(/motivate (.+)/i, method: :motivate_else)
 
       def random_word(msg)
         msg.reply(LiterateRandomizer.word)
@@ -35,6 +37,22 @@ module Plugins
         num = rand(maximum.to_i).to_s
         num = num.separate if num.to_i > 999
         msg.reply(num)
+      end
+
+      def motivate_you(msg)
+        path = "#{Dir.pwd}/src/info/motivate.txt"
+        line = StringUtility.random_line(path)
+        msg.reply("#{line}, #{msg.user.nick}")
+      end
+
+      def motivate_else(msg, user)
+        if msg.channel.has_user?(user)
+          path = "#{Dir.pwd}/src/info/motivate.txt"
+          line = StringUtility.random_line(path)
+          msg.reply("#{line}, #{user}")
+        else
+          motivate_you(msg)
+        end
       end
     end
   end

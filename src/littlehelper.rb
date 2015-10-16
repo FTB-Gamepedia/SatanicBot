@@ -47,7 +47,8 @@ module LittleHelper
         Plugins::Commands::EightBall,
         Plugins::Commands::FlipCoin,
         Plugins::Commands::WikiStatistics,
-        Plugins::Commands::NumberGame
+        Plugins::Commands::NumberGame,
+        Plugins::Commands::AddMod
       ]
       c.plugins.prefix = /^\$/
     end
