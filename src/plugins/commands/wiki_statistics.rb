@@ -20,7 +20,7 @@ module Plugins
         admins = stats['admins']
 
         msg.reply("Pages: #{pages} | Articles: #{articles} | Edits: #{edits}" \
-                  "Images: #{images} | Users: #{users} | Active users: " \
+                  " | Images: #{images} | Users: #{users} | Active users: " \
                   "#{activeusers} | Admins: #{admins}")
       end
 

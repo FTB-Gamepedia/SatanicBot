@@ -28,7 +28,8 @@ module LittleHelper
   end
 
   def init_weather
-    weather = Weatheruby.new(GeneralUtils::Files.get_secure(6))
+    weather = Weatheruby.new(GeneralUtils::Files.get_secure(6), 'EN', true,
+                             true, true)
     weather
   end
 
