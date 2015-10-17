@@ -2,6 +2,7 @@ require 'cinch'
 require 'mediawiki-butt'
 require 'require_all'
 require 'twitter'
+require 'weatheruby'
 require_relative 'generalutils'
 require_relative 'variables'
 require_rel 'plugins'
@@ -15,8 +16,20 @@ module LittleHelper
     butt
   end
 
-  def tweet(message)
-    TWITTER.update(message)
+  def init_twitter
+    twitter = Twitter::REST::Client.new do |c|
+      c.consumer_key = GeneralUtils::Files.get_secure(2)
+      c.consumer_secret = GeneralUtils::Files.get_secure(3)
+      c.access_token = GeneralUtils::Files.get_secure(4)
+      c.access_token_secret = GeneralUtils::Files.get_secure(5)
+    end
+
+    twitter
+  end
+
+  def init_weather
+    weather = Weatheruby.new(GeneralUtils::Files.get_secure(6))
+    weather
   end
 
   BOT = Cinch::Bot.new do
@@ -54,7 +67,8 @@ module LittleHelper
         Plugins::Commands::WikiStatistics,
         Plugins::Commands::NumberGame,
         Plugins::Commands::AddMod,
-        Plugins::Commands::Tweet
+        Plugins::Commands::Tweet,
+        Plugins::Commands::Weather
       ]
       c.plugins.prefix = /^\$/
     end
@@ -67,13 +81,6 @@ module LittleHelper
       msg.reply('And here I was thinking we were going to have some ' \
                 "peace and quiet, but now #{ban.mask} is unbanned by #{ban.by}")
     end
-  end
-
-  TWITTER = Twitter::REST::Client.new do |c|
-    c.consumer_key = GeneralUtils::Files.get_secure(2)
-    c.consumer_secret = GeneralUtils::Files.get_secure(3)
-    c.access_token = GeneralUtils::Files.get_secure(4)
-    c.access_token_secret = GeneralUtils::Files.get_secure(5)
   end
 
   def run
