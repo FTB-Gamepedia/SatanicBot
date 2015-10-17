@@ -54,7 +54,11 @@ module Variables
                   'Op-only. 1 arg: $addmod <mod name>',
       'addminor' => 'Adds a mod to the list of minor mods on the main page. ' \
                     'Op-only. 1 arg: $addminor <mod name>',
-      'tweet' => 'Tweets the first arg on the LittleHelperBot Twitter account.'
+      'tweet' => 'Tweets the first arg on the LittleHelperBot Twitter account.',
+      'weather' => 'Provides weather information for the given place. 1 arg: ' \
+                   '$weather <place>',
+      'forecast' => 'Provides forecast information for the next 3 days. 1 ' \
+                    'arg: $forecast <place>'
     }
   end
 
