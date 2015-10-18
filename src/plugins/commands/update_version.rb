@@ -18,7 +18,7 @@ module Plugins
             if /version=#{version}/ !~ text && /version =#{version}/ !~ text
               text = text.gsub(/version=.*/, "version=#{version}")
               text = text.gsub(/version =.*/, "version=#{version}")
-              butt.edit(mod, text, 'Update vesion.', true)
+              butt.edit(mod, text, true, true, 'Update vesion.')
               msg.reply("Sucessfully updated #{mod} to #{version}!")
             else
               msg.reply("#{version} is the current version on the page.")
@@ -27,7 +27,7 @@ module Plugins
             msg.reply('That page does not have the param, trying to make one.')
             if /{{[Ii]nfobox mod}}/ =~ text
               text = text.sub(/}}/, "version=#{version}\n}}")
-              edit = butt.edit(mod, text, 'Add version parameter', true)
+              edit = butt.edit(mod, text, true, true, 'Add version parameter')
               if edit.is_a?(Fixnum)
                 msg.reply("Successfully updated #{mod} to #{version}!")
               else

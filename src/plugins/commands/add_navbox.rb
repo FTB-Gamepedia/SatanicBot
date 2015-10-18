@@ -29,7 +29,7 @@ module Plugins
                         " {{L|#{content}}} ||\n|}"
               text = text.gsub(/\|\}/, addition)
               summary = "Add the #{content} navbox (Navbox #{navbox})"
-              edit = butt.edit(page, text, summary, true)
+              edit = butt.edit(page, text, true, true, summary)
               if edit.is_a?(Fixnum)
                 msg.reply("Successfully appended #{navbox} to the list!")
               else

@@ -22,7 +22,7 @@ module Plugins
             replace = "local modsByAbbrv = {\n    #{abbreviation} = {'#{mod}', " \
                       "[=[<translate>#{mod}</translate>]=]},"
             module_text = module_text.gsub(/local modsByAbbrv = \{/, replace)
-            edit = butt.edit(page, module_text, "Adding #{mod}", true)
+            edit = butt.edit(page, module_text, true, true, "Adding #{mod}")
             if edit.is_a?(Fixnum)
               msg.reply("Successfully abbreviated #{mod} as #{abbreviation}")
             else
