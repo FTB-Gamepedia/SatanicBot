@@ -69,7 +69,8 @@ module LittleHelper
         Plugins::Commands::NumberGame,
         Plugins::Commands::AddMod,
         Plugins::Commands::Tweet,
-        Plugins::Commands::Weather
+        Plugins::Commands::Weather,
+        Plugins::Commands::BanInfo
       ]
       c.plugins.prefix = /^\$/
     end

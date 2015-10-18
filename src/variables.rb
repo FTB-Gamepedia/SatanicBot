@@ -58,7 +58,9 @@ module Variables
       'weather' => 'Provides weather information for the given place. 1 arg: ' \
                    '$weather <place>',
       'forecast' => 'Provides forecast information for the next 3 days. 1 ' \
-                    'arg: $forecast <place>'
+                    'arg: $forecast <place>',
+      'banned' => 'Gets whether or not a user has been banned on MC servers. ' \
+                  '1 arg: $banned <username>.'
     }
   end
 
