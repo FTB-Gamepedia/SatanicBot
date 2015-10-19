@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/elifoster/SatanicBot.png?label=ready&title=Ready)](https://waffle.io/elifoster/SatanicBot)
 SatanicBot
 ==========
 
