@@ -11,41 +11,49 @@ module LittleHelper
   extend self
 
   def init_wiki
-    butt = MediaWiki::Butt.new 'http://ftb.gamepedia.com'
-    butt.login('SatanicBot', Variables::Constants::PASSWORD)
+    url = Variables::Constants::WIKI_URL
+    username = Variables::Constants::WIKI_USERNAME
+    password = Variables::Constants::WIKI_PASSWORD
+    butt = MediaWiki::Butt.new(url)
+    butt.login(username, password)
     butt
   end
 
   def init_twitter
+    consumer_key = Variables::Constants::TWITTER_CONSUMER_KEY
+    consumer_secret = Variables::Constants::TWITTER_CONSUMER_SECRET
+    access_token = Variables::Constants::TWITTER_ACCESS_TOKEN
+    access_secret = Variables::Constants::TWITTER_ACCESS_SECRET
     twitter = Twitter::REST::Client.new do |c|
-      c.consumer_key = GeneralUtils::Files.get_secure(2)
-      c.consumer_secret = GeneralUtils::Files.get_secure(3)
-      c.access_token = GeneralUtils::Files.get_secure(4)
-      c.access_token_secret = GeneralUtils::Files.get_secure(5)
+      c.consumer_key = consumer_key
+      c.consumer_secret = consumer_secret
+      c.access_token = access_token
+      c.access_token_secret = access_secret
     end
 
     twitter
   end
 
   def init_weather
-    weather = Weatheruby.new(GeneralUtils::Files.get_secure(6), 'EN', true,
-                             true, true)
+    api_key = Variables::Constants::WUNDERGROUND_KEY
+    weather = Weatheruby.new(api_key, 'EN', true, true, true)
     weather
   end
 
   BOT = Cinch::Bot.new do
     configure do |c|
-      c.server = 'irc.esper.net'
-      c.port = 6667
+
+      c.server = Variables::Constants::IRC_SERVER
+      c.port = Variables::Constants::IRC_PORT
       if ARGV[0] == '-d'
-        c.channels = %w(#FTB-Wiki-Dev)
+        c.channels = Variables::Constants::IRC_DEV_CHANNELS
       else
-        c.channels = %w(#FTB-Wiki #SatanicSanta #FTB-Wiki-Dev)
+        c.channels = Variables::Constants::IRC_CHANNELS
       end
-      c.nicks = %w(LittleHelper SatanicBot SatanicButt)
-      c.user = 'LittleHelper'
-      c.password = Variables::Constants::PASSWORD
-      c.realname = 'SatanicSanta\'s Big Fat Butt'
+      c.nicks = Variables::Constants::IRC_NICKNAMES
+      c.user = Variables::Constants::IRC_USERNAME
+      c.password = Variables::Constants::IRC_PASSWORD
+      c.realname = Variables::Constants::IRC_REALNAME
       c.plugins.plugins = [
         Plugins::Commands::Authentication::SetPass,
         Plugins::Commands::Authentication::Login,

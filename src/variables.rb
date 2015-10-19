@@ -1,10 +1,27 @@
+require 'yaml'
 require_relative 'generalutils'
 
 module Variables
   module Constants
-    WIKIUSER = 'SatanicBot'
-    PASSWORD = GeneralUtils::Files.get_secure(0)
-    TWITUSER = 'LittleHelperBot'
+    CONFIG = YAML.load_file("#{Dir.pwd}/config.yml")
+
+    IRC_USERNAME = CONFIG['irc']['username']
+    IRC_PASSWORD = CONFIG['irc']['password']
+    IRC_REALNAME = CONFIG['irc']['realname']
+    IRC_NICKNAMES = CONFIG['irc']['nicknames']
+    IRC_SERVER = CONFIG['irc']['server']
+    IRC_PORT = CONFIG['irc']['port']
+    IRC_CHANNELS = CONFIG['irc']['channels']
+    IRC_DEV_CHANNELS = CONFIG['irc']['dev_channels']
+    WIKI_URL = CONFIG['wiki']['url']
+    WIKI_USERNAME = CONFIG['wiki']['username']
+    WIKI_PASSWORD = CONFIG['wiki']['password']
+    TWITTER_CONSUMER_KEY = CONFIG['twitter']['consumer_key']
+    TWITTER_CONSUMER_SECRET = CONFIG['twitter']['consumer_secret']
+    TWITTER_ACCESS_TOKEN = CONFIG['twitter']['access_token']
+    TWITTER_ACCESS_SECRET = CONFIG['twitter']['access_secret']
+    WUNDERGROUND_KEY = CONFIG['wunderground']['api_key']
+
     COMMANDS = {
       'login' => 'Logs the user in, allowing for op-only commands. ' \
                 '1 arg: $login <password>',
@@ -66,7 +83,7 @@ module Variables
 
   module NonConstants
     extend self
-    @@authpass = GeneralUtils::Files.get_secure(1)
+    @@authpass = Variables::Constants::CONFIG['irc']['default_auth_pass']
     @@authedusers = []
 
     def get_authentication_password
