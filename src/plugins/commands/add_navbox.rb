@@ -5,11 +5,13 @@ module Plugins
     class AddNavbox
       include Cinch::Plugin
 
-      match(/addnav <(.+)> <(.+)>/i)
+      match(/addnav ([^\|\[\]\<\>\%\+\?]+) \| ([^\|\[\]\<\>\%\+\?]+)/i)
 
       def execute(msg, navbox, content)
         authedusers = Variables::NonConstants.get_authenticated_users
         if authedusers.include?(msg.user.authname)
+          navbox = navbox.chomp
+          content = content.chomp
           navbox = navbox.sub(/[Nn]avbox/, '')
           page = 'User:TheSatanicSanta/Sandbox/NavList'
           # page = 'Template:Navbox List'

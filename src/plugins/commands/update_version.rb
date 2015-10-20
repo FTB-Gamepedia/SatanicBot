@@ -7,11 +7,13 @@ module Plugins
     class UpdateVersion
       include Cinch::Plugin
 
-      match(/updatevers <(.+)> <(.+)>/i)
+      match(/updatevers ([^\|\[\]\<\>\%\+\?]+) \| (.+)/i)
 
       def execute(msg, mod, version)
         authedusers = Variables::NonConstants.get_authenticated_users
         if authedusers.include?(msg.user.authname)
+          mod = mod.chomp
+          version = version.chomp
           butt = LittleHelper.init_wiki
           text = butt.get_text(mod)
           if /version=/ =~ text || /version =/ =~ text

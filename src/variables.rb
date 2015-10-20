@@ -38,8 +38,8 @@ module Variables
       'randnum' => 'Generates a random number. 1 optional arg, if not ' \
                    'provided I will assume 0-100: <max num>',
       'updatevers' => 'Updates a mod version on the wiki. Op-only command. ' \
-                      '2 args: $updatevers <mod page> <mod version>. Args ' \
-                      'must be wrapped in <> for this command.',
+                      '2 args: $updatevers <mod page> | <mod version>. Args ' \
+                      'must be separated with a pipe in this command.',
       'abbrv' => 'Abbreivates a mod for the tilesheet extension. ' \
                  'An op-only command. 2 args: $abbrv <abbreviation> <mod_name>',
       'checkpage' => 'Checks if the page exists. 1 arg: $checkpage <page>',
@@ -52,7 +52,7 @@ module Variables
       'upload' => 'Uploads a web file to the wiki. Op-only. 2 args: $upload ' \
                   '<url> <filename>',
       'addnav' => 'Adds the navbox to the template list. Op-only. 2 args: ' \
-                  '$addnav <navbox> <page>. Args must be wrapped in <> ' \
+                  '$addnav <navbox> <page>. Args must be separated by a pipe ' \
                   'for this command.',
       'contribs' => 'Provides the user\'s number of contribs to the wiki and ' \
                     'registration date. 1 optional arg: <username>. If no ' \
