@@ -29,12 +29,22 @@ module Plugins
         end
 
 
-        if failed == false
-          message = "#{conditions[:full_name]}: #{conditions[:weather]} | " \
-                    "#{conditions[:formatted_temperature]} | Humidity: " \
-                    "#{conditions[:humidity]}% | #{conditions[:updated]}"
+        unless failed
+          name = conditions[:full_name]
+          condition = conditions[:weather]
+          temp = conditions[:formatted_temperature]
+          feel = conditions[:formatted_temperature]
+          humidity = "#{conditions[:humidity]}%"
+          date = conditions[:updated]
+          if conditions[:formatted_temperature] == conditions[:formatted_feelslike]
+            message = "#{name}: #{condition} | #{temp}, and feels like it! " \
+                      "Humidity: #{humidity} | #{date}"
+          else
+            message = "#{name}: #{condition} | #{temp}, but feels like " \
+                      "#{feel}! Humidity: #{humidity} | #{date}"
+          end
         end
-        
+
         unless alerts.nil?
           alerts.each do |a|
             desc = Cinch::Formatting.format(:red, a[:description])
