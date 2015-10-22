@@ -1,3 +1,5 @@
+require 'simple_geolocator'
+
 module Plugins
   module Commands
     class Weather
@@ -5,6 +7,8 @@ module Plugins
 
       match(/weather (.+)/i, method: :weather)
       match(/forecast (.+)/i, method: :forecast)
+      match(/weather$/i, method: :weather_self)
+      match(/forecast$/i, method: :forecast_self)
 
       def weather(msg, location)
         weather = LittleHelper.init_weather
@@ -54,7 +58,22 @@ module Plugins
         msg.reply(message)
       end
 
+      def get_location_by_ip(ip)
+        region_hash = SimpleGeolocator.region(ip)
+        region = region_hash[:code]
+        city = SimpleGeolocator.city(ip)
+        location = "#{city}, #{region}"
+        return location
+      end
+
+      def weather_self(msg)
+        ip = msg.user.host
+        location = get_location_by_ip(ip)
+        weather(msg, location)
+      end
+
       def forecast(msg, location)
+        msg.reply("Getting forecast for #{location}...")
         weather = LittleHelper.init_weather
         forecast = weather.simple_forecast(location)
 
@@ -65,6 +84,12 @@ module Plugins
             msg.reply("#{f[:weekday_name]}: #{f[:text]}")
           end
         end
+      end
+
+      def forecast_self(msg)
+        ip = msg.user.host
+        location = get_location_by_ip(ip)
+        forecast(msg, location)
       end
     end
   end

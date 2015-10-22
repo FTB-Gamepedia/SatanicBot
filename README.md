@@ -16,3 +16,4 @@ You can find this bot in the following channels on EsperNet:
 * [Twitter](https://github.com/sferik/twitter)
 * [Weatheruby](https://github.com/elifoster/weatheruby)
 * [require_all](https://github.com/jarmo/require_all)
+* [simple_geolocator](https://github.com/elifoster/simple_geolocator)
