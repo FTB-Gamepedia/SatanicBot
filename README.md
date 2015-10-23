@@ -1,4 +1,5 @@
 # SatanicBot
+[![Stories in Ready](https://badge.waffle.io/elifoster/SatanicBot.png?label=ready&title=Ready)](https://waffle.io/elifoster/SatanicBot)
 
 SatanicBot is an IRC, Twitter, FTB Wiki, and general bot written in Ruby, but previously Perl. It utilizes custom Ruby Gems created by myself and others at the FTB Wiki, such as string-utility, fishbans, mediawiki-butt, and weatheruby, and Ruby gems by generally awesome developers, such as sferik's twitter gem.
 
