@@ -10,35 +10,17 @@ require_rel 'plugins'
 module LittleHelper
   extend self
 
-  def init_wiki
-    url = Variables::Constants::WIKI_URL
-    username = Variables::Constants::WIKI_USERNAME
-    password = Variables::Constants::WIKI_PASSWORD
-    butt = MediaWiki::Butt.new(url)
-    butt.login(username, password)
-    butt
+  BUTT = MediaWiki::Butt.new(Variables::Constants::WIKI_URL)
+
+  TWEETER = Twitter::REST::Client.new do |c|
+    c.consumer_key = Variables::Constants::TWITTER_CONSUMER_KEY
+    c.consumer_secret = Variables::Constants::TWITTER_CONSUMER_SECRET
+    c.access_token = Variables::Constants::TWITTER_ACCESS_TOKEN
+    c.access_token_secret = Variables::Constants::TWITTER_CONSUMER_SECRET
   end
 
-  def init_twitter
-    consumer_key = Variables::Constants::TWITTER_CONSUMER_KEY
-    consumer_secret = Variables::Constants::TWITTER_CONSUMER_SECRET
-    access_token = Variables::Constants::TWITTER_ACCESS_TOKEN
-    access_secret = Variables::Constants::TWITTER_ACCESS_SECRET
-    twitter = Twitter::REST::Client.new do |c|
-      c.consumer_key = consumer_key
-      c.consumer_secret = consumer_secret
-      c.access_token = access_token
-      c.access_token_secret = access_secret
-    end
-
-    twitter
-  end
-
-  def init_weather
-    api_key = Variables::Constants::WUNDERGROUND_KEY
-    weather = Weatheruby.new(api_key, 'EN', true, true, true)
-    weather
-  end
+  WEATHER = Weatheruby.new(Variables::Constants::WUNDERGROUND_KEY, 'EN', true,
+                           true, true)
 
   BOT = Cinch::Bot.new do
     configure do |c|
@@ -81,6 +63,25 @@ module LittleHelper
       ]
       c.plugins.prefix = /^\$/
     end
+  end
+
+  def init_wiki
+    wiki_login unless BUTT.user_bot?
+
+    BUTT
+  end
+
+  def init_twitter
+    TWEETER
+  end
+
+  def init_weather
+    WEATHER
+  end
+
+  def wiki_login
+    BUTT.login(Variables::Constants::WIKI_USERNAME,
+               Variables::Constants::WIKI_PASSWORD)
   end
 
   def run
