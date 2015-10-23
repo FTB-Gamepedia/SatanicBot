@@ -1,0 +1,32 @@
+# This should actually be called 'config.yml'
+
+irc:
+  server: irc.esper.net
+  port: 6667
+  channels:
+    - "#Channel1"
+    - "#Channel2"
+  dev_channels:
+    - "#DevChannel1"
+    - "#DevChannel2"
+  username: MyUsername
+  password: password
+  realname: MyUsername's Ugly Bot
+  nicknames:
+    - MyNickname
+    - MyOtherNickname
+  default_auth_pass: password
+
+wiki:
+  url: http://ftb.gamepedia.com
+  username: MyUsername
+  password: password
+
+twitter:
+  consumer_key: abcdefefghijklmnop
+  consumer_secret: ahsudhuahsdhauhsd
+  access_token: jaisdjasujdaushf
+  access_secret: jeuhuthertoqpworj
+
+wunderground:
+  api_key: abcdefghijklmnop
