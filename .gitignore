@@ -36,3 +36,4 @@ build/
 .rvmrc
 
 config.yml
+valid_authnames.txt

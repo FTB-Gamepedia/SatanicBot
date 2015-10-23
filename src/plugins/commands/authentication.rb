@@ -11,15 +11,21 @@ module Plugins
 
         def execute(msg, pass)
           authedusers = Variables::NonConstants.get_authenticated_users
-          if authedusers.include? msg.user.authname
-            msg.reply('You are already logged in.')
-          else
-            if pass == Variables::NonConstants.get_authentication_password
-              Variables::NonConstants.authenticate_user(msg.user.authname)
-              msg.reply("You are now logged in as #{msg.user.authname}!")
+          if Variables::Constants::VALID_PEOPLE.include?(msg.user.authname)
+            if authedusers.include? msg.user.authname
+              msg.reply('You are already logged in.')
             else
-              msg.reply("Sorry, #{pass} is not the password.")
+              if pass == Variables::NonConstants.get_authentication_password
+                Variables::NonConstants.authenticate_user(msg.user.authname)
+                msg.reply("You are now logged in as #{msg.user.authname}!")
+              else
+                msg.reply("Sorry, #{pass} is not the password.")
+              end
             end
+          else
+            msg.reply('You are not on the list of valid users. If you think ' \
+                      'this is an error, please contact Eli, and he may add ' \
+                      'you to the list of valid authentication names.')
           end
         end
       end

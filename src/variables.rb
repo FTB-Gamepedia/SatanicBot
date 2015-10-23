@@ -22,6 +22,9 @@ module Variables
     TWITTER_ACCESS_SECRET = CONFIG['twitter']['access_secret']
     WUNDERGROUND_KEY = CONFIG['wunderground']['api_key']
 
+    people_path = "#{Dir.pwd}/src/info/valid_authnames.txt"
+    VALID_PEOPLE = IO.read(people_path).split("\n")
+
     COMMANDS = {
       'login' => 'Logs the user in, allowing for op-only commands. ' \
                 '1 arg: $login <password>',
@@ -83,27 +86,27 @@ module Variables
 
   module NonConstants
     extend self
-    @@authpass = Variables::Constants::CONFIG['irc']['default_auth_pass']
-    @@authedusers = []
+    @authpass = Variables::Constants::CONFIG['irc']['default_auth_pass']
+    @authedusers = []
 
     def get_authentication_password
-      @@authpass
+      @authpass
     end
 
     def set_authentication_password(new_password)
-      @@authpass = new_password
+      @authpass = new_password
     end
 
     def get_authenticated_users
-      @@authedusers
+      @authedusers
     end
 
     def authenticate_user(authname)
-      @@authedusers.push(authname)
+      @authedusers.push(authname)
     end
 
     def deauthenticate_user(authname)
-      @@authedusers.delete(authname)
+      @authedusers.delete(authname)
     end
   end
 end
