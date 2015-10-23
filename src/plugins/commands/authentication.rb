@@ -9,24 +9,51 @@ module Plugins
 
         match(/login (.+)/i)
 
-        def execute(msg, pass)
+        @message = nil
+
+        def check_valid(authname, pass)
           authedusers = Variables::NonConstants.get_authenticated_users
-          if Variables::Constants::VALID_PEOPLE.include?(msg.user.authname)
-            if authedusers.include? msg.user.authname
-              msg.reply('You are already logged in.')
-            else
-              if pass == Variables::NonConstants.get_authentication_password
-                Variables::NonConstants.authenticate_user(msg.user.authname)
-                msg.reply("You are now logged in as #{msg.user.authname}!")
-              else
-                msg.reply("Sorry, #{pass} is not the password.")
-              end
-            end
-          else
-            msg.reply('You are not on the list of valid users. If you think ' \
+          true_pass = Variables::NonConstants.get_authentication_password
+          people = Variables::Constants::VALID_PEOPLE
+
+          nickserv = 'You must be authenticated with Nickserv.'
+          already = 'You are already logged in.'
+          incorrect = "Sorry, #{pass} is not the password."
+          not_valid = 'You are not on the list of valid users. If you think ' \
                       'this is an error, please contact Eli, and he may add ' \
-                      'you to the list of valid authentication names.')
+                      'you to the list of valid authentication names.'
+          success = "You are now logged in as #{authname}"
+          valid = true
+
+          if authname.nil?
+            @message = nickserv
+            valid = false
           end
+
+          if authedusers.include? authname
+            @message = already
+            valid = false
+          end
+
+          if pass != true_pass
+            @message = incorrect
+            valid = false
+          end
+
+          unless people.include? authname
+            @message = not_valid
+            valid = false
+          end
+
+          return unless valid
+
+          @message = success
+          Variables::NonConstants.authenticate_user(authname)
+        end
+
+        def execute(msg, pass)
+          check_valid(msg.user.authname, pass)
+          msg.reply(@message)
         end
       end
 
