@@ -42,7 +42,6 @@ module LittleHelper
 
   BOT = Cinch::Bot.new do
     configure do |c|
-
       c.server = Variables::Constants::IRC_SERVER
       c.port = Variables::Constants::IRC_PORT
       if ARGV[0] == '-d'
@@ -81,15 +80,6 @@ module LittleHelper
         Plugins::Commands::BanInfo
       ]
       c.plugins.prefix = /^\$/
-    end
-
-    on :ban do |msg, ban|
-      msg.reply("#{ban.by} just knocked the fuck out of #{ban.mask}")
-    end
-
-    on :unban do |msg, ban|
-      msg.reply('And here I was thinking we were going to have some ' \
-                "peace and quiet, but now #{ban.mask} is unbanned by #{ban.by}")
     end
   end
 
