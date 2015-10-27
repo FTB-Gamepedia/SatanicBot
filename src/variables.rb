@@ -80,7 +80,9 @@ module Variables
       'forecast' => 'Provides forecast information for the next 3 days. 1 ' \
                     'arg: $forecast <place>',
       'banned' => 'Gets whether or not a user has been banned on MC servers. ' \
-                  '1 arg: $banned <username>.'
+                  '1 arg: $banned <username>.',
+      'checkvers' => 'Gets the current version on the page. 1 arg: ' \
+                     '$checkvers <page name>'
     }
   end
 

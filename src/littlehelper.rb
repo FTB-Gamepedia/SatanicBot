@@ -43,7 +43,7 @@ module LittleHelper
         Plugins::Commands::Info::Help,
         Plugins::Commands::Info::Src,
         Plugins::Commands::Random,
-        Plugins::Commands::UpdateVersion,
+        Plugins::Commands::Version,
         Plugins::Commands::Abbreviate,
         Plugins::Commands::CheckPage,
         Plugins::Commands::MajorCategory,
