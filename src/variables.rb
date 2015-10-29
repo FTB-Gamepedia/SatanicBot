@@ -1,5 +1,4 @@
 require 'yaml'
-require_relative 'generalutils'
 
 module Variables
   module Constants

@@ -3,7 +3,6 @@ require 'mediawiki-butt'
 require 'require_all'
 require 'twitter'
 require 'weatheruby'
-require_relative 'generalutils'
 require_relative 'variables'
 require_rel 'plugins'
 

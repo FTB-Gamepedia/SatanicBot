@@ -1,5 +1,4 @@
 require 'cinch'
-require_relative '../../generalutils'
 
 module Plugins
   module Commands
