@@ -19,7 +19,7 @@ module Plugins
           elsif /[Ss]atanicBot/ =~ username
             'I have'
           elsif /[Tt]heSatanicSanta/ =~ username
-            'The seccond hottest babe in the channel has'
+            'The second hottest babe in the channel has'
           elsif /[Rr]etep998/ =~ username
             'The hottest babe in the channel has'
           elsif /[Pp]onyButt/ =~ username
