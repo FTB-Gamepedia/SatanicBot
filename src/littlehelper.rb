@@ -15,7 +15,7 @@ module LittleHelper
     c.consumer_key = Variables::Constants::TWITTER_CONSUMER_KEY
     c.consumer_secret = Variables::Constants::TWITTER_CONSUMER_SECRET
     c.access_token = Variables::Constants::TWITTER_ACCESS_TOKEN
-    c.access_token_secret = Variables::Constants::TWITTER_CONSUMER_SECRET
+    c.access_token_secret = Variables::Constants::TWITTER_ACCESS_SECRET
   end
 
   WEATHER = Weatheruby.new(Variables::Constants::WUNDERGROUND_KEY, 'EN', true,
@@ -85,5 +85,8 @@ module LittleHelper
 
   def run
     BOT.start
+    TWITTER.filter(follow: 'littlehelperbot') do |tweet|
+      BOT.send(tweet.text)
+    end
   end
 end
