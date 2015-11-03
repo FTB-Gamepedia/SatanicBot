@@ -85,8 +85,5 @@ module LittleHelper
 
   def run
     BOT.start
-    TWITTER.filter(follow: 'littlehelperbot') do |tweet|
-      BOT.send(tweet.text)
-    end
   end
 end
