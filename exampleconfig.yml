@@ -30,3 +30,11 @@ twitter:
 
 wunderground:
   api_key: abcdefghijklmnop
+
+github:
+  -
+    channel: "#TheSteamTank"
+    repo: esteemed-innovation/flaxbeards-steam-power
+  -
+    channel: "#FTB-Wiki"
+    repo: ftb-gamepedia/ftb-wiki-issue-tracker

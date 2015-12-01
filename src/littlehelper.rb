@@ -58,7 +58,8 @@ module LittleHelper
         Plugins::Commands::AddMod,
         Plugins::Commands::Tweet,
         Plugins::Commands::Weather,
-        Plugins::Commands::BanInfo
+        Plugins::Commands::BanInfo,
+        Plugins::Commands::IssueLink
       ]
       c.plugins.prefix = /^\$/
     end

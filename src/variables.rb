@@ -20,6 +20,11 @@ module Variables
     TWITTER_ACCESS_TOKEN = CONFIG['twitter']['access_token']
     TWITTER_ACCESS_SECRET = CONFIG['twitter']['access_secret']
     WUNDERGROUND_KEY = CONFIG['wunderground']['api_key']
+    ISSUE_TRACKING = {}
+    CONFIG['github'].each do |i|
+      ISSUE_TRACKING[i['channel']] = i['repo']
+    end
+    p ISSUE_TRACKING
 
     people_path = "#{Dir.pwd}/src/info/valid_authnames.txt"
     VALID_PEOPLE = IO.read(people_path).split("\n")
