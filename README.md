@@ -18,3 +18,4 @@ You can find this bot in the following channels on EsperNet:
 * [Weatheruby](https://github.com/elifoster/weatheruby)
 * [require_all](https://github.com/jarmo/require_all)
 * [simple_geolocator](https://github.com/elifoster/simple_geolocator)
+* [octokit](https://github.com/octokit/octokit.rb)

@@ -9,5 +9,6 @@ gem('literate_randomizer', '>= 0.4.0')
 gem('twitter', '>= 0.15.0')
 gem('require_all', '>= 1.3.0')
 gem('simple_geolocator', '>= 1.0.0')
+gem('octokit', '>= 4.0.1')
 
 ruby '2.2.3'
