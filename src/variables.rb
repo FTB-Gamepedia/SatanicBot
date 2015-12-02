@@ -24,7 +24,6 @@ module Variables
     CONFIG['github'].each do |i|
       ISSUE_TRACKING[i['channel']] = i['repo']
     end
-    p ISSUE_TRACKING
 
     people_path = "#{Dir.pwd}/src/info/valid_authnames.txt"
     VALID_PEOPLE = IO.read(people_path).split("\n")
