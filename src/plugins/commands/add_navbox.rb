@@ -13,8 +13,7 @@ module Plugins
           navbox = navbox.chomp
           content = content.chomp
           navbox = navbox.sub(/[Nn]avbox/, '')
-          page = 'User:TheSatanicSanta/Sandbox/NavList'
-          # page = 'Template:Navbox List'
+          page = 'Template:Navbox List'
           butt = LittleHelper.init_wiki
           text = butt.get_text(page)
           if butt.get_text("Template:Navbox #{navbox}").nil?

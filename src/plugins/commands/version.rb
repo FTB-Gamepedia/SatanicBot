@@ -73,7 +73,7 @@ module Plugins
       # @param version [String] The new version.
       # @param new_p [Boolean] Whether the parameter is being created or not.
       def get_reply(return_value, mod, version, old, new_p = false)
-        success "Added version parameter to #{mod} as #{version}" if new_p
+        success = "Added version parameter to #{mod} as #{version}" if new_p
         success = "Updated #{mod} from #{old} to #{version}!" unless new_p
         not_found = 'Could not find Infobox/param in the page. Please be ' \
                     'sure that you entered the page name correctly.'

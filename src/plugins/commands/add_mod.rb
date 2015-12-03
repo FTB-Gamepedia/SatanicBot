@@ -34,7 +34,6 @@ module Plugins
             text = text.gsub('</noinclude>', '')
             text = text.gsub('</translate>', '')
             text = text.gsub(/^$\n/, '')
-            puts text
             text = text.gsub(/\{\{L\|\w+\}\}\n/, "{{L|\\1}} {{*}}\n")
             text = "#{text}\n{{L|#{mod}}} {{*}}"
             lines = text.split(/\n/)

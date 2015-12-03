@@ -107,7 +107,7 @@ module Variables
     end
 
     def authenticate_user(authname)
-      @authedusers.push(authname)
+      @authedusers << authname
     end
 
     def deauthenticate_user(authname)

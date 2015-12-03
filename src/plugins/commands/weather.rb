@@ -52,7 +52,7 @@ module Plugins
         unless alerts.nil?
           alerts.each do |a|
             desc = Cinch::Formatting.format(:red, a[:description])
-            message = message + " | #{desc} until #{a[:expires]}"
+            message << " | #{desc} until #{a[:expires]}"
           end
         end
         msg.reply(message)
