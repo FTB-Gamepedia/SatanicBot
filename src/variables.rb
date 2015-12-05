@@ -86,8 +86,8 @@ module Variables
                   '1 arg: $banned <username>.',
       'checkvers' => 'Gets the current version on the page. 1 arg: ' \
                      '$checkvers <page name>',
-      'movecat' => 'Moves one category to another, and edits all its members' \
-                   'The parameters must be separated with a ->. ' \
+      'movecat' => 'Moves one category to another, and edits all its members.' \
+                   ' The parameters must be separated with a ->. ' \
                    '$movecat <old_cat> -> <new_cat>'
     }
   end
