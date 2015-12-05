@@ -7,15 +7,3 @@ You can find this bot in the following channels on EsperNet:
 * #FTB-Wiki
 * #FTB-Wiki-Dev
 * #SatanicSanta
-
-## Dependencies
-* [Cinch](https://github.com/cinchrb/cinch)
-* [StringUtility](https://github.com/elifoster/String-Utility-Ruby)
-* [MediaWiki::Butt](https://github.com/FTB-Gamepedia/MediaWiki-Butt-Ruby)
-* [Fishbans](https://github.com/elifoster/fishbans-rb)
-* [LiterateRandomizer](https://rubygems.org/gems/literate_randomizer)
-* [Twitter](https://github.com/sferik/twitter)
-* [Weatheruby](https://github.com/elifoster/weatheruby)
-* [require_all](https://github.com/jarmo/require_all)
-* [simple_geolocator](https://github.com/elifoster/simple_geolocator)
-* [octokit](https://github.com/octokit/octokit.rb)

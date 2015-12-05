@@ -59,9 +59,12 @@ module LittleHelper
         Plugins::Commands::Tweet,
         Plugins::Commands::Weather,
         Plugins::Commands::BanInfo,
-        Plugins::Commands::IssueLink
+        Plugins::Commands::IssueLink,
+        Plugins::Commands::Log
       ]
       c.plugins.prefix = /^\$/
+
+      CHANNELS = c.channels
     end
   end
 
@@ -85,6 +88,25 @@ module LittleHelper
   end
 
   def run
+    log
     BOT.start
+  end
+
+  def log
+    time = Time.now
+    CHANNELS.each do |c|
+      file_name = "#{Dir.pwd}/#{c}-#{time.year}-#{time.month}-#{time.day}.log"
+      if File.file?(file_name)
+        open(file_name, 'a') do |f|
+          f.puts("\n\n## Logging start at #{time.hour}:#{time.min}:#{time.sec} " \
+                 "#{time.zone}\n")
+        end
+      else
+        File.new(file_name, 'a') do |f|
+          f.puts("## Logging start at #{time.hour}:#{time.min}:#{time.sec} " \
+                 "#{time.zone}\n")
+        end
+      end
+    end
   end
 end
