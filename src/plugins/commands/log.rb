@@ -10,7 +10,7 @@ module Plugins
 
       def execute(msg)
         time = Time.now
-        file_name = "#{Dir.pwd}/#{msg.channel}-#{time.year}-#{time.month}-" \
+        file_name = "#{Dir.pwd}/logs/#{msg.channel}-#{time.year}-#{time.month}-" \
                     "#{time.day}.log"
         if File.file?(file_name)
           open(file_name, 'a') do |f|

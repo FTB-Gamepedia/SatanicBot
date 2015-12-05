@@ -95,7 +95,7 @@ module LittleHelper
   def log
     time = Time.now
     CHANNELS.each do |c|
-      file_name = "#{Dir.pwd}/#{c}-#{time.year}-#{time.month}-#{time.day}.log"
+      file_name = "#{Dir.pwd}/logs/#{c}-#{time.year}-#{time.month}-#{time.day}.log"
       if File.file?(file_name)
         open(file_name, 'a') do |f|
           f.puts("\n\n## Logging start at #{time.hour}:#{time.min}:#{time.sec} " \
