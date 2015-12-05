@@ -60,7 +60,8 @@ module LittleHelper
         Plugins::Commands::Weather,
         Plugins::Commands::BanInfo,
         Plugins::Commands::IssueLink,
-        Plugins::Commands::Log
+        Plugins::Commands::Log,
+        Plugins::Commands::MoveCategory
       ]
       c.plugins.prefix = /^\$/
 
