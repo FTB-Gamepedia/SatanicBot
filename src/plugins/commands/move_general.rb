@@ -17,11 +17,13 @@ module Plugins
             links.each do |l|
               text = butt.get_text(l)
               next if text.nil?
-              text.gsub!(/\[\[#{old_page}\|/, "[[#{new_page}|")
-              text.gsub!(/\[\[#{old_page}\]\]/, "#{new_page}]]")
-              text.gsub!(/\{\{L\|#{old_page}\|/, "{{L|#{new_page}|")
-              text.gsub!(/\{\{L\|#{old_page}\}\}/, "{{L|#{new_page}}}")
-              edit = butt.edit(l, text, true)
+              new_text = text
+              new_text.gsub!(/\[\[#{old_page}\|/, "[[#{new_page}|")
+              new_text.gsub!(/\[\[#{old_page}\]\]/, "#{new_page}]]")
+              new_text.gsub!(/\{\{L\|#{old_page}\|/, "{{L|#{new_page}|")
+              new_text.gsub!(/\{\{L\|#{old_page}\}\}/, "{{L|#{new_page}}}")
+              next if new_text == text
+              edit = butt.edit(l, new_text, true)
               msg.reply("Something went wrong when editing #{l}! " \
                         "Error code: #{edit} ... Continuing...") unless edit.is_a?(Fixnum)
             end
