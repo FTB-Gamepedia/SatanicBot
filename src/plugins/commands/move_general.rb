@@ -19,7 +19,7 @@ module Plugins
               next if text.nil?
               new_text = text
               new_text.gsub!(/\[\[#{old_page}\|/, "[[#{new_page}|")
-              new_text.gsub!(/\[\[#{old_page}\]\]/, "#{new_page}]]")
+              new_text.gsub!(/\[\[#{old_page}\]\]/, "[[#{new_page}]]")
               new_text.gsub!(/\{\{L\|#{old_page}\|/, "{{L|#{new_page}|")
               new_text.gsub!(/\{\{L\|#{old_page}\}\}/, "{{L|#{new_page}}}")
               next if new_text == text
