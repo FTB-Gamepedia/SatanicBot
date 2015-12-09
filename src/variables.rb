@@ -28,6 +28,9 @@ module Variables
     people_path = "#{Dir.pwd}/src/info/valid_authnames.txt"
     VALID_PEOPLE = IO.read(people_path).split("\n")
 
+    QUOTE_PATH = "#{Dir.pwd}/src/info/ircquotes.txt"
+    MOTIVATE_PATH = "#{Dir.pwd}/src/info/motivate.txt"
+
     COMMANDS = {
       'login' => 'Logs the user in, allowing for op-only commands. ' \
                 '1 arg: $login <password>',
