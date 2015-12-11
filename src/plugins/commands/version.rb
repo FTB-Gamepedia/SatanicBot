@@ -78,9 +78,9 @@ module Plugins
         not_found = 'Could not find Infobox/param in the page. Please be ' \
                     'sure that you entered the page name correctly.'
         failed = "Failed! Error code: #{return_value}"
-        success if return_value
-        not_found unless return_value
-        failed if return_value.is_a?(String)
+        return success if return_value
+        return not_found unless return_value
+        return failed if return_value.is_a?(String)
       end
 
       def update(msg, mod, version)
