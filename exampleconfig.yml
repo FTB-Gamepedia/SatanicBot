@@ -38,3 +38,6 @@ github:
   -
     channel: "#FTB-Wiki"
     repo: ftb-gamepedia/ftb-wiki-issue-tracker
+
+pastee:
+  api_key: abcdefghijklmnop

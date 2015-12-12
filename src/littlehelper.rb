@@ -3,6 +3,7 @@ require 'mediawiki-butt'
 require 'require_all'
 require 'twitter'
 require 'weatheruby'
+require 'pastee'
 require_relative 'variables'
 require_rel 'plugins'
 
@@ -20,6 +21,8 @@ module LittleHelper
 
   WEATHER = Weatheruby.new(Variables::Constants::WUNDERGROUND_KEY, 'EN', true,
                            true, true)
+
+  PASTEE = Pastee.new(Variables::Constants::PASTEE_KEY)
 
   BOT = Cinch::Bot.new do
     configure do |c|
@@ -62,7 +65,8 @@ module LittleHelper
         Plugins::Commands::IssueLink,
         Plugins::Commands::Log,
         Plugins::Commands::MoveCategory,
-        Plugins::Commands::MoveGeneral
+        Plugins::Commands::MoveGeneral,
+        Plugins::Commands::CategoryMembers
       ]
       c.plugins.prefix = /^\$/
 
@@ -82,6 +86,10 @@ module LittleHelper
 
   def init_weather
     WEATHER
+  end
+
+  def init_pastee
+    PASTEE
   end
 
   def wiki_login

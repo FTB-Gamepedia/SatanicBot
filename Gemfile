@@ -11,5 +11,6 @@ gem('require_all', '>= 1.3.3')
 gem('simple_geolocator', '>= 1.3.0')
 gem('octokit', '>= 4.2.0')
 gem('array_utility', '>= 1.1.0')
+gem('pastee', '>= 1.0.0')
 
 ruby '2.2.3'
