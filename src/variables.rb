@@ -95,7 +95,12 @@ module Variables
                    '$movecat <old_cat> -> <new_cat>',
       'safemove' => 'Moves a page to a new page, with no redirect, including ' \
                     'subpages such as talk pages. Will also update all ' \
-                    'pages that link to it. $safemove <old_page> -> <new_page>'
+                    'pages that link to it. $safemove <old_page> -> <new_page>',
+      'categorymembers' => 'Gets a comprehensive summary of all category ' \
+                           'members, organized by their other categories. ' \
+                           'Use this command with caution, as it will take ' \
+                           'a very long time with large categories. ' \
+                           '$categorymembers <category>'
     }
   end
 
