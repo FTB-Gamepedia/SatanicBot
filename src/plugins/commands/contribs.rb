@@ -1,16 +1,18 @@
 require 'cinch'
+require 'string-utility'
 
 module Plugins
   module Commands
     class GetContribs
       include Cinch::Plugin
+      using StringUtility
 
       match(/contribs (.+)/i, method: :execute)
       match(/contribs$/i, method: :no_username)
 
       def execute(msg, username, you = false)
         butt = LittleHelper.init_wiki
-        count = butt.get_contrib_count(username)
+        count = butt.get_contrib_count(username).to_s.separate
         date = butt.get_registration_time(username)
 
         message_start =
