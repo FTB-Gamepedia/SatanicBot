@@ -48,7 +48,7 @@ module Plugins
         issue['labels'].each do |label|
           labels << label['name']
         end
-        msg.reply("https://github.com/#{user}/#{repo}/#{num}")
+        msg.reply("https://github.com/#{user}/#{repo}/issues/#{num}")
         msg.reply(form_message(issue['state'], issue['title'], labels, num))
       rescue Octokit::NotFound
         msg.relpy("Issue ##{issue} cannot be found.")
