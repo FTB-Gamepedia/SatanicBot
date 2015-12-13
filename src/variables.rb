@@ -100,7 +100,9 @@ module Variables
                            'members, organized by their other categories. ' \
                            'Use this command with caution, as it will take ' \
                            'a very long time with large categories. ' \
-                           '$categorymembers <category>'
+                           '$categorymembers <category>',
+      'changecat' => 'Changes a category in a page to a different one. ' \
+                     '$changecat <page> | <old> -> <new>'
     }
   end
 
