@@ -14,6 +14,9 @@ module Plugins
         butt = LittleHelper.init_wiki
         count = butt.get_contrib_count(username).to_s.separate
         date = butt.get_registration_time(username)
+        month = date.strftime('%B')
+        day = date.strftime('%e')
+        year = date.strftime('%Y')
 
         message_start =
           if you
@@ -36,7 +39,7 @@ module Plugins
             "#{count} contributions"
           end
         message = "#{message_start} made #{message_contribs} to the wiki and " \
-                  "registered on #{date}"
+                  "registered on #{month} #{day}, #{year}"
         msg.reply(message)
       end
 
