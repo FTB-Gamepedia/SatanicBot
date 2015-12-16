@@ -102,7 +102,9 @@ module Variables
                            'a very long time with large categories. ' \
                            '$categorymembers <category>',
       'changecat' => 'Changes a category in a page to a different one. ' \
-                     '$changecat <page> | <old> -> <new>'
+                     '$changecat <page> | <old> -> <new>',
+      'getabbrv' => 'Gets either the abbreviation for the mod, or the mod for ' \
+                    'the abbreviation. $getabbrv <abbreviation or mod name>'
     }
   end
 

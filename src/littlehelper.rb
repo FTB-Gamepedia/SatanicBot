@@ -67,7 +67,8 @@ module LittleHelper
         Plugins::Commands::MoveCategory,
         Plugins::Commands::MoveGeneral,
         Plugins::Commands::CategoryMembers,
-        Plugins::Commands::ChangeCategory
+        Plugins::Commands::ChangeCategory,
+        Plugins::Commands::GetAbbreviation
       ]
       c.plugins.prefix = /^\$/
 
