@@ -32,6 +32,9 @@ module Plugins
             end
         end
 
+        now = Time.now
+        precip_chance = weather.chance_of_precipitation(now, now, location)
+
         unless failed
           name = conditions[:full_name]
           condition = conditions[:weather]
@@ -39,13 +42,15 @@ module Plugins
           feel = conditions[:formatted_feelslike]
           humidity = "#{conditions[:humidity]}%"
           date = conditions[:updated]
+          message = "#{name}: #{condition} | "
           if temp == feel
-            message = "#{name}: #{condition} | #{temp}, and feels like it! " \
-                      "Humidity: #{humidity} | #{date}"
+            message << "#{temp}, and feels like it! "
           else
-            message = "#{name}: #{condition} | #{temp}, but feels like " \
-                      "#{feel}! Humidity: #{humidity} | #{date}"
+            message << "#{temp}, but feels like #{feel}"
           end
+
+          message << "Humidity: #{humidity} | #{precip_chance}% chance of " \
+                     "precipitation | #{date}"
         end
 
         unless alerts.nil?
