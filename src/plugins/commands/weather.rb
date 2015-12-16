@@ -32,15 +32,14 @@ module Plugins
             end
         end
 
-
         unless failed
           name = conditions[:full_name]
           condition = conditions[:weather]
           temp = conditions[:formatted_temperature]
-          feel = conditions[:formatted_temperature]
+          feel = conditions[:formatted_feelslike]
           humidity = "#{conditions[:humidity]}%"
           date = conditions[:updated]
-          if conditions[:formatted_temperature] == conditions[:formatted_feelslike]
+          if temp == feel
             message = "#{name}: #{condition} | #{temp}, and feels like it! " \
                       "Humidity: #{humidity} | #{date}"
           else
