@@ -37,7 +37,9 @@ module Plugins
     # Clears up all the stuff. Closes all the files and clears the array. Unsure
     #   about the parameters.
     def cleanup(*)
-      @log_files.map(&:close)
+      @log_files.each do |_, file|
+        file.close
+      end
       @log_files.clear
     end
 
