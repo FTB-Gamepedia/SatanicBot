@@ -2,7 +2,7 @@ require 'cinch'
 
 module Plugins
   module Commands
-    class MajorCategory
+    class NewCategory
       include Cinch::Plugin
       match(/newmodcat (.+)/i, method: :new_mod_category)
       match(/newminorcat (.+)/i, method: :new_minor_category)
