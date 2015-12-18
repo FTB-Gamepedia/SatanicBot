@@ -11,7 +11,7 @@ module Plugins
       # @todo use bot.quit rather than exit 0 for a cleaner quit.
       def execute(msg)
         if msg.user.authname == 'SatanicSanta'
-          exit 0
+          LittleHelper.quit(msg.user.name)
         else
           msg.reply('You are not authorized for this action.')
         end

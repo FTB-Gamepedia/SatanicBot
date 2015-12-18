@@ -31,18 +31,12 @@ module Plugins
       def add_new_param(page, version)
         butt = LittleHelper.init_wiki
         text = butt.get_text(page)
-        if /{{[Ii]nfobox mod/ =~ text
-          text = text.sub(/{{[Ii]nfobox mod\n/, "{{Infobox mod\n|version=" \
-                                                "#{version}")
-          edit = butt.edit(page, text, true, true, 'Add version parameter')
-          if edit.is_a?(Fixnum)
-            return true
-          else
-            return edit
-          end
-        else
-          return false
-        end
+        return false unless /{{[Ii]nfobox mod}}/ =~ text
+        text.sub!(/{{[Ii]nfobox mod\n/, "{{Infobox mod\n|version=" \
+                                        "#{version}")
+        edit = butt.edit(page, text, true, true, 'Add version parameter')
+        return true if edit.is_a?(Fixnum)
+        return edit
       end
 
       # Updates the version parameter in the infobox.
@@ -53,18 +47,12 @@ module Plugins
       def update_param(page, version)
         butt = LittleHelper.init_wiki
         text = butt.get_text(page)
-        if /version=#{version}/ !~ text && /version =#{version}/ !~ text
-          text = text.gsub(/version=.*/, "version=#{version}")
-          text = text.gsub(/version =.*/, "version=#{version}")
-          edit = butt.edit(page, text, true, true, 'Update vesion.')
-          if edit.is_a?(Fixnum)
-            return true
-          else
-            return edit
-          end
-        else
-          return false
-        end
+        return false if /version=#{version}/ =~ text || /version =#{version}/ =~ text
+        text.gsub!(/version=.*/, "version=#{version}")
+        text.gsub!(/version =.*/, "version=#{version}")
+        edit = butt.edit(page, text, true, true, 'Update vesion.')
+        return true if edit.is_a?(Fixnum)
+        return edit
       end
 
       # Replies according to the return value.

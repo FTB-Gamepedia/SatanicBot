@@ -58,11 +58,7 @@ module Plugins
       #   channel within the past 5 calls.
       # @param msg [Cinch::Message]
       def random_number(msg)
-        number = rand(100)
-        @last_numbers = [] if @last_numbers.nil?
-        number = rand(100) while @last_numbers.include?(number)
-        @last_numbers.prepend_capped(number, 5)
-        msg.reply(number.to_s)
+        random_number_max(msg, 100)
       end
 
       # Gets a random number that has not been said in the channel within the
@@ -81,12 +77,7 @@ module Plugins
       # Gets a random motivational statement for the user who used the command.
       # @param msg [Cinch::Message]
       def motivate_you(msg)
-        line = StringUtility.random_line(Variables::Constants::MOTIVATE_PATH)
-        @last_motivation = [] if @last_motivation.nil?
-        line = StringUtility.random_line(Variables::Constants::MOTIVATE_PATH) \
-          while @last_motivation.include?(line)
-        @last_motivation.prepend_capped(line, 5)
-        msg.reply("#{line}, #{msg.user.nick}")
+        motivate_else(msg, msg.user.nick)
       end
 
       # Gets a random motivational statement for the provided user.

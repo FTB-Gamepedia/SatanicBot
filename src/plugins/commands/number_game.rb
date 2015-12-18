@@ -45,7 +45,6 @@ module Plugins
       def guess(msg, num)
         num = num.to_i
         if @started
-          # msg.reply("DEBUG: #{@random_number}")
           @tries += 1
           if @tries > 5
             msg.reply('Sorry, you have tried the maximum number of times.' \
@@ -61,44 +60,41 @@ module Plugins
             @started = false
             @tries = 0
             return
-          else
-            measure = @random_number / 5
-            measures = [
-              measure,
-              measure * 2,
-              measure * 3,
-              measure * 4,
-              measure * 5
-            ]
-
-            diff = num - @random_number
-            diff = diff.abs
-
-            # msg.reply("DEBUG: CURR DIFF: #{diff}")
-
-            if @tries == 1
-              if num.between?(measures[4], @random_number + measures[4])
-                msg.reply('You are on fire!')
-              elsif num.between?(measures[3], @random_number + measures[3])
-                msg.reply('You are warm.')
-              elsif num.between?(measures[2], @random_number + measures[2])
-                msg.reply('You are pretty neutral.')
-              elsif num.between?(measures[1], @random_number + measures[1])
-                msg.reply('You are cold.')
-              elsif num.between?(measures[0], @random_number + measures[0])
-                msg.reply('You are fucking freezing!')
-              end
-            else
-              if diff < @previous_difference
-                msg.reply('You are warmer.')
-              else
-                msg.reply('You are colder.')
-              end
-            end
-
-            # msg.reply("DEBUG: PREV DIFF: #{@previous_difference}")
-            @previous_difference = diff
           end
+
+          measure = @random_number / 5
+          measures = [
+            measure,
+            measure * 2,
+            measure * 3,
+            measure * 4,
+            measure * 5
+          ]
+
+          diff = num - @random_number
+          diff = diff.abs
+
+          if @tries == 1
+            if num.between?(measures[4], @random_number + measures[4])
+              msg.reply('You are on fire!')
+            elsif num.between?(measures[3], @random_number + measures[3])
+              msg.reply('You are warm.')
+            elsif num.between?(measures[2], @random_number + measures[2])
+              msg.reply('You are pretty neutral.')
+            elsif num.between?(measures[1], @random_number + measures[1])
+              msg.reply('You are cold.')
+            elsif num.between?(measures[0], @random_number + measures[0])
+              msg.reply('You are fucking freezing!')
+            end
+          else
+            if diff < @previous_difference
+              msg.reply('You are warmer.')
+            else
+              msg.reply('You are colder.')
+            end
+          end
+
+          @previous_difference = diff
         else
           msg.reply('You must start the game first.')
         end

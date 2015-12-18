@@ -27,12 +27,7 @@ module Plugins
 
         if alerts.is_a?(String)
           failed = true
-          message =
-            if message.nil?
-              "Error getting alerts: #{alerts}"
-            else
-              " | Error getting alerts: #{alerts}"
-            end
+          message = message.nil? ? "Error getting alerts: #{alerts}" : " | Error getting alerts: #{alerts}"
         end
 
         now = Time.now
@@ -71,8 +66,7 @@ module Plugins
         region_hash = SimpleGeolocator.region(ip)
         region = region_hash[:code]
         city = SimpleGeolocator.city(ip)
-        location = "#{city}, #{region}"
-        return location
+        "#{city}, #{region}"
       end
 
       # Gets the weather conditions for the user's location by their IP.

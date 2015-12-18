@@ -112,4 +112,10 @@ module LittleHelper
   def run
     BOT.start
   end
+
+  # Quits the bot.
+  # @param user [String] The user who is quitting the bot.
+  def quit(user)
+    BOT.quit("I will be avenged, #{user}!")
+  end
 end

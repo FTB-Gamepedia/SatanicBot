@@ -38,12 +38,8 @@ module Plugins
           else
             "#{username} has"
           end
-        message_contribs =
-          if count == '1'
-            '1 contribution'
-          else
-            "#{count} contributions"
-          end
+
+        message_contribs = count == '1' ? '1 contribution' : "#{count} contributions"
         message = "#{message_start} made #{message_contribs} to the wiki and " \
                   "registered on #{month} #{day}, #{year}"
         msg.reply(message)

@@ -22,27 +22,30 @@ module Plugins
           if !old_cat_contents.nil? && new_cat_contents.nil?
             summary = "Moving #{old_cat} to #{new_cat} through IRC."
             create = butt.create_page(new_cat, old_cat_contents, summary)
-            if !create.is_a?(Fixnum)
-              msg.reply("Something went wrong when creating the page " \
+            unless create.is_a?(Fixnum)
+              msg.reply('Something went wrong when creating the page ' \
                         "#{new_cat}! Error code: #{create}")
-            else
-              delete = butt.delete(old_cat, summary)
-              if delete != true
-                msg.reply("Something went wrong when deleting #{old_cat}!" \
-                          "Error code: #{delete}")
-              else
-                members = butt.get_category_members(old_cat, 5000)
-                members.each do |t|
-                  text = butt.get_text(t)
-                  next if text.nil?
-                  text.gsub!(old_cat, new_cat)
-                  text.gsub!(/\{\{[Cc]|#{old_cat}\}\}/, "{{C|#{new_cat}}}")
-                  edit = butt.edit(t, text, true)
-                  msg.reply("Something went wrong when editing #{t}! " \
-                            "Error code: #{edit} ... Continuing...") if !edit.is_a?(Fixnum)
-                end
-              end
+              return
             end
+
+            delete = butt.delete(old_cat, summary)
+            if delete != true
+              msg.reply("Something went wrong when deleting #{old_cat}!" \
+                        "Error code: #{delete}")
+              return
+            end
+
+            members = butt.get_category_members(old_cat, 5000)
+            members.each do |t|
+              text = butt.get_text(t)
+              next if text.nil?
+              text.gsub!(old_cat, new_cat)
+              text.gsub!(/\{\{[Cc]|#{old_cat}\}\}/, "{{C|#{new_cat}}}")
+              edit = butt.edit(t, text, true)
+              msg.reply("Something went wrong when editing #{t}! " \
+                        "Error code: #{edit} ... Continuing...") unless edit.is_a?(Fixnum)
+            end
+
             msg.reply("Finished moving #{old_cat} to #{new_cat}")
           else
             msg.reply('Either the new category already exists, or the old one' \
