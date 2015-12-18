@@ -11,6 +11,15 @@ module Plugins
 
         @message = nil
 
+        # Checks whether the log in is valid, sets the message to the proper
+        #   value, and actually logs the user in.
+        # @param authname [String] The user's authname (NickServ login)
+        # @param pass [String] The password for LittleHelper that the user
+        #   provided.
+        # @return [void] when it is invalid. The request is invalid when:
+        #   the user is not logged in, the user is already logged into
+        #   LittleHelper, the password provided is not correct, or the user is
+        #   not in the list of people who are allowed to login.
         def check_valid(authname, pass)
           authedusers = Variables::NonConstants.get_authenticated_users
           true_pass = Variables::NonConstants.get_authentication_password
@@ -51,6 +60,8 @@ module Plugins
           Variables::NonConstants.authenticate_user(authname)
         end
 
+        # Attempts to log in.
+        # @see check_valid
         def execute(msg, pass)
           check_valid(msg.user.authname, pass)
           msg.reply(@message)
@@ -62,6 +73,8 @@ module Plugins
 
         match(/logout/i)
 
+        # Logs the user out.
+        # @param msg [Cinch::Message]
         def execute(msg)
           authedusers = Variables::NonConstants.get_authenticated_users
           if authedusers.include? msg.user.authname
@@ -78,6 +91,9 @@ module Plugins
 
         match(/setpass (.+)/i)
 
+        # Sets a new password for users to log in with.
+        # @param msg [Cinch::Message]
+        # @param new_pass [String] The new password.
         def execute(msg, new_pass)
           if msg.user.authname == 'SatanicSanta'
             if new_pass == Variables::NonConstants.get_authentication_password

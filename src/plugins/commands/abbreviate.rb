@@ -7,6 +7,12 @@ module Plugins
 
       match(/abbrv ([A-Z0-9\-]+) (.+)/i)
 
+      # Abbreviates the given mod with the given abbreviation. Fails when the
+      #   mod or abbreviation are already on the list, or the user is not
+      #   logged into LittleHelper. Will state the error code if there is any.
+      # @param msg [Cinch::Message]
+      # @param abbreviation [String] The abbreviation.
+      # @param mod [String] The mod name.
       def execute(msg, abbreviation, mod)
         abbreviation = abbreviation.upcase
         authedusers = Variables::NonConstants.get_authenticated_users

@@ -113,22 +113,34 @@ module Variables
     @authpass = Variables::Constants::CONFIG['irc']['default_auth_pass']
     @authedusers = []
 
+    # Gets the authentication password set in the config or by $setpass..
+    # @return [String] The password.
     def get_authentication_password
       @authpass
     end
 
+    # Sets the authentication password to a new value. This does not update the
+    #   actual config file.
+    # @todo Actually update the config file for a permanent change.
+    # @param new_password [String] The new password.
     def set_authentication_password(new_password)
       @authpass = new_password
     end
 
+    # Gets all of the authenticated user's authnames.
+    # @return [Array<String>] All of the authenticated user's NickServ usernames
     def get_authenticated_users
       @authedusers
     end
 
+    # Authenticates the given user.
+    # @param username [String] The user to authenticate.
     def authenticate_user(authname)
       @authedusers << authname
     end
 
+    # De-authenticates a user.
+    # @param username [String] The user to deauthenticate.
     def deauthenticate_user(authname)
       @authedusers.delete(authname)
     end

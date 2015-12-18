@@ -76,29 +76,39 @@ module LittleHelper
     end
   end
 
+  # Initializes the MediaWiki::Butt instance. Logs back in if necessary.
+  # @return [MediaWiki::Butt].
   def init_wiki
     wiki_login unless BUTT.user_bot?
 
     BUTT
   end
 
+  # Gets the Twitter instance.
+  # @return [Twitter::Rest::Client]
   def init_twitter
     TWEETER
   end
 
+  # Gets the Weatheruby instance.
+  # @return [Weatheruby]
   def init_weather
     WEATHER
   end
 
+  # Gets the Pastee instance.
+  # @return [Pastee]
   def init_pastee
     PASTEE
   end
 
+  # Logs into the wiki with MediaWiki::Butt.
   def wiki_login
     BUTT.login(Variables::Constants::WIKI_USERNAME,
                Variables::Constants::WIKI_PASSWORD)
   end
 
+  # Starts the bot.
   def run
     BOT.start
   end

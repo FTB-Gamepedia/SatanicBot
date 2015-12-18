@@ -7,6 +7,9 @@ module Plugins
 
       match(/addquote (.+)/i)
 
+      # Adds a quote to the quote list, for $randquote.
+      # @param msg [Cinch::Message]
+      # @param quote [String] The quote's text.
       def execute(msg, quote)
         authedusers = Variables::NonConstants.get_authenticated_users
         if authedusers.include?(msg.user.authname)

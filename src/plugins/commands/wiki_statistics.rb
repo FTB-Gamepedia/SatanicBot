@@ -10,6 +10,9 @@ module Plugins
       match(/stats$/i, method: :get_all)
       match(/stats (.+)/i, method: :get_one)
 
+      # Gets all statistics for the wiki, including number of pages, articles,
+      #   edits, images, users, admins, and active users.
+      # @param msg [Cinch::Message]
       def get_all(msg)
         butt = LittleHelper.init_wiki
         stats = butt.get_statistics
@@ -26,6 +29,10 @@ module Plugins
                   "#{activeusers} | Admins: #{admins}")
       end
 
+      # Gets a single statistic on the wiki.
+      # @param msg [Cinch::Message]
+      # @param prop [String] The property to get. Can be any of the following:
+      #   pages, articles, edits, images, users, activeusers, or admins.
       def get_one(msg, prop)
         valid_properties = [
           'pages',

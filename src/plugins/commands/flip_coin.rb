@@ -7,6 +7,8 @@ module Plugins
 
       match(/flip/i)
 
+      # Simulates a coin flip, and states randomly 'Heads!' or 'Tails!'.
+      # @param msg [Cinch::Message]
       def execute(msg)
         coin = ['Tails!', 'Heads!'].sample
         msg.reply(coin)

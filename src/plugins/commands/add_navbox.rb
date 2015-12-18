@@ -7,6 +7,11 @@ module Plugins
 
       match(/addnav ([^\|\[\]\<\>\%\+\?]+) \| ([^\|\[\]\<\>\%\+\?]+)/i)
 
+      # Adds a navigation template to the list of navigation templates.
+      # @param msg [Cinch::Message]
+      # @param navbox [String] The navbox's name.
+      # @param content [String] What the navbox contains. This is usually just
+      #   a mod name.
       def execute(msg, navbox, content)
         authedusers = Variables::NonConstants.get_authenticated_users
         if authedusers.include?(msg.user.authname)

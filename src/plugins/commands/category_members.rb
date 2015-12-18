@@ -7,6 +7,12 @@ module Plugins
 
       match(/categorymembers (.+)/i)
 
+      # Creates a massive comprehensive summary of the category members of any
+      #   given category on the wiki, and puts it on Pastee. The comprehensive
+      #   summary includes a list of all category members, and those members
+      #   organized by their other categories.
+      # @param msg [Cinch::Message]
+      # @param category [String] The top category.
       def execute(msg, category)
         authedusers = Variables::NonConstants.get_authenticated_users
         category = "Category:#{category}" if /^Category:/ !~ category

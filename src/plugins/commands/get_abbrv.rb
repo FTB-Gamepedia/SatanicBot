@@ -7,6 +7,9 @@ module Plugins
 
       match(/getabbrv (.+)/)
 
+      # Gets either the abbreviation of a mod, or the mod using an abbreviation.
+      # @param msg [Cinch::Message]
+      # @param thing [String] The abbreviation OR mod.
       def execute(msg, thing)
         page = 'Module:Mods/list'
         butt = LittleHelper.init_wiki

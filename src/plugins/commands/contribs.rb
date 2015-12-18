@@ -10,6 +10,12 @@ module Plugins
       match(/contribs (.+)/i, method: :execute)
       match(/contribs$/i, method: :no_username)
 
+      # Gets the amount of contributions and the registration date of the given
+      #   user.
+      # @param msg [Cinch::Message]
+      # @param username [String] The username to check.
+      # @param you [Boolean] Whether the username is also the user who performed
+      #   the command.
       def execute(msg, username, you = false)
         butt = LittleHelper.init_wiki
         count = butt.get_contrib_count(username).to_s.separate
@@ -43,6 +49,10 @@ module Plugins
         msg.reply(message)
       end
 
+      # Gets the amount of contributions and the registration date of the user
+      #   who performed the command, by their IRC nickname.
+      # @see execute
+      # @param msg [Cinch::Message]
       def no_username(msg)
         execute(msg, msg.user.nick, true)
       end

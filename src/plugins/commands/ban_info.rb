@@ -8,6 +8,9 @@ module Plugins
 
       match(/banned (.+)/i)
 
+      # Gets Minecraft server ban information from Fishbans.
+      # @param msg [Cinch::Message]
+      # @param username [String] The username to check.
       def execute(msg, username)
         bans = Fishbans.get_total_bans(username)
         if bans.is_a?(Fixnum)

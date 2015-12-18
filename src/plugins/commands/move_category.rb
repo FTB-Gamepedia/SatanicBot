@@ -7,6 +7,10 @@ module Plugins
 
       match(/movecat ([^\|\[\]\<\>\%\+\?]+) \-\> ([^\|\[\]\<\>\%\+\?]+)/i)
 
+      # Moves a category, and tries to update all of its members.
+      # @param msg [Cinch::Message]
+      # @param old_cat [String] The old category name.
+      # @param new_cat [String] The new category name.
       def execute(msg, old_cat, new_cat)
         authed_users = Variables::NonConstants.get_authenticated_users
         if authed_users.include? msg.user.authname

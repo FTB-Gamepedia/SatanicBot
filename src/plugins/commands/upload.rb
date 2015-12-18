@@ -7,6 +7,10 @@ module Plugins
 
       match(/upload (.*) (.*)/)
 
+      # Uploads a file to the wiki.
+      # @param msg [Cinch::Message]
+      # @param url [String] The URL to upload.
+      # @param filename [String] The file's name on the wiki.
       def execute(msg, url, filename)
         authedusers = Variables::NonConstants.get_authenticated_users
         if authedusers.include?(msg.user.authname)

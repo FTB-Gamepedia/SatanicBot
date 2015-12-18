@@ -8,6 +8,12 @@ module Plugins
       match(/addmod (.+)/i, method: :execute_major)
       match(/addminor (.+)/i, method: :execute_minor)
 
+      # Adds the mod to the list of mods on the main page of the FTB wiki.
+      #   Unlike most other execute methods, this one is not actually called
+      #   directly by match.
+      # @param msg [Cinch::Message]
+      # @param mod [String] The mod's name.
+      # @param minor [Boolean] Whether the mod is considered minor or not.
       def execute(msg, mod, minor = false)
         butt = LittleHelper.init_wiki
         page =
@@ -55,6 +61,9 @@ module Plugins
         end
       end
 
+      # Adds a major (non-minor) mod to the main page list.
+      # @param msg [Cinch::Message]
+      # @param mod [String] The mod to add.
       def execute_major(msg, mod)
         authedusers = Variables::NonConstants.get_authenticated_users
         if authedusers.include?(msg.user.authname)
@@ -64,6 +73,9 @@ module Plugins
         end
       end
 
+      # Adds a minor mod to the main page list.
+      # @param msg [Cinch::Message]
+      # @param mod [String] The mod to add.
       def execute_minor(msg, mod)
         authedusers = Variables::NonConstants.get_authenticated_users
         if authedusers.include?(msg.user.authname)

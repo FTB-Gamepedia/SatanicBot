@@ -7,6 +7,10 @@ module Plugins
 
       match(/safemove (.+) -> (.+)/i)
 
+      # Safely moves a page by updating all of the backlinks possible.
+      # @param msg [Cinch::Message]
+      # @param old_page [String] The old page name.
+      # @param new_page [String] The new page name.
       def execute(msg, old_page, new_page)
         authed_users = Variables::NonConstants.get_authenticated_users
         if authed_users.include? msg.user.authname

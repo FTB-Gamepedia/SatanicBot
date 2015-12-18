@@ -10,6 +10,9 @@ module Plugins
       match(/weather$/i, method: :weather_self)
       match(/forecast$/i, method: :forecast_self)
 
+      # Gets the current weather conditions for the location.
+      # @param msg [Cinch::Message]
+      # @param location [String] The location to get the weather for.
       def weather(msg, location)
         weather = LittleHelper.init_weather
         conditions = weather.conditions(location)
@@ -62,6 +65,8 @@ module Plugins
         msg.reply(message)
       end
 
+      # Geolocates the IP to a given location, in City, Region syntax.
+      # @param ip [String] The IP to geolocate
       def get_location_by_ip(ip)
         region_hash = SimpleGeolocator.region(ip)
         region = region_hash[:code]
@@ -70,12 +75,18 @@ module Plugins
         return location
       end
 
+      # Gets the weather conditions for the user's location by their IP.
+      # @param msg [Cinch::Message]
       def weather_self(msg)
         ip = msg.user.host
         location = get_location_by_ip(ip)
         weather(msg, location)
       end
 
+      # Gets the forecast information for the next 3 days (including nights) in
+      #   the given location.
+      # @param msg [Cinch::Message]
+      # @param location [String] The location to get the information for.
       def forecast(msg, location)
         msg.reply("Getting forecast for #{location}...")
         weather = LittleHelper.init_weather
@@ -90,6 +101,9 @@ module Plugins
         end
       end
 
+      # Gets the forecast information for the next 3 days (including nights) in
+      #   the users location, by first getting the location of their IP.
+      # @param msg [Cinch::Message]
       def forecast_self(msg)
         ip = msg.user.host
         location = get_location_by_ip(ip)

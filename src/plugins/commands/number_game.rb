@@ -14,6 +14,8 @@ module Plugins
       @tries = nil
       @previous_difference = 0
 
+      # Quits the number game if one has been started.
+      # @param msg [Cinch::Message]
       def quit(msg)
         if @started
           msg.reply('Game exited.')
@@ -25,6 +27,8 @@ module Plugins
         end
       end
 
+      # Initializes a number game.
+      # @param msg [Cinch::Message]
       def init(msg)
         msg.reply('Game starting! You have 5 tries! Submit an answer by using' \
                   ' $game guess followed by a number!')
@@ -33,6 +37,11 @@ module Plugins
         @tries = 0
       end
 
+      # Checks if the number guessed is correct. It will state if the user's
+      #   guess was warm or cold to the original number, and if they were warmer
+      #   or colder than their previous guess.
+      # @param msg [Cinch::Message]
+      # @param num [String] The number to guess.
       def guess(msg, num)
         num = num.to_i
         if @started

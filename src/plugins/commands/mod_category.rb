@@ -6,6 +6,9 @@ module Plugins
       include Cinch::Plugin
       match(/newmodcat (.+)/i)
 
+      # Creates a major (non-minor) mod category.
+      # @param msg [Cinch::Message]
+      # @param page [String] The mod name.
       def execute(msg, page)
         authedusers = Variables::NonConstants.get_authenticated_users
         page = "Category:#{page}" if /^Category:/ !~ page
@@ -32,6 +35,9 @@ module Plugins
       include Cinch::Plugin
       match(/newminorcat (.+)/i)
 
+      # Creates a minor mod category.
+      # @param msg [Cinch::Message]
+      # @param page [String] The mod name.
       def execute(msg, page)
         page = "Category:#{page}" if /^Category:/ !~ page
         authedusers = Variables::NonConstants.get_authenticated_users

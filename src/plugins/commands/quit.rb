@@ -7,6 +7,8 @@ module Plugins
 
       match(/quit/i)
 
+      # Quits the bot if the user is authenticated as SatanicSanta.
+      # @todo use bot.quit rather than exit 0 for a cleaner quit.
       def execute(msg)
         if msg.user.authname == 'SatanicSanta'
           exit 0

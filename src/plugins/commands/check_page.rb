@@ -9,6 +9,9 @@ module Plugins
 
       match(/checkpage (.+)/i)
 
+      # Checks whether the page exists on the wiki.
+      # @param msg [Cinch::Message]
+      # @param page [String] The page to check.
       def execute(msg, page)
         butt = LittleHelper.init_wiki
         page = page.spacify

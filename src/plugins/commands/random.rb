@@ -18,6 +18,9 @@ module Plugins
       match(/motivate$/i, method: :motivate_you)
       match(/motivate (.+)/i, method: :motivate_else)
 
+      # Gets a random word that has not been said in the channel within the past
+      #   5 calls.
+      # @param msg [Cinch::Message]
       def random_word(msg)
         word = LiterateRandomizer.word
         @last_words = [] if @last_words.nil?
@@ -26,6 +29,9 @@ module Plugins
         msg.reply(word)
       end
 
+      # Gets a random sentence that has not been said in the channel within the
+      #   past 5 calls.
+      # @param msg [Cinch::Message]
       def random_sentence(msg)
         sentence = LiterateRandomizer.sentence
         @last_sentences = [] if @last_sentences.nil?
@@ -35,6 +41,9 @@ module Plugins
         msg.reply(sentence)
       end
 
+      # Gets a random quote that has not been said in the channel within the
+      #   past 5 calls.
+      # @param msg [Cinch::Message]
       def random_quote(msg)
         quote = StringUtility.random_line(Variables::Constants::QUOTE_PATH)
         @last_quotes = [] if @last_quotes.nil?
@@ -45,6 +54,9 @@ module Plugins
         msg.reply(quote)
       end
 
+      # Gets a random number with a cap of 100 that has not been said in the
+      #   channel within the past 5 calls.
+      # @param msg [Cinch::Message]
       def random_number(msg)
         number = rand(100)
         @last_numbers = [] if @last_numbers.nil?
@@ -53,6 +65,10 @@ module Plugins
         msg.reply(number.to_s)
       end
 
+      # Gets a random number that has not been said in the channel within the
+      #   past 5 calls.
+      # @param msg [Cinch::Message]
+      # @param maximum [String] The integer cap.
       def random_number_max(msg, maximum)
         number = rand(maximum.to_i)
         @last_numbers = [] if @last_numbers.nil?
@@ -62,6 +78,8 @@ module Plugins
         msg.reply(number)
       end
 
+      # Gets a random motivational statement for the user who used the command.
+      # @param msg [Cinch::Message]
       def motivate_you(msg)
         line = StringUtility.random_line(Variables::Constants::MOTIVATE_PATH)
         @last_motivation = [] if @last_motivation.nil?
@@ -71,6 +89,9 @@ module Plugins
         msg.reply("#{line}, #{msg.user.nick}")
       end
 
+      # Gets a random motivational statement for the provided user.
+      # @param msg [Cinch::Message]
+      # @param user [String] The username to motivate.
       def motivate_else(msg, user)
         if msg.channel.has_user?(user)
           line = StringUtility.random_line(Variables::Constants::MOTIVATE_PATH)

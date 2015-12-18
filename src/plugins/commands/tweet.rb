@@ -7,6 +7,9 @@ module Plugins
 
       match(/tweet (.+)/i)
 
+      # Tweets the message provided.
+      # @param msg [Cinch::Message]
+      # @param tweet [String] The message to tweet.
       def execute(msg, tweet)
         # 134 because it has to fit "[IRC] "
         if tweet.length > 1 && tweet.length < 134
