@@ -104,7 +104,12 @@ module Variables
       'changecat' => 'Changes a category in a page to a different one. ' \
                      '$changecat <page> | <old> -> <new>',
       'getabbrv' => 'Gets either the abbreviation for the mod, or the mod for ' \
-                    'the abbreviation. $getabbrv <abbreviation or mod name>'
+                    'the abbreviation. $getabbrv <abbreviation or mod name>',
+      'subcategorymembers' => 'Gets a comprehensive summary of all category ' \
+                              'members, and subcategories, and their members.' \
+                              ' Use this command with caution, as it will ' \
+                              'take a very long time for large categories. ' \
+                              '$subcategorymembers <category>'
     }
   end
 
