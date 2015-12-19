@@ -25,7 +25,9 @@ module Plugins
             match_data = module_text.scan(/([A-Z0-9\-]+) = {'#{thing}',/)
             msg.reply("#{thing} is abbreviated as #{match_data[0][0]}")
           else
-            msg.reply('I do not know what happened.')
+            msg.reply("#{thing} does not appear to be in the abbreviation " \
+                      'list, but there were similar non-exact results. ' \
+                      'Try something similar.')
           end
         else
           msg.reply("#{thing} does not appear to be in the abbreviation list.")
