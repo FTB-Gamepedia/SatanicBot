@@ -24,6 +24,54 @@ module LittleHelper
 
   PASTEE = Pastee.new(Variables::Constants::PASTEE_KEY)
 
+  plugins = [
+    Plugins::Commands::Authentication::SetPass,
+    Plugins::Commands::Authentication::Login,
+    Plugins::Commands::Authentication::Logout,
+    Plugins::Commands::Quit,
+    Plugins::Commands::Info::Help,
+    Plugins::Commands::Info::Src,
+    Plugins::Commands::Random,
+    Plugins::Commands::Version,
+    Plugins::Commands::Abbreviate,
+    Plugins::Commands::CheckPage,
+    Plugins::Commands::NewCategory,
+    Plugins::Commands::AddQuote,
+    Plugins::Commands::Upload,
+    Plugins::Commands::AddNavbox,
+    Plugins::Commands::GetContribs,
+    Plugins::Commands::EightBall,
+    Plugins::Commands::FlipCoin,
+    Plugins::Commands::WikiStatistics,
+    Plugins::Commands::NumberGame,
+    Plugins::Commands::AddMod,
+    Plugins::Commands::Tweet,
+    Plugins::Commands::Weather,
+    Plugins::Commands::BanInfo,
+    Plugins::Commands::IssueLink,
+    Plugins::Commands::MoveCategory,
+    Plugins::Commands::MoveGeneral,
+    Plugins::Commands::CategoryMembers,
+    Plugins::Commands::ChangeCategory,
+    Plugins::Commands::GetAbbreviation,
+    Plugins::Commands::SubCategoryMembers,
+    Plugins::Logger
+  ]
+
+  Variables::Constants::DISABLED_PLUGINS.each do |p|
+    constants = p.split('::')
+    disabled = nil
+    constants.each do |c|
+      if disabled.nil?
+        disabled = Object.const_get(c)
+        next
+      else
+        disabled = disabled.const_get(c)
+      end
+    end
+    plugins.delete(disabled)
+  end
+
   BOT = Cinch::Bot.new do
     configure do |c|
       c.server = Variables::Constants::IRC_SERVER
@@ -37,39 +85,7 @@ module LittleHelper
       c.user = Variables::Constants::IRC_USERNAME
       c.password = Variables::Constants::IRC_PASSWORD
       c.realname = Variables::Constants::IRC_REALNAME
-      c.plugins.plugins = [
-        Plugins::Commands::Authentication::SetPass,
-        Plugins::Commands::Authentication::Login,
-        Plugins::Commands::Authentication::Logout,
-        Plugins::Commands::Quit,
-        Plugins::Commands::Info::Help,
-        Plugins::Commands::Info::Src,
-        Plugins::Commands::Random,
-        Plugins::Commands::Version,
-        Plugins::Commands::Abbreviate,
-        Plugins::Commands::CheckPage,
-        Plugins::Commands::NewCategory,
-        Plugins::Commands::AddQuote,
-        Plugins::Commands::Upload,
-        Plugins::Commands::AddNavbox,
-        Plugins::Commands::GetContribs,
-        Plugins::Commands::EightBall,
-        Plugins::Commands::FlipCoin,
-        Plugins::Commands::WikiStatistics,
-        Plugins::Commands::NumberGame,
-        Plugins::Commands::AddMod,
-        Plugins::Commands::Tweet,
-        Plugins::Commands::Weather,
-        Plugins::Commands::BanInfo,
-        Plugins::Commands::IssueLink,
-        Plugins::Commands::MoveCategory,
-        Plugins::Commands::MoveGeneral,
-        Plugins::Commands::CategoryMembers,
-        Plugins::Commands::ChangeCategory,
-        Plugins::Commands::GetAbbreviation,
-        Plugins::Commands::SubCategoryMembers,
-        Plugins::Logger
-      ]
+      c.plugins.plugins = plugins
       c.plugins.prefix = /^\$/
 
       CHANNELS = c.channels

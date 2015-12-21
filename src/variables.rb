@@ -22,6 +22,8 @@ module Variables
     WUNDERGROUND_KEY = CONFIG['wunderground']['api_key']
     PASTEE_KEY = CONFIG['pastee']['api_key']
     ISSUE_TRACKING = {}
+    DISABLED_PLUGINS = CONFIG['disabled'] if CONFIG.key?('disabled')
+
     CONFIG['github'].each do |i|
       ISSUE_TRACKING[i['channel']] = i['repo']
     end

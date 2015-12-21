@@ -41,3 +41,7 @@ github:
 
 pastee:
   api_key: abcdefghijklmnop
+
+disabled:
+  - Plugins::Commands::Weather
+  - Plugins::Logger
