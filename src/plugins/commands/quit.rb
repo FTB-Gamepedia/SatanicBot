@@ -7,6 +7,9 @@ module Plugins
 
       match(/quit/i)
 
+      doc = 'Murders me. Owner only command. No args.'
+      Variables::NonConstants.add_command('quit', doc)
+
       # Quits the bot if the user is authenticated as SatanicSanta.
       # @todo use bot.quit rather than exit 0 for a cleaner quit.
       def execute(msg)

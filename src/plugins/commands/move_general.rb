@@ -7,6 +7,11 @@ module Plugins
 
       match(/safemove (.+) -> (.+)/i)
 
+      doc = 'Moves a page to a new page, with no redirect, including ' \
+            "subpages. Edits all of the page's backlinks. 2 args: " \
+            '$safemove <old> -> <new> Args must be separated by ->'
+      Variables::NonConstants.add_command('safemove', doc)
+
       # Safely moves a page by updating all of the backlinks possible.
       # @param msg [Cinch::Message]
       # @param old_page [String] The old page name.

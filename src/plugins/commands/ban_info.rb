@@ -8,6 +8,10 @@ module Plugins
 
       match(/banned (.+)/i)
 
+      doc = 'Gets whether or not the user is banned on a Minecraft server. ' \
+            '1 arg: $banned <user>'
+      Variables::NonConstants.add_command('banned', doc)
+
       # Gets Minecraft server ban information from Fishbans.
       # @param msg [Cinch::Message]
       # @param username [String] The username to check.

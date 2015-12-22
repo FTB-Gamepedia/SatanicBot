@@ -10,6 +10,16 @@ module Plugins
       match(/weather$/i, method: :weather_self)
       match(/forecast$/i, method: :forecast_self)
 
+      weather = 'Provides weather information for the given place. 1 ' \
+                'optional arg: $weather <place>, if not provided it will ' \
+                "use the user's IP address using simple_geolocator"
+      forecast = 'Provides forecast information for the enxt 3 days, ' \
+                 'including nights. 1 optional arg: $forecast <place>, ' \
+                 "if not provided it will use the user's IP address using" \
+                 'simple_geolocator'
+      Variables::NonConstants.add_command('weather', weather)
+      Variables::NonConstants.add_command('forecast', forecast)
+
       # Gets the current weather conditions for the location.
       # @param msg [Cinch::Message]
       # @param location [String] The location to get the weather for.

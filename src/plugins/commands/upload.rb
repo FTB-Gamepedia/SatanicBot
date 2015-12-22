@@ -7,6 +7,10 @@ module Plugins
 
       match(/upload (.*) (.*)/)
 
+      doc = 'Uploads a web file to the wiki. Op-only. 2 args: $upload ' \
+            '<url> <filename>'
+      Variables::NonConstants.add_command('upload', doc)
+
       # Uploads a file to the wiki.
       # @param msg [Cinch::Message]
       # @param url [String] The URL to upload.

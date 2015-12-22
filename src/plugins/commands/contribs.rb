@@ -10,6 +10,12 @@ module Plugins
       match(/contribs (.+)/i, method: :execute)
       match(/contribs$/i, method: :no_username)
 
+      doc = "Provides the user's number of contributions and their " \
+            'registration date on the wiki. 1 optional arg: $contribs ' \
+            "<username> If no arg is given, it will default to the user's " \
+            'IRC nickname.'
+      Variables::NonConstants.add_command('contribs', doc)
+
       # Gets the amount of contributions and the registration date of the given
       #   user.
       # @param msg [Cinch::Message]

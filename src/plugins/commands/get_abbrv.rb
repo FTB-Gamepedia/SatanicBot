@@ -7,6 +7,10 @@ module Plugins
 
       match(/getabbrv (.+)/)
 
+      doc = 'Gets either the abbreviation for the given mod, or the mod ' \
+            'for the given abbreviation. 1 arg: $getabbrv <thing>'
+      Variables::NonConstants.add_command('getabbrv', doc)
+
       # Gets either the abbreviation of a mod, or the mod using an abbreviation.
       # @param msg [Cinch::Message]
       # @param thing [String] The abbreviation OR mod.

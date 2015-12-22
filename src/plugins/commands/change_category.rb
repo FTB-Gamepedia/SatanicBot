@@ -7,6 +7,11 @@ module Plugins
 
       match(/changecat (.+) \| (.+) -> (.+)/)
 
+      doc = 'Changes a category in a page to a different one. 3 args: ' \
+            '$changecat <page> | <old> -> <new> All separation characters ' \
+            'are required.'
+      Variables::NonConstants.add_command('changecat', doc)
+
       # Changes any category on any page.
       # @param msg [Cinch::Message]
       # @param page [String] The page to edit.

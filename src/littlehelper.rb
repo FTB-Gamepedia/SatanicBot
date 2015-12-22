@@ -58,18 +58,20 @@ module LittleHelper
     Plugins::Logger
   ]
 
-  Variables::Constants::DISABLED_PLUGINS.each do |p|
-    constants = p.split('::')
-    disabled = nil
-    constants.each do |c|
-      if disabled.nil?
-        disabled = Object.const_get(c)
-        next
-      else
-        disabled = disabled.const_get(c)
+  unless Variables::Constants::DISABLED_PLUGINS.nil?
+    Variables::Constants::DISABLED_PLUGINS.each do |p|
+      constants = p.split('::')
+      disabled = nil
+      constants.each do |c|
+        if disabled.nil?
+          disabled = Object.const_get(c)
+          next
+        else
+          disabled = disabled.const_get(c)
+        end
       end
+      plugins.delete(disabled)
     end
-    plugins.delete(disabled)
   end
 
   BOT = Cinch::Bot.new do

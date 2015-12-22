@@ -7,6 +7,10 @@ module Plugins
 
       match(/addquote (.+)/i)
 
+      doc = 'Adds a quote to the quote list. Op-only. 1 arg: $addquote ' \
+            '<quote>'
+      Variables::NonConstants.add_command('addquote', doc)
+
       # Adds a quote to the quote list, for $randquote.
       # @param msg [Cinch::Message]
       # @param quote [String] The quote's text.

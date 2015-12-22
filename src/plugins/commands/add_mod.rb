@@ -8,6 +8,13 @@ module Plugins
       match(/addmod (.+)/i, method: :execute_major)
       match(/addminor (.+)/i, method: :execute_minor)
 
+      moddoc = 'Adds a mod to the list of mods on the main page. Op-only. ' \
+               '1 arg: $addmod <mod name>'
+      minordoc = 'Adds a mod to the list of minor mods on the main page. ' \
+                 'Op-only. 1 arg: $addminor <mod name>'
+      Variables::NonConstants.add_command('addmod', moddoc)
+      Variables::NonConstants.add_command('addminor', minordoc)
+
       # Adds the mod to the list of mods on the main page of the FTB wiki.
       #   Unlike most other execute methods, this one is not actually called
       #   directly by match.

@@ -7,6 +7,11 @@ module Plugins
 
       match(/addnav ([^\|\[\]\<\>\%\+\?]+) \| ([^\|\[\]\<\>\%\+\?]+)/i)
 
+      doc = 'Adds the navbox to the template list. Op-only. 2 args: ' \
+            '$addnav <navebox> | <content page> Args must be separated ' \
+            'by a pipe for this command.'
+      Variables::NonConstants.add_command('addnav', doc)
+
       # Adds a navigation template to the list of navigation templates.
       # @param msg [Cinch::Message]
       # @param navbox [String] The navbox's name.

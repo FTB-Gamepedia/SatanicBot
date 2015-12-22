@@ -7,6 +7,11 @@ module Plugins
 
       match(/movecat ([^\|\[\]\<\>\%\+\?]+) \-\> ([^\|\[\]\<\>\%\+\?]+)/i)
 
+      doc = 'Moves one category to another, and edits all its members. ' \
+            '2 args: $movecat <old> -> <new> Args must be separated ' \
+            'with a ->.'
+      Variables::NonConstants.add_command('movecat', doc)
+
       # Moves a category, and tries to update all of its members.
       # @param msg [Cinch::Message]
       # @param old_cat [String] The old category name.

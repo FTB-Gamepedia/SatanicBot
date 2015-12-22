@@ -7,6 +7,10 @@ module Plugins
 
       match(/abbrv ([A-Z0-9\-]+) (.+)/i)
 
+      doc = 'Abbreivates a mod for the tilesheet extension. ' \
+            'An op-only command. 2 args: $abbrv <abbreviation> <mod_name>'
+      Variables::NonConstants.add_command('abbrv', doc)
+
       # Abbreviates the given mod with the given abbreviation. Fails when the
       #   mod or abbreviation are already on the list, or the user is not
       #   logged into LittleHelper. Will state the error code if there is any.

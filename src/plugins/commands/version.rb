@@ -9,6 +9,14 @@ module Plugins
       match(/updatevers ([^\|\[\]\<\>\%\+\?]+) \| (.+)/i, method: :update)
       match(/checkvers (.+)/i, method: :check)
 
+      update = 'Updates a mod version on the wiki. Op-only command. 2 ' \
+               'args: $updatevers <page> | <version> Args must be ' \
+               'separated with a pipe in this command.'
+      check = 'Gets the current version on the page. 1 arg: $checkvers ' \
+              '<page>'
+      Variables::NonConstants.add_command('updatevers', update)
+      Variables::NonConstants.add_command('checkvers', check)
+
       # Gets the current 'version' value for the page.
       # @param page [String] The page to check.
       # @return [Nil] If there is no version parameter.

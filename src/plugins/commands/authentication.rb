@@ -11,6 +11,10 @@ module Plugins
 
         @message = nil
 
+        doc = 'Logs the user in, allowing for op-only commands. ' \
+              '1 arg: $login <password>'
+        Variables::NonConstants.add_command('login', doc)
+
         # Checks whether the log in is valid, sets the message to the proper
         #   value, and actually logs the user in.
         # @param authname [String] The user's authname (NickServ login)
@@ -73,6 +77,9 @@ module Plugins
 
         match(/logout/i)
 
+        doc = 'Logs the user out. No args.'
+        Variables::NonConstants.add_command('logout', doc)
+
         # Logs the user out.
         # @param msg [Cinch::Message]
         def execute(msg)
@@ -90,6 +97,10 @@ module Plugins
         include Cinch::Plugin
 
         match(/setpass (.+)/i)
+
+        doc = 'Sets the login password. Owner only command. ' \
+                      '1 arg: $setpass <new password>'
+        Variables::NonConstants.add_command('setpass', doc)
 
         # Sets a new password for users to log in with.
         # @param msg [Cinch::Message]

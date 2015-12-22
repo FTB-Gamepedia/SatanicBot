@@ -9,6 +9,9 @@ module Plugins
 
       match(/checkpage (.+)/i)
 
+      doc = 'Checks if a page exists. 1 arg: $checkpage <page>'
+      Variables::NonConstants.add_command('checkpage', doc)
+
       # Checks whether the page exists on the wiki.
       # @param msg [Cinch::Message]
       # @param page [String] The page to check.

@@ -7,6 +7,13 @@ module Plugins
 
       match(/subcategorymembers (.+)/i)
 
+      doc = 'Get a comprehensive summary of all category members, their ' \
+            'subcategories, and their members. Use this command with ' \
+            'caution, as it will take a long time to process. Will upload ' \
+            'the final result to Pastee. 1 arg: $subcategorymembers ' \
+            '<top category>'
+      Variables::NonConstants.add_command('subcategorymembers', doc)
+
       # Gets a hash containing all of the category's members, subcategories,
       #   their members, their subcategories, etc. recursively.
       # @param butt [MediaWiki::Butt] The butt to use for the wiki queries.

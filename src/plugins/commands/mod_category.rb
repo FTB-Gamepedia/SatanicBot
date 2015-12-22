@@ -7,6 +7,13 @@ module Plugins
       match(/newmodcat (.+)/i, method: :new_mod_category)
       match(/newminorcat (.+)/i, method: :new_minor_category)
 
+      mod = 'Creates a standard mod category. Op-only. 1 arg: $newmodcat ' \
+            '<name>'
+      minor = 'Creates a new minor mod category. Op-only. 1 arg: ' \
+              '$newminorcat <name>'
+      Variables::NonConstants.add_command('newmodcat', mod)
+      Variables::NonConstants.add_command('newminorcat', minor)
+
       def new_category(msg, page, minor = false)
         butt = LittleHelper.init_wiki
         if butt.get_text(page).nil?

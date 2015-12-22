@@ -9,6 +9,11 @@ module Plugins
       match(/game guess (\d+)/i, method: :guess)
       match(/game quit$/i, method: :quit)
 
+      doc = 'Number guessing game. Initialize with $game star. Then guess' \
+            ' numbers with $game guess <number>. A game can be quit with ' \
+            '$game quit'
+      Variables::NonConstants.add_command('game', doc)
+
       @started = false
       @random_number = nil
       @tries = nil

@@ -7,6 +7,13 @@ module Plugins
 
       match(/categorymembers (.+)/i)
 
+      doc = 'Gets a comprehensive summary of all category members, ' \
+            'organized by the other categories of each member. Use this ' \
+            'command with caution, as it will take a very long time to ' \
+            'process. Uploads the summary to Pastee. 1 arg: ' \
+            '$categorymembers <top category>'
+      Variables::NonConstants.add_command('categorymembers', doc)
+
       # Creates a massive comprehensive summary of the category members of any
       #   given category on the wiki, and puts it on Pastee. The comprehensive
       #   summary includes a list of all category members, and those members

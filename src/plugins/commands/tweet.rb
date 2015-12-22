@@ -7,6 +7,10 @@ module Plugins
 
       match(/tweet (.+)/i)
 
+      doc = 'Creates a new tweet on the LittleHelperBot Twitter account. ' \
+            '1 arg: $tweet <message>'
+      Variables::NonConstants.add_command('tweet', doc)
+
       # Tweets the message provided.
       # @param msg [Cinch::Message]
       # @param tweet [String] The message to tweet.

@@ -10,6 +10,11 @@ module Plugins
       match(/stats$/i, method: :get_all)
       match(/stats (.+)/i, method: :get_one)
 
+      doc = 'Gives wiki stats. 1 optionl arg: $stats <type>, where type is ' \
+            "'pages', 'articles', 'edits', 'images', 'users', 'admins', " \
+            "or 'activeusers'."
+      Variables::NonConstants.add_command('stats', doc)
+
       # Gets all statistics for the wiki, including number of pages, articles,
       #   edits, images, users, admins, and active users.
       # @param msg [Cinch::Message]

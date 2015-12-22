@@ -18,6 +18,20 @@ module Plugins
       match(/motivate$/i, method: :motivate_you)
       match(/motivate (.+)/i, method: :motivate_else)
 
+      word_doc = 'Outputs a random word. No args.'
+      sentence_doc = 'Outputs a random sentence. No args.'
+      quote_doc = 'Outputs a random quote. No args.'
+      num_doc = 'Outputs a random number. 1 optional arg: $randnum <max>, ' \
+                'when not set 100 will be used as the maximum.'
+      motivate_doc = 'Motivates you or the user provided in the first arg. ' \
+                     'If the user in the first arg is not in the channel, ' \
+                     'I will motivate you instead <3'
+      Variables::NonConstants.add_command('randword', word_doc)
+      Variables::NonConstants.add_command('randsentence', sentence_doc)
+      Variables::NonConstants.add_command('randquote', quote_doc)
+      Variables::NonConstants.add_command('randnum', num_doc)
+      Variables::NonConstants.add_command('motivate', motivate_doc)
+
       # Gets a random word that has not been said in the channel within the past
       #   5 calls.
       # @param msg [Cinch::Message]
