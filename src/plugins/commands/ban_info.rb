@@ -1,15 +1,18 @@
 require 'fishbans'
 require 'cinch'
+require 'simple_geolocator'
 
 module Plugins
   module Commands
     class BanInfo
       include Cinch::Plugin
 
-      match(/banned (.+)/i)
+      match(/banned (.+)/i, method: :execute)
+      match(/banned$/i, method: :do_self)
 
       doc = 'Gets whether or not the user is banned on a Minecraft server. ' \
-            '1 arg: $banned <user>'
+            '1 optional arg: $banned <user> If there is no arg provided, ' \
+            "the user's nickname will be used."
       Variables::NonConstants.add_command('banned', doc)
 
       # Gets Minecraft server ban information from Fishbans.
@@ -29,6 +32,10 @@ module Plugins
         end
 
         msg.reply(message)
+      end
+
+      def do_self(msg)
+        execute(msg, msg.user.nick)
       end
     end
   end
