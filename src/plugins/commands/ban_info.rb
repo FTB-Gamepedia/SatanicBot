@@ -1,6 +1,5 @@
 require 'fishbans'
 require 'cinch'
-require 'simple_geolocator'
 
 module Plugins
   module Commands
