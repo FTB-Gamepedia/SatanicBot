@@ -14,7 +14,7 @@ module Plugins
       # Gets a random fortune and says it in chat.
       # @param msg [Cinch::Message] The message.
       def execute(msg)
-        path = "#{Dir.pwd}/src/info/8ball.txt"
+        path = Variables::Constants::FORTUNE_PATH
         msg.reply(StringUtility.random_line(path))
       end
     end

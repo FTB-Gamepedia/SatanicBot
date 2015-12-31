@@ -2,7 +2,8 @@ require 'yaml'
 
 module Variables
   module Constants
-    CONFIG = YAML.load_file("#{Dir.pwd}/config.yml")
+    PWD = Dir.pwd
+    CONFIG = YAML.load_file("#{PWD}/config.yml")
 
     IRC_USERNAME = CONFIG['irc']['username']
     IRC_PASSWORD = CONFIG['irc']['password']
@@ -28,11 +29,12 @@ module Variables
       ISSUE_TRACKING[i['channel']] = i['repo']
     end
 
-    people_path = "#{Dir.pwd}/src/info/valid_authnames.txt"
+    people_path = "#{PWD}/src/info/valid_authnames.txt"
     VALID_PEOPLE = IO.read(people_path).split("\n")
 
-    QUOTE_PATH = "#{Dir.pwd}/src/info/ircquotes.txt"
-    MOTIVATE_PATH = "#{Dir.pwd}/src/info/motivate.txt"
+    QUOTE_PATH = "#{PWD}/src/info/ircquotes.txt"
+    MOTIVATE_PATH = "#{PWD}/src/info/motivate.txt"
+    FORTUNE_PATH = "#{PWD}/src/info/8ball.txt"
   end
 
   module NonConstants

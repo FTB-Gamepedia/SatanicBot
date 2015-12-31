@@ -18,7 +18,8 @@ module Plugins
         authedusers = Variables::NonConstants.get_authenticated_users
         if authedusers.include?(msg.user.authname)
           path = 'src/info/ircquotes.txt'
-          file = File.open(File.expand_path(path, Dir.pwd), 'a')
+          file = File.open(File.expand_path(path, Variables::Constants::PWD),
+                           'a')
           file.puts(quote)
           file.close
           msg.reply('Added to the quote list.')

@@ -16,7 +16,8 @@ module Plugins
     #   the channel files. User files will be created when necessary. Unsure
     #   about the parameters.
     def setup(*)
-      @file_format = "#{Dir.pwd}/logs/%{channel}-%{year}-%{month}-%{day}.log"
+      @file_format = "#{Variables::Constants::PWD}/logs/%{channel}-%{year}-" \
+                     '%{month}-%{day}.log'
       @time_format = '%H:%M:%S'
       @log_format = "[%{time}] <%{nick}>: %{msg}\n"
       @action_format = "[%{time}] %{nick} %{action}\n"
