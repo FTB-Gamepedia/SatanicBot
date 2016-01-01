@@ -55,6 +55,7 @@ module LittleHelper
     Plugins::Commands::ChangeCategory,
     Plugins::Commands::GetAbbreviation,
     Plugins::Commands::SubCategoryMembers,
+    Plugins::Commands::NewVanilla,
     Plugins::Logger
   ]
 
