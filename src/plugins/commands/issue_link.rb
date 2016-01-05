@@ -34,12 +34,12 @@ module Plugins
         repo_message = msg.message.scan(/\S+\/\S+#\d+/)
         channel_valid = Variables::Constants::ISSUE_TRACKING.include?(msg.channel)
         message = []
-        if multiple_match.size > 0 && multiple_match[0].size > 0 && channel_valid
+        if multiple_match.size > 0 && channel_valid
           repo = Variables::Constants::ISSUE_TRACKING[msg.channel]
-          multiple_match[0].each do |i|
-            num = i.split(/[#]/)[1]
+          multiple_match.each do |i|
+            num = i[0].split(/[#]/)[1]
             url = ISGD.shorten("https://github.com/#{repo}/issues/#{num}")
-            message << "#{repo}#{i}: #{url}"
+            message << "#{repo}#{i[0]}: #{url}"
           end
         end
 
