@@ -38,3 +38,6 @@ build/
 config.yml
 valid_authnames.txt
 *.log
+
+## RubyMine
+.idea/
