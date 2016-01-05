@@ -2,7 +2,7 @@ require 'mediawiki-butt'
 require_relative '../variables'
 
 def change_pages(category, new_category_name)
-  @mw.get_category_members(category).each do |i|
+  @mw.get_category_members(category, 5000, 'page|subcat|file').each do |i|
     text = @mw.get_text(i)
     if !text.nil?
       text = text.gsub(/#{category}/, new_category_name)
