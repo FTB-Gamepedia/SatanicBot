@@ -19,7 +19,10 @@ end
 
 def change_backlinks(category, new_category_name)
   backlinks = @mw.what_links_here("Category:#{category}")
+  # Remove these when the Category Overhaul is done.
   backlinks.delete('Feed The Beast Wiki:Staff\'s Notceboard')
+  backlinks.delete('Template:Category hierarchy')
+  backlinks.delete('Template:Category hierarchy/doc')
   backlinks.each do |i|
     if @mw.get_text(i).nil?
       puts "#{i} couldn't be edited because its content is nil. Continuing...\n"
