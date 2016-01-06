@@ -57,7 +57,7 @@ module Plugins
             message << "#{temp}, but feels like #{feel}"
           end
 
-          message << "Humidity: #{humidity} | #{precip_chance}% chance of " \
+          message << " | Humidity: #{humidity} | #{precip_chance}% chance of " \
                      "precipitation | #{date}"
         end
 
