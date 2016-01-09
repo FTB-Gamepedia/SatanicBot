@@ -18,7 +18,8 @@ module Plugins
         butt = LittleHelper.init_wiki
         if butt.get_text(page).nil?
           text = "[[Category:Mod categories]]\n"
-          text << minor ? '[[Category:Minor Mods]]' : '[[Category:Mods]]'
+          category = minor ? '[[Category:Minor Mods]]' : '[[Category:Mods]]'
+          text << category
           edit = butt.create_page(page, text, 'New mod category.')
           if edit.is_a?(Fixnum)
             msg.reply("Succesfully created #{page}.")
