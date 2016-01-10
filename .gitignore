@@ -39,5 +39,8 @@ config.yml
 valid_authnames.txt
 *.log
 
-## RubyMine
-.idea/
+# Variable input stuff.
+input.txt
+
+# Shorties Kaught In The System lyrics; used for edit summaries typically.
+skits.txt
