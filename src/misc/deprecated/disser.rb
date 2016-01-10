@@ -2,6 +2,7 @@ require 'mediawiki/butt'
 require 'string-utility'
 require_relative '../variables'
 
+# This script actually just fucked everything up, so I don't recommend using it for anything. That's why it is deprecated.
 def replace(line)
   return line if line !~ /\{\{Gc/
   return line if line =~ /link=none/ || line =~ /dis=false/ || line =~ /dis=true/
