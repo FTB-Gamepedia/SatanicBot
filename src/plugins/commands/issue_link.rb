@@ -56,9 +56,10 @@ module Plugins
           return if message.size > 1
         end
 
-        unless repo_message.nil?
+        unless repo_message.nil? || repo_message.size < 1
           msg_data = repo_message[0].to_s.split(/[#\/]/)
           repo_syntax(msg, msg_data[0], msg_data[1], msg_data[2])
+          return
         end
 
         return unless channel_valid
