@@ -53,7 +53,7 @@ module Plugins
             valid = false
           end
 
-          unless people.include? authname
+          unless people.map(&:downcase).include? authname.downcase
             @message = not_valid
             valid = false
           end
