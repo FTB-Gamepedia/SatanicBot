@@ -20,8 +20,8 @@ module Plugins
         module_text = butt.get_text(page)
         thing.gsub!(/'/) { "\\'" }
         if module_text.include?(thing)
-          if module_text.include?("#{thing} = {'")
-            match_data = module_text.scan(/#{thing} = {'(.+)',/)
+          if module_text =~ /[\s+]#{thing} = \{\'/
+            match_data = module_text.scan(/\s{1,}#{thing} = {'(.+)',/)
             mod_name = match_data[0][0]
             msg.reply("#{thing} is the abbreviation for #{mod_name}")
           elsif module_text.include?("= {'#{thing}',")
