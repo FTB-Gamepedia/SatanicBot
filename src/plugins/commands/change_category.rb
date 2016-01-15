@@ -28,6 +28,10 @@ module Plugins
             msg.reply('That page does not exist.')
             return
           end
+          if butt.get_text(new_cat).nil?
+            msg.reply('That category does not exist.')
+            return
+          end
           page_text.gsub!(old_cat, new_cat)
           edit = butt.edit(page, page_text, true)
           if !edit.is_a?(Fixnum)
