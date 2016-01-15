@@ -24,9 +24,9 @@ module Plugins
           page = 'Module:Mods/list'
           butt = LittleHelper.init_wiki
           module_text = butt.get_text(page)
-          if /#{abbreviation}/ =~ module_text
+          if module_text =~ /[\s+]#{abbreviation} = \{\'/
             msg.reply('That abbreviation is already on the list.')
-          elsif /#{mod}/ =~ module_text
+          elsif module_text.include?("= {'#{mod}',")
             msg.reply('That mod is already on the list.')
           else
             replace = "local modsByAbbrv = {\n    #{abbreviation} = {'#{mod}', " \
