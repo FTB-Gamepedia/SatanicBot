@@ -1,5 +1,6 @@
 require 'cinch'
 require 'string-utility'
+require 'isgd'
 
 module Plugins
   module Commands
@@ -18,10 +19,13 @@ module Plugins
       def execute(msg, page)
         butt = LittleHelper.init_wiki
         page = page.spacify
-        if butt.get_text(page).nil?
-          msg.reply("#{page} does not exist on the FTB Wiki.")
-        else
-          link = "http://ftb.gamepedia.com/#{page.underscorify}"
+        is_redir = butt.page_redirect?(page)
+        link = ISGD.shorten("http://ftb.gamepedia.com/#{page.underscorify}")
+        if is_redir.nil?
+          msg.reply("#{page} does not exist on FTB Gamepedia.")
+        elsif is_redir
+          msg.reply("#{page} exists on the wiki as a redirect: #{link}")
+        elsif !is_redir
           msg.reply("#{page} exists: #{link}")
         end
       end
