@@ -38,7 +38,6 @@ module LittleHelper
     Plugins::Commands::NewCategory,
     Plugins::Commands::AddQuote,
     Plugins::Commands::Upload,
-    Plugins::Commands::AddNavbox,
     Plugins::Commands::GetContribs,
     Plugins::Commands::EightBall,
     Plugins::Commands::FlipCoin,
