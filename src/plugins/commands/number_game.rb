@@ -23,12 +23,12 @@ module Plugins
       # @param msg [Cinch::Message]
       def quit(msg)
         if @started
-          msg.reply('Game exited.')
+          msg.reply('Game exited.'.freeze)
           @started = false
           @random_number = nil
           @tries = nil
         else
-          msg.reply('There is not game to exit.')
+          msg.reply('There is not game to exit.'.freeze)
         end
       end
 
@@ -36,7 +36,7 @@ module Plugins
       # @param msg [Cinch::Message]
       def init(msg)
         msg.reply('Game starting! You have 5 tries! Submit an answer by using' \
-                  ' $game guess followed by a number!')
+                  ' $game guess followed by a number!'.freeze)
         @started = true
         @random_number = rand(100)
         @tries = 0
@@ -81,27 +81,27 @@ module Plugins
 
           if @tries == 1
             if num.between?(measures[4], @random_number + measures[4])
-              msg.reply('You are on fire!')
+              msg.reply('You are on fire!'.freeze)
             elsif num.between?(measures[3], @random_number + measures[3])
-              msg.reply('You are warm.')
+              msg.reply('You are warm.'.freeze)
             elsif num.between?(measures[2], @random_number + measures[2])
-              msg.reply('You are pretty neutral.')
+              msg.reply('You are pretty neutral.'.freeze)
             elsif num.between?(measures[1], @random_number + measures[1])
-              msg.reply('You are cold.')
+              msg.reply('You are cold.'.freeze)
             elsif num.between?(measures[0], @random_number + measures[0])
-              msg.reply('You are fucking freezing!')
+              msg.reply('You are fucking freezing!'.freeze)
             end
           else
             if diff < @previous_difference
-              msg.reply('You are warmer.')
+              msg.reply('You are warmer.'.freeze)
             else
-              msg.reply('You are colder.')
+              msg.reply('You are colder.'.freeze)
             end
           end
 
           @previous_difference = diff
         else
-          msg.reply('You must start the game first.')
+          msg.reply('You must start the game first.'.freeze)
         end
       end
     end

@@ -29,12 +29,12 @@ module Plugins
           true_pass = Variables::NonConstants.get_authentication_password
           people = Variables::Constants::VALID_PEOPLE
 
-          nickserv = 'You must be authenticated with Nickserv.'
-          already = 'You are already logged in.'
+          nickserv = 'You must be authenticated with Nickserv.'.freeze
+          already = 'You are already logged in.'.freeze
           incorrect = "Sorry, #{pass} is not the password."
           not_valid = 'You are not on the list of valid users. If you think ' \
                       'this is an error, please contact Eli, and he may add ' \
-                      'you to the list of valid authentication names.'
+                      'you to the list of valid authentication names.'.freeze
           success = "You are now logged in as #{authname}"
           valid = true
 
@@ -86,9 +86,9 @@ module Plugins
           authedusers = Variables::NonConstants.get_authenticated_users
           if authedusers.include? msg.user.authname
             Variables::NonConstants.deauthenticate_user(msg.user.authname)
-            msg.reply('You have been logged out.')
+            msg.reply('You have been logged out.'.freeze)
           else
-            msg.reply('You are not logged in to begin with.')
+            msg.reply('You are not logged in to begin with.'.freeze)
           end
         end
       end
@@ -106,15 +106,16 @@ module Plugins
         # @param msg [Cinch::Message]
         # @param new_pass [String] The new password.
         def execute(msg, new_pass)
+          # TODO: Configurable owner.
           if msg.user.authname == 'SatanicSanta'
             if new_pass == Variables::NonConstants.get_authentication_password
-              msg.reply('That is already the password.')
+              msg.reply('That is already the password.'.freeze)
             else
               Variables::NonConstants.set_authentication_password(new_pass)
               msg.reply("Password set to #{new_pass}.")
             end
           else
-            msg.reply('Sorry, you do not have permission to do this action.')
+            msg.reply('Sorry, you do not have permission to do this action.'.freeze)
           end
         end
       end

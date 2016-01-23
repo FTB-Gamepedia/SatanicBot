@@ -54,10 +54,10 @@ module Plugins
             msg.reply("Finished moving #{old_cat} to #{new_cat}")
           else
             msg.reply('Either the new category already exists, or the old one' \
-                      ' does not. Please be sure to use valid categories.')
+                      ' does not. Please be sure to use valid categories.'.freeze)
           end
         else
-          msg.reply('You must be authenticated for this command.')
+          msg.reply(Variables::Constants::LOGGED_IN)
         end
       end
     end

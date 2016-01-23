@@ -21,12 +21,12 @@ module Plugins
           butt = LittleHelper.init_wiki
           upload = butt.upload(url, filename)
           if upload
-            msg.reply('Uploaded the file to the wiki!')
+            msg.reply('Uploaded the file to the wiki!'.freeze)
           else
             msg.reply("Possibly failed! Error warning: #{upload}")
           end
         else
-          msg.reply('You must be authenticated for this action.')
+          msg.reply(Variables::Constants::LOGGED_IN)
         end
       end
     end

@@ -17,9 +17,9 @@ module Plugins
         # States the bot's command prefix character, and all of its commands.
         # @param msg [Cinch::Message]
         def help(msg)
-          command_names = Variables::NonConstants.get_commands.keys.join(', ')
-          msg.reply('My activation char is $.')
-          msg.reply("Listing commands... #{command_names}")
+          command_names = Variables::NonConstants.get_commands.keys.join(', ').freeze
+          msg.reply('My activation char is $.'.freeze)
+          msg.reply("Listing commands... #{command_names}".freeze)
         end
 
         # States the information for the command defined in Constants.
@@ -30,7 +30,7 @@ module Plugins
             command_info = Variables::NonConstants.get_commands[command]
             msg.reply("Command: #{command}. Info: #{command_info}")
           else
-            msg.reply('That is not a command.')
+            msg.reply('That is not a command.'.freeze)
           end
         end
       end

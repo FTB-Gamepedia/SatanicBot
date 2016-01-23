@@ -23,11 +23,11 @@ module Plugins
       # @param minor [Boolean] Whether the mod is considered minor or not.
       def execute(msg, mod, minor = false)
         butt = LittleHelper.init_wiki
-        page = minor ? 'Template:Minor Mods' : 'Template:Mods'
-        category = minor ? 'Category:Minor Mods' : 'Category:Mods'
+        page = minor ? 'Template:Minor Mods'.freeze : 'Template:Mods'.freeze
+        category = minor ? 'Category:Minor Mods'.freeze : 'Category:Mods'.freeze
 
         if butt.get_text(mod).nil?
-          msg.reply('Sorry, that mod is not a valid page.')
+          msg.reply('Sorry, that mod is not a valid page.'.freeze)
           return
         end
 
@@ -54,7 +54,7 @@ module Plugins
             msg.reply("Failed! Error code: #{edit}")
           end
         else
-          msg.reply('Sorry, that page is not in its assumed category.')
+          msg.reply('Sorry, that page is not in its assumed category.'.freeze)
         end
       end
 
@@ -66,7 +66,7 @@ module Plugins
         if authedusers.include?(msg.user.authname)
           execute(msg, mod)
         else
-          msg.reply('You must be authenticated for this action.')
+          msg.reply(Variables::Constants::LOGGED_IN)
         end
       end
 
@@ -78,7 +78,7 @@ module Plugins
         if authedusers.include?(msg.user.authname)
           execute(msg, mod, true)
         else
-          msg.reply('You must be authenticated for this action.')
+          msg.reply(Variables::Constants::LOGGED_IN)
         end
       end
     end

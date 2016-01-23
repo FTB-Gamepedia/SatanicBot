@@ -43,7 +43,7 @@ module Plugins
           id = pastee.submit(paste_contents, "Summary of #{category} members.")
           msg.reply("http://paste.ee/p/#{id}")
         else
-          msg.reply('You must be authenticated for this command.')
+          msg.reply(Variables::Constants::LOGGED_IN)
         end
       end
     end

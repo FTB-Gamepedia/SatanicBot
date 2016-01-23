@@ -5,6 +5,8 @@ module Plugins
     class GetAbbreviation
       include Cinch::Plugin
 
+      PAGE = 'Module:Mods/list'.freeze
+
       match(/getabbrv (.+)/)
 
       doc = 'Gets either the abbreviation for the given mod, or the mod ' \
@@ -15,9 +17,8 @@ module Plugins
       # @param msg [Cinch::Message]
       # @param thing [String] The abbreviation OR mod.
       def execute(msg, thing)
-        page = 'Module:Mods/list'
         butt = LittleHelper.init_wiki
-        module_text = butt.get_text(page)
+        module_text = butt.get_text(PAGE)
         thing.gsub!(/'/) { "\\'" }
         if module_text.include?(thing)
           if module_text =~ /[\s+]#{thing} = \{\'/

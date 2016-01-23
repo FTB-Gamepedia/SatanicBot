@@ -12,20 +12,20 @@ module Plugins
     listen_to(:notice, method: :log_notice)
     timer(60, method: :check_time)
 
+    TIME_FORMAT = '%H:%M:%S'.freeze
+    LOG_FORMAT = "[%{time}] <%{nick}> %{msg}\n"
+    ACTION_FORMAT = "[%{time}] %{nick} %{action}\n"
+    NOTICE_FORMAT = "[%{time}] *%{nick}* %{notice}\n"
+    FILE_FORMAT = "#{Variables::Constants::PWD}/logs/%{channel}-%{year}-%{month}-%{day}.log"
+
     # Prepares for logging. Creates all the format strings. Creates/opens all
     #   the channel files. User files will be created when necessary. Unsure
     #   about the parameters.
     def setup(*)
-      @file_format = "#{Variables::Constants::PWD}/logs/%{channel}-%{year}-" \
-                     '%{month}-%{day}.log'
-      @time_format = '%H:%M:%S'
-      @log_format = "[%{time}] <%{nick}>: %{msg}\n"
-      @action_format = "[%{time}] %{nick} %{action}\n"
-      @notice_format = "[%{time}] *%{nick}* %{notice}\n"
       @last_time_check = Time.now
       @log_files = {}
       LittleHelper::CHANNELS.each do |channel|
-        name = format(@file_format,
+        name = format(FILE_FORMAT,
                       channel: channel,
                       year: @last_time_check.year,
                       month: @last_time_check.month,
@@ -85,7 +85,7 @@ module Plugins
         nick: msg.user.name,
         action: msg.action_message
       }
-      log_general(prefix, hash, @action_format)
+      log_general(prefix, hash, ACTION_FORMAT)
     end
 
     # Logs a NOTICE created by a user.
@@ -97,7 +97,7 @@ module Plugins
         nick: msg.user.name,
         notice: msg.message
       }
-      log_general(prefix, hash, @notice_format)
+      log_general(prefix, hash, NOTICE_FORMAT)
     end
 
     private
@@ -110,9 +110,9 @@ module Plugins
     #   method. Just set all the other options needed by the format.
     # @param format_str [String] The string to format. Use one of the values in
     #   #setup.
-    def log_general(prefix, format_hash, format_str = @log_format)
-      format_hash[:time] = Time.now.strftime(@time_format)
-      name = format(@file_format,
+    def log_general(prefix, format_hash, format_str = LOG_FORMAT)
+      format_hash[:time] = Time.now.strftime(TIME_FORMAT)
+      name = format(FILE_FORMAT,
                     channel: prefix,
                     year: @last_time_check.year,
                     month: @last_time_check.month,

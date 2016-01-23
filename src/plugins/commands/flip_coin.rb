@@ -5,6 +5,8 @@ module Plugins
     class FlipCoin
       include Cinch::Plugin
 
+      COIN = %w(Tails! Heads!).freeze
+
       match(/flip/i)
 
       doc = 'Heads or tails! No args.'
@@ -13,8 +15,7 @@ module Plugins
       # Simulates a coin flip, and states randomly 'Heads!' or 'Tails!'.
       # @param msg [Cinch::Message]
       def execute(msg)
-        coin = ['Tails!', 'Heads!'].sample
-        msg.reply(coin)
+        msg.reply(COIN.sample)
       end
     end
   end

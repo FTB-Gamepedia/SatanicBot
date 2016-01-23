@@ -25,9 +25,9 @@ module Plugins
           butt = LittleHelper.init_wiki
           module_text = butt.get_text(page)
           if module_text =~ /[\s+]#{abbreviation} = \{\'/
-            msg.reply('That abbreviation is already on the list.')
+            msg.reply('That abbreviation is already on the list.'.freeze)
           elsif module_text.include?("= {'#{mod}',")
-            msg.reply('That mod is already on the list.')
+            msg.reply('That mod is already on the list.'.freeze)
           else
             replace = "local modsByAbbrv = {\n    #{abbreviation} = {'#{mod}', " \
                       "[=[<translate>#{mod}</translate>]=]},"
@@ -40,7 +40,7 @@ module Plugins
             end
           end
         else
-          msg.reply('You must be logged in for this command.')
+          msg.reply(Variables::Constants::LOGGED_IN)
         end
       end
     end

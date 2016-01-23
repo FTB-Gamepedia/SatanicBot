@@ -42,7 +42,7 @@ module Plugins
         return false unless /{{[Ii]nfobox mod}}/ =~ text
         text.sub!(/{{[Ii]nfobox mod\n/, "{{Infobox mod\n|version=" \
                                         "#{version}")
-        edit = butt.edit(page, text, true, true, 'Add version parameter')
+        edit = butt.edit(page, text, true, true, 'Add version parameter'.freeze)
         return true if edit.is_a?(Fixnum)
         return edit
       end
@@ -58,7 +58,7 @@ module Plugins
         return false if /version=#{version}/ =~ text || /version =#{version}/ =~ text
         text.gsub!(/version=.*/, "version=#{version}")
         text.gsub!(/version =.*/, "version=#{version}")
-        edit = butt.edit(page, text, true, true, 'Update vesion.')
+        edit = butt.edit(page, text, true, true, 'Update vesion.'.freeze)
         return true if edit.is_a?(Fixnum)
         return edit
       end
@@ -72,7 +72,7 @@ module Plugins
         success = "Added version parameter to #{mod} as #{version}" if new_p
         success = "Updated #{mod} from #{old} to #{version}!" unless new_p
         not_found = 'Could not find Infobox/param in the page. Please be ' \
-                    'sure that you entered the page name correctly.'
+                    'sure that you entered the page name correctly.'.freeze
         failed = "Failed! Error code: #{return_value}"
         return success if return_value
         return not_found unless return_value
@@ -90,7 +90,7 @@ module Plugins
           if current == version
             msg.reply("#{version} is already the current version")
           elsif current.nil?
-            msg.reply('That page does not have the param, trying to make one.')
+            msg.reply('That page does not have the param, trying to make one.'.freeze)
             add = add_new_param(mod, version)
             msg.reply(get_reply(add, mod, version, current, true))
           else
@@ -98,7 +98,7 @@ module Plugins
             msg.reply(get_reply(update, mod, version, current))
           end
         else
-          msg.reply('You must be logged in for this command.')
+          msg.reply(Variables::Constants::LOGGED_IN)
         end
       end
 
@@ -108,7 +108,7 @@ module Plugins
       def check(msg, page)
         version = get_current_verison(page)
         if version.nil?
-          msg.reply('No version found on that page.')
+          msg.reply('No version found on that page.'.freeze)
         else
           msg.reply("The current version on the wiki for #{page} is #{version}")
         end

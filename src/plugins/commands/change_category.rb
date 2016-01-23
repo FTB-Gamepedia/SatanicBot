@@ -25,11 +25,11 @@ module Plugins
           butt = LittleHelper.init_wiki
           page_text = butt.get_text(page)
           if page_text.nil?
-            msg.reply('That page does not exist.')
+            msg.reply('That page does not exist.'.freeze)
             return
           end
           if butt.get_text(new_cat).nil?
-            msg.reply('That category does not exist.')
+            msg.reply('That category does not exist.'.freeze)
             return
           end
           page_text.gsub!(old_cat, new_cat)
@@ -37,10 +37,10 @@ module Plugins
           if !edit.is_a?(Fixnum)
             msg.reply("Something went wrong! Error code: #{edit}")
           else
-            msg.reply('Finished.')
+            msg.reply('Finished.'.freeze)
           end
         else
-          msg.reply('You must be authenticated for that command.')
+          msg.reply(Variables::Constants::LOGGED_IN)
         end
       end
     end

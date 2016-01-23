@@ -10,7 +10,7 @@ require_rel 'plugins'
 module LittleHelper
   extend self
 
-  BUTT = MediaWiki::Butt.new(Variables::Constants::WIKI_URL)
+  BUTT = MediaWiki::Butt.new(Variables::Constants::WIKI_URL).freeze
 
   TWEETER = Twitter::REST::Client.new do |c|
     c.consumer_key = Variables::Constants::TWITTER_CONSUMER_KEY
@@ -19,10 +19,9 @@ module LittleHelper
     c.access_token_secret = Variables::Constants::TWITTER_ACCESS_SECRET
   end
 
-  WEATHER = Weatheruby.new(Variables::Constants::WUNDERGROUND_KEY, 'EN', true,
-                           true, true)
+  WEATHER = Weatheruby.new(Variables::Constants::WUNDERGROUND_KEY, 'EN', true, true, true).freeze
 
-  PASTEE = Pastee.new(Variables::Constants::PASTEE_KEY)
+  PASTEE = Pastee.new(Variables::Constants::PASTEE_KEY).freeze
 
   plugins = [
     Plugins::Commands::Authentication::SetPass,
@@ -73,6 +72,8 @@ module LittleHelper
       plugins.delete(disabled)
     end
   end
+
+  plugins.freeze
 
   BOT = Cinch::Bot.new do
     configure do |c|

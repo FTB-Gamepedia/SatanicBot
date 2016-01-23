@@ -32,15 +32,15 @@ module Plugins
 
         message_start =
           if you
-            'You have'
+            'You have'.freeze
           elsif /[Ss]atanicBot/ =~ username
-            'I have'
+            'I have'.freeze
           elsif /[Tt]heSatanicSanta/ =~ username
-            'The second hottest babe in the channel has'
+            'The second hottest babe in the channel has'.freeze
           elsif /[Rr]etep998/ =~ username
-            'The hottest babe in the channel has'
+            'The hottest babe in the channel has'.freeze
           elsif /[Pp]onyButt/ =~ username
-            'Some stupid bitch has'
+            'Some stupid bitch has'.freeze
           else
             "#{username} has"
           end

@@ -8,14 +8,13 @@ module Plugins
 
       match(/8ball/i)
 
-      doc = 'Determines your fortune. No args'
+      doc = 'Determines your fortune. No args'.freeze
       Variables::NonConstants.add_command('8ball', doc)
 
       # Gets a random fortune and says it in chat.
       # @param msg [Cinch::Message] The message.
       def execute(msg)
-        path = Variables::Constants::FORTUNE_PATH
-        msg.reply(StringUtility.random_line(path))
+        msg.reply(StringUtility.random_line(Variables::Constants::FORTUNE_PATH))
       end
     end
   end

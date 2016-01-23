@@ -37,12 +37,12 @@ module Plugins
               msg.reply("Something went wrong when editing #{l}! " \
                         "Error code: #{edit} ... Continuing...") unless edit.is_a?(Fixnum)
             end
-            msg.reply('Finished.')
+            msg.reply('Finished.'.freeze)
           else
             msg.reply("Failed! Error code: #{move}")
           end
         else
-          msg.reply('You must be authenticated for this command.')
+          msg.reply(Variables::Constants::LOGGED_IN)
         end
       end
     end

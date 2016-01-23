@@ -7,6 +7,8 @@ module Plugins
       include Cinch::Plugin
       using StringUtility
 
+      VALID_PROPERTIES = %w(pages articles edits images users activeusers admins).freeze
+
       match(/stats$/i, method: :get_all)
       match(/stats (.+)/i, method: :get_one)
 
@@ -39,23 +41,13 @@ module Plugins
       # @param prop [String] The property to get. Can be any of the following:
       #   pages, articles, edits, images, users, activeusers, or admins.
       def get_one(msg, prop)
-        valid_properties = [
-          'pages',
-          'articles',
-          'edits',
-          'images',
-          'users',
-          'activeusers',
-          'admins'
-        ]
-
-        if valid_properties.include?(prop.downcase)
+        if VALID_PROPERTIES.include?(prop.downcase)
           butt = LittleHelper.init_wiki
           stats = butt.get_statistics
           stat = stats[prop].to_s.separate
           msg.reply("#{prop.capitalize}: #{stat}")
         else
-          msg.reply('That is not a valid property, getting general statistics.')
+          msg.reply('That is not a valid property, getting general statistics.'.freeze)
           get_all(msg)
         end
       end

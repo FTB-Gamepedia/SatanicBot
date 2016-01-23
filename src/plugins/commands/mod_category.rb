@@ -27,7 +27,7 @@ module Plugins
             msg.reply("Failure! Error code: #{edit}")
           end
         else
-          msg.reply('That page already exists.')
+          msg.reply('That page already exists.'.freeze)
         end
       end
 
@@ -40,7 +40,7 @@ module Plugins
         if authedusers.include?(msg.user.authname)
           new_category(msg, page)
         else
-          msg.reply('You must be authenticated for this action.')
+          msg.reply(Variables::Constants::LOGGED_IN)
         end
       end
 
@@ -53,7 +53,7 @@ module Plugins
         if authedusers.include?(msg.user.authname)
           new_category(msg, page, true)
         else
-          msg.reply('You must be authenticated for this action.')
+          msg.reply(Variables::Constants::LOGGED_IN)
         end
       end
     end

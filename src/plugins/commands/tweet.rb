@@ -19,9 +19,9 @@ module Plugins
         if tweet.length > 1 && tweet.length < 134
           twitter = LittleHelper.init_twitter
           twitter.update("[IRC] #{tweet}")
-          msg.reply('Successfully tweeted!')
+          msg.reply('Successfully tweeted!'.freeze)
         else
-          msg.reply('That tweet is either too long or too short.')
+          msg.reply('That tweet is either too long or too short.'.freeze)
         end
       end
     end
