@@ -24,7 +24,8 @@ module Variables
     PASTEE_KEY = CONFIG['pastee']['api_key'].freeze
     ISSUE_TRACKING = {}
     DISABLED_PLUGINS = CONFIG.key?('disabled') ? CONFIG['disabled'] : nil
-    IGNORED_USERS = CONFIG['ignored_users']
+    IGNORED_USERS = CONFIG['ignored_users'].freeze
+    OWNER = CONFIG['irc']['owner'].freeze
 
     CONFIG['github'].each do |i|
       ISSUE_TRACKING[i['channel']] = i['repo']
@@ -40,6 +41,7 @@ module Variables
     FORTUNE_PATH = "#{PWD}/src/info/8ball.txt".freeze
 
     LOGGED_IN = 'You must be authenticated for this command. See $help login.'.freeze
+    OWNER_ONLY = 'This command is for the owner only.'.freeze
   end
 
   module NonConstants

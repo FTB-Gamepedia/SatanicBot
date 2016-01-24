@@ -104,7 +104,7 @@ module Plugins
 
         match(/setpass (.+)/i)
 
-        doc = 'Sets the login password. Owner only command. ' \
+        doc = 'Sets the login password. Owner-only command. ' \
                       '1 arg: $setpass <new password>'
         Variables::NonConstants.add_command('setpass', doc)
 
@@ -115,8 +115,7 @@ module Plugins
           if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
             return
           end
-          # TODO: Configurable owner.
-          if msg.user.authname == 'SatanicSanta'
+          if msg.user.authname == Variables::Constants::OWNER
             if new_pass == Variables::NonConstants.get_authentication_password
               msg.reply('That is already the password.'.freeze)
             else
@@ -124,7 +123,7 @@ module Plugins
               msg.reply("Password set to #{new_pass}.")
             end
           else
-            msg.reply('Sorry, you do not have permission to do this action.'.freeze)
+            msg.reply(Variables::Constants::OWNER_ONLY)
           end
         end
       end

@@ -16,6 +16,7 @@ irc:
     - MyNickname
     - MyOtherNickname
   default_auth_pass: password
+  owner: SatanicSanta
 
 wiki:
   url: http://ftb.gamepedia.com
