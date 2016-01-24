@@ -22,6 +22,9 @@ module Plugins
       # Quits the number game if one has been started.
       # @param msg [Cinch::Message]
       def quit(msg)
+        if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
+          return
+        end
         if @started
           msg.reply('Game exited.'.freeze)
           @started = false
@@ -35,6 +38,9 @@ module Plugins
       # Initializes a number game.
       # @param msg [Cinch::Message]
       def init(msg)
+        if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
+          return
+        end
         msg.reply('Game starting! You have 5 tries! Submit an answer by using' \
                   ' $game guess followed by a number!'.freeze)
         @started = true
@@ -48,6 +54,9 @@ module Plugins
       # @param msg [Cinch::Message]
       # @param num [String] The number to guess.
       def guess(msg, num)
+        if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
+          return
+        end
         num = num.to_i
         if @started
           @tries += 1

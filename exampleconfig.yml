@@ -45,3 +45,6 @@ pastee:
 disabled:
   - Plugins::Commands::Weather
   - Plugins::Logger
+
+ignored_users:
+  - travis-ci

@@ -14,6 +14,9 @@ module Plugins
       # Gets a random fortune and says it in chat.
       # @param msg [Cinch::Message] The message.
       def execute(msg)
+        if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
+          return
+        end
         msg.reply(StringUtility.random_line(Variables::Constants::FORTUNE_PATH))
       end
     end

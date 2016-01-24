@@ -84,6 +84,9 @@ module Plugins
       # @param mod [String] The mod to update on the wiki.
       # @param version [String] The new mod version.
       def update(msg, mod, version)
+        if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
+          return
+        end
         authedusers = Variables::NonConstants.get_authenticated_users
         if authedusers.include?(msg.user.authname)
           current = get_current_verison(mod)
@@ -106,6 +109,9 @@ module Plugins
       # @param msg [Cinch::Message]
       # @param page [String] The mod page.
       def check(msg, page)
+        if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
+          return
+        end
         version = get_current_verison(page)
         if version.nil?
           msg.reply('No version found on that page.'.freeze)

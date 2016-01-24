@@ -23,6 +23,9 @@ module Plugins
       # @param you [Boolean] Whether the username is also the user who performed
       #   the command.
       def execute(msg, username, you = false)
+        if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
+          return
+        end
         butt = LittleHelper.init_wiki
         count = butt.get_contrib_count(username).to_s.separate
         date = butt.get_registration_time(username)

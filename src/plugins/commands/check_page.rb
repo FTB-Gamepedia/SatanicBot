@@ -17,6 +17,9 @@ module Plugins
       # @param msg [Cinch::Message]
       # @param page [String] The page to check.
       def execute(msg, page)
+        if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
+          return
+        end
         butt = LittleHelper.init_wiki
         page = page.spacify
         is_redir = butt.page_redirect?(page)

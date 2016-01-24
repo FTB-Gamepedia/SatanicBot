@@ -74,6 +74,9 @@ module Plugins
       # @param msg [Cinch::Message]
       # @param category [String] The top category.
       def execute(msg, category)
+        if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
+          return
+        end
         authedusers = Variables::NonConstants.get_authenticated_users
         category = "Category:#{category}" if /^Category:/ !~ category
         if authedusers.include?(msg.user.authname)

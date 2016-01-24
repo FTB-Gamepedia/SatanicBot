@@ -24,6 +24,9 @@ module Plugins
       # @param msg [Cinch::Message]
       # @param location [String] The location to get the weather for.
       def weather(msg, location)
+        if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
+          return
+        end
         weather = LittleHelper.init_weather
         conditions = weather.conditions(location)
         failed = false
@@ -82,6 +85,9 @@ module Plugins
       # Gets the weather conditions for the user's location by their IP.
       # @param msg [Cinch::Message]
       def weather_self(msg)
+        if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
+          return
+        end
         ip = msg.user.host
         location = get_location_by_ip(ip)
         weather(msg, location)
@@ -92,6 +98,9 @@ module Plugins
       # @param msg [Cinch::Message]
       # @param location [String] The location to get the information for.
       def forecast(msg, location)
+        if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
+          return
+        end
         msg.reply("Getting forecast for #{location}...")
         weather = LittleHelper.init_weather
         forecast = weather.simple_forecast(location)
@@ -109,6 +118,9 @@ module Plugins
       #   the users location, by first getting the location of their IP.
       # @param msg [Cinch::Message]
       def forecast_self(msg)
+        if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
+          return
+        end
         ip = msg.user.host
         location = get_location_by_ip(ip)
         forecast(msg, location)

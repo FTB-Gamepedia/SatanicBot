@@ -15,6 +15,9 @@ module Plugins
       # @param msg [Cinch::Message]
       # @param quote [String] The quote's text.
       def execute(msg, quote)
+        if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
+          return
+        end
         authedusers = Variables::NonConstants.get_authenticated_users
         if authedusers.include?(msg.user.authname)
           file = File.open(Variables::Constants::QUOTE_PATH, 'a')

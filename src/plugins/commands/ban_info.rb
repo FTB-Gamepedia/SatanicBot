@@ -18,6 +18,9 @@ module Plugins
       # @param msg [Cinch::Message]
       # @param username [String] The username to check.
       def execute(msg, username)
+        if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
+          return
+        end
         bans = Fishbans.get_total_bans(username)
         if bans.is_a?(Fixnum)
           if bans > 0

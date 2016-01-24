@@ -11,6 +11,9 @@ module Plugins
       Variables::NonConstants.add_command('newvanilla', doc)
 
       def execute(msg, page, type)
+        if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
+          return
+        end
         authedusers = Variables::NonConstants.get_authenticated_users
         if authedusers.include?(msg.user.authname)
           butt = LittleHelper.init_wiki

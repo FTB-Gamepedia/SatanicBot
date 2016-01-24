@@ -67,6 +67,9 @@ module Plugins
         # Attempts to log in.
         # @see check_valid
         def execute(msg, pass)
+          if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
+            return
+          end
           check_valid(msg.user.authname, pass)
           msg.reply(@message)
         end
@@ -83,6 +86,9 @@ module Plugins
         # Logs the user out.
         # @param msg [Cinch::Message]
         def execute(msg)
+          if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
+            return
+          end
           authedusers = Variables::NonConstants.get_authenticated_users
           if authedusers.include? msg.user.authname
             Variables::NonConstants.deauthenticate_user(msg.user.authname)
@@ -106,6 +112,9 @@ module Plugins
         # @param msg [Cinch::Message]
         # @param new_pass [String] The new password.
         def execute(msg, new_pass)
+          if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
+            return
+          end
           # TODO: Configurable owner.
           if msg.user.authname == 'SatanicSanta'
             if new_pass == Variables::NonConstants.get_authentication_password

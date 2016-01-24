@@ -18,6 +18,9 @@ module Plugins
       # @param abbreviation [String] The abbreviation.
       # @param mod [String] The mod name.
       def execute(msg, abbreviation, mod)
+        if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
+          return
+        end
         abbreviation = abbreviation.upcase
         authedusers = Variables::NonConstants.get_authenticated_users
         if authedusers.include?(msg.user.authname)

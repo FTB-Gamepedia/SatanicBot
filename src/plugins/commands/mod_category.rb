@@ -35,6 +35,9 @@ module Plugins
       # @param msg [Cinch::Message]
       # @param page [String] The mod name.
       def new_mod_category(msg, page)
+        if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
+          return
+        end
         authedusers = Variables::NonConstants.get_authenticated_users
         page = "Category:#{page}" if /^Category:/ !~ page
         if authedusers.include?(msg.user.authname)
@@ -48,6 +51,9 @@ module Plugins
       # @param msg [Cinch::Message]
       # @param page [String] The mod name.
       def new_minor_category(msg, page)
+        if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
+          return
+        end
         page = "Category:#{page}" if /^Category:/ !~ page
         authedusers = Variables::NonConstants.get_authenticated_users
         if authedusers.include?(msg.user.authname)

@@ -62,6 +62,9 @@ module Plugins
       # @param msg [Cinch::Message]
       # @param mod [String] The mod to add.
       def execute_major(msg, mod)
+        if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
+          return
+        end
         authedusers = Variables::NonConstants.get_authenticated_users
         if authedusers.include?(msg.user.authname)
           execute(msg, mod)
@@ -74,6 +77,9 @@ module Plugins
       # @param msg [Cinch::Message]
       # @param mod [String] The mod to add.
       def execute_minor(msg, mod)
+        if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
+          return
+        end
         authedusers = Variables::NonConstants.get_authenticated_users
         if authedusers.include?(msg.user.authname)
           execute(msg, mod, true)

@@ -12,6 +12,9 @@ module Plugins
 
       # Quits the bot if the user is authenticated as SatanicSanta.
       def execute(msg)
+        if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
+          return
+        end
         if msg.user.authname == 'SatanicSanta'
           LittleHelper.quit(msg.user.name)
         else

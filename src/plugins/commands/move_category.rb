@@ -17,6 +17,9 @@ module Plugins
       # @param old_cat [String] The old category name.
       # @param new_cat [String] The new category name.
       def execute(msg, old_cat, new_cat)
+        if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
+          return
+        end
         authed_users = Variables::NonConstants.get_authenticated_users
         if authed_users.include? msg.user.authname
           butt = LittleHelper.init_wiki

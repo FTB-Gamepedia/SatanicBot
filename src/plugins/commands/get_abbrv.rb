@@ -17,6 +17,9 @@ module Plugins
       # @param msg [Cinch::Message]
       # @param thing [String] The abbreviation OR mod.
       def execute(msg, thing)
+        if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
+          return
+        end
         butt = LittleHelper.init_wiki
         module_text = butt.get_text(PAGE)
         thing.gsub!(/'/) { "\\'" }

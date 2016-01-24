@@ -21,6 +21,9 @@ module Plugins
       #   edits, images, users, admins, and active users.
       # @param msg [Cinch::Message]
       def get_all(msg)
+        if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
+          return
+        end
         butt = LittleHelper.init_wiki
         stats = butt.get_statistics
         pages = stats['pages'].to_s.separate
@@ -41,6 +44,9 @@ module Plugins
       # @param prop [String] The property to get. Can be any of the following:
       #   pages, articles, edits, images, users, activeusers, or admins.
       def get_one(msg, prop)
+        if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
+          return
+        end
         if VALID_PROPERTIES.include?(prop.downcase)
           butt = LittleHelper.init_wiki
           stats = butt.get_statistics

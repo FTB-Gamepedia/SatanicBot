@@ -36,6 +36,9 @@ module Plugins
       #   5 calls.
       # @param msg [Cinch::Message]
       def random_word(msg)
+        if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
+          return
+        end
         word = LiterateRandomizer.word
         @last_words = [] if @last_words.nil?
         word = LiterateRandomizer.word while @last_words.include?(word)
@@ -47,6 +50,9 @@ module Plugins
       #   past 5 calls.
       # @param msg [Cinch::Message]
       def random_sentence(msg)
+        if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
+          return
+        end
         sentence = LiterateRandomizer.sentence
         @last_sentences = [] if @last_sentences.nil?
         sentence = LiterateRandomizer.sentence \
@@ -59,6 +65,9 @@ module Plugins
       #   past 5 calls.
       # @param msg [Cinch::Message]
       def random_quote(msg)
+        if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
+          return
+        end
         quote = StringUtility.random_line(Variables::Constants::QUOTE_PATH)
         @last_quotes = [] if @last_quotes.nil?
         while @last_quotes.include?(quote)
@@ -72,6 +81,9 @@ module Plugins
       #   channel within the past 5 calls.
       # @param msg [Cinch::Message]
       def random_number(msg)
+        if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
+          return
+        end
         random_number_max(msg, 100)
       end
 
@@ -80,6 +92,9 @@ module Plugins
       # @param msg [Cinch::Message]
       # @param maximum [String] The integer cap.
       def random_number_max(msg, maximum)
+        if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
+          return
+        end
         number = rand(maximum.to_i)
         @last_numbers = [] if @last_numbers.nil?
         number = rand(maximum.to_i) while @last_numbers.include?(number)
@@ -91,6 +106,9 @@ module Plugins
       # Gets a random motivational statement for the user who used the command.
       # @param msg [Cinch::Message]
       def motivate_you(msg)
+        if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
+          return
+        end
         motivate_else(msg, msg.user.nick)
       end
 
@@ -98,6 +116,9 @@ module Plugins
       # @param msg [Cinch::Message]
       # @param user [String] The username to motivate.
       def motivate_else(msg, user)
+        if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
+          return
+        end
         if msg.channel.has_user?(user)
           line = StringUtility.random_line(Variables::Constants::MOTIVATE_PATH)
           @last_motivation = [] if @last_motivation.nil?

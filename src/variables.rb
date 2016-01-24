@@ -24,6 +24,7 @@ module Variables
     PASTEE_KEY = CONFIG['pastee']['api_key'].freeze
     ISSUE_TRACKING = {}
     DISABLED_PLUGINS = CONFIG.key?('disabled') ? CONFIG['disabled'] : nil
+    IGNORED_USERS = CONFIG['ignored_users']
 
     CONFIG['github'].each do |i|
       ISSUE_TRACKING[i['channel']] = i['repo']

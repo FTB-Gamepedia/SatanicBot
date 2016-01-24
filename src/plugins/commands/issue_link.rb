@@ -30,6 +30,9 @@ module Plugins
       # @param msg [Cinch::Message]
       # @param issue_num [String] The GitHub issue number.
       def default_repo(msg, issue_num)
+        if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
+          return
+        end
         multiple_match = msg.message.scan(/(?:[\W]+|^)(#[\d]+)/)
         repo_message = msg.message.scan(/\S+\/\S+#\d+/)
         channel_valid = Variables::Constants::ISSUE_TRACKING.include?(msg.channel)
