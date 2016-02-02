@@ -5,7 +5,7 @@ module Plugins
     class MoveCategory
       include Cinch::Plugin
 
-      match(/movecat ([^\|\[\]\<\>\%\+\?]+) \-\> ([^\|\[\]\<\>\%\+\?]+)/i)
+      match(/movecat ([^\|\[\]<>%\+\?]+) \-\> ([^\|\[\]<>%\+\?]+)/i)
 
       doc = 'Moves one category to another, and edits all its members. ' \
             '2 args: $movecat <old> -> <new> Args must be separated ' \

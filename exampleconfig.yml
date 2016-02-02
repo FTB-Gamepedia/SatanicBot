@@ -43,6 +43,10 @@ github:
 pastee:
   api_key: abcdefghijklmnop
 
+cleverbot:
+  api_user: abcdefghudfuhd
+  api_key: idjfudjgudfjguhgjhkgofpa
+
 disabled:
   - Plugins::Commands::Weather
   - Plugins::Logger

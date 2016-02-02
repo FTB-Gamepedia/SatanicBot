@@ -13,5 +13,6 @@ gem('octokit', '>= 4.2.0')
 gem('array_utility', '>= 1.1.0')
 gem('pastee', '>= 2.0.1')
 gem('isgd', '>= 1.0.1')
+gem('cleverbot_io', '>= 1.0.0')
 
 ruby '2.3.0'

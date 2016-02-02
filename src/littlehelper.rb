@@ -4,6 +4,7 @@ require 'require_all'
 require 'twitter'
 require 'weatheruby'
 require 'pastee'
+require 'cleverbot'
 require_relative 'variables'
 require_rel 'plugins'
 
@@ -22,6 +23,8 @@ module LittleHelper
   WEATHER = Weatheruby.new(Variables::Constants::WUNDERGROUND_KEY, 'EN', true, true, true)
 
   PASTEE = Pastee.new(Variables::Constants::PASTEE_KEY)
+
+  CLEVER = Cleverbot.new(Variables::Constants::CLEVER_USER, Variables::Constants::CLEVER_KEY)
 
   plugins = [
     Plugins::Commands::Authentication::SetPass,
@@ -54,6 +57,7 @@ module LittleHelper
     Plugins::Commands::GetAbbreviation,
     Plugins::Commands::SubCategoryMembers,
     Plugins::Commands::NewVanilla,
+    Plugins::Commands::CleverBot,
     Plugins::Logger
   ]
 
@@ -130,6 +134,14 @@ module LittleHelper
   # Starts the bot.
   def run
     BOT.start
+  end
+
+  def bot
+    BOT
+  end
+
+  def clever
+    CLEVER
   end
 
   # Quits the bot.

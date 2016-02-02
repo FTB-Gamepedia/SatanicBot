@@ -22,6 +22,8 @@ module Variables
     TWITTER_ACCESS_SECRET = CONFIG['twitter']['access_secret'].freeze
     WUNDERGROUND_KEY = CONFIG['wunderground']['api_key'].freeze
     PASTEE_KEY = CONFIG['pastee']['api_key'].freeze
+    CLEVER_USER = CONFIG['cleverbot']['api_user'].freeze
+    CLEVER_KEY = CONFIG['cleverbot']['api_key'].freeze
     ISSUE_TRACKING = {}
     DISABLED_PLUGINS = CONFIG.key?('disabled') ? CONFIG['disabled'] : nil
     IGNORED_USERS = CONFIG['ignored_users'].freeze
