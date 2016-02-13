@@ -1,36 +1,39 @@
-require 'yaml'
+require 'dotenv'
 
 module Variables
   module Constants
     PWD = Dir.pwd
-    CONFIG = YAML.load_file("#{PWD}/config.yml")
 
-    IRC_USERNAME = CONFIG['irc']['username'].freeze
-    IRC_PASSWORD = CONFIG['irc']['password'].freeze
-    IRC_REALNAME = CONFIG['irc']['realname'].freeze
-    IRC_NICKNAMES = CONFIG['irc']['nicknames'].freeze
-    IRC_SERVER = CONFIG['irc']['server'].freeze
-    IRC_PORT = CONFIG['irc']['port'].freeze
-    IRC_CHANNELS = CONFIG['irc']['channels'].freeze
-    IRC_DEV_CHANNELS = CONFIG['irc']['dev_channels'].freeze
-    WIKI_URL = CONFIG['wiki']['url'].freeze
-    WIKI_USERNAME = CONFIG['wiki']['username'].freeze
-    WIKI_PASSWORD = CONFIG['wiki']['password'].freeze
-    TWITTER_CONSUMER_KEY = CONFIG['twitter']['consumer_key'].freeze
-    TWITTER_CONSUMER_SECRET = CONFIG['twitter']['consumer_secret'].freeze
-    TWITTER_ACCESS_TOKEN = CONFIG['twitter']['access_token'].freeze
-    TWITTER_ACCESS_SECRET = CONFIG['twitter']['access_secret'].freeze
-    WUNDERGROUND_KEY = CONFIG['wunderground']['api_key'].freeze
-    PASTEE_KEY = CONFIG['pastee']['api_key'].freeze
-    CLEVER_USER = CONFIG['cleverbot']['api_user'].freeze
-    CLEVER_KEY = CONFIG['cleverbot']['api_key'].freeze
+    Dotenv.load
+
+    IRC_USERNAME = ENV['IRC_USERNAME'].freeze
+    IRC_PASSWORD = ENV['IRC_PASSWORD'].freeze
+    IRC_REALNAME = ENV['IRC_REALNAME'].freeze
+    IRC_NICKNAMES = ENV['IRC_NICKNAMES'].split(',').freeze
+    IRC_SERVER = ENV['IRC_SERVER'].freeze
+    IRC_PORT = ENV['IRC_PORT'].to_i.freeze
+    IRC_CHANNELS = ENV['IRC_CHANNELS'].split(',').freeze
+    IRC_DEV_CHANNELS = ENV['IRC_DEV_CHANNELS'].split(',').freeze
+    WIKI_URL = ENV['WIKI_URL'].freeze
+    WIKI_USERNAME = ENV['WIKI_USERNAME'].freeze
+    WIKI_PASSWORD = ENV['WIKI_PASSWORD'].freeze
+    TWITTER_CONSUMER_KEY = ENV['TWITTER_CONSUMER_KEY'].freeze
+    TWITTER_CONSUMER_SECRET = ENV['TWITTER_CONSUMER_SECRET'].freeze
+    TWITTER_ACCESS_TOKEN = ENV['TWITTER_ACCESS_TOKEN'].freeze
+    TWITTER_ACCESS_SECRET = ENV['TWITTER_ACCESS_SECRET'].freeze
+    WUNDERGROUND_KEY = ENV['WUNDERGROUND_API_KEY'].freeze
+    PASTEE_KEY = ENV['PASTEE_API_KEY'].freeze
+    CLEVER_USER = ENV['CLEVERBOT_API_USER'].freeze
+    CLEVER_KEY = ENV['CLEVERBOT_API_KEY'].freeze
     ISSUE_TRACKING = {}
-    DISABLED_PLUGINS = CONFIG.key?('disabled') ? CONFIG['disabled'] : nil
-    IGNORED_USERS = CONFIG['ignored_users'].freeze
-    OWNER = CONFIG['irc']['owner'].freeze
+    DISABLED_PLUGINS = ENV['DISABLED_PLUGINS'].split(',')
+    IGNORED_USERS = ENV['IGNORED_USERS']
+    OWNER = ENV['OWNER']
 
-    CONFIG['github'].each do |i|
-      ISSUE_TRACKING[i['channel']] = i['repo']
+    githubs = ENV['GITHUB'].split('|')
+    githubs.each do |i|
+      ary = i.split(',')
+      ISSUE_TRACKING[ary[0]] = ary[1]
     end
 
     ISSUE_TRACKING.freeze
@@ -48,7 +51,7 @@ module Variables
 
   module NonConstants
     extend self
-    @authpass = Variables::Constants::CONFIG['irc']['default_auth_pass']
+    @authpass = ENV['DEFAULT_AUTH_PASS']
     @authedusers = []
     @commands = {}
 

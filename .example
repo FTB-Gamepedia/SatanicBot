@@ -1,0 +1,32 @@
+IRC_SERVER: irc.esper.net
+IRC_PORT: 6667
+IRC_CHANNELS: #Channel1,Channel2
+IRC_DEV_CHANNELS: #DevChannel1,DevChannel2
+IRC_USERNAME: MyUsername
+IRC_PASSWORD: password
+IRC_REALNAME: MyUsername's Ugly Bot
+IRC_NICKNAMES: MyNickname,MyOtherNickname
+DEFAULT_AUTH_PASS: password
+OWNER: SatanicSanta
+
+WIKI_URL: http://ftb.gamepedia.com/api.php
+WIKI_USERNAME: MyUsername
+WIKI_PASSWORD: password
+
+TWITTER_CONSUMER_KEY: abcdefefghijklmnop
+TWITTER_CONSUMER_SECRET: ahsudhuahsdhauhsd
+TWITTER_ACCESS_TOKEN: jaisdjasujdaushf
+TWITTER_ACCESS_SECRET: jeuhuthertoqpworj
+
+WUNDERGROUND_API_KEY: abcdefghijklmnop
+
+GITHUB: #TheSteamTank,esteemed-innovation/flaxbeards-steam-power|FTB-Wiki,ftb-gamepedia/ftb-wiki-issue-tracker
+
+PASTEE_API_KEY: abcdefghijklmnop
+
+CLEVERBOT_API_USER: abcdefghudfuhd
+CLEVERBOT_API_KEY:  idjfudjgudfjguhgjhkgofpa
+
+IGNORED_USERS: travis-ci
+
+DISABLED_PLUGINS: Plugins::Logger,Plugins::Commands::Weather
