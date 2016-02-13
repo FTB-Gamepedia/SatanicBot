@@ -14,5 +14,6 @@ gem('array_utility', '>= 1.1.0')
 gem('pastee', '>= 2.0.1')
 gem('isgd', '>= 1.0.1')
 gem('cleverbot_io', '>= 1.0.0')
+gem('dotenv', '>= 2.1.0')
 
 ruby '2.3.0'
