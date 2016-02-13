@@ -1,2 +1,1 @@
-web: echo "" > /dev/null
-bot: bundle exec ruby run.rb
+web: bundle exec ruby run.rb
