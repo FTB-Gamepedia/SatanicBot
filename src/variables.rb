@@ -38,8 +38,7 @@ module Variables
 
     ISSUE_TRACKING.freeze
 
-    people_path = "#{PWD}/src/info/valid_authnames.txt"
-    VALID_PEOPLE = IO.read(people_path).split("\n").freeze
+    VALID_PEOPLE = ENV['VALID_AUTHNAMES'].split(',').freeze
 
     QUOTE_PATH = "#{PWD}/src/info/ircquotes.txt".freeze
     MOTIVATE_PATH = "#{PWD}/src/info/motivate.txt".freeze

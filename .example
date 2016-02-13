@@ -30,3 +30,5 @@ CLEVERBOT_API_KEY:  idjfudjgudfjguhgjhkgofpa
 IGNORED_USERS: travis-ci
 
 DISABLED_PLUGINS: Plugins::Logger,Plugins::Commands::Weather
+
+VALID_AUTHNAMES: Me,NotYou
