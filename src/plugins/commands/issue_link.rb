@@ -34,7 +34,7 @@ module Plugins
           return
         end
         multiple_match = msg.message.scan(/(?:[\W]+|^)(#[\d]+)/)
-        repo_message = msg.message.scan(/\S+\/\S+#\d+/)
+        repo_message = msg.message.scan(/[A-Za-z0-9\-]+\/[A-Za-z0-9\-_\.]+#\d+/)
         channel_valid = Variables::Constants::ISSUE_TRACKING.include?(msg.channel)
         message = []
         if multiple_match.size > 0 && channel_valid
