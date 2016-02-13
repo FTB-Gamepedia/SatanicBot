@@ -20,10 +20,18 @@ module Plugins
         end
         authedusers = Variables::NonConstants.get_authenticated_users
         if authedusers.include?(msg.user.authname)
-          file = File.open(Variables::Constants::QUOTE_PATH, 'a')
-          file.puts(quote)
-          file.close
-          msg.reply('Added to the quote list.'.freeze)
+          butt = LittleHelper.init_wiki
+          # TODO See random
+          quotes = butt.get_text('User:SatanicBot/NotGoodEnoughForENV/Quotes').split("\n")
+          quotes.delete('</nowiki>')
+          quotes << quote
+          quotes << '</nowiki>'
+          edit = butt.edit('User:SatanicBot/NotGoodEnoughForENV/Quotes', quotes.join("\n"))
+          if edit.is_a?(Fixnum)
+            msg.reply('Added to the quote list'.freeze)
+          else
+            msg.reply("Failed! Error code: #{edit}".freeze)
+          end
         else
           msg.reply(Variables::Constants::LOGGED_IN)
         end

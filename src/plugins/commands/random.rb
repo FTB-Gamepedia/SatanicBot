@@ -68,10 +68,15 @@ module Plugins
         if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
           return
         end
-        quote = StringUtility.random_line(Variables::Constants::QUOTE_PATH)
+        butt = LittleHelper.init_wiki
+        # TODO Maybe modularize this a bit?
+        quotes = butt.get_text('User:SatanicBot/NotGoodEnoughForENV/Quotes').split("\n")
+        quotes.delete('<nowiki>')
+        quotes.delete('</nowiki>')
         @last_quotes = [] if @last_quotes.nil?
+        quote = ''
         while @last_quotes.include?(quote)
-          quote = StringUtility.random_line(Variables::Constants::QUOTE_PATH)
+          quote = quotes.sample
         end
         @last_quotes.prepend_capped(quote, 5)
         msg.reply(quote)
