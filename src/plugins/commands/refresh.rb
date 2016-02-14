@@ -11,6 +11,7 @@ module Plugins
 
       def execute(_)
         Variables::NonConstants.get_quotes(true)
+        msg.reply('Finished refreshing quotes.')
       end
     end
   end
