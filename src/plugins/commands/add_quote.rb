@@ -28,6 +28,7 @@ module Plugins
           quotes << '</nowiki>'
           edit = butt.edit('User:SatanicBot/NotGoodEnoughForENV/Quotes', quotes.join("\n"))
           if edit.is_a?(Fixnum)
+            Variables::NonConstants.append_quote(quote)
             msg.reply('Added to the quote list'.freeze)
           else
             msg.reply("Failed! Error code: #{edit}".freeze)

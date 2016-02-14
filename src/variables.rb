@@ -53,6 +53,28 @@ module Variables
     @authpass = ENV['DEFAULT_AUTH_PASS']
     @authedusers = []
     @commands = {}
+    @quotes = []
+
+    # Gets the current quote array, or refreshes it.
+    # @param refresh [Boolean] Whether to refresh the array. Will automatically refresh if it has not been initialized.
+    # @return [Array<String>] The quotes array.
+    def get_quotes(refresh = false)
+      if refresh || @quotes.empty?
+        butt = LittleHelper.init_wiki
+        quotes = butt.get_text('User:SatanicBot/NotGoodEnoughForENV/Quotes').split("\n")
+        quotes.delete('<nowiki>')
+        quotes.delete('</nowiki>')
+        @quotes = quotes
+      end
+      @quotes
+    end
+
+    # Adds a quote to the quote array. Does NOT add it to the actual quote list on the wiki.
+    # @param quote [String] The quote.
+    # @return [void]
+    def append_quote(quote)
+      @quotes << quote
+    end
 
     # Gets the command names and their docs.
     # @return [Hash] The commands.

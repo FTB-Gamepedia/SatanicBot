@@ -68,11 +68,7 @@ module Plugins
         if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
           return
         end
-        butt = LittleHelper.init_wiki
-        # TODO Maybe modularize this a bit?
-        quotes = butt.get_text('User:SatanicBot/NotGoodEnoughForENV/Quotes').split("\n")
-        quotes.delete('<nowiki>')
-        quotes.delete('</nowiki>')
+        quotes = Variables::NonConstants.get_quotes(false)
         @last_quotes = [] if @last_quotes.nil?
         quote = ''
         while @last_quotes.include?(quote)
