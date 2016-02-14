@@ -58,6 +58,7 @@ module LittleHelper
     Plugins::Commands::SubCategoryMembers,
     Plugins::Commands::NewVanilla,
     Plugins::Commands::CleverBot,
+    Plugins::Commands::RefreshQuotes,
     Plugins::Logger
   ]
 
