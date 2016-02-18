@@ -1,9 +1,11 @@
 require 'cinch'
+require 'array_utility'
 
 module Plugins
   module Commands
     class Abbreviate
       include Cinch::Plugin
+      using ArrayUtility
 
       match(/abbrv ([A-Z0-9\-]+) (.+)/i)
 
@@ -32,10 +34,17 @@ module Plugins
           elsif module_text.include?("= {'#{mod}',")
             msg.reply('That mod is already on the list.'.freeze)
           else
-            replace = "local modsByAbbrv = {\n    #{abbreviation} = {'#{mod}', " \
-                      "[=[<translate>#{mod}</translate>]=]},"
-            module_text = module_text.gsub(/local modsByAbbrv = \{/, replace)
-            edit = butt.edit(page, module_text, true, true, "Adding #{mod}")
+            new_line = "    #{abbreviation} = {'#{mod}', [=[<translate>#{mod}</translate>]=]},"
+            text_ary = module_text.split("\n")
+            text_ary.each_with_index do |line, index|
+              next unless line =~ /^[\s]+[\w]+ = \{'/
+              ary = [new_line, line]
+              next unless ary == ary.sort
+              new_line.gsub!(',', '') if text_ary.next(line) == '}'
+              text_ary.insert(index, new_line)
+              break
+            end
+            edit = butt.edit(page, text_ary.join("\n"), true, true, "Adding #{mod}")
             if edit.is_a?(Fixnum)
               msg.reply("Successfully abbreviated #{mod} as #{abbreviation}")
             else
