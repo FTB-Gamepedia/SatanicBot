@@ -120,13 +120,14 @@ module Plugins
         if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
           return
         end
-        if msg.channel.has_user?(user)
+        if !msg.channel? || msg.channel.has_user?(user)
           line = StringUtility.random_line(Variables::Constants::MOTIVATE_PATH)
           @last_motivation = [] if @last_motivation.nil?
-          line = StringUtility.random_line(Variables::Constants::MOTIVATE_PATH)\
-            while @last_motivation.include?(line)
+          while @last_motivation.include?(line)
+            line = StringUtility.random_line(Variables::Constants::MOTIVATE_PATH)
+          end
           @last_motivation.prepend_capped(line, 5)
-          msg.reply("#{line}, #{user}")
+          msg.reply("#{line.chomp}, #{user}")
         else
           motivate_you(msg)
         end
