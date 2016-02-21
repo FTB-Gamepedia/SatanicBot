@@ -55,7 +55,7 @@ module Plugins
           date = conditions[:updated]
           message = "#{name}: #{condition} | "
           if temp == feel
-            message << "#{temp}, and feels like it! "
+            message << "#{temp}, and feels like it!"
           else
             message << "#{temp}, but feels like #{feel}"
           end
