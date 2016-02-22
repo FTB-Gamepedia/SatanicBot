@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem('string-utility', '>= 2.6.1')
+gem('string-utility', '>= 2.7.0')
 gem('mediawiki-butt', '>= 0.10.2')
 gem('fishbans', '>= 1.1.1')
 gem('weatheruby', '>= 0.5.1')
@@ -15,5 +15,6 @@ gem('pastee', '>= 2.0.1')
 gem('isgd', '>= 1.0.1')
 gem('cleverbot_io', '>= 1.0.0')
 gem('dotenv', '>= 2.1.0')
+gem('urbandict', '>= 1.0.0')
 
 ruby '2.3.0'
