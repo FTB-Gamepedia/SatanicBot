@@ -110,13 +110,13 @@ module Variables
     end
 
     # Authenticates the given user.
-    # @param username [String] The user to authenticate.
+    # @param authname [String] The user to authenticate.
     def authenticate_user(authname)
       @authedusers << authname
     end
 
     # De-authenticates a user.
-    # @param username [String] The user to deauthenticate.
+    # @param authname [String] The user to deauthenticate.
     def deauthenticate_user(authname)
       @authedusers.delete(authname)
     end

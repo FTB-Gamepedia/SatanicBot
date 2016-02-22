@@ -6,7 +6,7 @@ module Plugins
     class Version
       include Cinch::Plugin
 
-      match(/updatevers ([^\|\[\]\<\>\%\+\?]+) \| (.+)/i, method: :update)
+      match(/updatevers ([^\|\[\]<>%\+\?]+) \| (.+)/i, method: :update)
       match(/checkvers (.+)/i, method: :check)
 
       update = 'Updates a mod version on the wiki. Op-only command. 2 ' \
@@ -25,9 +25,9 @@ module Plugins
         butt = LittleHelper.init_wiki
         text = butt.get_text(page)
         if text =~ /version=(.*)/ || text =~ /version =(.*)/
-          return Regexp.last_match[1]
+          Regexp.last_match[1]
         else
-          return nil
+          nil
         end
       end
 
@@ -44,7 +44,8 @@ module Plugins
                                         "#{version}")
         edit = butt.edit(page, text, true, true, 'Add version parameter'.freeze)
         return true if edit.is_a?(Fixnum)
-        return edit
+
+        edit
       end
 
       # Updates the version parameter in the infobox.
@@ -60,7 +61,8 @@ module Plugins
         text.gsub!(/version =.*/, "version=#{version}")
         edit = butt.edit(page, text, true, true, 'Update vesion.'.freeze)
         return true if edit.is_a?(Fixnum)
-        return edit
+
+        edit
       end
 
       # Replies according to the return value.

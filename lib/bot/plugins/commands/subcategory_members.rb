@@ -23,7 +23,7 @@ module Plugins
         subcats = butt.get_subcategories(category, 5000)
         members = butt.get_category_members(category, 5000)
         ret = {
-          "#{category}" => {
+          category => {
             members: [],
             subcats: []
           }

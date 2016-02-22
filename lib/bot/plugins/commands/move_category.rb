@@ -5,7 +5,7 @@ module Plugins
     class MoveCategory
       include Cinch::Plugin
 
-      match(/movecat ([^\|\[\]<>%\+\?]+) \-\> ([^\|\[\]<>%\+\?]+)/i)
+      match(/movecat ([^\|\[\]<>%\+\?]+) \-> ([^\|\[\]<>%\+\?]+)/i)
 
       doc = 'Moves one category to another, and edits all its members. ' \
             '2 args: $movecat <old> -> <new> Args must be separated ' \
@@ -37,7 +37,7 @@ module Plugins
             end
 
             delete = butt.delete(old_cat, summary)
-            if delete != true
+            unless delete
               msg.reply("Something went wrong when deleting #{old_cat}!" \
                         "Error code: #{delete}")
               return

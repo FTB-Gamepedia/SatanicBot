@@ -29,7 +29,7 @@ module Plugins
             mod_name = match_data[0][0]
             msg.reply("#{thing} is the abbreviation for #{mod_name}")
           elsif module_text.include?("= {'#{thing}',")
-            thing.gsub!(/\'/) { "\\'" }
+            thing.gsub!(/'/) { "\\'" }
             match_data = module_text.scan(/([A-Z0-9\-]+) = {'#{thing}',/)
             msg.reply("#{thing} is abbreviated as #{match_data[0][0]}")
           else

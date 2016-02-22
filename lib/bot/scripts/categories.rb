@@ -30,9 +30,9 @@ def change_backlinks(category, new_category_name)
     else
       text = @mw.get_text(i)
       text = text.gsub(/\{\{C\|#{category}/,
-                       "\{\{C\|#{new_category_name}")
+                       "{{C|#{new_category_name}")
       text = text.gsub(/\[\[\:#{category}/,
-                       "\[\[\:Category\:#{new_category_name}")
+                       "[[:Category:#{new_category_name}")
       @mw.edit(i, text, "Changing #{category} to #{new_category_name}", true)
       puts "#{i} has been edited.\n"
     end
