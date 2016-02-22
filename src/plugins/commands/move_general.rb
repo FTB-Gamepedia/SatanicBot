@@ -1,9 +1,11 @@
 require 'cinch'
+require 'string-utility'
 
 module Plugins
   module Commands
     class MoveGeneral
       include Cinch::Plugin
+      using StringUtility
 
       match(/safemove (.+) -> (.+)/i)
 
@@ -24,19 +26,16 @@ module Plugins
         if authed_users.include? msg.user.authname
           butt = LittleHelper.init_wiki
           move = butt.move(old_page, new_page, 'Moving page from IRC.')
-          if move == true
+          if move
             links = butt.what_links_here(old_page, 5000)
             links.each do |l|
               text = butt.get_text(l)
-              next if text.nil?
-              next unless text =~ /#{old_page}/
-              new_text = text
-              new_text.gsub!(/\[\[#{old_page}\|/, "[[#{new_page}|")
-              new_text.gsub!(/\[\[#{old_page}\]\]/, "[[#{new_page}]]")
-              new_text.gsub!(/\{\[Ll]\|#{old_page}\|/, "{{L|#{new_page}|")
-              new_text.gsub!(/\{\{[Ll]\|#{old_page}\}\}/, "{{L|#{new_page}}}")
-              next if new_text == text
-              edit = butt.edit(l, new_text, true)
+              next if text.nil? || text !~ /#{old_page}/
+              text.safely_gsub!(/\[\[#{old_page}\|/, "[[#{new_page}|")
+              text.safely_gsub!(/\[\[#{old_page}\]\]/, "[[#{new_page}]]")
+              text.safely_gsub!(/\{[Ll]\|#{old_page}\|/, "{{L|#{new_page}|")
+              text.safely_gsub!(/\{\{[Ll]\|#{old_page}\}\}/, "{{L|#{new_page}}}")
+              edit = butt.edit(l, text, true)
               msg.reply("Something went wrong when editing #{l}! " \
                         "Error code: #{edit} ... Continuing...") unless edit.is_a?(Fixnum)
             end
