@@ -7,19 +7,16 @@ module Plugins
 
       match(/movecat ([^\|\[\]<>%\+\?]+) \-> ([^\|\[\]<>%\+\?]+)/i)
 
-      doc = 'Moves one category to another, and edits all its members. ' \
-            '2 args: $movecat <old> -> <new> Args must be separated ' \
-            'with a ->.'
-      Variables::NonConstants.add_command('movecat', doc)
+      DOC = 'Moves one category to another, and edits all its members. ' \
+            '2 args: $movecat <old> -> <new> Args must be separated with a ->.'.freeze
+      Variables::NonConstants.add_command('movecat', DOC)
 
       # Moves a category, and tries to update all of its members.
       # @param msg [Cinch::Message]
       # @param old_cat [String] The old category name.
       # @param new_cat [String] The new category name.
       def execute(msg, old_cat, new_cat)
-        if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
-          return
-        end
+        return if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
         authed_users = Variables::NonConstants.get_authenticated_users
         if authed_users.include? msg.user.authname
           butt = LittleHelper.init_wiki
@@ -31,15 +28,13 @@ module Plugins
             summary = "Moving #{old_cat} to #{new_cat} through IRC."
             create = butt.create_page(new_cat, old_cat_contents, summary)
             unless create.is_a?(Fixnum)
-              msg.reply('Something went wrong when creating the page ' \
-                        "#{new_cat}! Error code: #{create}")
+              msg.reply("Something went wrong when creating the page #{new_cat}! Error code: #{create}")
               return
             end
 
             delete = butt.delete(old_cat, summary)
             unless delete
-              msg.reply("Something went wrong when deleting #{old_cat}!" \
-                        "Error code: #{delete}")
+              msg.reply("Something went wrong when deleting #{old_cat}! Error code: #{delete}")
               return
             end
 

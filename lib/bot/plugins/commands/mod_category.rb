@@ -7,12 +7,10 @@ module Plugins
       match(/newmodcat (.+)/i, method: :new_mod_category)
       match(/newminorcat (.+)/i, method: :new_minor_category)
 
-      mod = 'Creates a standard mod category. Op-only. 1 arg: $newmodcat ' \
-            '<name>'
-      minor = 'Creates a new minor mod category. Op-only. 1 arg: ' \
-              '$newminorcat <name>'
-      Variables::NonConstants.add_command('newmodcat', mod)
-      Variables::NonConstants.add_command('newminorcat', minor)
+      MOD_DOC = 'Creates a standard mod category. Op-only. 1 arg: $newmodcat <name>'.freeze
+      MINOR_DOC = 'Creates a new minor mod category. Op-only. 1 arg: $newminorcat <name>'.freeze
+      Variables::NonConstants.add_command('newmodcat', MOD_DOC)
+      Variables::NonConstants.add_command('newminorcat', MINOR_DOC)
 
       def new_category(msg, page, minor = false)
         butt = LittleHelper.init_wiki
@@ -35,9 +33,7 @@ module Plugins
       # @param msg [Cinch::Message]
       # @param page [String] The mod name.
       def new_mod_category(msg, page)
-        if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
-          return
-        end
+        return if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
         authedusers = Variables::NonConstants.get_authenticated_users
         page = "Category:#{page}" if /^Category:/ !~ page
         if authedusers.include?(msg.user.authname)
@@ -51,9 +47,7 @@ module Plugins
       # @param msg [Cinch::Message]
       # @param page [String] The mod name.
       def new_minor_category(msg, page)
-        if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
-          return
-        end
+        return if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
         page = "Category:#{page}" if /^Category:/ !~ page
         authedusers = Variables::NonConstants.get_authenticated_users
         if authedusers.include?(msg.user.authname)

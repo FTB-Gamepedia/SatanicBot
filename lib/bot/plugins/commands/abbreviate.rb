@@ -9,9 +9,9 @@ module Plugins
 
       match(/abbrv ([A-Z0-9\-]+) (.+)/i)
 
-      doc = 'Abbreivates a mod for the tilesheet extension. ' \
-            'An op-only command. 2 args: $abbrv <abbreviation> <mod_name>'
-      Variables::NonConstants.add_command('abbrv', doc)
+      DOC = 'Abbreivates a mod for the tilesheet extension. An op-only command. ' \
+            '2 args: $abbrv <abbreviation> <mod_name>'.freeze
+      Variables::NonConstants.add_command('abbrv', DOC)
 
       # Abbreviates the given mod with the given abbreviation. Fails when the
       #   mod or abbreviation are already on the list, or the user is not
@@ -20,9 +20,7 @@ module Plugins
       # @param abbreviation [String] The abbreviation.
       # @param mod [String] The mod name.
       def execute(msg, abbreviation, mod)
-        if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
-          return
-        end
+        return if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
         abbreviation = abbreviation.upcase
         authedusers = Variables::NonConstants.get_authenticated_users
         if authedusers.include?(msg.user.authname)
@@ -40,7 +38,7 @@ module Plugins
               next unless line =~ /^[\s]+[\w]+ = \{'/
               ary = [new_line, line]
               next unless ary == ary.sort
-              new_line.gsub!(',', '') if text_ary.next(line) == '}'
+              new_line.delete!(',', '') if text_ary.next(line) == '}'
               text_ary.insert(index, new_line)
               break
             end

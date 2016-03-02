@@ -6,12 +6,10 @@ def change_pages(category, new_category_name)
     text = @mw.get_text(i)
     if !text.nil?
       text = text.gsub(/#{category}/, new_category_name)
-      @mw.edit(i, text, "Changing #{category} to #{new_category_name}",
-               true)
+      @mw.edit(i, text, "Changing #{category} to #{new_category_name}", true)
       puts "#{i} has been edited.\n"
     else
-      puts "#{i} could not be edited. Content found as nil." \
-           " Continuing without editing...\n"
+      puts "#{i} could not be edited. Content found as nil. Continuing without editing...\n"
       next
     end
   end
@@ -29,10 +27,8 @@ def change_backlinks(category, new_category_name)
       next
     else
       text = @mw.get_text(i)
-      text = text.gsub(/\{\{C\|#{category}/,
-                       "{{C|#{new_category_name}")
-      text = text.gsub(/\[\[\:#{category}/,
-                       "[[:Category:#{new_category_name}")
+      text = text.gsub(/\{\{C\|#{category}/, "{{C|#{new_category_name}")
+      text = text.gsub(/\[\[\:#{category}/, "[[:Category:#{new_category_name}")
       @mw.edit(i, text, "Changing #{category} to #{new_category_name}", true)
       puts "#{i} has been edited.\n"
     end
@@ -57,16 +53,11 @@ if num.is_a? Numeric
       change_backlinks(cat, new_cat)
       initial += 1
     else
-      puts 'SEVERE: THE TWO CATEGORIES CANNOT BE THE SAME.' \
-           ' EXITIING WITH EXIT CODE 1'
-      exit 1
+      raise SecurityError
     end
   end
-  puts 'Successfully completed changing categories provided by user.' \
-       ' Exiting with exit code 0.'
+  puts 'Successfully completed changing categories provided by user. Exiting with exit code 0.'
 else
-  puts 'SEVERE: NUMBER OF CATEGORIES PROVIDED IS NOT A VALID NUMBER.' \
-       'EXITING WITH EXIT CODE 1'
-  exit 1
+  raise ArgumentError
 end
 exit 0

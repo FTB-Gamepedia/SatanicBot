@@ -9,8 +9,6 @@ require_relative 'variables'
 require_rel 'plugins'
 
 module LittleHelper
-  extend self
-
   BUTT = MediaWiki::Butt.new(Variables::Constants::WIKI_URL)
 
   TWEETER = Twitter::REST::Client.new do |c|
@@ -82,14 +80,11 @@ module LittleHelper
   plugins.freeze
 
   BOT = Cinch::Bot.new do
+    # noinspection RubyResolve
     configure do |c|
       c.server = Variables::Constants::IRC_SERVER
       c.port = Variables::Constants::IRC_PORT
-      if ARGV[0] == '-d'
-        c.channels = Variables::Constants::IRC_DEV_CHANNELS
-      else
-        c.channels = Variables::Constants::IRC_CHANNELS
-      end
+      c.channels = ARGV[0] == '-d' ? Variables::Constants::IRC_DEV_CHANNELS : Variables::Constants::IRC_CHANNELS
       c.nicks = Variables::Constants::IRC_NICKNAMES
       c.user = Variables::Constants::IRC_USERNAME
       c.password = Variables::Constants::IRC_PASSWORD
@@ -100,6 +95,8 @@ module LittleHelper
       CHANNELS = c.channels
     end
   end
+
+  module_function
 
   # Initializes the MediaWiki::Butt instance. Logs back in if necessary.
   # @return [MediaWiki::Butt].
@@ -129,8 +126,7 @@ module LittleHelper
 
   # Logs into the wiki with MediaWiki::Butt.
   def wiki_login
-    BUTT.login(Variables::Constants::WIKI_USERNAME,
-               Variables::Constants::WIKI_PASSWORD)
+    BUTT.login(Variables::Constants::WIKI_USERNAME, Variables::Constants::WIKI_PASSWORD)
   end
 
   # Starts the bot.

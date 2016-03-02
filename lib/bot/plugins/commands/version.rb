@@ -9,13 +9,11 @@ module Plugins
       match(/updatevers ([^\|\[\]<>%\+\?]+) \| (.+)/i, method: :update)
       match(/checkvers (.+)/i, method: :check)
 
-      update = 'Updates a mod version on the wiki. Op-only command. 2 ' \
-               'args: $updatevers <page> | <version> Args must be ' \
-               'separated with a pipe in this command.'
-      check = 'Gets the current version on the page. 1 arg: $checkvers ' \
-              '<page>'
-      Variables::NonConstants.add_command('updatevers', update)
-      Variables::NonConstants.add_command('checkvers', check)
+      UPDATE_DOC = 'Updates a mod version on the wiki. Op-only command. ' \
+                   '2 args: $updatevers <page> | <version> Args must be separated with a pipe in this command.'.freeze
+      CHECK_DOC = 'Gets the current version on the page. 1 arg: $checkvers <page>'.freeze
+      Variables::NonConstants.add_command('updatevers', UPDATE_DOC)
+      Variables::NonConstants.add_command('checkvers', CHECK_DOC)
 
       # Gets the current 'version' value for the page.
       # @param page [String] The page to check.
@@ -25,10 +23,10 @@ module Plugins
         butt = LittleHelper.init_wiki
         text = butt.get_text(page)
         if text =~ /version=(.*)/ || text =~ /version =(.*)/
-          Regexp.last_match[1]
-        else
-          nil
+          return Regexp.last_match[1]
         end
+
+        nil
       end
 
       # Adds the version parameter to the infobox in the page.
@@ -40,8 +38,7 @@ module Plugins
         butt = LittleHelper.init_wiki
         text = butt.get_text(page)
         return false unless /{{[Ii]nfobox mod}}/ =~ text
-        text.sub!(/{{[Ii]nfobox mod\n/, "{{Infobox mod\n|version=" \
-                                        "#{version}")
+        text.sub!(/{{[Ii]nfobox mod\n/, "{{Infobox mod\n|version=#{version}")
         edit = butt.edit(page, text, true, true, 'Add version parameter'.freeze)
         return true if edit.is_a?(Fixnum)
 
@@ -65,6 +62,9 @@ module Plugins
         edit
       end
 
+      NOT_FOUND = 'Could not find Infobox/param in the page. ' \
+                  'Please be sure that you entered the page name correctly.'.freeze
+
       # Replies according to the return value.
       # @param return_value [Any] The return value of the edit.
       # @param mod [String] The mod name.
@@ -73,11 +73,9 @@ module Plugins
       def get_reply(return_value, mod, version, old, new_p = false)
         success = "Added version parameter to #{mod} as #{version}" if new_p
         success = "Updated #{mod} from #{old} to #{version}!" unless new_p
-        not_found = 'Could not find Infobox/param in the page. Please be ' \
-                    'sure that you entered the page name correctly.'.freeze
         failed = "Failed! Error code: #{return_value}"
         return success if return_value
-        return not_found unless return_value
+        return NOT_FOUND unless return_value
         return failed if return_value.is_a?(String)
       end
 
@@ -86,9 +84,7 @@ module Plugins
       # @param mod [String] The mod to update on the wiki.
       # @param version [String] The new mod version.
       def update(msg, mod, version)
-        if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
-          return
-        end
+        return if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
         authedusers = Variables::NonConstants.get_authenticated_users
         if authedusers.include?(msg.user.authname)
           current = get_current_verison(mod)
@@ -111,9 +107,7 @@ module Plugins
       # @param msg [Cinch::Message]
       # @param page [String] The mod page.
       def check(msg, page)
-        if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
-          return
-        end
+        return if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
         version = get_current_verison(page)
         if version.nil?
           msg.reply('No version found on that page.'.freeze)

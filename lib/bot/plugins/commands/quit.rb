@@ -7,14 +7,12 @@ module Plugins
 
       match(/quit/i)
 
-      doc = 'Murders me. Owner only command. No args.'
-      Variables::NonConstants.add_command('quit', doc)
+      DOC = 'Murders me. Owner only command. No args.'.freeze
+      Variables::NonConstants.add_command('quit', DOC)
 
       # Quits the bot if the user is authenticated as the owner.
       def execute(msg)
-        if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
-          return
-        end
+        return if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
         if msg.user.authname == Variables::Constants::OWNER
           LittleHelper.quit(msg.user.name)
         else

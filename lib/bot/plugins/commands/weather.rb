@@ -10,23 +10,20 @@ module Plugins
       match(/weather$/i, method: :weather_self)
       match(/forecast$/i, method: :forecast_self)
 
-      weather = 'Provides weather information for the given place. 1 ' \
-                'optional arg: $weather <place>, if not provided it will ' \
-                "use the user's IP address using simple_geolocator"
-      forecast = 'Provides forecast information for the enxt 3 days, ' \
-                 'including nights. 1 optional arg: $forecast <place>, ' \
-                 "if not provided it will use the user's IP address using" \
-                 'simple_geolocator'
-      Variables::NonConstants.add_command('weather', weather)
-      Variables::NonConstants.add_command('forecast', forecast)
+      WEATHER_DOC = 'Provides weather information for the given place. 1 ' \
+                    'optional arg: $weather <place>, if not provided it will ' \
+                    "use the user's IP address using simple_geolocator".freeze
+      FORECAST_DOC = 'Provides forecast information for the enxt 3 days, ' \
+                     'including nights. 1 optional arg: $forecast <place>, ' \
+                     "if not provided it will use the user's IP address using simple_geolocator".freeze
+      Variables::NonConstants.add_command('weather', WEATHER_DOC)
+      Variables::NonConstants.add_command('forecast', FORECAST_DOC)
 
       # Gets the current weather conditions for the location.
       # @param msg [Cinch::Message]
       # @param location [String] The location to get the weather for.
       def weather(msg, location)
-        if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
-          return
-        end
+        return if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
         weather = LittleHelper.init_weather
         conditions = weather.conditions(location)
         failed = false
@@ -54,14 +51,17 @@ module Plugins
           humidity = "#{conditions[:humidity]}%"
           date = conditions[:updated]
           message = "#{name}: #{condition} | "
+
+          # Appending `message` based on temp_feel in any other way would make for terrible styling.
+          # rubocop:disable Style/ConditionalAssignment
           if temp == feel
             message << "#{temp}, and feels like it!"
           else
             message << "#{temp}, but feels like #{feel}"
           end
+          # rubocop:enable Style/ConditionalAssignment
 
-          message << " | Humidity: #{humidity} | #{precip_chance}% chance of " \
-                     "precipitation | #{date}"
+          message << " | Humidity: #{humidity} | #{precip_chance}% chance of precipitation | #{date}"
         end
 
         unless alerts.nil?
@@ -85,9 +85,7 @@ module Plugins
       # Gets the weather conditions for the user's location by their IP.
       # @param msg [Cinch::Message]
       def weather_self(msg)
-        if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
-          return
-        end
+        return if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
         ip = msg.user.host
         location = get_location_by_ip(ip)
         weather(msg, location)
@@ -98,9 +96,7 @@ module Plugins
       # @param msg [Cinch::Message]
       # @param location [String] The location to get the information for.
       def forecast(msg, location)
-        if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
-          return
-        end
+        return if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
         msg.reply("Getting forecast for #{location}...")
         weather = LittleHelper.init_weather
         forecast = weather.simple_forecast(location)
@@ -118,9 +114,7 @@ module Plugins
       #   the users location, by first getting the location of their IP.
       # @param msg [Cinch::Message]
       def forecast_self(msg)
-        if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
-          return
-        end
+        return if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
         ip = msg.user.host
         location = get_location_by_ip(ip)
         forecast(msg, location)

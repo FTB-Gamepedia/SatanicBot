@@ -7,12 +7,12 @@ module Plugins
 
       match(/subcategorymembers (.+)/i)
 
-      doc = 'Get a comprehensive summary of all category members, their ' \
+      DOC = 'Get a comprehensive summary of all category members, their ' \
             'subcategories, and their members. Use this command with ' \
             'caution, as it will take a long time to process. Will upload ' \
             'the final result to Pastee. 1 arg: $subcategorymembers ' \
-            '<top category>'
-      Variables::NonConstants.add_command('subcategorymembers', doc)
+            '<top category>'.freeze
+      Variables::NonConstants.add_command('subcategorymembers', DOC)
 
       # Gets a hash containing all of the category's members, subcategories,
       #   their members, their subcategories, etc. recursively.
@@ -45,8 +45,7 @@ module Plugins
       # @return [String] The end string to be published on Pastee.
       def create_paste_contents(hash, level)
         contents = ''
-        contents = "Comprehensive summary of #{hash.keys[0]}'s subcats.\n\n" \
-                   "## #{hash.keys[0]}\n" if level == 1
+        contents = "Comprehensive summary of #{hash.keys[0]}'s subcats.\n\n## #{hash.keys[0]}\n" if level == 1
         hash.each do |_, h|
           asterisks = '*' * level
           unless h[:members].empty?
@@ -74,9 +73,7 @@ module Plugins
       # @param msg [Cinch::Message]
       # @param category [String] The top category.
       def execute(msg, category)
-        if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
-          return
-        end
+        return if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
         authedusers = Variables::NonConstants.get_authenticated_users
         category = "Category:#{category}" if /^Category:/ !~ category
         if authedusers.include?(msg.user.authname)

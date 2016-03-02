@@ -10,16 +10,14 @@ module Plugins
 
       match(/checkpage (.+)/i)
 
-      doc = 'Checks if a page exists. 1 arg: $checkpage <page>'
-      Variables::NonConstants.add_command('checkpage', doc)
+      DOC = 'Checks if a page exists. 1 arg: $checkpage <page>'.freeze
+      Variables::NonConstants.add_command('checkpage', DOC)
 
       # Checks whether the page exists on the wiki.
       # @param msg [Cinch::Message]
       # @param page [String] The page to check.
       def execute(msg, page)
-        if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
-          return
-        end
+        return if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
         butt = LittleHelper.init_wiki
         page = page.spacify
         is_redir = butt.page_redirect?(page)

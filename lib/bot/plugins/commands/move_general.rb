@@ -9,19 +9,16 @@ module Plugins
 
       match(/safemove (.+) -> (.+)/i)
 
-      doc = 'Moves a page to a new page, with no redirect, including ' \
-            "subpages. Edits all of the page's backlinks. 2 args: " \
-            '$safemove <old> -> <new> Args must be separated by ->'
-      Variables::NonConstants.add_command('safemove', doc)
+      DOC = "Moves a page to a new page, with no redirect, including subpages. Edits all of the page's " \
+            'backlinks. 2 args: $safemove <old> -> <new> Args must be separated by ->'.freeze
+      Variables::NonConstants.add_command('safemove', DOC)
 
       # Safely moves a page by updating all of the backlinks possible.
       # @param msg [Cinch::Message]
       # @param old_page [String] The old page name.
       # @param new_page [String] The new page name.
       def execute(msg, old_page, new_page)
-        if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
-          return
-        end
+        return if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
         authed_users = Variables::NonConstants.get_authenticated_users
         if authed_users.include? msg.user.authname
           butt = LittleHelper.init_wiki

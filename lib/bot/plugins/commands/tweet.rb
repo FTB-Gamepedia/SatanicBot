@@ -7,17 +7,14 @@ module Plugins
 
       match(/tweet (.+)/i)
 
-      doc = 'Creates a new tweet on the LittleHelperBot Twitter account. ' \
-            '1 arg: $tweet <message>'
-      Variables::NonConstants.add_command('tweet', doc)
+      DOC = 'Creates a new tweet on the LittleHelperBot Twitter account. 1 arg: $tweet <message>'.freeze
+      Variables::NonConstants.add_command('tweet', DOC)
 
       # Tweets the message provided.
       # @param msg [Cinch::Message]
       # @param tweet [String] The message to tweet.
       def execute(msg, tweet)
-        if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
-          return
-        end
+        return if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
         # 134 because it has to fit "[IRC] "
         if tweet.length > 1 && tweet.length < 134
           twitter = LittleHelper.init_twitter

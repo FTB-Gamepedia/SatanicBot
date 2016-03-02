@@ -7,12 +7,10 @@ module Plugins
 
       match(/categorymembers (.+)/i)
 
-      doc = 'Gets a comprehensive summary of all category members, ' \
-            'organized by the other categories of each member. Use this ' \
-            'command with caution, as it will take a very long time to ' \
-            'process. Uploads the summary to Pastee. 1 arg: ' \
-            '$categorymembers <top category>'
-      Variables::NonConstants.add_command('categorymembers', doc)
+      DOC = 'Gets a comprehensive summary of all category members, organized by the other categories of each ' \
+            'member. Use this command with caution, as it will take a very long time to ' \
+            'process. Uploads the summary to Pastee. 1 arg: $categorymembers <top category>'.freeze
+      Variables::NonConstants.add_command('categorymembers', DOC)
 
       # Creates a massive comprehensive summary of the category members of any
       #   given category on the wiki, and puts it on Pastee. The comprehensive
@@ -21,9 +19,7 @@ module Plugins
       # @param msg [Cinch::Message]
       # @param category [String] The top category.
       def execute(msg, category)
-        if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
-          return
-        end
+        return if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
         authedusers = Variables::NonConstants.get_authenticated_users
         category = "Category:#{category}" if /^Category:/ !~ category
         if authedusers.include?(msg.user.authname)

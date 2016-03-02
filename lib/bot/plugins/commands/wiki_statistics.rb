@@ -12,18 +12,15 @@ module Plugins
       match(/stats$/i, method: :get_all)
       match(/stats (.+)/i, method: :get_one)
 
-      doc = 'Gives wiki stats. 1 optionl arg: $stats <type>, where type is ' \
-            "'pages', 'articles', 'edits', 'images', 'users', 'admins', " \
-            "or 'activeusers'."
+      DOC = 'Gives wiki stats. 1 optionl arg: $stats <type>, where type is ' \
+            "'pages', 'articles', 'edits', 'images', 'users', 'admins', or 'activeusers'.".freeze
       Variables::NonConstants.add_command('stats', doc)
 
       # Gets all statistics for the wiki, including number of pages, articles,
       #   edits, images, users, admins, and active users.
       # @param msg [Cinch::Message]
       def get_all(msg)
-        if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
-          return
-        end
+        return if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
         butt = LittleHelper.init_wiki
         stats = butt.get_statistics
         pages = stats['pages'].to_s.separate
@@ -44,9 +41,7 @@ module Plugins
       # @param prop [String] The property to get. Can be any of the following:
       #   pages, articles, edits, images, users, activeusers, or admins.
       def get_one(msg, prop)
-        if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
-          return
-        end
+        return if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
         if VALID_PROPERTIES.include?(prop.downcase)
           butt = LittleHelper.init_wiki
           stats = butt.get_statistics

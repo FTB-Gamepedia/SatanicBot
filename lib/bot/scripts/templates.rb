@@ -12,8 +12,7 @@ def edit(old, new)
       text = text.gsub(/\{\{#{old}/, "{{#{new}}}")
       text = text.gsub(/\[\[Template:#{old}/, "[[Template:#{new}]]")
       text = text.gsub(/\{\{L\|Template:#{old}/, "{{L|Template:#{new}}}")
-      @mw.edit(i, text,
-               "Changing #{old} template calls to #{new} template calls.", true)
+      @mw.edit(i, text, "Changing #{old} template calls to #{new} template calls.", true)
       puts "#{i} has been edited.\n"
     end
   end
@@ -37,11 +36,8 @@ if num.is_a? Numeric
     edit(template, new_template)
     initial += 1
   end
-  puts 'Successfully completed changing template links provided by user.' \
-       ' Exiting with exit code 0.'
+  puts 'Successfully completed changing template links provided by user. Exiting with exit code 0.'
 else
-  puts 'SEVERE: NUMBER OF TEMPLATES PROVIDED IS NOT A VALID NUMBER.' \
-       ' EXITING WITH EXIT CODE 1'
-  exit 1
+  raise ArgumentError
 end
 exit 0

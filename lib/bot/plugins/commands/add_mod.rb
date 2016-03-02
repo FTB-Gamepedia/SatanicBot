@@ -8,12 +8,10 @@ module Plugins
       match(/addmod (.+)/i, method: :execute_major)
       match(/addminor (.+)/i, method: :execute_minor)
 
-      moddoc = 'Adds a mod to the list of mods on the main page. Op-only. ' \
-               '1 arg: $addmod <mod name>'
-      minordoc = 'Adds a mod to the list of minor mods on the main page. ' \
-                 'Op-only. 1 arg: $addminor <mod name>'
-      Variables::NonConstants.add_command('addmod', moddoc)
-      Variables::NonConstants.add_command('addminor', minordoc)
+      MOD_DOC = 'Adds a mod to the list of mods on the main page. Op-only. 1 arg: $addmod <mod name>'.freeze
+      MINOR_DOC = 'Adds a mod to the list of minor mods on the main page. Op-only. 1 arg: $addminor <mod name>'.freeze
+      Variables::NonConstants.add_command('addmod', MOD_DOC)
+      Variables::NonConstants.add_command('addminor', MINOR_DOC)
 
       # Adds the mod to the list of mods on the main page of the FTB wiki.
       #   Unlike most other execute methods, this one is not actually called
@@ -62,9 +60,7 @@ module Plugins
       # @param msg [Cinch::Message]
       # @param mod [String] The mod to add.
       def execute_major(msg, mod)
-        if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
-          return
-        end
+        return if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
         authedusers = Variables::NonConstants.get_authenticated_users
         if authedusers.include?(msg.user.authname)
           execute(msg, mod)
@@ -77,9 +73,7 @@ module Plugins
       # @param msg [Cinch::Message]
       # @param mod [String] The mod to add.
       def execute_minor(msg, mod)
-        if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
-          return
-        end
+        return if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
         authedusers = Variables::NonConstants.get_authenticated_users
         if authedusers.include?(msg.user.authname)
           execute(msg, mod, true)

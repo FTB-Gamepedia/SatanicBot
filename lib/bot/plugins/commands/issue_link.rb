@@ -10,6 +10,8 @@ module Plugins
 
       match(/([\d]+)/, method: :default_repo, prefix: /\#/)
 
+      # TODO: Help/doc info.
+
       # Creates a message based on the information given about the issue.
       # @param state [String] The state of the issue (open/closed)
       # @param title [String] The issue's title.
@@ -30,14 +32,12 @@ module Plugins
       # @param msg [Cinch::Message]
       # @param issue_num [String] The GitHub issue number.
       def default_repo(msg, issue_num)
-        if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
-          return
-        end
+        return if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
         multiple_match = msg.message.scan(/(?:[\W]+|^)(#[\d]+)/)
         repo_message = msg.message.scan(/[A-Za-z0-9\-]+\/[A-Za-z0-9\-_\.]+#\d+/)
         channel_valid = Variables::Constants::ISSUE_TRACKING.include?(msg.channel)
         message = []
-        if multiple_match.size > 0 && channel_valid
+        if !multiple_match.empty? && channel_valid
           repo = Variables::Constants::ISSUE_TRACKING[msg.channel]
           multiple_match.each do |i|
             num = i[0].split(/[#]/)[1]
@@ -46,7 +46,7 @@ module Plugins
           end
         end
 
-        if repo_message.size > 0
+        unless repo_message.empty?
           repo_message.each do |i|
             msg_data = i.split(/[#]/)
             url = ISGD.shorten("https://github.com/#{msg_data[0]}/issues/#{msg_data[1]}")
@@ -75,7 +75,7 @@ module Plugins
           issue['labels'].each do |l|
             labels << l['name']
           end
-          msg.reply(form_message(state, title, labels, issue_num,))
+          msg.reply(form_message(state, title, labels, issue_num))
         rescue Octokit::NotFound
           msg.reply("Issue ##{issue_num} cannot be found.")
         end

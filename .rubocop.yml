@@ -1,0 +1,54 @@
+# These 2 are disabled because many command's #execute method have a bunch of logic that has no need for modularity.
+Metrics/MethodLength:
+  Enabled: false
+
+Metrics/ModuleLength:
+  Enabled: false
+
+# Normal configuration follows.
+Metrics/LineLength:
+  Max: 120
+
+Metrics/AbcSize:
+  Enabled: false
+
+Metrics/PerceivedComplexity:
+  Enabled: false
+
+Metrics/CyclomaticComplexity:
+  Enabled: false
+
+Style/InlineComment:
+  Enabled: true
+
+Style/Documentation:
+  Enabled: false
+
+Style/RegexpLiteral:
+  Enabled: false
+
+Style/AccessorMethodName:
+  Enabled: false
+
+Style/InlineComment:
+  Enabled: false
+
+#Metrics/ModuleLength:
+#  Max: 150
+#
+#Metrics/ClassLength:
+#  Max: 150
+
+Style/WordArray:
+  Enabled: false
+
+Metrics/ParameterLists:
+  Enabled: false
+
+# Disable cops on deprecated scripts.
+AllCops:
+  Excludes:
+    - lib/bot/scripts/deprecated/disser.rb
+    - lib/bot/scripts/deprecated/gcrollback.rb
+    - lib/bot/scripts/deprecated/skyrimtemplates.rb
+    - lib/bot/scripts/deprecated/terrible_infobox.rb

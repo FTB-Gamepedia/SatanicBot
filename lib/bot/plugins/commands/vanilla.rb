@@ -6,14 +6,11 @@ module Plugins
       include Cinch::Plugin
       match(/newvanilla (.+) \| (.+)/i)
 
-      doc = 'Creates a new page for a Vanilla thing. Op-only. 1 arg: ' \
-            '$newvanilla <page> | <type>'
-      Variables::NonConstants.add_command('newvanilla', doc)
+      DOC = 'Creates a new page for a Vanilla thing. Op-only. 1 arg: $newvanilla <page> | <type>'.freeze
+      Variables::NonConstants.add_command('newvanilla', DOC)
 
       def execute(msg, page, type)
-        if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
-          return
-        end
+        return if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
         authedusers = Variables::NonConstants.get_authenticated_users
         if authedusers.include?(msg.user.authname)
           butt = LittleHelper.init_wiki

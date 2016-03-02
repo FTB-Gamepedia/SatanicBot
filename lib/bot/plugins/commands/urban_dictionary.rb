@@ -9,10 +9,11 @@ module Plugins
       match(/what does ["'](.+)["'] mean\?/i)
       set(:prefix, //)
 
-      doc = 'Gets a definition for the word from Urban Dictionary.'
-      Variables::NonConstants.add_command('urban', doc)
+      DOC = 'Gets a definition for the word from Urban Dictionary.'.freeze
+      Variables::NonConstants.add_command('urban', DOC)
 
       def execute(msg, word)
+        return if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
         slangs = UrbanDictionary.define(word)
         if slangs.empty?
           msg.reply("That's a good question, #{msg.user.nick}.")

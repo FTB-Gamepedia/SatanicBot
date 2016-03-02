@@ -9,10 +9,9 @@ module Plugins
       match(/game guess (\d+)/i, method: :guess)
       match(/game quit$/i, method: :quit)
 
-      doc = 'Number guessing game. Initialize with $game star. Then guess' \
-            ' numbers with $game guess <number>. A game can be quit with ' \
-            '$game quit'
-      Variables::NonConstants.add_command('game', doc)
+      DOC = 'Number guessing game. Initialize with $game star. Then guess numbers with $game guess <number>. ' \
+            'A game can be quit with $game quit'.freeze
+      Variables::NonConstants.add_command('game', DOC)
 
       @started = false
       @random_number = nil
@@ -22,9 +21,7 @@ module Plugins
       # Quits the number game if one has been started.
       # @param msg [Cinch::Message]
       def quit(msg)
-        if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
-          return
-        end
+        return if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
         if @started
           msg.reply('Game exited.'.freeze)
           @started = false
@@ -38,11 +35,8 @@ module Plugins
       # Initializes a number game.
       # @param msg [Cinch::Message]
       def init(msg)
-        if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
-          return
-        end
-        msg.reply('Game starting! You have 5 tries! Submit an answer by using' \
-                  ' $game guess followed by a number!'.freeze)
+        return if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
+        msg.reply('Game starting! You have 5 tries! Submit an answer by using $game guess followed by a number!'.freeze)
         @started = true
         @random_number = rand(100)
         @tries = 0
@@ -54,23 +48,19 @@ module Plugins
       # @param msg [Cinch::Message]
       # @param num [String] The number to guess.
       def guess(msg, num)
-        if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
-          return
-        end
+        return if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
         num = num.to_i
         if @started
           @tries += 1
           if @tries > 5
-            msg.reply('Sorry, you have tried the maximum number of times.' \
-                      "The random number was #{@random_number}")
+            msg.reply("Sorry, you have tried the maximum number of times. The random number was #{@random_number}")
             @started = false
             @tries = 0
             return
           end
 
           if @random_number == num
-            msg.reply("Correct! You win a shitty cookie! It took you #{@tries}" \
-                      ' tries!')
+            msg.reply("Correct! You win a shitty cookie! It took you #{@tries} tries!")
             @started = false
             @tries = 0
             return
@@ -100,12 +90,10 @@ module Plugins
             elsif num.between?(measures[0], @random_number + measures[0])
               msg.reply('You are fucking freezing!'.freeze)
             end
+          elsif diff < @previous_difference
+            msg.reply('You are warmer.'.freeze)
           else
-            if diff < @previous_difference
-              msg.reply('You are warmer.'.freeze)
-            else
-              msg.reply('You are colder.'.freeze)
-            end
+            msg.reply('You are colder.'.freeze)
           end
 
           @previous_difference = diff

@@ -11,9 +11,8 @@ module Plugins
 
         @message = nil
 
-        doc = 'Logs the user in, allowing for op-only commands. ' \
-              '1 arg: $login <password>'
-        Variables::NonConstants.add_command('login', doc)
+        DOC = 'Logs the user in, allowing for op-only commands. 1 arg: $login <password>'.freeze
+        Variables::NonConstants.add_command('login', DOC)
 
         # Checks whether the log in is valid, sets the message to the proper
         #   value, and actually logs the user in.
@@ -67,9 +66,7 @@ module Plugins
         # Attempts to log in.
         # @see check_valid
         def execute(msg, pass)
-          if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
-            return
-          end
+          return if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
           check_valid(msg.user.authname, pass)
           msg.reply(@message)
         end
@@ -80,15 +77,13 @@ module Plugins
 
         match(/logout/i)
 
-        doc = 'Logs the user out. No args.'
-        Variables::NonConstants.add_command('logout', doc)
+        DOC = 'Logs the user out. No args.'.freeze
+        Variables::NonConstants.add_command('logout', DOC)
 
         # Logs the user out.
         # @param msg [Cinch::Message]
         def execute(msg)
-          if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
-            return
-          end
+          return if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
           authedusers = Variables::NonConstants.get_authenticated_users
           if authedusers.include? msg.user.authname
             Variables::NonConstants.deauthenticate_user(msg.user.authname)
@@ -104,17 +99,14 @@ module Plugins
 
         match(/setpass (.+)/i)
 
-        doc = 'Sets the login password. Owner-only command. ' \
-                      '1 arg: $setpass <new password>'
-        Variables::NonConstants.add_command('setpass', doc)
+        DOC = 'Sets the login password. Owner-only command. 1 arg: $setpass <new password>'.freeze
+        Variables::NonConstants.add_command('setpass', DOC)
 
         # Sets a new password for users to log in with.
         # @param msg [Cinch::Message]
         # @param new_pass [String] The new password.
         def execute(msg, new_pass)
-          if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
-            return
-          end
+          return if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
           if msg.user.authname == Variables::Constants::OWNER
             if new_pass == Variables::NonConstants.get_authentication_password
               msg.reply('That is already the password.'.freeze)

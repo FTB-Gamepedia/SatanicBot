@@ -18,27 +18,25 @@ module Plugins
       match(/motivate$/i, method: :motivate_you)
       match(/motivate (.+)/i, method: :motivate_else)
 
-      word_doc = 'Outputs a random word. No args.'
-      sentence_doc = 'Outputs a random sentence. No args.'
-      quote_doc = 'Outputs a random quote. No args.'
-      num_doc = 'Outputs a random number. 1 optional arg: $randnum <max>, ' \
-                'when not set 100 will be used as the maximum.'
-      motivate_doc = 'Motivates you or the user provided in the first arg. ' \
+      WORD_DOC = 'Outputs a random word. No args.'.freeze
+      SENTENCE_DOC = 'Outputs a random sentence. No args.'.freeze
+      QUOTE_DOC = 'Outputs a random quote. No args.'.freeze
+      NUM_DOC = 'Outputs a random number. 1 optional arg: $randnum <max>, ' \
+                'when not set 100 will be used as the maximum.'.freeze
+      MOTIVATE_DOC = 'Motivates you or the user provided in the first arg. ' \
                      'If the user in the first arg is not in the channel, ' \
-                     'I will motivate you instead <3'
-      Variables::NonConstants.add_command('randword', word_doc)
-      Variables::NonConstants.add_command('randsentence', sentence_doc)
-      Variables::NonConstants.add_command('randquote', quote_doc)
-      Variables::NonConstants.add_command('randnum', num_doc)
-      Variables::NonConstants.add_command('motivate', motivate_doc)
+                     'I will motivate you instead <3'.freeze
+      Variables::NonConstants.add_command('randword', WORD_DOC)
+      Variables::NonConstants.add_command('randsentence', SENTENCE_DOC)
+      Variables::NonConstants.add_command('randquote', QUOTE_DOC)
+      Variables::NonConstants.add_command('randnum', NUM_DOC)
+      Variables::NonConstants.add_command('motivate', MOTIVATE_DOC)
 
       # Gets a random word that has not been said in the channel within the past
       #   5 calls.
       # @param msg [Cinch::Message]
       def random_word(msg)
-        if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
-          return
-        end
+        return if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
         word = LiterateRandomizer.word
         @last_words = [] if @last_words.nil?
         word = LiterateRandomizer.word while @last_words.include?(word)
@@ -50,13 +48,10 @@ module Plugins
       #   past 5 calls.
       # @param msg [Cinch::Message]
       def random_sentence(msg)
-        if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
-          return
-        end
+        return if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
         sentence = LiterateRandomizer.sentence
         @last_sentences = [] if @last_sentences.nil?
-        sentence = LiterateRandomizer.sentence \
-          while @last_sentences.include?(sentence)
+        sentence = LiterateRandomizer.sentence while @last_sentences.include?(sentence)
         @last_sentences.prepend_capped(sentence, 5)
         msg.reply(sentence)
       end
@@ -65,15 +60,11 @@ module Plugins
       #   past 5 calls.
       # @param msg [Cinch::Message]
       def random_quote(msg)
-        if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
-          return
-        end
+        return if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
         quotes = Variables::NonConstants.get_quotes(false)
         @last_quotes = [] if @last_quotes.nil?
         quote = ''
-        while @last_quotes.include?(quote)
-          quote = quotes.sample
-        end
+        quote = quotes.sample while @last_quotes.include?(quote)
         @last_quotes.prepend_capped(quote, 5)
         msg.reply(quote)
       end
@@ -82,9 +73,7 @@ module Plugins
       #   channel within the past 5 calls.
       # @param msg [Cinch::Message]
       def random_number(msg)
-        if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
-          return
-        end
+        return if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
         random_number_max(msg, 100)
       end
 
@@ -93,9 +82,7 @@ module Plugins
       # @param msg [Cinch::Message]
       # @param maximum [String] The integer cap.
       def random_number_max(msg, maximum)
-        if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
-          return
-        end
+        return if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
         number = rand(maximum.to_i)
         @last_numbers = [] if @last_numbers.nil?
         number = rand(maximum.to_i) while @last_numbers.include?(number)
@@ -107,9 +94,7 @@ module Plugins
       # Gets a random motivational statement for the user who used the command.
       # @param msg [Cinch::Message]
       def motivate_you(msg)
-        if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
-          return
-        end
+        return if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
         motivate_else(msg, msg.user.nick)
       end
 
@@ -117,9 +102,7 @@ module Plugins
       # @param msg [Cinch::Message]
       # @param user [String] The username to motivate.
       def motivate_else(msg, user)
-        if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
-          return
-        end
+        return if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
         if !msg.channel? || msg.channel.has_user?(user)
           line = StringUtility.random_line(Variables::Constants::MOTIVATE_PATH)
           @last_motivation = [] if @last_motivation.nil?

@@ -5,21 +5,19 @@ module Plugins
     class GetAbbreviation
       include Cinch::Plugin
 
-      PAGE = 'Module:Mods/list'.freeze
-
       match(/getabbrv (.+)/)
 
-      doc = 'Gets either the abbreviation for the given mod, or the mod ' \
-            'for the given abbreviation. 1 arg: $getabbrv <thing>'
-      Variables::NonConstants.add_command('getabbrv', doc)
+      DOC = 'Gets either the abbreviation for the given mod, or the mod for the given abbreviation. ' \
+            '1 arg: $getabbrv <thing>'.freeze
+      Variables::NonConstants.add_command('getabbrv', DOC)
+
+      PAGE = 'Module:Mods/list'.freeze
 
       # Gets either the abbreviation of a mod, or the mod using an abbreviation.
       # @param msg [Cinch::Message]
       # @param thing [String] The abbreviation OR mod.
       def execute(msg, thing)
-        if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
-          return
-        end
+        return if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
         butt = LittleHelper.init_wiki
         module_text = butt.get_text(PAGE)
         thing.gsub!(/'/) { "\\'" }

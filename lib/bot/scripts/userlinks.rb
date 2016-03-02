@@ -11,8 +11,7 @@ def edit(old, new)
       text = text.gsub(/\{\{[Uu]\|#{old}/, "{{U|#{new}")
       text = text.gsub(/\[\[[Uu]ser\:#{old}/, "[[User:#{new}")
       text = text.gsub(/\[\[[Uu]ser talk\:#{old}/, "[[User talk:#{new}")
-      text = text.gsub(/[Ss]pecial\:Contributions\/#{old}/,
-                       "Special:Contributions/#{new}")
+      text = text.gsub(/[Ss]pecial\:Contributions\/#{old}/, "Special:Contributions/#{new}")
       @mw.edit(i, text, 'Fixing user links.', true)
       puts "#{i} has been edited.\n"
     end
@@ -37,11 +36,8 @@ if num.is_a? Numeric
     edit(name, new_name)
     initial += 1
   end
-  puts 'Successfully completed changing username links provided by user.' \
-       ' Exiting with exit code 0.'
+  puts 'Successfully completed changing username links provided by user. Exiting with exit code 0.'
 else
-  puts 'SEVERE: NUMBER OF USERNAMES PROVIDED IS NOT A VALID NUMBER.' \
-       ' EXITING WITH EXIT CODE 1'
-  exit 1
+  raise ArgumentError
 end
 exit 0

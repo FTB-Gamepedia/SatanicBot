@@ -10,16 +10,14 @@ module Plugins
         match(/help$/i, method: :help)
         match(/help (.+)/i, method: :command)
 
-        doc = 'Gets basic usage information on the bot. 1 optional ' \
-                     'arg: $help <command> to get info on a command.'
-        Variables::NonConstants.add_command('help', doc)
+        DOC = 'Gets basic usage information on the bot. ' \
+              '1 optional arg: $help <command> to get info on a command.'.freeze
+        Variables::NonConstants.add_command('help', DOC)
 
         # States the bot's command prefix character, and all of its commands.
         # @param msg [Cinch::Message]
         def help(msg)
-          if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
-            return
-          end
+          return if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
           command_names = Variables::NonConstants.get_commands.keys.join(', ').freeze
           msg.reply('My activation char is $.'.freeze)
           msg.reply("Listing commands... #{command_names}".freeze)
@@ -43,17 +41,15 @@ module Plugins
 
         match(/src/i)
 
-        doc = "Outputs my creator's name and my repository."
-        Variables::NonConstants.add_command('src', doc)
+        DOC = "Outputs my creator's name and my repository.".freeze
+        Variables::NonConstants.add_command('src', DOC)
 
         # States the creator of the bot, as well as the source code repository.
         # @param msg [Cinch::Message]
         def execute(msg)
-          if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
-            return
-          end
+          return if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
           msg.reply('This bot was created by SatanicSanta, or Eli Foster: ' \
-                    'https://github.com/ftb-gamepedia/SatanicBot')
+                    'https://github.com/ftb-gamepedia/SatanicBot'.freeze)
         end
       end
     end

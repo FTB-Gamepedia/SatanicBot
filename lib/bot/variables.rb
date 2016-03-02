@@ -25,16 +25,18 @@ module Variables
     PASTEE_KEY = ENV['PASTEE_API_KEY'].freeze
     CLEVER_USER = ENV['CLEVERBOT_API_USER'].freeze
     CLEVER_KEY = ENV['CLEVERBOT_API_KEY'].freeze
-    ISSUE_TRACKING = {}
     DISABLED_PLUGINS = ENV['DISABLED_PLUGINS'].split(',')
     IGNORED_USERS = ENV['IGNORED_USERS']
     OWNER = ENV['OWNER']
 
+    # rubocop:disable Style/MutableConstant
+    ISSUE_TRACKING = {}
     githubs = ENV['GITHUB'].split('|')
     githubs.each do |i|
       ary = i.split(',')
       ISSUE_TRACKING[ary[0]] = ary[1]
     end
+    # rubocop:enable Style/MutableConstant
 
     ISSUE_TRACKING.freeze
 
@@ -49,11 +51,12 @@ module Variables
   end
 
   module NonConstants
-    extend self
     @authpass = ENV['DEFAULT_AUTH_PASS']
     @authedusers = []
     @commands = {}
     @quotes = []
+
+    module_function
 
     # Gets the current quote array, or refreshes it.
     # @param refresh [Boolean] Whether to refresh the array. Will automatically refresh if it has not been initialized.

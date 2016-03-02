@@ -7,10 +7,9 @@ module Plugins
 
       match(/changecat (.+) \| (.+) -> (.+)/)
 
-      doc = 'Changes a category in a page to a different one. 3 args: ' \
-            '$changecat <page> | <old> -> <new> All separation characters ' \
-            'are required.'
-      Variables::NonConstants.add_command('changecat', doc)
+      DOC = 'Changes a category in a page to a different one. 3 args: $changecat <page> | <old> -> <new> ' \
+            'All separation characters are required.'.freeze
+      Variables::NonConstants.add_command('changecat', DOC)
 
       # Changes any category on any page.
       # @param msg [Cinch::Message]
@@ -18,9 +17,7 @@ module Plugins
       # @param old_cat [String] The old category needed to be changed.
       # @param new_cat [String] What to change the category to.
       def execute(msg, page, old_cat, new_cat)
-        if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
-          return
-        end
+        return if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
         authedusers = Variables::NonConstants.get_authenticated_users
         old_cat = "Category:#{old_cat}" if /^Category:/ !~ old_cat
         new_cat = "Category:#{new_cat}" if /^Category:/ !~ new_cat

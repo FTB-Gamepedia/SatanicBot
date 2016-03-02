@@ -13,10 +13,10 @@ module Plugins
     timer(60, method: :check_time)
 
     TIME_FORMAT = '%H:%M:%S'.freeze
-    LOG_FORMAT = "[%{time}] <%{nick}> %{msg}\n"
-    ACTION_FORMAT = "[%{time}] %{nick} %{action}\n"
-    NOTICE_FORMAT = "[%{time}] *%{nick}* %{notice}\n"
-    FILE_FORMAT = "#{Variables::Constants::PWD}/logs/%{channel}-%{year}-%{month}-%{day}.log"
+    LOG_FORMAT = "[%{time}] <%{nick}> %{msg}\n".freeze
+    ACTION_FORMAT = "[%{time}] %{nick} %{action}\n".freeze
+    NOTICE_FORMAT = "[%{time}] *%{nick}* %{notice}\n".freeze
+    FILE_FORMAT = "#{Variables::Constants::PWD}/logs/%{channel}-%{year}-%{month}-%{day}.log".freeze
 
     # Prepares for logging. Creates all the format strings. Creates/opens all
     #   the channel files. User files will be created when necessary. Unsure
