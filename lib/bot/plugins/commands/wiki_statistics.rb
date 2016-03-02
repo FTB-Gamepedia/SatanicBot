@@ -14,7 +14,7 @@ module Plugins
 
       DOC = 'Gives wiki stats. 1 optionl arg: $stats <type>, where type is ' \
             "'pages', 'articles', 'edits', 'images', 'users', 'admins', or 'activeusers'.".freeze
-      Variables::NonConstants.add_command('stats', doc)
+      Variables::NonConstants.add_command('stats', DOC)
 
       # Gets all statistics for the wiki, including number of pages, articles,
       #   edits, images, users, admins, and active users.
