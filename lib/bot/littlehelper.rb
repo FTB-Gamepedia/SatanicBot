@@ -84,7 +84,7 @@ module LittleHelper
     configure do |c|
       c.server = Variables::Constants::IRC_SERVER
       c.port = Variables::Constants::IRC_PORT
-      c.channels = ARGV[0] == '-d' ? Variables::Constants::IRC_DEV_CHANNELS : Variables::Constants::IRC_CHANNELS
+      c.channels = ARGV.include?('-d') ? Variables::Constants::IRC_DEV_CHANNELS : Variables::Constants::IRC_CHANNELS
       c.nicks = Variables::Constants::IRC_NICKNAMES
       c.user = Variables::Constants::IRC_USERNAME
       c.password = Variables::Constants::IRC_PASSWORD

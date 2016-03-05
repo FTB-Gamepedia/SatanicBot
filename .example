@@ -1,7 +1,7 @@
 IRC_SERVER: irc.esper.net
 IRC_PORT: 6667
-IRC_CHANNELS: #Channel1,Channel2
-IRC_DEV_CHANNELS: #DevChannel1,DevChannel2
+IRC_CHANNELS: "#Channel1,Channel2"
+IRC_DEV_CHANNELS: "#DevChannel1,DevChannel2"
 IRC_USERNAME: MyUsername
 IRC_PASSWORD: password
 IRC_REALNAME: MyUsername's Ugly Bot
@@ -20,7 +20,7 @@ TWITTER_ACCESS_SECRET: jeuhuthertoqpworj
 
 WUNDERGROUND_API_KEY: abcdefghijklmnop
 
-GITHUB: #TheSteamTank,esteemed-innovation/flaxbeards-steam-power|FTB-Wiki,ftb-gamepedia/ftb-wiki-issue-tracker
+GITHUB: "#TheSteamTank,esteemed-innovation/flaxbeards-steam-power|FTB-Wiki,ftb-gamepedia/ftb-wiki-issue-tracker"
 
 PASTEE_API_KEY: abcdefghijklmnop
 
