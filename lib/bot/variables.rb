@@ -42,9 +42,8 @@ module Variables
 
     VALID_PEOPLE = ENV['VALID_AUTHNAMES'].split(',').freeze
 
-    QUOTE_PATH = "#{PWD}/src/info/ircquotes.txt".freeze
-    MOTIVATE_PATH = "#{PWD}/src/info/motivate.txt".freeze
-    FORTUNE_PATH = "#{PWD}/src/info/8ball.txt".freeze
+    MOTIVATE_PATH = "#{PWD}/lib/bot/info/motivate.txt".freeze
+    FORTUNE_PATH = "#{PWD}/lib/bot/info/8ball.txt".freeze
 
     LOGGED_IN = 'You must be authenticated for this command. See $help login.'.freeze
     OWNER_ONLY = 'This command is for the owner only.'.freeze
