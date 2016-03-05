@@ -79,18 +79,20 @@ module LittleHelper
 
   plugins.freeze
 
+  DEV_MODE = ARGV.include?('-d')
+
   BOT = Cinch::Bot.new do
     # noinspection RubyResolve
     configure do |c|
       c.server = Variables::Constants::IRC_SERVER
       c.port = Variables::Constants::IRC_PORT
-      c.channels = ARGV.include?('-d') ? Variables::Constants::IRC_DEV_CHANNELS : Variables::Constants::IRC_CHANNELS
+      c.channels = DEV_MODE ? Variables::Constants::IRC_DEV_CHANNELS : Variables::Constants::IRC_CHANNELS
       c.nicks = Variables::Constants::IRC_NICKNAMES
       c.user = Variables::Constants::IRC_USERNAME
       c.password = Variables::Constants::IRC_PASSWORD
       c.realname = Variables::Constants::IRC_REALNAME
       c.plugins.plugins = plugins
-      c.plugins.prefix = /^\$/
+      c.plugins.prefix = DEV_MODE ? /^&/ : /^\$/
 
       CHANNELS = c.channels
     end
