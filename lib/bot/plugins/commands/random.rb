@@ -61,9 +61,9 @@ module Plugins
       # @param msg [Cinch::Message]
       def random_quote(msg)
         return if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
-        quotes = Variables::NonConstants.get_quotes(false)
+        quotes = Variables::NonConstants.get_quotes
+        quote = quotes.sample
         @last_quotes = [] if @last_quotes.nil?
-        quote = ''
         quote = quotes.sample while @last_quotes.include?(quote)
         @last_quotes.prepend_capped(quote, 5)
         msg.reply(quote)
