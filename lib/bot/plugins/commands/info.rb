@@ -19,7 +19,6 @@ module Plugins
         def help(msg)
           return if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
           command_names = Variables::NonConstants.get_commands.keys.join(', ').freeze
-          msg.reply('My activation char is $.'.freeze)
           msg.reply("Listing commands... #{command_names}".freeze)
         end
 
