@@ -5,6 +5,7 @@ require 'twitter'
 require 'weatheruby'
 require 'pastee'
 require 'cleverbot'
+require 'sequel'
 require_relative 'variables'
 require_rel 'plugins'
 
@@ -98,6 +99,16 @@ module LittleHelper
     end
   end
 
+  DB = Sequel.connect(ENV['DATABASE_URL'])
+  unless DB.table_exists?(:messages)
+    DB.create_table(:messages) do
+      primary_key :id
+      String :to
+      String :from
+      String :msg
+    end
+  end
+
   module_function
 
   # Initializes the MediaWiki::Butt instance. Logs back in if necessary.
@@ -148,5 +159,9 @@ module LittleHelper
   # @param user [String] The user who is quitting the bot.
   def quit(user)
     BOT.quit("I will be avenged, #{user}!")
+  end
+
+  def message_table
+    DB[:messages]
   end
 end
