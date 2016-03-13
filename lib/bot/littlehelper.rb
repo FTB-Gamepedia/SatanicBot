@@ -59,6 +59,9 @@ module LittleHelper
     Plugins::Commands::CleverBot,
     Plugins::Commands::RefreshQuotes,
     Plugins::Commands::UrbanDict,
+    Plugins::Commands::CheckMail,
+    Plugins::Commands::Tell,
+    Plugins::YouveGotMail,
     Plugins::Logger
   ]
 
