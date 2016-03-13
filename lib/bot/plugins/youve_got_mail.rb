@@ -2,6 +2,8 @@ require 'cinch'
 
 module Plugins
   module YouveGotMail
+    include Cinch::Plugin
+
     listen_to(:join)
 
     # @param msg [Cinch::Message]

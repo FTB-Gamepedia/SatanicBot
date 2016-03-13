@@ -7,6 +7,9 @@ module Plugins
 
       match(/checkmail/)
 
+      DOC = 'Checks the user mail and sends it to them *publicly*. No arguments.'.freeze
+      Variables::NonConstants.add_command('checkmail', DOC)
+
       # @param msg [Cinch::Message]
       def execute(msg)
         table = LittleHelper.message_table

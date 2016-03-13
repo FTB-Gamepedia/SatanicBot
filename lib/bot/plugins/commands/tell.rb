@@ -7,6 +7,9 @@ module Plugins
 
       match(/tell (.+): (.+)/)
 
+      DOC = 'Sends a message to a user that is not here. 2 args: $tell <to>: <message>'.freeze
+      Variables::NonConstants.add_command('tell', DOC)
+
       # @param msg [Cinch::Message] The actual IRC message.
       # @param to [String] Recipient
       # @param message [String] The message to send.
