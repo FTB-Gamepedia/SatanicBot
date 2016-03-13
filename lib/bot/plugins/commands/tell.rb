@@ -16,7 +16,7 @@ module Plugins
       def execute(msg, to, message)
         from = msg.user.authname
         if msg.channel.has_user?(to)
-          msg.reply("Hey #{to}! #{from} would like you to know that #{message}! Also, they can't read.")
+          msg.reply("Hey #{to}! #{from} would like you to know that \"#{message}\"! Also, they can't read.")
         else
           table = LittleHelper.message_table
           next_id = table.map(:id).max&.+(1) || 0
