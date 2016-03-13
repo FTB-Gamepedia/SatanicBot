@@ -1,7 +1,7 @@
 require 'cinch'
 
 module Plugins
-  module YouveGotMail
+  class YouveGotMail
     include Cinch::Plugin
 
     listen_to(:join)
