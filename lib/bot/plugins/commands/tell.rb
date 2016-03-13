@@ -20,7 +20,7 @@ module Plugins
         else
           table = LittleHelper.message_table
           next_id = table.map(:id).max&.+(1) || 0
-          table.insert(id: next_id, to: to, from: from, message: message)
+          table.insert(id: next_id, to: to, from: from, msg: message)
           msg.reply('Stored message for later.')
         end
       end
