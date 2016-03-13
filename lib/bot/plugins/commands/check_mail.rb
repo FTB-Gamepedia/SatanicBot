@@ -18,6 +18,11 @@ module Plugins
           their_messages << hash if hash[:to] == msg.user.authname || hash[:to] == msg.user.nick
         end
 
+        if their_messages.length == 0
+          msg.reply('You have no unread messages.')
+          return
+        end
+
         msg.reply("You have #{their_messages.length} unread messages. Reading...")
         deleted = 0
         their_messages.each do |hash|

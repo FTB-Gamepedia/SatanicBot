@@ -4,7 +4,7 @@ module Plugins
   class YouveGotMail
     include Cinch::Plugin
 
-    listen_to(:join)
+    listen_to(:join, method: :execute)
 
     # @param msg [Cinch::Message]
     def execute(msg)
