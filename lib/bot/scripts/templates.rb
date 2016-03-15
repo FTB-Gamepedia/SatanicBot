@@ -20,24 +20,21 @@ end
 
 puts "How many temlpate links would you like to change this session?\n"
 num = gets.chomp.to_i
-initial = 0
+raise ArgumentError unless num.is_a?(Numeric)
+
 @mw = MediaWiki::Butt.new(Variables::Constants::WIKI_URL)
 username = Variables::Constants::WIKI_USERNAME
 password = Variables::Constants::WIKI_PASSWORD
 @mw.login(username, password)
 
-if num.is_a? Numeric
-  while initial < num
-    puts "Which template would you like to change?\n"
-    template = gets.chomp
-    puts "What would you like to replace the template with?\n"
-    new_template = gets.chomp
-
-    edit(template, new_template)
-    initial += 1
-  end
-  puts 'Successfully completed changing template links provided by user. Exiting with exit code 0.'
-else
-  raise ArgumentError
+initial = 0
+while initial < num
+  puts "Which template would you like to change?\n"
+  template = gets.chomp
+  puts "What would you like to replace the template with?\n"
+  new_template = gets.chomp
+  raise SecurityError if template == new_template
+  edit(template, new_template)
+  initial += 1
 end
-exit 0
+puts 'Successfully completed changing template links provided by user.'

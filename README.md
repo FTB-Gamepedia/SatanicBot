@@ -1,5 +1,6 @@
 # SatanicBot
 [![Stories in Ready](https://badge.waffle.io/elifoster/SatanicBot.png?label=ready&title=Ready)](https://waffle.io/elifoster/SatanicBot)
+[![License](https://img.shields.io/:license-mit-blue.svg)]()
 
 SatanicBot is an IRC and FTB Wiki bot written in Ruby (formerly Perl 5). It utilizes custom Ruby Gems created by myself and others at the FTB Wiki, such as string-utility, fishbans, mediawiki-butt, and weatheruby, and Ruby gems by other awesome developers, such as sferik's twitter gem.
 
@@ -32,3 +33,10 @@ Then, you need to create the configuration file. Previously, this was a YAML fil
 Before running, you will need to run `bundle install` in order for all of the gems to install. This may take a while, as this has a wide range of dependencies.
 
 Once all of the Gems and correct Ruby version (2.3.0) are installed, it is ready to be run. If running simply `ruby run.rb` errors, use `bundle exec ruby run.rb`. If it still errors, report it at the issue tracker.
+
+## Contributing
+This project is open source under the MIT license. Contributions adhere to that license.
+
+* When contributing code, always run `rubocop -c .rubocop.yml` before committing. This will ensure it follows the project's code style.
+* Avoid committing directly to master, as always, and either fork or branch your major changes. Bug fixes, typos, etc. are fine to be pushed directly to master.
+* Always be detailed in your pull requests. Describe any design choices you had to make, as well as any limitations or problems the feature may have.

@@ -40,24 +40,17 @@ password = Variables::Constants::WIKI_PASSWORD
 @mw.login(username, password)
 puts "How many categories would you like to change this session?\n"
 num = gets.chomp.to_i
+raise ArgumentError unless num.is_a?(Numeric)
 initial = 0
 
-if num.is_a? Numeric
-  while initial < num
-    puts "Which category would you like to change?\n"
-    cat = gets.chomp
-    puts "What would you like to replace the category with?\n"
-    new_cat = gets.chomp
-    if cat != new_cat
-      change_pages("Category:#{cat}", "Category:#{new_cat}")
-      change_backlinks(cat, new_cat)
-      initial += 1
-    else
-      raise SecurityError
-    end
-  end
-  puts 'Successfully completed changing categories provided by user. Exiting with exit code 0.'
-else
-  raise ArgumentError
+while initial < num
+  puts "Which category would you like to change?\n"
+  cat = gets.chomp
+  puts "What would you like to replace the category with?\n"
+  new_cat = gets.chomp
+  raise SecurityError if cat == new_cat
+  change_pages("Category:#{cat}", "Category:#{new_cat}")
+  change_backlinks(cat, new_cat)
+  initial += 1
 end
-exit 0
+puts 'Successfully completed changing categories provided by user.'

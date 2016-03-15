@@ -20,24 +20,20 @@ end
 
 puts "How many username links would you like to change this session?\n"
 num = gets.chomp.to_i
-initial = 0
+raise ArgumentError unless num.is_a?(Numeric)
 @mw = MediaWiki::Butt.new(Variables::Constants::WIKI_URL)
 username = Variables::Constants::WIKI_USERNAME
 password = Variables::Constants::WIKI_PASSWORD
 @mw.login(username, password)
 
-if num.is_a? Numeric
-  while initial < num
-    puts "Which username would you like to change?\n"
-    name = gets.chomp
-    puts "What would you like to replace the username with?\n"
-    new_name = gets.chomp
-
-    edit(name, new_name)
-    initial += 1
-  end
-  puts 'Successfully completed changing username links provided by user. Exiting with exit code 0.'
-else
-  raise ArgumentError
+initial = 0
+while initial < num
+  puts "Which username would you like to change?\n"
+  name = gets.chomp
+  puts "What would you like to replace the username with?\n"
+  new_name = gets.chomp
+  raise SecurityError if name == new_name
+  edit(name, new_name)
+  initial += 1
 end
-exit 0
+puts 'Successfully completed changing username links provided by user.'
