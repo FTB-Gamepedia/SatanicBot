@@ -65,6 +65,14 @@ module LittleHelper
     Plugins::Logger
   ]
 
+  db = ENV.include?('DATABASE_URL')
+
+  if db
+    plugins << Plugins::Commands::CheckMail
+    plugins << Plugins::Commands::Tell
+    plugins << Plugins::YouveGotMail
+  end
+
   unless Variables::Constants::DISABLED_PLUGINS.nil?
     Variables::Constants::DISABLED_PLUGINS.each do |p|
       constants = p.split('::')
@@ -102,13 +110,15 @@ module LittleHelper
     end
   end
 
-  DB = Sequel.connect(ENV['DATABASE_URL'])
-  unless DB.table_exists?(:messages)
-    DB.create_table(:messages) do
-      primary_key :id
-      String :to
-      String :from
-      String :msg
+  if db
+    DB = Sequel.connect(ENV['DATABASE_URL'])
+    unless DB.table_exists?(:messages)
+      DB.create_table(:messages) do
+        primary_key :id
+        String :to
+        String :from
+        String :msg
+      end
     end
   end
 
@@ -165,6 +175,8 @@ module LittleHelper
   end
 
   def message_table
-    DB[:messages]
+    if db
+      DB[:messages]
+    end
   end
 end
