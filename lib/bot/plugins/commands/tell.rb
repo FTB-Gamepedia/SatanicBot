@@ -19,8 +19,7 @@ module Plugins
           msg.reply("Hey #{to}! #{from} would like you to know that \"#{message}\"! Also, they can't read.")
         else
           table = LittleHelper.message_table
-          next_id = table.map(:id).max&.+(1) || 0
-          table.insert(id: next_id, to: to, from: from, msg: message)
+          table.insert(to: to, from: from, msg: message)
           msg.reply('Stored message for later.')
         end
       end

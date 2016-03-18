@@ -9,8 +9,8 @@ module Plugins
     # @param msg [Cinch::Message]
     def execute(msg)
       table = LittleHelper.message_table
-      to_column = table.map(:to)
-      if to_column.include?(msg.user.nick) || to_column.include?(msg.user.authname)
+      user = msg.user
+      if table.where(to: [user.nick, user.authname]).count > 0
         msg.channel.send("#{msg.user.nick}: You've got mail! Use the checkmail command to check your mail!")
       end
     end
