@@ -6,7 +6,7 @@ module Plugins
       include Cinch::Plugin
 
       # TODO: Figure out a way to call LittleHelper::BOT.nick here for modularity.
-      match(/LittleHelper: (.+)/i, use_prefix: false)
+      match(/^LittleHelper: (.+)/i, use_prefix: false)
 
       DOC = 'Talk with me by mentioning me as normal (LittleHelper: <message>)'.freeze
       Variables::NonConstants.add_command('cleverbot', DOC)
