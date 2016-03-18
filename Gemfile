@@ -16,5 +16,7 @@ gem('isgd', '>= 1.0.1')
 gem('cleverbot_io', '>= 1.0.0')
 gem('dotenv', '>= 2.1.0')
 gem('urbandict', '>= 1.0.0')
+gem('sequel', '>= 4.31.0')
+gem('pg', '>= 0.18.4')
 
 ruby '2.3.0'

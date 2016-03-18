@@ -5,6 +5,7 @@ require 'twitter'
 require 'weatheruby'
 require 'pastee'
 require 'cleverbot'
+require 'sequel'
 require_relative 'variables'
 require_rel 'plugins'
 
@@ -58,6 +59,9 @@ module LittleHelper
     Plugins::Commands::CleverBot,
     Plugins::Commands::RefreshQuotes,
     Plugins::Commands::UrbanDict,
+    Plugins::Commands::CheckMail,
+    Plugins::Commands::Tell,
+    Plugins::YouveGotMail,
     Plugins::Logger
   ]
 
@@ -95,6 +99,16 @@ module LittleHelper
       c.plugins.prefix = DEV_MODE ? /^&/ : /^\$/
 
       CHANNELS = c.channels
+    end
+  end
+
+  DB = Sequel.connect(ENV['DATABASE_URL'])
+  unless DB.table_exists?(:messages)
+    DB.create_table(:messages) do
+      primary_key :id
+      String :to
+      String :from
+      String :msg
     end
   end
 
@@ -148,5 +162,9 @@ module LittleHelper
   # @param user [String] The user who is quitting the bot.
   def quit(user)
     BOT.quit("I will be avenged, #{user}!")
+  end
+
+  def message_table
+    DB[:messages]
   end
 end
