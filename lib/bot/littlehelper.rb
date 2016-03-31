@@ -65,9 +65,9 @@ module LittleHelper
     Plugins::Logger
   ]
 
-  db = ENV.include?('DATABASE_URL')
+  HAS_DB = ENV.include?('DATABASE_URL')
 
-  if db
+  if HAS_DB
     plugins << Plugins::Commands::CheckMail
     plugins << Plugins::Commands::Tell
     plugins << Plugins::YouveGotMail
@@ -110,7 +110,7 @@ module LittleHelper
     end
   end
 
-  if db
+  if HAS_DB
     DB = Sequel.connect(ENV['DATABASE_URL'])
     unless DB.table_exists?(:messages)
       DB.create_table(:messages) do
@@ -174,9 +174,9 @@ module LittleHelper
     BOT.quit("I will be avenged, #{user}!")
   end
 
+  # Returns the :messages table from the database.
+  # @return [Sequel::Dataset] The message dataset.
   def message_table
-    if db
-      DB[:messages]
-    end
+    DB[:messages] if HAS_DB
   end
 end
