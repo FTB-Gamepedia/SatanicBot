@@ -35,13 +35,13 @@ module Plugins
         message_start =
           if you
             'You have'.freeze
-          elsif username.downcase == 'satanicbot'
+          elsif username.casecmp('SatanicBot').zero?
             'I have'.freeze
-          elsif username.downcase == 'thesatanicsanta'
+          elsif username.casecmp('TheSatanicSanta').zero?
             'The second hottest babe in the channel has'.freeze
-          elsif username.downcase == 'retep998'
+          elsif username.casecmp('Retep998').zero?
             'The hottest babe in the channel has'.freeze
-          elsif username.downcase == 'ponybutt'
+          elsif username.casecmp('PonyButt').zero?
             'Some stupid bitch has'.freeze
           else
             "#{username} has"
