@@ -5,9 +5,9 @@ module Plugins
     class Tell
       include Cinch::Plugin
 
-      match(/tell (.+): (.+)/)
+      match(/tell ([a-zA-Z][a-zA-Z0-9\^\-_\|\[\]]+) (.+)/)
 
-      DOC = 'Sends a message to a user that is not here. 2 args: $tell <to>: <message>'.freeze
+      DOC = 'Sends a message to a user that is not here. 2 args: $tell <to> <message>'.freeze
       Variables::NonConstants.add_command('tell', DOC)
 
       # @param msg [Cinch::Message] The actual IRC message.
