@@ -59,6 +59,7 @@ module LittleHelper
     Plugins::Commands::CleverBot,
     Plugins::Commands::RefreshQuotes,
     Plugins::Commands::UrbanDict,
+    Plugins::Commands::Drama,
     Plugins::Logger
   ]
 
