@@ -60,6 +60,7 @@ module LittleHelper
     Plugins::Commands::RefreshQuotes,
     Plugins::Commands::UrbanDict,
     Plugins::Commands::Drama,
+    Plugins::Commands::MojangStatus,
     Plugins::Logger
   ]
 
