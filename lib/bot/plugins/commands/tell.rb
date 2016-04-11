@@ -14,7 +14,9 @@ module Plugins
       # @param to [String] Recipient
       # @param message [String] The message to send.
       def execute(msg, to, message)
-        from = msg.user.authname
+        # Check both because the authname might be empty but not nil.
+        authed = msg.user.authed? && !msg.user.authname.empty?
+        from = authed ? msg.user.authname : msg.user.nick
         if msg.channel.has_user?(to)
           msg.reply("Hey #{to}! #{from} would like you to know that \"#{message}\"! Also, they can't read.")
         else
