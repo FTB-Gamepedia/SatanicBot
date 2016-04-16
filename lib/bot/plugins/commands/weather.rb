@@ -76,10 +76,9 @@ module Plugins
       # Geolocates the IP to a given location, in City, Region syntax.
       # @param ip [String] The IP to geolocate
       def get_location_by_ip(ip)
-        region_hash = SimpleGeolocator.region(ip)
-        region = region_hash[:code]
-        city = SimpleGeolocator.city(ip)
-        "#{city}, #{region}"
+        region = SimpleGeolocator.get(ip).region
+        city = SimpleGeolocator.get(ip).city
+        "#{city}, #{region.code}"
       end
 
       # Gets the weather conditions for the user's location by their IP.
