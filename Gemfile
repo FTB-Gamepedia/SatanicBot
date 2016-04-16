@@ -19,6 +19,6 @@ gem('urbandict', '~> 1.0')
 gem('sequel', '~> 4.33')
 gem('pg', '~> 0.18')
 gem('curb', '~> 0.9')
-gem('mojang', '~> 1.0')
+gem('mojang', '>= 1.0.1')
 
 ruby '2.3.0'
