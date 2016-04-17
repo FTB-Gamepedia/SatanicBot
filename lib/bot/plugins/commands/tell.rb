@@ -21,7 +21,7 @@ module Plugins
           msg.reply("Hey #{to}! #{from} would like you to know that \"#{message}\"! Also, they can't read.")
         else
           table = LittleHelper.message_table
-          table.insert(to: to, from: from, msg: message)
+          table.insert(to: to.downcase, from: from, msg: message)
           msg.reply('Stored message for later.')
         end
       end

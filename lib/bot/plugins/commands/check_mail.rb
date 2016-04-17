@@ -14,7 +14,7 @@ module Plugins
       def execute(msg)
         table = LittleHelper.message_table
         user = msg.user
-        their_messages = table.where(to: [user.nick, user.authname])
+        their_messages = table.where(to: [user.nick.downcase, user.authname.downcase])
         count = their_messages.count
 
         if count < 1
@@ -25,6 +25,7 @@ module Plugins
         msg.reply("You have #{count} unread messages. Reading...")
         deleted = 0
         their_messages.each do |hash|
+          # Use msg.user.nick instead of hash[:to] because it is lowercase, but nick has proper formatting/casing.
           msg.reply("#{msg.user.nick}: #{hash[:from]} says \"#{hash[:msg]}\"")
           deleted += table.where(id: hash[:id]).delete
         end
