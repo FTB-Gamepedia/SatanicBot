@@ -26,7 +26,8 @@ module Variables
     CLEVER_USER = ENV['CLEVERBOT_API_USER'].freeze
     CLEVER_KEY = ENV['CLEVERBOT_API_KEY'].freeze
     DISABLED_PLUGINS = ENV['DISABLED_PLUGINS'].split(',')
-    IGNORED_USERS = ENV['IGNORED_USERS']
+    IGNORED_USERS = ENV['IGNORED_USERS'].split(',') + IRC_NICKNAMES
+    IGNORED_USERS.freeze
     OWNER = ENV['OWNER']
 
     # rubocop:disable Style/MutableConstant
