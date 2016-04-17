@@ -18,7 +18,7 @@ module Plugins
         authed = msg.user.authed? && !msg.user.authname.empty?
         from = authed ? msg.user.authname : msg.user.nick
         if msg.channel.has_user?(to)
-          msg.reply("Hey #{to}! #{from} would like you to know that \"#{message}\"! Also, they can't read.")
+          msg.reply("Hey #{to}! #{from} would like you to know that \"#{message}\"!")
         else
           table = LittleHelper.message_table
           table.insert(to: to.downcase, from: from, msg: message)
