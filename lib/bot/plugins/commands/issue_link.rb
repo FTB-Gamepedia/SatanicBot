@@ -21,8 +21,35 @@ module Plugins
         if labels.empty?
           "\"#{title}\" ##{number}, is #{state}."
         else
-          "\"#{title}\" ##{number}, is #{state}, with the " \
-          "following labels: #{labels.join(', ')}"
+          "\"#{title}\" ##{number}, is #{state}, with the following labels: #{labels.join(', ')}"
+        end
+      end
+
+      # Replies to the message with the formatted full issue message.
+      # @param msg [Cinch::Message]
+      # @param repo [String] The full repository.
+      # @param issue_num [Integer] The issue number.
+      def reply(msg, repo, issue_num)
+        begin
+          issue = Octokit.issue(repo, issue_num)
+          state = issue[:state]
+          title = issue[:title]
+          labels = []
+          issue[:labels].each do |l|
+            labels << l[:name]
+          end
+          milestone = issue&.[](:milestone)&.[](:title)
+          message = "\"#{title}\" ##{issue_num}, is #{state}"
+          unless labels.empty?
+            message << ", with the following labels: #{labels.join(', ')}"
+          end
+          unless milestone.nil?
+            message << ", on the #{milestone} milestone"
+          end
+          message << '.'
+          msg.reply(message)
+        rescue Octokit::NotFound
+          msg.reply("Issue ##{issue_num} cannot be found.")
         end
       end
 
@@ -67,18 +94,7 @@ module Plugins
 
         return unless channel_valid
         repo = Variables::Constants::ISSUE_TRACKING[msg.channel]
-        begin
-          issue = Octokit.issue(repo, issue_num)
-          state = issue['state']
-          title = issue['title']
-          labels = []
-          issue['labels'].each do |l|
-            labels << l['name']
-          end
-          msg.reply(form_message(state, title, labels, issue_num))
-        rescue Octokit::NotFound
-          msg.reply("Issue ##{issue_num} cannot be found.")
-        end
+        reply(msg, repo, issue_num)
       end
 
       # Gets some information for an issue stated in the channel using user/repo
@@ -88,14 +104,7 @@ module Plugins
       # @param repo [String] The repository's name.
       # @param num [String] The issue number.
       def repo_syntax(msg, user, repo, num)
-        issue = Octokit.issue("#{user}/#{repo}", num)
-        labels = []
-        issue['labels'].each do |label|
-          labels << label['name']
-        end
-        msg.reply(form_message(issue['state'], issue['title'], labels, num))
-      rescue Octokit::NotFound
-        msg.reply("Issue ##{issue} cannot be found.")
+        reply(msg, "#{user}/#{repo}", num)
       end
     end
   end
