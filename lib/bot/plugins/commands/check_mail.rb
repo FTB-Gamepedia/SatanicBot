@@ -26,7 +26,7 @@ module Plugins
         deleted = 0
         their_messages.each do |hash|
           # Use msg.user.nick instead of hash[:to] because it is lowercase, but nick has proper formatting/casing.
-          msg.reply("#{msg.user.nick}: #{hash[:from]} says \"#{hash[:msg]}\"")
+          msg.reply("#{user.nick}: #{hash[:from]} says \"#{hash[:msg]}\"")
           deleted += table.where(id: hash[:id]).delete
         end
         msg.reply("Finished reading unread messages. Deleted #{deleted} message#{deleted == 1 ? '' : 's'}.")

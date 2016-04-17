@@ -10,8 +10,8 @@ module Plugins
     def execute(msg)
       table = LittleHelper.message_table
       user = msg.user
-      if table.where(to: [user.nick, user.authname]).count > 0
-        msg.channel.send("#{msg.user.nick}: You've got mail! Use the checkmail command to check your mail!")
+      if table.where(to: [user.nick.downcase, user.authname.downcase]).count > 0
+        msg.channel.send("#{user.nick}: You've got mail! Use the checkmail command to check your mail!")
       end
     end
   end
