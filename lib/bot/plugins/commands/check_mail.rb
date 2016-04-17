@@ -28,7 +28,7 @@ module Plugins
           msg.reply("#{msg.user.nick}: #{hash[:from]} says \"#{hash[:msg]}\"")
           deleted += table.where(id: hash[:id]).delete
         end
-        msg.reply("Finished reading unread messages. Deleted #{deleted} messages.")
+        msg.reply("Finished reading unread messages. Deleted #{deleted} message#{deleted == 1 ? '' : 's'}.")
       end
     end
   end
