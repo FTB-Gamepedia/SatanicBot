@@ -14,7 +14,7 @@ module Plugins
       def execute(msg)
         table = LittleHelper.message_table
         user = msg.user
-        their_messages = table.where(to: [user.nick.downcase, user.authname.downcase])
+        their_messages = table.where(to: [user.nick.downcase, user.authname&.downcase])
         count = their_messages.count
 
         if count < 1
