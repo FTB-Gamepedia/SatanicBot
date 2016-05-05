@@ -61,6 +61,7 @@ module LittleHelper
     Plugins::Commands::UrbanDict,
     Plugins::Commands::Drama,
     Plugins::Commands::MojangStatus,
+    Plugins::Commands::DeleteTiles,
     Plugins::Logger
   ]
 
