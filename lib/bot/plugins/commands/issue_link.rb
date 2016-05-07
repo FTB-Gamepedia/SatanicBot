@@ -1,7 +1,6 @@
 require 'cinch'
 require 'octokit'
 require 'isgd'
-require_relative '../../variables'
 
 module Plugins
   module Commands

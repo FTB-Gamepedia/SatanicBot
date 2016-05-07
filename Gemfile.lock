@@ -80,7 +80,7 @@ GEM
     unf_ext (0.0.7.2)
     urbandict (1.0.2)
       httpclient (~> 2.8)
-    weatheruby (0.5.3)
+    weatheruby (0.6.0)
       httpclient (~> 2.8)
       rainbow (~> 2.1)
       string-utility (~> 2.7)
@@ -108,7 +108,7 @@ DEPENDENCIES
   string-utility (~> 2.7)
   twitter (~> 5.16)
   urbandict (~> 1.0)
-  weatheruby (~> 0.5)
+  weatheruby (~> 0.6)
 
 BUNDLED WITH
    1.11.2

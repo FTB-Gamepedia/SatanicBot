@@ -19,7 +19,7 @@ module LittleHelper
     c.access_token_secret = Variables::Constants::TWITTER_ACCESS_SECRET
   end
 
-  WEATHER = Weatheruby.new(Variables::Constants::WUNDERGROUND_KEY, 'EN', true, true, true)
+  WEATHER = Weatheruby.new(Variables::Constants::WUNDERGROUND_KEY, 'EN', true, true)
 
   PASTEE = Pastee.new(Variables::Constants::PASTEE_KEY)
 

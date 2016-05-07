@@ -1,4 +1,5 @@
 require 'simple_geolocator'
+require 'weatheruby'
 
 module Plugins
   module Commands
@@ -25,50 +26,40 @@ module Plugins
       def weather(msg, location)
         return if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
         weather = LittleHelper.init_weather
-        conditions = weather.conditions(location)
-        failed = false
-
-        if conditions.is_a?(String)
-          failed = true
-          message = "Error getting conditions: #{conditions}"
+        begin
+          conditions = weather.conditions(location)
+        rescue Weatheruby::WeatherError => e
+          msg.reply(e.message)
+          return
         end
 
         alerts = weather.alerts(location)
 
-        if alerts.is_a?(String)
-          failed = true
-          message = message.nil? ? "Error getting alerts: #{alerts}" : " | Error getting alerts: #{alerts}"
-        end
-
         now = Time.now
         precip_chance = weather.chance_of_precipitation(now, now, location)
 
-        unless failed
-          name = conditions[:full_name]
-          condition = conditions[:weather]
-          temp = conditions[:formatted_temperature]
-          feel = conditions[:formatted_feelslike]
-          humidity = "#{conditions[:humidity]}%"
-          date = conditions[:updated]
-          message = "#{name}: #{condition} | "
+        name = conditions[:full_name]
+        condition = conditions[:weather]
+        temp = conditions[:formatted_temperature]
+        feel = conditions[:formatted_feelslike]
+        humidity = "#{conditions[:humidity]}%"
+        date = conditions[:updated]
+        message = "#{name}: #{condition} | "
 
-          # Appending `message` based on temp_feel in any other way would make for terrible styling.
-          # rubocop:disable Style/ConditionalAssignment
-          if temp == feel
-            message << "#{temp}, and feels like it!"
-          else
-            message << "#{temp}, but feels like #{feel}"
-          end
-          # rubocop:enable Style/ConditionalAssignment
-
-          message << " | Humidity: #{humidity} | #{precip_chance}% chance of precipitation | #{date}"
+        # Appending `message` based on temp_feel in any other way would make for terrible styling.
+        # rubocop:disable Style/ConditionalAssignment
+        if temp == feel
+          message << "#{temp}, and feels like it!"
+        else
+          message << "#{temp}, but feels like #{feel}"
         end
+        # rubocop:enable Style/ConditionalAssignment
 
-        unless alerts.nil?
-          alerts.each do |a|
-            desc = Cinch::Formatting.format(:red, a[:description])
-            message << " | #{desc} until #{a[:expires]}"
-          end
+        message << " | Humidity: #{humidity} | #{precip_chance}% chance of precipitation | #{date}"
+
+        alerts.each do |a|
+          desc = Cinch::Formatting.format(:red, a[:description])
+          message << " | #{desc} until #{a[:expires]}"
         end
         msg.reply(message)
       end
@@ -100,12 +91,8 @@ module Plugins
         weather = LittleHelper.init_weather
         forecast = weather.simple_forecast(location)
 
-        if forecast.is_a?(String)
-          msg.reply("Error getting forecast: #{forecast}")
-        else
-          forecast.each do |_, f|
-            msg.reply("#{f[:weekday_name]}: #{f[:text]}")
-          end
+        forecast.each do |_, f|
+          msg.reply("#{f[:weekday_name]}: #{f[:text]}")
         end
       end
 

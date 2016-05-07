@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 gem('string-utility', '~> 2.7')
 gem('mediawiki-butt', '~> 0.11')
 gem('fishbans', '~> 1.1')
-gem('weatheruby', '~> 0.5')
+gem('weatheruby', '~> 0.6')
 gem('cinch', '~> 2.3')
 gem('literate_randomizer', '~> 0.4')
 gem('twitter', '~> 5.16')
