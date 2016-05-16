@@ -62,7 +62,7 @@ GEM
       rainbow (~> 2)
       string-utility (~> 2)
     simple_oauth (0.3.1)
-    string-utility (2.7.2)
+    string-utility (2.7.3)
     thread_safe (0.3.5)
     twitter (5.16.0)
       addressable (~> 2.3)
