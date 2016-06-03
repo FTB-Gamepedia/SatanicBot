@@ -1,5 +1,7 @@
 source 'https://rubygems.org'
 
+p `which cargo`
+p `cargo --version`
 gem('string-utility', '~> 2.7')
 gem('mediawiki-butt', '~> 0.11')
 gem('fishbans', '~> 1.1')
