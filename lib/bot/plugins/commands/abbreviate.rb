@@ -27,12 +27,18 @@ module Plugins
           page = 'Module:Mods/list'
           butt = LittleHelper.init_wiki
           module_text = butt.get_text(page)
-          if module_text =~ /[\s+]#{abbreviation} = \{\'/
+          if module_text =~ /[\s+]#{abbreviation} = \{\'/ || module_text =~ /[\s+]\["#{abbreviation}"\] = \{\'/
             msg.reply('That abbreviation is already on the list.'.freeze)
           elsif module_text.include?("= {'#{mod}',")
             msg.reply('That mod is already on the list.'.freeze)
           else
-            new_line = "    #{abbreviation} = {'#{mod}', [=[<translate>#{mod}</translate>]=]},"
+            new_line = ' ' * 4
+            if abbreviation.include?('-')
+              new_line << "[\"#{abbreviation}\"]"
+            else
+              new_line << abbreviation
+            end
+            new_line << " = {'#{mod}', [=[<translate>#{mod}</translate>]=]},"
             text_ary = module_text.split("\n")
             text_ary.each_with_index do |line, index|
               next unless line =~ /^[\s]+[\w]+ = \{'/
