@@ -70,7 +70,7 @@ module LittleHelper
   if HAS_DB
     plugins << Plugins::Commands::CheckMail
     plugins << Plugins::Commands::Tell
-    plugins << Plugins::YouveGotMail
+    plugins << Plugins::Commands::YouveGotMail
   end
 
   unless Variables::Constants::DISABLED_PLUGINS.nil?
