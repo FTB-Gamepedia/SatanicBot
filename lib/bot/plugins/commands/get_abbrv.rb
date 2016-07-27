@@ -29,7 +29,7 @@ module Plugins
           elsif module_text.include?("= {'#{thing}',")
             thing.gsub!(/'/) { "\\'" }
             match_data = module_text.scan(/([A-Z0-9\-]+) = {'#{thing}',/)
-            msg.reply("#{thing} is abbreviated as #{match_data[0][0]}")
+            msg.reply("#{thing.gsub(/\\'/) { "'" }} is abbreviated as #{match_data[0][0]}")
           else
             msg.reply("#{thing} does not appear to be in the abbreviation " \
                       'list, but there were similar non-exact results. ' \
