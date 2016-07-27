@@ -4,14 +4,14 @@ GEM
     addressable (2.4.0)
     array_utility (1.1.1)
     buftok (0.2.0)
-    chunky_png (1.3.5)
+    chunky_png (1.3.6)
     cinch (2.3.2)
     cleverbot_io (1.2.2)
       httpclient (~> 2.8)
       oj (~> 2.15)
     curb (0.9.3)
     data_types (1.1.1)
-    domain_name (0.5.20160310)
+    domain_name (0.5.20160615)
       unf (>= 0.0.5, < 1.0.0)
     dotenv (2.1.1)
     equalizer (0.0.10)
@@ -30,7 +30,7 @@ GEM
     http-form_data (1.0.1)
     http_parser.rb (0.6.0)
     httpclient (2.8.0)
-    isgd (1.0.4)
+    isgd (1.0.5)
       httpclient (~> 2.8)
     json (1.8.3)
     literate_randomizer (0.4.0)
@@ -45,7 +45,7 @@ GEM
     naught (1.1.0)
     octokit (4.3.0)
       sawyer (~> 0.7.0, >= 0.5.3)
-    oj (2.15.0)
+    oj (2.17.1)
     pastee (2.0.3)
       httpclient (~> 2.8)
     pg (0.18.4)
@@ -54,7 +54,7 @@ GEM
     sawyer (0.7.0)
       addressable (>= 2.3.5, < 2.5)
       faraday (~> 0.8, < 0.10)
-    sequel (4.34.0)
+    sequel (4.36.0)
     simple_geolocator (2.0.0)
       curb (~> 0.9)
       data_types (~> 1)
@@ -110,5 +110,8 @@ DEPENDENCIES
   urbandict (~> 1.0)
   weatheruby (~> 0.6)
 
+RUBY VERSION
+   ruby 2.3.0p0
+
 BUNDLED WITH
-   1.11.2
+   1.12.5
