@@ -10,12 +10,33 @@ module Plugins
       DOC = 'Checks the user mail and sends it to them *publicly*. No arguments.'.freeze
       Variables::NonConstants.add_command('checkmail', DOC)
 
+      # Cinch formatting color symbols.
+      COLORS = [
+        :aqua,
+        :black,
+        :blue,
+        :brown,
+        :green,
+        :grey,
+        :lime,
+        :orange,
+        :pink,
+        :purple,
+        :red,
+        :royal,
+        :silver,
+        :teal,
+        :white,
+        :yellow
+      ]
+
       # @param msg [Cinch::Message]
       def execute(msg)
         table = LittleHelper.message_table
         user = msg.user
         their_messages = table.where(to: [user.nick.downcase, user.authname&.downcase])
         count = their_messages.count
+        color = count > 10
 
         if count < 1
           msg.reply('You have no unread messages.')
@@ -26,7 +47,8 @@ module Plugins
         deleted = 0
         their_messages.each do |hash|
           # Use msg.user.nick instead of hash[:to] because it is lowercase, but nick has proper formatting/casing.
-          msg.reply("#{user.nick}: #{hash[:from]} says \"#{hash[:msg]}\"")
+          reply = "#{user.nick}: #{hash[:from]} says \"#{hash[:msg]}\""
+          msg.reply(color ? Format(COLORS.sample, reply) : reply)
           deleted += table.where(id: hash[:id]).delete
         end
         msg.reply("Finished reading unread messages. Deleted #{deleted} message#{deleted == 1 ? '' : 's'}.")
