@@ -23,13 +23,18 @@ module Plugins
           quotes.delete('</nowiki>')
           quotes << quote
           quotes << '</nowiki>'
-          edit = butt.edit('User:SatanicBot/NotGoodEnoughForENV/Quotes', quotes.join("\n"))
-          if edit.is_a?(Fixnum)
-            Variables::NonConstants.append_quote(quote)
-            msg.reply('Added to the quote list'.freeze)
-          else
-            msg.reply("Failed! Error code: #{edit}".freeze)
+          begin
+            edit = butt.edit('User:SatanicBot/NotGoodEnoughForENV/Quotes', quotes.join("\n"))
+            if edit
+              Variables::NonConstants.append_quote(quote)
+              msg.reply('Added to the quote list'.freeze)
+            else
+              msg.reply('Failed! There was no change to the page.')
+            end
+          rescue EditError => e
+            msg.reply("Failed! Error code: #{e.message}")
           end
+
         else
           msg.reply(Variables::Constants::LOGGED_IN)
         end

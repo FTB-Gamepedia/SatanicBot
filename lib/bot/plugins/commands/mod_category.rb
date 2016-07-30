@@ -18,11 +18,15 @@ module Plugins
           text = "[[Category:Mod categories]]\n"
           category = minor ? '[[Category:Minor Mods]]' : '[[Category:Mods]]'
           text << category
+          begin
           edit = butt.create_page(page, text, 'New mod category.')
-          if edit.is_a?(Fixnum)
-            msg.reply("Succesfully created #{page}.")
+          if edit
+            msg.reply("Successfully created #{page}.")
           else
-            msg.reply("Failure! Error code: #{edit}")
+            msg.reply('Failed! There was no change to the page')
+          end
+          rescue EditError => e
+            msg.reply("Failed! Error code: #{e.message}")
           end
         else
           msg.reply('That page already exists.'.freeze)

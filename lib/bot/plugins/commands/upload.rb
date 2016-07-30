@@ -23,7 +23,7 @@ module Plugins
           if upload
             msg.reply('Uploaded the file to the wiki!'.freeze)
           else
-            msg.reply("Possibly failed! Error warning: #{upload}")
+            msg.reply('Possibly failed! Check my logs!')
           end
         else
           msg.reply(Variables::Constants::LOGGED_IN)

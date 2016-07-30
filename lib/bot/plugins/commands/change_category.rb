@@ -33,11 +33,15 @@ module Plugins
             return
           end
           page_text.gsub!(old_cat, new_cat)
-          edit = butt.edit(page, page_text, true)
-          if !edit.is_a?(Fixnum)
-            msg.reply("Something went wrong! Error code: #{edit}")
-          else
-            msg.reply('Finished.'.freeze)
+          begin
+            edit = butt.edit(page, page_text, true)
+            if edit
+              msg.reply('Finished.'.freeze)
+            else
+              msg.reply('Failed! There was no change to the page.')
+            end
+          rescue EditError => e
+            msg.reply("Failed! Error code: #{e.message}")
           end
         else
           msg.reply(Variables::Constants::LOGGED_IN)

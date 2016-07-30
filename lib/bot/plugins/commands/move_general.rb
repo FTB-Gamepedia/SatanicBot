@@ -22,9 +22,14 @@ module Plugins
         authed_users = Variables::NonConstants.get_authenticated_users
         if authed_users.include? msg.user.authname
           butt = LittleHelper.init_wiki
-          move = butt.move(old_page, new_page, 'Moving page from IRC.')
+          begin
+            move = butt.move(old_page, new_page, 'Moving page from IRC.')
+          rescue EditError => e
+            msg.reply("Failed! Error code: #{e.message}")
+          end
+
           if move
-            links = butt.what_links_here(old_page, 5000)
+            links = butt.what_links_here(old_page)
             links.each do |l|
               text = butt.get_text(l)
               next if text.nil? || text !~ /#{old_page}/
@@ -32,13 +37,13 @@ module Plugins
               text.safely_gsub!(/\[\[#{old_page}\]\]/, "[[#{new_page}]]")
               text.safely_gsub!(/\{[Ll]\|#{old_page}\|/, "{{L|#{new_page}|")
               text.safely_gsub!(/\{\{[Ll]\|#{old_page}\}\}/, "{{L|#{new_page}}}")
-              edit = butt.edit(l, text, true)
-              msg.reply("Something went wrong when editing #{l}! " \
-                        "Error code: #{edit} ... Continuing...") unless edit.is_a?(Fixnum)
+              begin
+                butt.edit(l, text, true)
+              rescue EditError => e
+                msg.reply("Something went wrong when editing #{l}! Error code: #{e.message} ... Continuing ...")
+              end
             end
             msg.reply('Finished.'.freeze)
-          else
-            msg.reply("Failed! Error code: #{move}")
           end
         else
           msg.reply(Variables::Constants::LOGGED_IN)

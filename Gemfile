@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 gem('string-utility', '~> 2.7', '<= 2.7.2')
-gem('mediawiki-butt', '~> 0.11')
+gem('mediawiki-butt', '~> 1.0')
 gem('fishbans', '~> 1.1')
 gem('weatheruby', '~> 0.6')
 gem('cinch', '~> 2.3')

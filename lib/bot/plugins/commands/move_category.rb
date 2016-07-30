@@ -1,4 +1,5 @@
 require 'cinch'
+require 'mediawiki/exceptions'
 
 module Plugins
   module Commands
@@ -26,27 +27,31 @@ module Plugins
           new_cat_contents = butt.get_text(new_cat)
           if !old_cat_contents.nil? && new_cat_contents.nil?
             summary = "Moving #{old_cat} to #{new_cat} through IRC."
-            create = butt.create_page(new_cat, old_cat_contents, summary)
-            unless create.is_a?(Fixnum)
-              msg.reply("Something went wrong when creating the page #{new_cat}! Error code: #{create}")
-              return
+            begin
+              butt.create_page(new_cat, old_cat_contents, summary)
+            rescue EditError => e
+              msg.reply("Something went wrong when creating the page #{new_cat}! Error code: #{e.message}")
             end
 
-            delete = butt.delete(old_cat, summary)
-            unless delete
-              msg.reply("Something went wrong when deleting #{old_cat}! Error code: #{delete}")
-              return
+            begin
+              butt.delete(old_cat, summary)
+            rescue EditError => e
+              msg.reply("Something went wrong when deleting #{old_cat}! Error code: #{e.message}")
             end
 
-            members = butt.get_category_members(old_cat, 5000)
+
+            members = butt.get_category_members(old_cat)
             members.each do |t|
               text = butt.get_text(t)
               next if text.nil?
               text.gsub!(old_cat, new_cat)
               text.gsub!(/\{\{[Cc]|#{old_cat}\}\}/, "{{C|#{new_cat}}}")
-              edit = butt.edit(t, text, true)
-              msg.reply("Something went wrong when editing #{t}! " \
-                        "Error code: #{edit} ... Continuing...") unless edit.is_a?(Fixnum)
+              begin
+                butt.edit(t, text, true)
+              rescue EditError => e
+                msg.reply("Something went wrongwhen editing #{t}! Error code: #{e.message} ... Continuing ...")
+              end
+
             end
 
             msg.reply("Finished moving #{old_cat} to #{new_cat}")

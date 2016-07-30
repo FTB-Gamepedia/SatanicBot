@@ -23,7 +23,7 @@ module Plugins
         return if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
         butt = LittleHelper.init_wiki
         count = butt.get_contrib_count(username).to_s.separate
-        if count.empty?
+        unless count
           msg.reply("#{username} is not a user on the wiki.")
           return
         end

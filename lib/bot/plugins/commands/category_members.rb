@@ -24,9 +24,10 @@ module Plugins
         category = "Category:#{category}" if /^Category:/ !~ category
         if authedusers.include?(msg.user.authname)
           butt = LittleHelper.init_wiki
-          members = butt.get_category_members(category, 5000)
+          members = butt.get_category_members(category)
           paste_hash = {}
           members.each do |page|
+            next unless page
             categories = butt.get_categories_in_page(page)
             categories.each do |cat|
               paste_hash[cat] = [] unless paste_hash.key?(cat)

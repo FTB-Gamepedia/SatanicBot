@@ -16,12 +16,13 @@ module Plugins
           butt = LittleHelper.init_wiki
           if butt.get_text(page).nil?
             text = "{{Vanilla|type=#{type}}}"
-            edit = butt.create_page(page, text, 'New vanilla page.'.freeze)
-            if edit.is_a?(Fixnum)
-              msg.reply("Succesfully created #{page}.")
-            else
-              msg.reply("Failure! Error code: #{edit}")
+            begin
+              butt.create_page(page, text, 'New vanilla page.'.freeze)
+            rescue EditError => e
+              msg.reply("Failed! Error code: #{e.message}")
             end
+
+            msg.reply("Succesfully created #{page}.")
           else
             msg.reply('That page already exists.'.freeze)
           end

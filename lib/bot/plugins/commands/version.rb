@@ -38,8 +38,11 @@ module Plugins
         text = butt.get_text(page)
         return false unless /{{[Ii]nfobox mod}}/ =~ text
         text.sub!(/{{[Ii]nfobox mod\n/, "{{Infobox mod\n|version=#{version}")
-        edit = butt.edit(page, text, true, true, 'Add version parameter'.freeze)
-        return true if edit.is_a?(Fixnum)
+        begin
+          edit = butt.edit(page, text, true, true, 'Add version parameter'.freeze)
+        rescue EditError => e
+          msg.reply("Failed! Error code: #{e.message}")
+        end
 
         edit
       end
@@ -55,8 +58,11 @@ module Plugins
         return false if /version=#{version}/ =~ text || /version =#{version}/ =~ text
         text.gsub!(/version=.*/, "version=#{version}")
         text.gsub!(/version =.*/, "version=#{version}")
-        edit = butt.edit(page, text, true, true, 'Update vesion.'.freeze)
-        return true if edit.is_a?(Fixnum)
+        begin
+          edit = butt.edit(page, text, true, true, 'Update vesion.'.freeze)
+        rescue EditError => e
+          msg.reply("Failed! Error code: #{e.message}")
+        end
 
         edit
       end
@@ -70,8 +76,8 @@ module Plugins
       # @param version [String] The new version.
       # @param new_p [Boolean] Whether the parameter is being created or not.
       def get_reply(return_value, mod, version, old, new_p = false)
-        success = "Added version parameter to #{mod} as #{version}" if new_p
-        success = "Updated #{mod} from #{old} to #{version}!" unless new_p
+        return unless return_value
+        success = new_p ? "Added version parameter to #{mod} as #{version}" : "Updated #{mod} from #{old} to #{version}!"
         failed = "Failed! Error code: #{return_value}"
         return success if return_value
         return NOT_FOUND unless return_value

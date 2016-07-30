@@ -48,11 +48,15 @@ module Plugins
               text_ary.insert(index, new_line)
               break
             end
-            edit = butt.edit(page, text_ary.join("\n"), true, true, "Adding #{mod}")
-            if edit.is_a?(Fixnum)
-              msg.reply("Successfully abbreviated #{mod} as #{abbreviation}")
-            else
-              msg.reply("Failed! Error code: #{edit}")
+            begin
+              edit = butt.edit(page, text_ary.join("\n"), true, true, "Adding #{mod}")
+              if edit
+                msg.reply("Successfully abbreviated #{mod} as #{abbreviation}")
+              else
+                msg.reply('Failed! There was no change to the mod list')
+              end
+            rescue EditError => e
+              msg.reply("Failed! Error code: #{e.message}")
             end
           end
         else

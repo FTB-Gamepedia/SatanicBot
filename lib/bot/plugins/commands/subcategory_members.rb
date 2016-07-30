@@ -20,8 +20,8 @@ module Plugins
       # @param category [String] The category to start at.
       # @return [Hash] The hash.
       def get_members(butt, category)
-        subcats = butt.get_subcategories(category, 5000)
-        members = butt.get_category_members(category, 5000)
+        subcats = butt.get_subcategories(category)
+        members = butt.get_category_members(category)
         ret = {
           category => {
             members: [],
