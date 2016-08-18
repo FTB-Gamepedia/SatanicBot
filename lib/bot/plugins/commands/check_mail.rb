@@ -34,7 +34,7 @@ module Plugins
       def execute(msg)
         table = LittleHelper.message_table
         user = msg.user
-        their_messages = table.where(to: [user.nick.downcase, user.authname&.downcase])
+        their_messages = table.where(to: [user.nick.downcase, user.authname&.downcase]).all
         total_count = their_messages.count
         if total_count < 1
           msg.reply('You have no unread messages.')
