@@ -34,23 +34,28 @@ module Plugins
       def execute(msg)
         table = LittleHelper.message_table
         user = msg.user
-        their_messages = table.where(to: [user.nick.downcase, user.authname&.downcase])
-        count = their_messages.count
-        color = count > 10
-
-        if count < 1
+        their_messages = table.where(to: [user.nick.downcase, user.authname&.downcase]).all
+        total_count = their_messages.count
+        if total_count < 1
           msg.reply('You have no unread messages.')
           return
         end
 
-        msg.reply("You have #{count} unread messages. Reading...")
-        deleted = 0
-        their_messages.each do |hash|
+        # Remove the :id key because we do not use it, and it makes every entry unique.
+        # TODO: Consider removing the id key entirely from the table.
+        their_messages.map { |hash| hash.delete(:id) }
+        unique_messages = their_messages.uniq
+        color = unique_messages.count > 10
+
+        msg.reply("You have #{total_count} unread messages. Reading...")
+        unique_messages.each do |hash|
           # Use msg.user.nick instead of hash[:to] because it is lowercase, but nick has proper formatting/casing.
+          count = their_messages.count(hash)
           reply = "#{user.nick}: #{hash[:from]} says \"#{hash[:msg]}\""
+          reply << " #{count} times" if count > 1
           msg.reply(color ? Format(COLORS.sample, reply) : reply)
-          deleted += table.where(id: hash[:id]).delete
         end
+        deleted = table.where(to: [user.nick.downcase, user.authname&.downcase]).delete
         msg.reply("Finished reading unread messages. Deleted #{deleted} message#{deleted == 1 ? '' : 's'}.")
       end
     end
