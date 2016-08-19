@@ -62,6 +62,7 @@ module LittleHelper
     Plugins::Commands::Drama,
     Plugins::Commands::MojangStatus,
     Plugins::Commands::DeleteTiles,
+    Plugins::Commands::ReadTweet,
     Plugins::Logger
   ]
 
