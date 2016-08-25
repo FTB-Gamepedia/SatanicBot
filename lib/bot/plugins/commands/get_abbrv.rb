@@ -56,7 +56,8 @@ module Plugins
         thing = thing.gsub(/\\'/) { "'" }
         replies = []
         replies << "#{thing} does not appear to be in the abbreviation list." if names.empty? && abbreviations.empty?
-        replies << "#{thing} is the abbreviation for the following mod(s): #{names.join(', ')}" unless names.empty?
+        s = names.length == 1 ? '' : 's'
+        replies << "#{thing} is the abbreviation for the following mod#{s}: #{names.join(', ')}" unless names.empty?
         replies << "#{thing} is abbreviated as the following: #{abbreviations.join(', ')}" unless abbreviations.empty?
 
         replies.map { |str| msg.reply(str) }
