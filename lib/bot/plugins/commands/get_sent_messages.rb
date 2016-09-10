@@ -10,9 +10,9 @@ module Plugins
       def execute(msg)
         table = LittleHelper.message_table
         user = msg.user
-        outgoing_messages = table.where(from: [user.nick.downcase, user.authname&.downcase]).all
+        outgoing_messages = table.where(from: [user.nick, user.authname]).all
         if outgoing_messages.count < 1
-          msg.reply('You have not sent any messages.')
+          user.send('You have not sent any messages.')
           return
         end
 
