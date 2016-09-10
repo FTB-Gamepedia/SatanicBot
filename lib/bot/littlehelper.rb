@@ -72,6 +72,8 @@ module LittleHelper
     plugins << Plugins::Commands::CheckMail
     plugins << Plugins::Commands::Tell
     plugins << Plugins::Commands::YouveGotMail
+    plugins << Plugins::Commands::DeleteSentMessage
+    plugins << Plugins::Commands::GetSentMessages
   end
 
   unless Variables::Constants::DISABLED_PLUGINS.nil?
