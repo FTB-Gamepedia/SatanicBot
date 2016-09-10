@@ -42,7 +42,6 @@ module Plugins
         end
 
         # Remove the :id key because we do not use it, and it makes every entry unique.
-        # TODO: Consider removing the id key entirely from the table.
         their_messages.map { |hash| hash.delete(:id) }
         unique_messages = their_messages.uniq
         color = unique_messages.count > 10
