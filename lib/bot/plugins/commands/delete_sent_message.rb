@@ -14,7 +14,7 @@ module Plugins
 
         if to_delete.count == 0
           msg.reply("No messages found with ID #{mail_id} sent by you")
-        else to_delete[:from] == user.nick.downcase || to_delete[:from] == user.authname&.downcase
+        else
           to_delete.delete
           msg.reply("Deleted message #{mail_id}")
         end
