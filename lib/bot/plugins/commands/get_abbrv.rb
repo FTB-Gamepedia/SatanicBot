@@ -48,12 +48,11 @@ module Plugins
         return if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
         butt = LittleHelper.init_wiki
         module_text = butt.get_text(PAGE)
-        thing.gsub!(/'/) { "\\'" }
+        escaped_thing = thing.gsub("'") { "\\\\'" }
 
-        names = get_names(thing, module_text)
-        abbreviations = get_abbreviations(thing, module_text)
+        names = get_names(escaped_thing, module_text)
+        abbreviations = get_abbreviations(escaped_thing, module_text)
 
-        thing = thing.gsub(/\\'/) { "'" }
         replies = []
         replies << "#{thing} does not appear to be in the abbreviation list." if names.empty? && abbreviations.empty?
         s = names.length == 1 ? '' : 's'
