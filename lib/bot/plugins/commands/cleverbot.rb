@@ -13,7 +13,7 @@ module Plugins
       def execute(msg, username, talk)
         return if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
         return unless username.casecmp(bot.nick).zero?
-        msg.reply("#{msg.user.nick}: #{LittleHelper.clever.say(talk)}")
+        msg.reply("#{msg.user.nick}: #{LittleHelper::CLEVER.say(talk)}")
       end
     end
   end

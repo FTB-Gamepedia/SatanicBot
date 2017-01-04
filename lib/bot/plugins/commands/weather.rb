@@ -25,18 +25,17 @@ module Plugins
       # @param location [String] The location to get the weather for.
       def weather(msg, location)
         return if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
-        weather = LittleHelper.init_weather
         begin
-          conditions = weather.conditions(location)
+          conditions = LittleHelper::WEATHER.conditions(location)
         rescue Weatheruby::WeatherError => e
           msg.reply(e.message)
           return
         end
 
-        alerts = weather.alerts(location)
+        alerts = LittleHelper::WEATHER.alerts(location)
 
         now = Time.now
-        precip_chance = weather.chance_of_precipitation(now, now, location)
+        precip_chance = LittleHelper::WEATHER.chance_of_precipitation(now, now, location)
 
         name = conditions[:full_name]
         condition = conditions[:weather]
@@ -88,8 +87,7 @@ module Plugins
       def forecast(msg, location)
         return if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
         msg.reply("Getting forecast for #{location}...")
-        weather = LittleHelper.init_weather
-        forecast = weather.simple_forecast(location)
+        forecast = LittleHelper::WEATHER.simple_forecast(location)
 
         forecast.each do |_, f|
           msg.reply("#{f[:weekday_name]}: #{f[:text]}")

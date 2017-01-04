@@ -9,8 +9,7 @@ module Plugins
 
       def execute(msg, tweet_id)
         return if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
-        twitter = LittleHelper.init_twitter
-        tweet = twitter.status(tweet_id.to_i)
+        tweet = LittleHelper::TWEETER.status(tweet_id.to_i)
         msg.reply("@#{tweet.user.screen_name} tweeted '#{tweet.text}'")
       end
     end

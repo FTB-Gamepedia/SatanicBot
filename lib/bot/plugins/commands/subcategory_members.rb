@@ -80,8 +80,7 @@ module Plugins
           butt = LittleHelper.init_wiki
           paste_hash = get_members(butt, category)
           paste_contents = create_paste_contents(paste_hash, 1)
-          pastee = LittleHelper.init_pastee
-          id = pastee.submit(paste_contents, "Summary of #{category} subcats.")
+          id = LittleHelper::PASTEE.submit(paste_contents, "Summary of #{category} subcats.")
           msg.reply("http://paste.ee/p/#{id}")
         else
           msg.reply(Variables::Constants::LOGGED_IN)

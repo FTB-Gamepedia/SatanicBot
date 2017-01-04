@@ -17,8 +17,7 @@ module Plugins
         return if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
         # 134 because it has to fit "[IRC] "
         if tweet.length > 1 && tweet.length < 134
-          twitter = LittleHelper.init_twitter
-          twitter.update("[IRC] #{tweet}")
+          LittleHelper::TWEETER.update("[IRC] #{tweet}")
           msg.reply('Successfully tweeted!'.freeze)
         else
           msg.reply('That tweet is either too long or too short.'.freeze)

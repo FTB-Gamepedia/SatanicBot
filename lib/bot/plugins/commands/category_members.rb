@@ -39,8 +39,7 @@ module Plugins
             page_string = pages.join("\n* ")
             paste_contents << "## #{cat}\n* #{page_string}\n\n"
           end
-          pastee = LittleHelper.init_pastee
-          id = pastee.submit(paste_contents, "Summary of #{category} members.")
+          id = LittleHelper::PASTEE.submit(paste_contents, "Summary of #{category} members.")
           msg.reply("http://paste.ee/p/#{id}")
         else
           msg.reply(Variables::Constants::LOGGED_IN)
