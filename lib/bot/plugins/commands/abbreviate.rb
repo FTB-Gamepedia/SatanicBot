@@ -27,6 +27,7 @@ module Plugins
           page = 'Module:Mods/list'
           butt = LittleHelper.init_wiki
           module_text = butt.get_text(page)
+          mod.gsub!("'") { "\\'" }
           if module_text =~ /[\s+]#{abbreviation} = \{\'/ || module_text =~ /[\s+]\["#{abbreviation}"\] = \{\'/
             msg.reply('That abbreviation is already on the list.'.freeze)
           elsif module_text.include?("= {'#{mod}',")
