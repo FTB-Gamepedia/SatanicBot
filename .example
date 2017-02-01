@@ -27,6 +27,9 @@ PASTEE_API_KEY: abcdefghijklmnop
 CLEVERBOT_API_USER: abcdefghudfuhd
 CLEVERBOT_API_KEY:  idjfudjgudfjguhgjhkgofpa
 
+OXFORD_API_KEY: aushfuhsdfushisdufhdisufhisdhfdshf
+OXFORD_API_ID: asjd8asud89
+
 IGNORED_USERS: travis-ci
 
 DISABLED_PLUGINS: Plugins::Logger,Plugins::Commands::Weather
