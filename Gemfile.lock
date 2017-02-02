@@ -112,6 +112,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  addressable (~> 2.5)
   array_utility (~> 1.1)
   cinch (~> 2.3)
   cleverbot_io (~> 1.2)
@@ -139,4 +140,4 @@ RUBY VERSION
    ruby 2.3.0p0
 
 BUNDLED WITH
-   1.12.5
+   1.14.3

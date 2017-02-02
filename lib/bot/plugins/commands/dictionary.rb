@@ -1,5 +1,6 @@
 require 'cinch'
 require 'oxford_dictionary'
+require 'addressable/uri'
 
 module Plugins
   module Commands
@@ -51,6 +52,8 @@ module Plugins
       # @todo Perhaps multilingualism. Oxford allows you to provide a language code.
       def execute(msg, term)
         return if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
+
+        term = Addressable::URI.escape(term)
 
         begin
           entry_resp = LittleHelper::DICTIONARY.entry(term)
