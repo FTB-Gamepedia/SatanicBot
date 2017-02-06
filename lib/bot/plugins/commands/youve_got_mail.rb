@@ -22,7 +22,7 @@ module Plugins
         count = table.where(to: [nick_dc, auth]).count
         if count > 0
           Variables::NonConstants.add_mail_time(auth ? auth : nick_dc, Time.now)
-          msg.channel.send("#{nick}: You've got mail (#{count} unread)! Use the checkmail command to check your mail!")
+          msg.reply("#{nick}: You've got mail (#{count} unread)! Use the checkmail command to check your mail!")
         end
       end
     end
