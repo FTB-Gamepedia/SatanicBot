@@ -16,9 +16,16 @@ module Plugins
       # @param [Cinch::Message]
       # @return [Boolean] Whether the user who sent the message is ignored or not. (True if they are not ignored).
       def not_ignored_user?(msg)
-        msg.reply('Hook method called')
         !Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
       end
+    end
+
+    class AuthorizedOnlyCommand < BaseCommand
+      def not_igno
+    end
+
+    class OwnerOnlyCommand < BaseCommand
+
     end
   end
 end
