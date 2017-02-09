@@ -19,13 +19,5 @@ module Plugins
         !Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
       end
     end
-
-    class AuthorizedOnlyCommand < BaseCommand
-      def not_igno
-    end
-
-    class OwnerOnlyCommand < BaseCommand
-
-    end
   end
 end
