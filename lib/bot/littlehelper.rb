@@ -27,9 +27,6 @@ module LittleHelper
   DICTIONARY = OxfordDictionary.new(app_id: Variables::Constants::DICT_ID, app_key: Variables::Constants::DICT_KEY)
 
   plugins = [
-    Plugins::Commands::Authentication::SetPass,
-    Plugins::Commands::Authentication::Login,
-    Plugins::Commands::Authentication::Logout,
     Plugins::Commands::Quit,
     Plugins::Commands::Info::Help,
     Plugins::Commands::Info::Src,

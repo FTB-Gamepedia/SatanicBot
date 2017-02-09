@@ -105,7 +105,7 @@ module Plugins
             msg.reply(get_reply(update, mod, version, current))
           end
         else
-          msg.reply(Variables::Constants::LOGGED_IN)
+          msg.reply(Variables::Constants::NOT_VERIFIED)
         end
       end
 

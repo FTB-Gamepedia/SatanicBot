@@ -6,7 +6,6 @@ IRC_USERNAME: MyUsername
 IRC_PASSWORD: password
 IRC_REALNAME: MyUsername's Ugly Bot
 IRC_NICKNAMES: MyNickname,MyOtherNickname
-DEFAULT_AUTH_PASS: password
 OWNER: SatanicSanta
 
 WIKI_URL: http://ftb.gamepedia.com/api.php

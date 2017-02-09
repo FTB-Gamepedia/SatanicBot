@@ -15,9 +15,9 @@ module Cinch
       Variables::Constants::IGNORED_USERS.include?(nick)
     end
 
-    # @return [Boolean] Whether this user is logged into the bot.
+    # @return [Boolean] Whether this user is authorized to use authorized-only commands with the bot.
     def authorized?
-      Variables::NonConstants.get_authenticated_users.include?(authname)
+      Variables::Constants::VALID_PEOPLE.include?(authname)
     end
 
     # @return [Boolean] Whether this user is the owner of the bot.
@@ -38,7 +38,7 @@ module Plugins
     class AuthorizedCommand < BaseCommand
       def hook(msg)
         authorized = msg.user.authorized?
-        msg.reply(Variables::Constants::LOGGED_IN) unless authorized
+        msg.reply(Variables::Constants::NOT_VERIFIED) unless authorized
         authorized
       end
     end
