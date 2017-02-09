@@ -3,8 +3,9 @@ require_relative 'base_command'
 
 module Plugins
   module Commands
-    class ChangeCategory < BaseCommand
+    class ChangeCategory < AuthorizedCommand
       include Cinch::Plugin
+      ignore_ignored_users
 
       match(/changecat (.+) \| (.+) -> (.+)/)
 
@@ -18,33 +19,28 @@ module Plugins
       # @param old_cat [String] The old category needed to be changed.
       # @param new_cat [String] What to change the category to.
       def execute(msg, page, old_cat, new_cat)
-        authedusers = Variables::NonConstants.get_authenticated_users
         old_cat = "Category:#{old_cat}" if /^Category:/ !~ old_cat
         new_cat = "Category:#{new_cat}" if /^Category:/ !~ new_cat
-        if authedusers.include?(msg.user.authname)
-          butt = LittleHelper.init_wiki
-          page_text = butt.get_text(page)
-          if page_text.nil?
-            msg.reply('That page does not exist.'.freeze)
-            return
+        butt = LittleHelper.init_wiki
+        page_text = butt.get_text(page)
+        if page_text.nil?
+          msg.reply('That page does not exist.'.freeze)
+          return
+        end
+        if butt.get_text(new_cat).nil?
+          msg.reply('That category does not exist.'.freeze)
+          return
+        end
+        page_text.gsub!(old_cat, new_cat)
+        begin
+          edit = butt.edit(page, page_text, true)
+          if edit
+            msg.reply('Finished.'.freeze)
+          else
+            msg.reply('Failed! There was no change to the page.')
           end
-          if butt.get_text(new_cat).nil?
-            msg.reply('That category does not exist.'.freeze)
-            return
-          end
-          page_text.gsub!(old_cat, new_cat)
-          begin
-            edit = butt.edit(page, page_text, true)
-            if edit
-              msg.reply('Finished.'.freeze)
-            else
-              msg.reply('Failed! There was no change to the page.')
-            end
-          rescue EditError => e
-            msg.reply("Failed! Error code: #{e.message}")
-          end
-        else
-          msg.reply(Variables::Constants::LOGGED_IN)
+        rescue EditError => e
+          msg.reply("Failed! Error code: #{e.message}")
         end
       end
     end

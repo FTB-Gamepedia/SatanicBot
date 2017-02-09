@@ -72,8 +72,9 @@ module Plugins
         end
       end
 
-      class Logout
+      class Logout < BaseCommand
         include Cinch::Plugin
+        ignore_ignored_users
 
         match(/logout/i)
 
@@ -83,9 +84,7 @@ module Plugins
         # Logs the user out.
         # @param msg [Cinch::Message]
         def execute(msg)
-          return if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
-          authedusers = Variables::NonConstants.get_authenticated_users
-          if authedusers.include? msg.user.authname
+          if msg.user.authed?
             Variables::NonConstants.deauthenticate_user(msg.user.authname)
             msg.reply('You have been logged out.'.freeze)
           else
@@ -94,8 +93,9 @@ module Plugins
         end
       end
 
-      class SetPass
+      class SetPass < OwnerCommand
         include Cinch::Plugin
+        ignore_ignored_users
 
         match(/setpass (.+)/i)
 
@@ -106,16 +106,11 @@ module Plugins
         # @param msg [Cinch::Message]
         # @param new_pass [String] The new password.
         def execute(msg, new_pass)
-          return if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
-          if msg.user.authname == Variables::Constants::OWNER
-            if new_pass == Variables::NonConstants.get_authentication_password
-              msg.reply('That is already the password.'.freeze)
-            else
-              Variables::NonConstants.set_authentication_password(new_pass)
-              msg.reply("Password set to #{new_pass}.")
-            end
+          if new_pass == Variables::NonConstants.get_authentication_password
+            msg.reply('That is already the password.'.freeze)
           else
-            msg.reply(Variables::Constants::OWNER_ONLY)
+            Variables::NonConstants.set_authentication_password(new_pass)
+            msg.reply("Password set to #{new_pass}.")
           end
         end
       end

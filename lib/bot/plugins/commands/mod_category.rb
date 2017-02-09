@@ -3,7 +3,7 @@ require_relative 'base_command'
 
 module Plugins
   module Commands
-    class NewCategory < BaseCommand
+    class NewCategory < AuthorizedCommand
       include Cinch::Plugin
       ignore_ignored_users
       match(/newmodcat (.+)/i, method: :new_mod_category)
@@ -39,13 +39,8 @@ module Plugins
       # @param msg [Cinch::Message]
       # @param page [String] The mod name.
       def new_mod_category(msg, page)
-        authedusers = Variables::NonConstants.get_authenticated_users
         page = "Category:#{page}" if /^Category:/ !~ page
-        if authedusers.include?(msg.user.authname)
-          new_category(msg, page)
-        else
-          msg.reply(Variables::Constants::LOGGED_IN)
-        end
+        new_category(msg, page)
       end
 
       # Creates a minor mod category.
@@ -53,12 +48,7 @@ module Plugins
       # @param page [String] The mod name.
       def new_minor_category(msg, page)
         page = "Category:#{page}" if /^Category:/ !~ page
-        authedusers = Variables::NonConstants.get_authenticated_users
-        if authedusers.include?(msg.user.authname)
-          new_category(msg, page, true)
-        else
-          msg.reply(Variables::Constants::LOGGED_IN)
-        end
+        new_category(msg, page, true)
       end
     end
   end

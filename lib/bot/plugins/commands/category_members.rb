@@ -3,7 +3,7 @@ require_relative 'base_command'
 
 module Plugins
   module Commands
-    class CategoryMembers < BaseCommand
+    class CategoryMembers < AuthorizedCommand
       include Cinch::Plugin
       ignore_ignored_users
 
@@ -21,30 +21,25 @@ module Plugins
       # @param msg [Cinch::Message]
       # @param category [String] The top category.
       def execute(msg, category)
-        authedusers = Variables::NonConstants.get_authenticated_users
         category = "Category:#{category}" if /^Category:/ !~ category
-        if authedusers.include?(msg.user.authname)
-          butt = LittleHelper.init_wiki
-          members = butt.get_category_members(category)
-          paste_hash = {}
-          members.each do |page|
-            next unless page
-            categories = butt.get_categories_in_page(page)
-            categories.each do |cat|
-              paste_hash[cat] = [] unless paste_hash.key?(cat)
-              paste_hash[cat] << page
-            end
+        butt = LittleHelper.init_wiki
+        members = butt.get_category_members(category)
+        paste_hash = {}
+        members.each do |page|
+          next unless page
+          categories = butt.get_categories_in_page(page)
+          categories.each do |cat|
+            paste_hash[cat] = [] unless paste_hash.key?(cat)
+            paste_hash[cat] << page
           end
-          paste_contents = "Comprehensive summary of #{category} members\n\n"
-          paste_hash.each do |cat, pages|
-            page_string = pages.join("\n* ")
-            paste_contents << "## #{cat}\n* #{page_string}\n\n"
-          end
-          id = LittleHelper::PASTEE.submit(paste_contents, "Summary of #{category} members.")
-          msg.reply("http://paste.ee/p/#{id}")
-        else
-          msg.reply(Variables::Constants::LOGGED_IN)
         end
+        paste_contents = "Comprehensive summary of #{category} members\n\n"
+        paste_hash.each do |cat, pages|
+          page_string = pages.join("\n* ")
+          paste_contents << "## #{cat}\n* #{page_string}\n\n"
+        end
+        id = LittleHelper::PASTEE.submit(paste_contents, "Summary of #{category} members.")
+        msg.reply("http://paste.ee/p/#{id}")
       end
     end
   end

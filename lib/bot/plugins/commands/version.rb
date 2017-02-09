@@ -3,6 +3,7 @@ require_relative 'base_command'
 
 module Plugins
   module Commands
+    # This is not an AuthorizedCommand because $checkvers does not require you to be authorized.
     class Version < BaseCommand
       include Cinch::Plugin
       ignore_ignored_users
@@ -91,8 +92,7 @@ module Plugins
       # @param mod [String] The mod to update on the wiki.
       # @param version [String] The new mod version.
       def update(msg, mod, version)
-        authedusers = Variables::NonConstants.get_authenticated_users
-        if authedusers.include?(msg.user.authname)
+        if msg.user.authed?
           current = get_current_verison(mod)
           if current == version
             msg.reply("#{version} is already the current version")

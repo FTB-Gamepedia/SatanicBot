@@ -3,7 +3,7 @@ require_relative 'base_command'
 
 module Plugins
   module Commands
-    class SubCategoryMembers < BaseCommand
+    class SubCategoryMembers < AuthorizedCommand
       include Cinch::Plugin
       ignore_ignored_users
 
@@ -75,17 +75,12 @@ module Plugins
       # @param msg [Cinch::Message]
       # @param category [String] The top category.
       def execute(msg, category)
-        authedusers = Variables::NonConstants.get_authenticated_users
         category = "Category:#{category}" if /^Category:/ !~ category
-        if authedusers.include?(msg.user.authname)
-          butt = LittleHelper.init_wiki
-          paste_hash = get_members(butt, category)
-          paste_contents = create_paste_contents(paste_hash, 1)
-          id = LittleHelper::PASTEE.submit(paste_contents, "Summary of #{category} subcats.")
-          msg.reply("http://paste.ee/p/#{id}")
-        else
-          msg.reply(Variables::Constants::LOGGED_IN)
-        end
+        butt = LittleHelper.init_wiki
+        paste_hash = get_members(butt, category)
+        paste_contents = create_paste_contents(paste_hash, 1)
+        id = LittleHelper::PASTEE.submit(paste_contents, "Summary of #{category} subcats.")
+        msg.reply("http://paste.ee/p/#{id}")
       end
     end
   end

@@ -1,9 +1,11 @@
 require 'cinch'
+require_relative 'base_command'
 
 module Plugins
   module Commands
-    class AddMod < BaseCommand
+    class AddMod < AuthorizedCommand
       include Cinch::Plugin
+      ignore_ignored_users
 
       match(/addmod (.+)/i, method: :execute_major)
       match(/addminor (.+)/i, method: :execute_minor)
@@ -60,26 +62,14 @@ module Plugins
       # @param msg [Cinch::Message]
       # @param mod [String] The mod to add.
       def execute_major(msg, mod)
-        return if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
-        authedusers = Variables::NonConstants.get_authenticated_users
-        if authedusers.include?(msg.user.authname)
-          execute(msg, mod)
-        else
-          msg.reply(Variables::Constants::LOGGED_IN)
-        end
+        execute(msg, mod)
       end
 
       # Adds a minor mod to the main page list.
       # @param msg [Cinch::Message]
       # @param mod [String] The mod to add.
       def execute_minor(msg, mod)
-        return if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
-        authedusers = Variables::NonConstants.get_authenticated_users
-        if authedusers.include?(msg.user.authname)
-          execute(msg, mod, true)
-        else
-          msg.reply(Variables::Constants::LOGGED_IN)
-        end
+        execute(msg, mod, true)
       end
     end
   end

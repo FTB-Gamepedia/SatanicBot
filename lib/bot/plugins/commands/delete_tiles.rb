@@ -3,7 +3,7 @@ require_relative 'base_command'
 
 module Plugins
   module Commands
-    class DeleteTiles < BaseCommand
+    class DeleteTiles < AuthorizedCommand
       include Cinch::Plugin
       ignore_ignored_users
 
@@ -13,28 +13,23 @@ module Plugins
       Variables::NonConstants.add_command('deletetiles', doc)
 
       def execute(msg, ids)
-        authedusers = Variables::NonConstants.get_authenticated_users
-        if authedusers.include?(msg.user.authname)
-          butt = LittleHelper.init_wiki
-          # TODO: Finish up MediaWiki::Butt extension stuff.
-          params = {
-            action: 'deletetiles',
-            tsids: ids,
-            tstoken: butt.get_token('edit')
-          }
-          response = butt.post(params)
-          failures = ids.split('|')
-          response['edit']['deletetiles'].each_key do |id|
-            failures.delete(id)
-          end
+        butt = LittleHelper.init_wiki
+        # TODO: Finish up MediaWiki::Butt extension stuff.
+        params = {
+          action: 'deletetiles',
+          tsids: ids,
+          tstoken: butt.get_token('edit')
+        }
+        response = butt.post(params)
+        failures = ids.split('|')
+        response['edit']['deletetiles'].each_key do |id|
+          failures.delete(id)
+        end
 
-          if failures.empty?
-            msg.reply('Successfully deleted all provided tiles.')
-          else
-            msg.reply("Failed to delete #{failures.join(', ')}")
-          end
+        if failures.empty?
+          msg.reply('Successfully deleted all provided tiles.')
         else
-          msg.reply(Variables::Constants::LOGGED_IN)
+          msg.reply("Failed to delete #{failures.join(', ')}")
         end
       end
     end

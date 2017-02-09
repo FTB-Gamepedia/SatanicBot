@@ -3,7 +3,7 @@ require_relative 'base_command'
 
 module Plugins
   module Commands
-    class Upload < BaseCommand
+    class Upload < AuthorizedCommand
       include Cinch::Plugin
       ignore_ignored_users
 
@@ -17,17 +17,12 @@ module Plugins
       # @param url [String] The URL to upload.
       # @param filename [String] The file's name on the wiki.
       def execute(msg, url, filename)
-        authedusers = Variables::NonConstants.get_authenticated_users
-        if authedusers.include?(msg.user.authname)
-          butt = LittleHelper.init_wiki
-          upload = butt.upload(url, filename)
-          if upload
-            msg.reply('Uploaded the file to the wiki!'.freeze)
-          else
-            msg.reply('Possibly failed! Check my logs!')
-          end
+        butt = LittleHelper.init_wiki
+        upload = butt.upload(url, filename)
+        if upload
+          msg.reply('Uploaded the file to the wiki!'.freeze)
         else
-          msg.reply(Variables::Constants::LOGGED_IN)
+          msg.reply('Possibly failed! Check my logs!')
         end
       end
     end
