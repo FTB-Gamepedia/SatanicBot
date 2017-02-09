@@ -92,7 +92,7 @@ module Plugins
       # @param mod [String] The mod to update on the wiki.
       # @param version [String] The new mod version.
       def update(msg, mod, version)
-        if msg.user.authed?
+        if msg.user.authorized?
           current = get_current_verison(mod)
           if current == version
             msg.reply("#{version} is already the current version")
