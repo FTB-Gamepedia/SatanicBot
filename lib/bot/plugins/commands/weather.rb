@@ -1,10 +1,12 @@
 require 'simple_geolocator'
 require 'weatheruby'
+require_relative 'base_command'
 
 module Plugins
   module Commands
-    class Weather
+    class Weather < BaseCommand
       include Cinch::Plugin
+      ignore_ignored_users
 
       match(/weather (.+)/i, method: :weather)
       match(/forecast (.+)/i, method: :forecast)
@@ -24,7 +26,6 @@ module Plugins
       # @param msg [Cinch::Message]
       # @param location [String] The location to get the weather for.
       def weather(msg, location)
-        return if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
         begin
           conditions = LittleHelper::WEATHER.conditions(location)
         rescue Weatheruby::WeatherError => e
@@ -74,7 +75,6 @@ module Plugins
       # Gets the weather conditions for the user's location by their IP.
       # @param msg [Cinch::Message]
       def weather_self(msg)
-        return if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
         ip = msg.user.host
         location = get_location_by_ip(ip)
         weather(msg, location)
@@ -85,7 +85,6 @@ module Plugins
       # @param msg [Cinch::Message]
       # @param location [String] The location to get the information for.
       def forecast(msg, location)
-        return if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
         msg.reply("Getting forecast for #{location}...")
         forecast = LittleHelper::WEATHER.simple_forecast(location)
 
@@ -98,7 +97,6 @@ module Plugins
       #   the users location, by first getting the location of their IP.
       # @param msg [Cinch::Message]
       def forecast_self(msg)
-        return if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
         ip = msg.user.host
         location = get_location_by_ip(ip)
         forecast(msg, location)

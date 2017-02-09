@@ -1,10 +1,12 @@
 require 'cinch'
 require 'urbandict'
+require_relative 'base_command'
 
 module Plugins
   module Commands
-    class UrbanDict
+    class UrbanDict < BaseCommand
       include Cinch::Plugin
+      ignore_ignored_users
 
       match(/what does ["'](.+)["'] mean\?/i)
       set(:prefix, //)
@@ -13,7 +15,6 @@ module Plugins
       Variables::NonConstants.add_command('urban', DOC)
 
       def execute(msg, word)
-        return if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
         slangs = UrbanDictionary.define(word)
         if slangs.empty?
           msg.reply("That's a good question, #{msg.user.nick}.")

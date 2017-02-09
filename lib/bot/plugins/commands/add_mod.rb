@@ -2,7 +2,7 @@ require 'cinch'
 
 module Plugins
   module Commands
-    class AddMod
+    class AddMod < BaseCommand
       include Cinch::Plugin
 
       match(/addmod (.+)/i, method: :execute_major)

@@ -1,10 +1,12 @@
 require 'cinch'
 require 'mediawiki/exceptions'
+require_relative 'base_command'
 
 module Plugins
   module Commands
-    class MoveCategory
+    class MoveCategory < BaseCommand
       include Cinch::Plugin
+      ignore_ignored_users
 
       match(/movecat ([^\|\[\]<>%\+\?]+) \-> ([^\|\[\]<>%\+\?]+)/i)
 
@@ -17,7 +19,6 @@ module Plugins
       # @param old_cat [String] The old category name.
       # @param new_cat [String] The new category name.
       def execute(msg, old_cat, new_cat)
-        return if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
         authed_users = Variables::NonConstants.get_authenticated_users
         if authed_users.include? msg.user.authname
           butt = LittleHelper.init_wiki

@@ -2,13 +2,15 @@ require 'cinch'
 require 'literate_randomizer'
 require 'string-utility'
 require 'array_utility'
+require_relative 'base_command'
 
 module Plugins
   module Commands
-    class Random
+    class Random < BaseCommand
       include Cinch::Plugin
       using StringUtility
       using ArrayUtility
+      ignore_ignored_users
 
       match(/randword/i, method: :random_word)
       match(/randsentence/i, method: :random_sentence)
@@ -36,7 +38,6 @@ module Plugins
       #   5 calls.
       # @param msg [Cinch::Message]
       def random_word(msg)
-        return if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
         word = LiterateRandomizer.word
         @last_words = [] if @last_words.nil?
         word = LiterateRandomizer.word while @last_words.include?(word)
@@ -48,7 +49,6 @@ module Plugins
       #   past 5 calls.
       # @param msg [Cinch::Message]
       def random_sentence(msg)
-        return if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
         sentence = LiterateRandomizer.sentence
         @last_sentences = [] if @last_sentences.nil?
         sentence = LiterateRandomizer.sentence while @last_sentences.include?(sentence)
@@ -60,7 +60,6 @@ module Plugins
       #   past 5 calls.
       # @param msg [Cinch::Message]
       def random_quote(msg)
-        return if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
         quotes = Variables::NonConstants.get_quotes
         quote = quotes.sample
         @last_quotes = [] if @last_quotes.nil?
@@ -73,7 +72,6 @@ module Plugins
       #   channel within the past 5 calls.
       # @param msg [Cinch::Message]
       def random_number(msg)
-        return if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
         random_number_max(msg, 100)
       end
 
@@ -94,7 +92,6 @@ module Plugins
       # Gets a random motivational statement for the user who used the command.
       # @param msg [Cinch::Message]
       def motivate_you(msg)
-        return if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
         motivate_else(msg, msg.user.nick)
       end
 
@@ -102,7 +99,6 @@ module Plugins
       # @param msg [Cinch::Message]
       # @param user [String] The username to motivate.
       def motivate_else(msg, user)
-        return if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
         if !msg.channel? || msg.channel.has_user?(user)
           line = StringUtility.random_line(Variables::Constants::MOTIVATE_PATH)
           @last_motivation = [] if @last_motivation.nil?

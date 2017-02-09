@@ -1,11 +1,13 @@
 require 'cinch'
 require 'octokit'
 require 'isgd'
+require_relative 'base_command'
 
 module Plugins
   module Commands
-    class IssueLink
+    class IssueLink < BaseCommand
       include Cinch::Plugin
+      ignore_ignored_users
 
       match(/([\d]+)/, method: :default_repo, prefix: /\#/)
 
@@ -58,7 +60,6 @@ module Plugins
       # @param msg [Cinch::Message]
       # @param issue_num [String] The GitHub issue number.
       def default_repo(msg, issue_num)
-        return if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
         multiple_match = msg.message.scan(/(?:[\W]+|^)(#[\d]+)/)
         repo_message = msg.message.scan(/[A-Za-z0-9\-]+\/[A-Za-z0-9\-_\.]+#\d+/)
         channel_valid = Variables::Constants::ISSUE_TRACKING.include?(msg.channel)

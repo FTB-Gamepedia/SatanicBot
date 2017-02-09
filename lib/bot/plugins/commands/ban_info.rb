@@ -1,10 +1,12 @@
 require 'fishbans'
 require 'cinch'
+require_relative 'base_command'
 
 module Plugins
   module Commands
-    class BanInfo
+    class BanInfo < BaseCommand
       include Cinch::Plugin
+      ignore_ignored_users
 
       match(/banned (.+)/i, method: :execute)
       match(/banned$/i, method: :do_self)
@@ -18,7 +20,6 @@ module Plugins
       # @param msg [Cinch::Message]
       # @param username [String] The username to check.
       def execute(msg, username)
-        return if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
         bans = Fishbans.get_total_bans(username)
         if bans.is_a?(Fixnum)
           # A ternary would be illogical here for length.

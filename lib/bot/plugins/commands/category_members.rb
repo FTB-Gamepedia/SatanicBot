@@ -1,9 +1,11 @@
 require 'cinch'
+require_relative 'base_command'
 
 module Plugins
   module Commands
-    class CategoryMembers
+    class CategoryMembers < BaseCommand
       include Cinch::Plugin
+      ignore_ignored_users
 
       match(/categorymembers (.+)/i)
 
@@ -19,7 +21,6 @@ module Plugins
       # @param msg [Cinch::Message]
       # @param category [String] The top category.
       def execute(msg, category)
-        return if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
         authedusers = Variables::NonConstants.get_authenticated_users
         category = "Category:#{category}" if /^Category:/ !~ category
         if authedusers.include?(msg.user.authname)

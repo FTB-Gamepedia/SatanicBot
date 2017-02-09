@@ -1,11 +1,13 @@
 require 'cinch'
 require 'array_utility'
+require_relative 'base_command'
 
 module Plugins
   module Commands
-    class Abbreviate
+    class Abbreviate < BaseCommand
       include Cinch::Plugin
       using ArrayUtility
+      ignore_ignored_users
 
       match(/abbrv ([A-Z0-9\-]+) (.+)/i)
 
@@ -20,7 +22,6 @@ module Plugins
       # @param abbreviation [String] The abbreviation.
       # @param mod [String] The mod name.
       def execute(msg, abbreviation, mod)
-        return if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
         abbreviation = abbreviation.upcase
         authedusers = Variables::NonConstants.get_authenticated_users
         if authedusers.include?(msg.user.authname)

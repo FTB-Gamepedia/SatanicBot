@@ -1,10 +1,12 @@
 require 'cinch'
+require_relative 'base_command'
 
 module Plugins
   module Commands
     module Authentication
-      class Login
+      class Login < BaseCommand
         include Cinch::Plugin
+        ignore_ignored_users
 
         match(/login (.+)/i)
 
@@ -65,7 +67,6 @@ module Plugins
         # Attempts to log in.
         # @see check_valid
         def execute(msg, pass)
-          return if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
           check_valid(msg.user.authname, pass)
           msg.reply(@message)
         end

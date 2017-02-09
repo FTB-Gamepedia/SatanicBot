@@ -1,11 +1,13 @@
 require 'cinch'
 require 'oxford_dictionary'
 require 'addressable/uri'
+require_relative 'base_command'
 
 module Plugins
   module Commands
-    class Dictionary
+    class Dictionary < BaseCommand
       include Cinch::Plugin
+      ignore_ignored_users
 
       match(/dict (.+)/i)
 
@@ -51,8 +53,6 @@ module Plugins
       # @param term [String] The term for which a definition is requested
       # @todo Perhaps multilingualism. Oxford allows you to provide a language code.
       def execute(msg, term)
-        return if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
-
         term = Addressable::URI.escape(term)
 
         begin

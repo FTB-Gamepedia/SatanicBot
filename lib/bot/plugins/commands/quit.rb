@@ -1,9 +1,11 @@
 require 'cinch'
+require_relative 'base_command'
 
 module Plugins
   module Commands
-    class Quit
+    class Quit < BaseCommand
       include Cinch::Plugin
+      ignore_ignored_users
 
       match(/quit/i)
 
@@ -12,7 +14,6 @@ module Plugins
 
       # Quits the bot if the user is authenticated as the owner.
       def execute(msg)
-        return if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
         if msg.user.authname == Variables::Constants::OWNER
           LittleHelper.quit(msg.user.name)
         else

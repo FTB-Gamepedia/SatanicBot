@@ -1,9 +1,11 @@
 require 'cinch'
+require_relative 'base_command'
 
 module Plugins
   module Commands
-    class DeleteTiles
+    class DeleteTiles < BaseCommand
       include Cinch::Plugin
+      ignore_ignored_users
 
       match(/deletetiles ([\d+\|]+)/i)
 
@@ -11,7 +13,6 @@ module Plugins
       Variables::NonConstants.add_command('deletetiles', doc)
 
       def execute(msg, ids)
-        return if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
         authedusers = Variables::NonConstants.get_authenticated_users
         if authedusers.include?(msg.user.authname)
           butt = LittleHelper.init_wiki

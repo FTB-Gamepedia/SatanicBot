@@ -1,9 +1,11 @@
 require 'cinch'
+require_relative 'base_command'
 
 module Plugins
   module Commands
-    class CleverBot
+    class CleverBot < BaseCommand
       include Cinch::Plugin
+      ignore_ignored_users
 
       match(/^(.+): (.+)/i, use_prefix: false)
 
@@ -11,7 +13,6 @@ module Plugins
       Variables::NonConstants.add_command('cleverbot', DOC)
 
       def execute(msg, username, talk)
-        return if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
         return unless username.casecmp(bot.nick).zero?
         msg.reply("#{msg.user.nick}: #{LittleHelper::CLEVER.say(talk)}")
       end

@@ -1,8 +1,9 @@
 require 'cinch'
+require_relative 'base_command'
 
 module Plugins
   module Commands
-    class ChangeCategory
+    class ChangeCategory < BaseCommand
       include Cinch::Plugin
 
       match(/changecat (.+) \| (.+) -> (.+)/)
@@ -17,7 +18,6 @@ module Plugins
       # @param old_cat [String] The old category needed to be changed.
       # @param new_cat [String] What to change the category to.
       def execute(msg, page, old_cat, new_cat)
-        return if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
         authedusers = Variables::NonConstants.get_authenticated_users
         old_cat = "Category:#{old_cat}" if /^Category:/ !~ old_cat
         new_cat = "Category:#{new_cat}" if /^Category:/ !~ new_cat

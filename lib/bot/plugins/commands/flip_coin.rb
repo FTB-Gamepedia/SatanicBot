@@ -1,9 +1,11 @@
 require 'cinch'
+require_relative 'base_command'
 
 module Plugins
   module Commands
-    class FlipCoin
+    class FlipCoin < BaseCommand
       include Cinch::Plugin
+      ignore_ignored_users
 
       match(/flip/i)
 

@@ -1,9 +1,11 @@
 require 'cinch'
+require_relative 'base_command'
 
 module Plugins
   module Commands
-    class CheckMail
+    class CheckMail < BaseCommand
       include Cinch::Plugin
+      ignore_ignored_users
 
       match(/checkmail/)
 

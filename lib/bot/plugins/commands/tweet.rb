@@ -1,8 +1,9 @@
 require 'cinch'
+require_relative 'base_command'
 
 module Plugins
   module Commands
-    class Tweet
+    class Tweet < BaseCommand
       include Cinch::Plugin
 
       match(/tweet (.+)/i)
@@ -14,7 +15,6 @@ module Plugins
       # @param msg [Cinch::Message]
       # @param tweet [String] The message to tweet.
       def execute(msg, tweet)
-        return if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
         # 134 because it has to fit "[IRC] "
         if tweet.length > 1 && tweet.length < 134
           LittleHelper::TWEETER.update("[IRC] #{tweet}")

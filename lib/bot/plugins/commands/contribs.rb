@@ -1,11 +1,13 @@
 require 'cinch'
 require 'string-utility'
+require_relative 'base_command'
 
 module Plugins
   module Commands
     class GetContribs
       include Cinch::Plugin
       using StringUtility
+      ignore_ignored_users
 
       match(/contribs (.+)/i, method: :execute)
       match(/contribs$/i, method: :no_username)
@@ -20,7 +22,6 @@ module Plugins
       # @param username [String] The username to check.
       # @param you [Boolean] Whether the username is also the user who performed the command.
       def execute(msg, username, you = false)
-        return if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
         butt = LittleHelper.init_wiki
         count = butt.get_contrib_count(username).to_s.separate
         unless count

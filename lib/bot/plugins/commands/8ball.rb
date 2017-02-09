@@ -1,10 +1,12 @@
 require 'cinch'
 require 'string-utility'
+require_relative 'base_command'
 
 module Plugins
   module Commands
-    class EightBall
+    class EightBall < BaseCommand
       include Cinch::Plugin
+      ignore_ignored_users
 
       match(/8ball/i)
 
@@ -14,7 +16,6 @@ module Plugins
       # Gets a random fortune and says it in chat.
       # @param msg [Cinch::Message] The message.
       def execute(msg)
-        return if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
         msg.reply(StringUtility.random_line(Variables::Constants::FORTUNE_PATH))
       end
     end

@@ -1,11 +1,13 @@
 require 'cinch'
 require 'string-utility'
+require_relative 'base_command'
 
 module Plugins
   module Commands
-    class MoveGeneral
+    class MoveGeneral < BaseCommand
       include Cinch::Plugin
       using StringUtility
+      ignore_ignored_users
 
       match(/safemove (.+) -> (.+)/i)
 
@@ -18,7 +20,6 @@ module Plugins
       # @param old_page [String] The old page name.
       # @param new_page [String] The new page name.
       def execute(msg, old_page, new_page)
-        return if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
         authed_users = Variables::NonConstants.get_authenticated_users
         if authed_users.include? msg.user.authname
           butt = LittleHelper.init_wiki

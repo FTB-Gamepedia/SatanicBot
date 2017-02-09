@@ -1,10 +1,12 @@
 require 'cinch'
 require 'timerizer'
+require_relative 'base_command'
 
 module Plugins
   module Commands
-    class YouveGotMail
+    class YouveGotMail < BaseCommand
       include Cinch::Plugin
+      ignore_ignored_users
 
       # Match anything but messages containing checkmail.
       match(/^(?!.*checkmail).*/i, use_prefix: false)

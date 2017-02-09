@@ -1,16 +1,17 @@
 require 'cinch'
+require_relative 'base_command'
 
 module Plugins
   module Commands
-    class NewVanilla
+    class NewVanilla < BaseCommand
       include Cinch::Plugin
+      ignore_ignored_users
       match(/newvanilla (.+) \| (.+)/i)
 
       DOC = 'Creates a new page for a Vanilla thing. Op-only. 1 arg: $newvanilla <page> | <type>'.freeze
       Variables::NonConstants.add_command('newvanilla', DOC)
 
       def execute(msg, page, type)
-        return if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
         authedusers = Variables::NonConstants.get_authenticated_users
         if authedusers.include?(msg.user.authname)
           butt = LittleHelper.init_wiki

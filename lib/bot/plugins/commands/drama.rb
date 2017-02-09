@@ -1,10 +1,12 @@
 require 'cinch'
 require 'curb'
+require_relative 'base_command'
 
 module Plugins
   module Commands
-    class Drama
+    class Drama < BaseCommand
       include Cinch::Plugin
+      ignore_ignored_users
 
       match(/drama/i)
 
@@ -12,7 +14,6 @@ module Plugins
       Variables::NonConstants.add_command('drama', DOC)
 
       def execute(msg)
-        return if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
         msg.reply(Curl.get('http://mc-drama.herokuapp.com/raw'.freeze).body_str)
       end
     end

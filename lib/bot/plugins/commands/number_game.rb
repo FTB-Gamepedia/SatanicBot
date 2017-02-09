@@ -1,9 +1,11 @@
 require 'cinch'
+require_relative 'base_command'
 
 module Plugins
   module Commands
-    class NumberGame
+    class NumberGame < BaseCommand
       include Cinch::Plugin
+      ignore_ignored_users
 
       match(/game start$/i, method: :init)
       match(/game guess (\d+)/i, method: :guess)
@@ -21,7 +23,6 @@ module Plugins
       # Quits the number game if one has been started.
       # @param msg [Cinch::Message]
       def quit(msg)
-        return if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
         if @started
           msg.reply('Game exited.'.freeze)
           @started = false
@@ -35,7 +36,6 @@ module Plugins
       # Initializes a number game.
       # @param msg [Cinch::Message]
       def init(msg)
-        return if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
         msg.reply('Game starting! You have 5 tries! Submit an answer by using $game guess followed by a number!'.freeze)
         @started = true
         @random_number = rand(100)
@@ -48,7 +48,6 @@ module Plugins
       # @param msg [Cinch::Message]
       # @param num [String] The number to guess.
       def guess(msg, num)
-        return if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
         num = num.to_i
         if @started
           @tries += 1

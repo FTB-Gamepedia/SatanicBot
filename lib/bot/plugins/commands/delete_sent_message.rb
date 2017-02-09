@@ -1,9 +1,11 @@
 require 'cinch'
+require_relative 'base_command'
 
 module Plugins
   module Commands
-    class DeleteSentMessage
+    class DeleteSentMessage < BaseCommand
       include Cinch::Plugin
+      ignore_ignored_users
 
       match(/deletesent (\d+)/i)
 

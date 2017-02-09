@@ -1,10 +1,12 @@
 require 'cinch'
 require 'mojang'
+require_relative 'base_command'
 
 module Plugins
   module Commands
-    class MojangStatus
+    class MojangStatus < BaseCommand
       include Cinch::Plugin
+      ignore_ignored_users
 
       match(/mcstatus/i)
 
@@ -12,7 +14,6 @@ module Plugins
       Variables::NonConstants.add_command('mcstatus', DOC)
 
       def execute(msg)
-        return if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
         statuses = Mojang.status
         messages = []
         statuses.each do |site, status|

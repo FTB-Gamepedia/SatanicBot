@@ -1,10 +1,12 @@
 require 'cinch'
+require_relative 'base_command'
 
 module Plugins
   module Commands
     module Info
-      class Help
+      class Help < BaseCommand
         include Cinch::Plugin
+        ignore_ignored_users
 
         match(/help$/i, method: :help)
         match(/help (.+)/i, method: :command)
@@ -16,7 +18,6 @@ module Plugins
         # States the bot's command prefix character, and all of its commands.
         # @param msg [Cinch::Message]
         def help(msg)
-          return if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
           command_names = Variables::NonConstants.get_commands.keys.join(', ').freeze
           msg.reply("Listing commands... #{command_names}".freeze)
         end
@@ -34,8 +35,9 @@ module Plugins
         end
       end
 
-      class Src
+      class Src < BaseCommand
         include Cinch::Plugin
+        ignore_ignored_users
 
         match(/src/i)
 
@@ -45,7 +47,6 @@ module Plugins
         # States the creator of the bot, as well as the source code repository.
         # @param msg [Cinch::Message]
         def execute(msg)
-          return if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
           msg.reply('This bot was created by SatanicSanta, or Eli Foster: ' \
                     'https://github.com/ftb-gamepedia/SatanicBot'.freeze)
         end

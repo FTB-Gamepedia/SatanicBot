@@ -1,9 +1,11 @@
 require 'cinch'
+require_relative 'base_command'
 
 module Plugins
   module Commands
-    class AddQuote
+    class AddQuote < BaseCommand
       include Cinch::Plugin
+      ignore_ignored_users
 
       match(/addquote (.+)/i)
 
@@ -14,7 +16,6 @@ module Plugins
       # @param msg [Cinch::Message]
       # @param quote [String] The quote's text.
       def execute(msg, quote)
-        return if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
         authedusers = Variables::NonConstants.get_authenticated_users
         if authedusers.include?(msg.user.authname)
           butt = LittleHelper.init_wiki

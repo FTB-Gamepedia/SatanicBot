@@ -1,14 +1,15 @@
 require 'cinch'
+require_relative 'base_command'
 
 module Plugins
   module Commands
-    class ReadTweet
+    class ReadTweet < BaseCommand
       include Cinch::Plugin
+      ignore_ignored_users
 
       match(/twitter\.com\/.+\/status\/(.+)/i, use_prefix: false)
 
       def execute(msg, tweet_id)
-        return if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
         tweet = LittleHelper::TWEETER.status(tweet_id.to_i)
         msg.reply("@#{tweet.user.screen_name} tweeted '#{tweet.text}'")
       end

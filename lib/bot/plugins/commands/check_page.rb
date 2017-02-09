@@ -1,12 +1,14 @@
 require 'cinch'
 require 'string-utility'
 require 'isgd'
+require_relative 'base_command'
 
 module Plugins
   module Commands
-    class CheckPage
+    class CheckPage < BaseCommand
       using StringUtility
       include Cinch::Plugin
+      ignore_ignored_users
 
       match(/checkpage (.+)/i)
 
@@ -17,7 +19,6 @@ module Plugins
       # @param msg [Cinch::Message]
       # @param page [String] The page to check.
       def execute(msg, page)
-        return if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
         butt = LittleHelper.init_wiki
         page = page.spacify
         is_redir = butt.page_redirect?(page)

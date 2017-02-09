@@ -1,9 +1,11 @@
 require 'cinch'
+require_relative 'base_command'
 
 module Plugins
   module Commands
-    class GetAbbreviation
+    class GetAbbreviation < BaseCommand
       include Cinch::Plugin
+      ignore_ignored_users
 
       match(/getabbrv (.+)/)
 
@@ -45,7 +47,6 @@ module Plugins
       # @param msg [Cinch::Message]
       # @param thing [String] The abbreviation OR mod.
       def execute(msg, thing)
-        return if Variables::Constants::IGNORED_USERS.include?(msg.user.nick)
         butt = LittleHelper.init_wiki
         module_text = butt.get_text(PAGE)
         escaped_thing = thing.gsub("'") { "\\\\'" }
