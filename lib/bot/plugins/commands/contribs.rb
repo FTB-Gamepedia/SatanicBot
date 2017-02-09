@@ -4,7 +4,7 @@ require_relative 'base_command'
 
 module Plugins
   module Commands
-    class GetContribs
+    class GetContribs < BaseCommand
       include Cinch::Plugin
       using StringUtility
       ignore_ignored_users

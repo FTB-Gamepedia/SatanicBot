@@ -3,7 +3,7 @@ require_relative 'base_command'
 
 module Plugins
   module Commands
-    class Tell
+    class Tell < BaseCommand
       include Cinch::Plugin
       ignore_ignored_users
 
