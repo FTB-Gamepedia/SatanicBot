@@ -10,10 +10,8 @@ module Plugins
       include Cinch::Plugin
       ignore_ignored_users
 
+      set(help: 'Checks if a page exists. 1 arg: $checkpage <page name>', plugin_name: 'checkpage')
       match(/checkpage (.+)/i)
-
-      DOC = 'Checks if a page exists. 1 arg: $checkpage <page>'.freeze
-      Variables::NonConstants.add_command('checkpage', DOC)
 
       # Checks whether the page exists on the wiki.
       # @param msg [Cinch::Message]

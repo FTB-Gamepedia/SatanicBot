@@ -7,10 +7,8 @@ module Plugins
       include Cinch::Plugin
       ignore_ignored_users
 
+      set(help: 'Heads or tails! No args.', plugin_name: 'flip')
       match(/flip/i)
-
-      DOC = 'Heads or tails! No args.'.freeze
-      Variables::NonConstants.add_command('flip', DOC)
 
       COIN = %w(Tails! Heads!).freeze
 

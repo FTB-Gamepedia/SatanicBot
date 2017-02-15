@@ -6,10 +6,10 @@ module Plugins
     class NewVanilla < AuthorizedCommand
       include Cinch::Plugin
       ignore_ignored_users
-      match(/newvanilla (.+) \| (.+)/i)
 
-      DOC = 'Creates a new page for a Vanilla thing. Op-only. 1 arg: $newvanilla <page> | <type>'.freeze
-      Variables::NonConstants.add_command('newvanilla', DOC)
+      set(help: 'Creates a new page for a Vanilla thing. Op-only. 2 args: $newvanilla <page> | <type>',
+          plugin_name: 'newvanilla')
+      match(/newvanilla (.+) \| (.+)/i)
 
       def execute(msg, page, type)
         butt = LittleHelper.init_wiki

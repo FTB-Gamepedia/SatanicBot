@@ -7,10 +7,8 @@ module Plugins
       include Cinch::Plugin
       ignore_ignored_users
 
+      set(help: 'Adds a quote to the quote list. Op-only. 1 arg: $addquote <quote>', plugin_name: 'addquote')
       match(/addquote (.+)/i)
-
-      DOC = 'Adds a quote to the quote list. Op-only. 1 arg: $addquote <quote>'.freeze
-      Variables::NonConstants.add_command('addquote', DOC)
 
       # Adds a quote to the quote list, for $randquote.
       # @param msg [Cinch::Message]

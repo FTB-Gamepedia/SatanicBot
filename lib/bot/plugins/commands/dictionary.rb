@@ -9,10 +9,9 @@ module Plugins
       include Cinch::Plugin
       ignore_ignored_users
 
+      set(help: 'Proides a definition and examples if applicable for thee provided word. 1 arg: $dict <term>',
+          plugin_name: 'dict')
       match(/dict (.+)/i)
-
-      DOC = 'Provides a definition, including examples if applicable, for the provided word. 1 required arg: $dict <term>'.freeze
-      Variables::NonConstants.add_command('dict', DOC)
 
       MAX_PUBLIC_DEFS = 4
 

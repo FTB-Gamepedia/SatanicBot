@@ -7,6 +7,8 @@ module Plugins
       include Cinch::Plugin
       ignore_ignored_users
 
+      set(help: 'Deletes an unread mail that the user has sent. 1 arg: $deletesent <mail message ID>',
+          plugin_name: 'deletesent')
       match(/deletesent (\d+)/i)
 
       def execute(msg, mail_id)

@@ -9,10 +9,7 @@ module Plugins
       ignore_ignored_users
 
       match(/what does ["'](.+)["'] mean\?/i)
-      set(:prefix, //)
-
-      DOC = 'Gets a definition for the word from Urban Dictionary.'.freeze
-      Variables::NonConstants.add_command('urban', DOC)
+      set(prefix: //, help: 'Gets a definition for the word from Urban Dictionary.', plugin_name: 'urban')
 
       def execute(msg, word)
         slangs = UrbanDictionary.define(word)

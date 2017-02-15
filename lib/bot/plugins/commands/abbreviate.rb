@@ -9,11 +9,9 @@ module Plugins
       using ArrayUtility
       ignore_ignored_users
 
+      set(help: 'Abbreviates a mod for the Tilesheet extension. Op-only. 2 args: $abbrv <abbreviation> <mod name>',
+          plugin_name: 'abbrv')
       match(/abbrv ([A-Z0-9\-]+) (.+)/i)
-
-      DOC = 'Abbreivates a mod for the tilesheet extension. An op-only command. ' \
-            '2 args: $abbrv <abbreviation> <mod_name>'.freeze
-      Variables::NonConstants.add_command('abbrv', DOC)
 
       # Abbreviates the given mod with the given abbreviation. Fails when the
       #   mod or abbreviation are already on the list, or the user is not

@@ -8,10 +8,8 @@ module Plugins
       include Cinch::Plugin
       ignore_ignored_users
 
+      set(help: 'Gets the status of the various Mojang servers. No args.', plugin_name: 'mcstatus')
       match(/mcstatus/i)
-
-      DOC = 'Gets the status of the various Mojang servers. No args.'.freeze
-      Variables::NonConstants.add_command('mcstatus', DOC)
 
       def execute(msg)
         statuses = Mojang.status

@@ -8,10 +8,11 @@ module Plugins
       include Cinch::Plugin
       ignore_ignored_users
 
+      set(help: 'Determines your fortune. No args'.freeze, plugin_name: '8ball')
       match(/8ball/i)
 
-      DOC = 'Determines your fortune. No args'.freeze
-      Variables::NonConstants.add_command('8ball', DOC)
+      # DOC = 'Determines your fortune. No args'.freeze
+      # Variables::NonConstants.add_command('8ball', DOC)
 
       # Gets a random fortune and says it in chat.
       # @param msg [Cinch::Message] The message.

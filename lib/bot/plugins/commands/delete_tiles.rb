@@ -7,10 +7,8 @@ module Plugins
       include Cinch::Plugin
       ignore_ignored_users
 
+      set(help: 'Deletes a set of Tilesheet tiles. 1 arg: pipe separated list of IDs.', plugin_name: 'deltetiles')
       match(/deletetiles ([\d+\|]+)/i)
-
-      doc = 'Deletes a set of Tilesheet tiles. 1 Argument: pipe separated list of IDs.'
-      Variables::NonConstants.add_command('deletetiles', doc)
 
       def execute(msg, ids)
         butt = LittleHelper.init_wiki

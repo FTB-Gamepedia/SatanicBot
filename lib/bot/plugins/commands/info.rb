@@ -8,30 +8,16 @@ module Plugins
         include Cinch::Plugin
         ignore_ignored_users
 
-        match(/help$/i, method: :help)
-        match(/help (.+)/i, method: :command)
-
-        DOC = 'Gets basic usage information on the bot. ' \
-              '1 optional arg: $help <command> to get info on a command.'.freeze
-        Variables::NonConstants.add_command('help', DOC)
+        # $help <command. is handled by Cinch itself using the `set` stuff.
+        set(help: 'Gets basic usage information on the bot. 1 optional arg: $help <command> to get info on a specific command',
+            plugin_name: 'help')
+        match(/help$/i)
 
         # States the bot's command prefix character, and all of its commands.
         # @param msg [Cinch::Message]
-        def help(msg)
-          command_names = Variables::NonConstants.get_commands.keys.join(', ').freeze
+        def execute(msg)
+          command_names = LittleHelper::BOT.plugins.map { |plugin| plugin.class.plugin_name }.sort.join(', ').freeze
           msg.reply("Listing commands... #{command_names}".freeze)
-        end
-
-        # States the information for the command defined in Constants.
-        # @param msg [Cinch::Message]
-        # @param command [String] The command to get the info for.
-        def command(msg, command)
-          if Variables::NonConstants.get_commands.keys.include? command
-            command_info = Variables::NonConstants.get_commands[command]
-            msg.reply("Command: #{command}. Info: #{command_info}")
-          else
-            msg.reply('That is not a command.'.freeze)
-          end
         end
       end
 
@@ -39,10 +25,9 @@ module Plugins
         include Cinch::Plugin
         ignore_ignored_users
 
+        set(help: "Outputs my creator's name and my source repository.", plugin_name: 'src')
         match(/src/i)
 
-        DOC = "Outputs my creator's name and my repository.".freeze
-        Variables::NonConstants.add_command('src', DOC)
 
         # States the creator of the bot, as well as the source code repository.
         # @param msg [Cinch::Message]

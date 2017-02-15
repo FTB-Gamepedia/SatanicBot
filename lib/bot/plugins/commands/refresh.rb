@@ -6,11 +6,10 @@ module Plugins
     class RefreshQuotes < BaseCommand
       include Cinch::Plugin
       ignore_ignored_users
-      match(/refreshquotes/)
 
-      DOC = 'Refreshes the quote list. Not necessary when adding quotes, ' \
-            'as that will automatically append to the list.'.freeze
-      Variables::NonConstants.add_command('refreshquotes', DOC)
+      set(help: 'Refreshes the quote list. Not necessary after adding quotes, as that automatically appends to the list.',
+          plugin_name: 'refreshquotes')
+      match(/refreshquotes/)
 
       def execute(msg)
         Variables::NonConstants.get_quotes(true)

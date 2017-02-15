@@ -7,11 +7,9 @@ module Plugins
       include Cinch::Plugin
       ignore_ignored_users
 
+      set(help: 'Changes a category in a page to a different one. Op-only. 3 args: $changecat <page> | <old> -> <new>',
+          plugin_name: 'changecat')
       match(/changecat (.+) \| (.+) -> (.+)/)
-
-      DOC = 'Changes a category in a page to a different one. 3 args: $changecat <page> | <old> -> <new> ' \
-            'All separation characters are required.'.freeze
-      Variables::NonConstants.add_command('changecat', DOC)
 
       # Changes any category on any page.
       # @param msg [Cinch::Message]

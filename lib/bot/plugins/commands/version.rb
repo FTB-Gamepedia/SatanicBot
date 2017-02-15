@@ -8,14 +8,11 @@ module Plugins
       include Cinch::Plugin
       ignore_ignored_users
 
+      set(help: 'Updates a mod version on the wiki. Op-only command. 2 args: $updatevers <page> | <version>',
+          plugin_name: 'updatevers')
+      set(help: 'Gets the current mod version on the page. 1 arg: $checkvers <page>', plugin_name: 'checkvers')
       match(/updatevers ([^\|\[\]<>%\+\?]+) \| (.+)/i, method: :update)
       match(/checkvers (.+)/i, method: :check)
-
-      UPDATE_DOC = 'Updates a mod version on the wiki. Op-only command. ' \
-                   '2 args: $updatevers <page> | <version> Args must be separated with a pipe in this command.'.freeze
-      CHECK_DOC = 'Gets the current version on the page. 1 arg: $checkvers <page>'.freeze
-      Variables::NonConstants.add_command('updatevers', UPDATE_DOC)
-      Variables::NonConstants.add_command('checkvers', CHECK_DOC)
 
       # Gets the current 'version' value for the page.
       # @param page [String] The page to check.

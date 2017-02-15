@@ -7,14 +7,11 @@ module Plugins
       include Cinch::Plugin
       ignore_ignored_users
 
+      set(help: 'Gets a comprehensive summary of all category members, their subcategories, and their members. Use ' \
+                'this command with caution, as it will take a long time to process. Will upload the final result to ' \
+                'Pastee. Op-only. 1 arg: $subcategorymembers <top category>',
+          plugin_name: 'subcategorymembers')
       match(/subcategorymembers (.+)/i)
-
-      DOC = 'Get a comprehensive summary of all category members, their ' \
-            'subcategories, and their members. Use this command with ' \
-            'caution, as it will take a long time to process. Will upload ' \
-            'the final result to Pastee. 1 arg: $subcategorymembers ' \
-            '<top category>'.freeze
-      Variables::NonConstants.add_command('subcategorymembers', DOC)
 
       # Gets a hash containing all of the category's members, subcategories,
       #   their members, their subcategories, etc. recursively.

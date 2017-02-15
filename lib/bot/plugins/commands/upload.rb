@@ -7,10 +7,9 @@ module Plugins
       include Cinch::Plugin
       ignore_ignored_users
 
+      set(help: 'Uploads a web file to the wiki. Op-only. 2 args: $upload <url to upload> <filename to upload to>',
+          plugin_name: 'upload')
       match(/upload (.*) (.*)/)
-
-      DOC = 'Uploads a web file to the wiki. Op-only. 2 args: $upload <url> <filename>'.freeze
-      Variables::NonConstants.add_command('upload', DOC)
 
       # Uploads a file to the wiki.
       # @param msg [Cinch::Message]

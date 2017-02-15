@@ -7,6 +7,8 @@ module Plugins
       include Cinch::Plugin
       ignore_ignored_users
 
+      set(help: 'Privately sends the user all of the messages that they have sent that have not been read yet.',
+          plugin_name: 'getsent')
       match(/getsent/i)
 
       def execute(msg)

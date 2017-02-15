@@ -7,11 +7,9 @@ module Plugins
       include Cinch::Plugin
       ignore_ignored_users
 
+      set(help: 'Gets either the abbreviation for the given mod, or the mod for the given abbreviation. 1 arg: $getabbrv <thing>',
+          plugin_name: 'getabbrv')
       match(/getabbrv (.+)/)
-
-      DOC = 'Gets either the abbreviation for the given mod, or the mod for the given abbreviation. ' \
-            '1 arg: $getabbrv <thing>'.freeze
-      Variables::NonConstants.add_command('getabbrv', DOC)
 
       PAGE = 'Module:Mods/list'.freeze
 

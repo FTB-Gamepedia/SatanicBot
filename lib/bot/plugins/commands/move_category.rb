@@ -8,11 +8,10 @@ module Plugins
       include Cinch::Plugin
       ignore_ignored_users
 
+      set(help: 'Moves one category to another, and edits all its members to reflect this change. 2 args: $movecat ' \
+                '<old> -> <new>.',
+          plugin_name: 'movecat')
       match(/movecat ([^\|\[\]<>%\+\?]+) \-> ([^\|\[\]<>%\+\?]+)/i)
-
-      DOC = 'Moves one category to another, and edits all its members. ' \
-            '2 args: $movecat <old> -> <new> Args must be separated with a ->.'.freeze
-      Variables::NonConstants.add_command('movecat', DOC)
 
       # Moves a category, and tries to update all of its members.
       # @param msg [Cinch::Message]

@@ -12,6 +12,12 @@ module Plugins
       using ArrayUtility
       ignore_ignored_users
 
+      set(help: 'Outputs a random word. No args.', plugin_name: 'randword')
+      set(help: 'Outputs a random sentence. No args.', plugin_name: 'randsentence')
+      set(help: 'Outputs a random quote. No args.', plugin_name: 'randquote')
+      set(help: 'Outputs a random number. 1 optional arg: $randnum [max], 100 is default.', plugin_name: 'randnum')
+      set(help: 'Outputs a motivational message. 1 optional arg: $motivate [user], defaults to command sender.',
+          plugin_name: 'motivate')
       match(/randword/i, method: :random_word)
       match(/randsentence/i, method: :random_sentence)
       match(/randquote/i, method: :random_quote)
@@ -19,20 +25,6 @@ module Plugins
       match(/randnum (\d+)/i, method: :random_number_max)
       match(/motivate$/i, method: :motivate_you)
       match(/motivate (.+)/i, method: :motivate_else)
-
-      WORD_DOC = 'Outputs a random word. No args.'.freeze
-      SENTENCE_DOC = 'Outputs a random sentence. No args.'.freeze
-      QUOTE_DOC = 'Outputs a random quote. No args.'.freeze
-      NUM_DOC = 'Outputs a random number. 1 optional arg: $randnum <max>, ' \
-                'when not set 100 will be used as the maximum.'.freeze
-      MOTIVATE_DOC = 'Motivates you or the user provided in the first arg. ' \
-                     'If the user in the first arg is not in the channel, ' \
-                     'I will motivate you instead <3'.freeze
-      Variables::NonConstants.add_command('randword', WORD_DOC)
-      Variables::NonConstants.add_command('randsentence', SENTENCE_DOC)
-      Variables::NonConstants.add_command('randquote', QUOTE_DOC)
-      Variables::NonConstants.add_command('randnum', NUM_DOC)
-      Variables::NonConstants.add_command('motivate', MOTIVATE_DOC)
 
       # Gets a random word that has not been said in the channel within the past
       #   5 calls.

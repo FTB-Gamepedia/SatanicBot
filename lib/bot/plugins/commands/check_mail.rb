@@ -7,10 +7,8 @@ module Plugins
       include Cinch::Plugin
       ignore_ignored_users
 
+      set(help: 'Checks the user mail and sends it to them publicly. No arguments.', plugin_name: 'checkmail')
       match(/checkmail/)
-
-      DOC = 'Checks the user mail and sends it to them *publicly*. No arguments.'.freeze
-      Variables::NonConstants.add_command('checkmail', DOC)
 
       # Cinch formatting color symbols.
       COLORS = [

@@ -6,10 +6,8 @@ module Plugins
     class Tweet < BaseCommand
       include Cinch::Plugin
 
+      set(help: 'Tweets the provided message on the bot Twitter account. 1 arg: $tweet <message>', plugin_name: 'tweet')
       match(/tweet (.+)/i)
-
-      DOC = 'Creates a new tweet on the LittleHelperBot Twitter account. 1 arg: $tweet <message>'.freeze
-      Variables::NonConstants.add_command('tweet', DOC)
 
       # Tweets the message provided.
       # @param msg [Cinch::Message]

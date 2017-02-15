@@ -8,19 +8,16 @@ module Plugins
       include Cinch::Plugin
       ignore_ignored_users
 
+      set(help: 'Provides weather information for the given place. 1 optional arg: $weather [place], if not provided' \
+                ' it will use the location of the command sender using IP geolocation.',
+          plugin_name: 'weather')
+      set(help: 'Provides forecast information for the next 3 days including nights. 1 optional arg: $forecast ' \
+                '[place], if not provided it will use the locaiton of the command sender using IP geolocation.',
+          plugin_name: 'forecast')
       match(/weather (.+)/i, method: :weather)
       match(/forecast (.+)/i, method: :forecast)
       match(/weather$/i, method: :weather_self)
       match(/forecast$/i, method: :forecast_self)
-
-      WEATHER_DOC = 'Provides weather information for the given place. 1 ' \
-                    'optional arg: $weather <place>, if not provided it will ' \
-                    "use the user's IP address using simple_geolocator".freeze
-      FORECAST_DOC = 'Provides forecast information for the enxt 3 days, ' \
-                     'including nights. 1 optional arg: $forecast <place>, ' \
-                     "if not provided it will use the user's IP address using simple_geolocator".freeze
-      Variables::NonConstants.add_command('weather', WEATHER_DOC)
-      Variables::NonConstants.add_command('forecast', FORECAST_DOC)
 
       # Gets the current weather conditions for the location.
       # @param msg [Cinch::Message]

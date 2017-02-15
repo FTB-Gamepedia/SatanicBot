@@ -7,13 +7,12 @@ module Plugins
       include Cinch::Plugin
       ignore_ignored_users
 
+      set(help: 'Adds a mod to the list of mods on the main page. Op-only. 1 arg: $addmod <mod name>',
+          plugin_name: 'addmod')
+      set(help: 'Adds a mod to the list of minor mods on the main page. Op-only. 1 arg: $addminor <mod name>',
+          plugin_name: 'addminor')
       match(/addmod (.+)/i, method: :execute_major)
       match(/addminor (.+)/i, method: :execute_minor)
-
-      MOD_DOC = 'Adds a mod to the list of mods on the main page. Op-only. 1 arg: $addmod <mod name>'.freeze
-      MINOR_DOC = 'Adds a mod to the list of minor mods on the main page. Op-only. 1 arg: $addminor <mod name>'.freeze
-      Variables::NonConstants.add_command('addmod', MOD_DOC)
-      Variables::NonConstants.add_command('addminor', MINOR_DOC)
 
       # Adds the mod to the list of mods on the main page of the FTB wiki.
       #   Unlike most other execute methods, this one is not actually called

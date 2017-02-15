@@ -53,7 +53,6 @@ module Variables
   end
 
   module NonConstants
-    @commands = {}
     @quotes = []
     @youve_got_mail_times = {}
 
@@ -86,19 +85,6 @@ module Variables
     # @return [void]
     def append_quote(quote)
       @quotes << quote
-    end
-
-    # Gets the command names and their docs.
-    # @return [Hash] The commands.
-    def get_commands
-      @commands
-    end
-
-    # Adds a command to the hash.
-    # @param name [String] The command name, basically whatever comes after $.
-    # @param doc [String] The documentation of the command for $help.
-    def add_command(name, doc)
-      @commands[name] = doc
     end
   end
 end

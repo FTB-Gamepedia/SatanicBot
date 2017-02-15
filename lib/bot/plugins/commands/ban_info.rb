@@ -8,13 +8,10 @@ module Plugins
       include Cinch::Plugin
       ignore_ignored_users
 
+      set(help: 'Gets whether the user is banned on a Minecraft server. 1 optional arg: $banned [user]. If no user' \
+                ' is provided, the nickname of the command user will be used', plugin_name: 'banned')
       match(/banned (.+)/i, method: :execute)
       match(/banned$/i, method: :do_self)
-
-      DOC = 'Gets whether or not the user is banned on a Minecraft server. ' \
-            '1 optional arg: $banned <user> If there is no arg provided, ' \
-            "the user's nickname will be used.".freeze
-      Variables::NonConstants.add_command('banned', DOC)
 
       # Gets Minecraft server ban information from Fishbans.
       # @param msg [Cinch::Message]

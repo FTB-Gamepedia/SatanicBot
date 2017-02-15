@@ -7,12 +7,10 @@ module Plugins
       include Cinch::Plugin
       ignore_ignored_users
 
+      set(help: 'Gets a comprehensive summary of all category members, organized by the other categories of each ' \
+                'member. Use this command with caution, as it will take a very long time to process. Uploads the ' \
+                'summary to Pastee. Op-only. 1 arg: $categorymembers <top category>', plugin_name: 'categorymembers')
       match(/categorymembers (.+)/i)
-
-      DOC = 'Gets a comprehensive summary of all category members, organized by the other categories of each ' \
-            'member. Use this command with caution, as it will take a very long time to ' \
-            'process. Uploads the summary to Pastee. 1 arg: $categorymembers <top category>'.freeze
-      Variables::NonConstants.add_command('categorymembers', DOC)
 
       # Creates a massive comprehensive summary of the category members of any
       #   given category on the wiki, and puts it on Pastee. The comprehensive

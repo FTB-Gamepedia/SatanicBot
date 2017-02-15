@@ -9,11 +9,10 @@ module Plugins
       using StringUtility
       ignore_ignored_users
 
+      set(help: 'Moves a page to a new page, with no redirect, including subpages. Edits all backlinks to reflect ' \
+                'this change. Op-only. 2 args: $safemove <old> -> <new>',
+          plugin_name: 'safemove')
       match(/safemove (.+) -> (.+)/i)
-
-      DOC = "Moves a page to a new page, with no redirect, including subpages. Edits all of the page's " \
-            'backlinks. 2 args: $safemove <old> -> <new> Args must be separated by ->'.freeze
-      Variables::NonConstants.add_command('safemove', DOC)
 
       # Safely moves a page by updating all of the backlinks possible.
       # @param msg [Cinch::Message]

@@ -7,10 +7,8 @@ module Plugins
       include Cinch::Plugin
       ignore_ignored_users
 
+      set(help: 'Sends a mail message to a user. 2 args: $tell <to> <message>', plugin_name: 'tell')
       match(/tell ([a-zA-Z][a-zA-Z0-9\^\-_\|\[\]]+) (.+)/)
-
-      DOC = 'Sends a message to a user that is not here. 2 args: $tell <to> <message>'.freeze
-      Variables::NonConstants.add_command('tell', DOC)
 
       # @param msg [Cinch::Message] The actual IRC message.
       # @param to [String] Recipient

@@ -11,12 +11,10 @@ module Plugins
 
       VALID_PROPERTIES = %w(pages articles edits images users activeusers admins).freeze
 
+      set(help: "Gives wiki stats. 1 optional arg: $stats [type], where type can be any of: #{VALID_PROPERTIES.join ('; ')}",
+          plugin_name: 'stats')
       match(/stats$/i, method: :get_all)
       match(/stats (.+)/i, method: :get_one)
-
-      DOC = 'Gives wiki stats. 1 optionl arg: $stats <type>, where type is ' \
-            "'pages', 'articles', 'edits', 'images', 'users', 'admins', or 'activeusers'.".freeze
-      Variables::NonConstants.add_command('stats', DOC)
 
       # Gets all statistics for the wiki, including number of pages, articles,
       #   edits, images, users, admins, and active users.

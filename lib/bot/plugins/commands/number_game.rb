@@ -7,13 +7,12 @@ module Plugins
       include Cinch::Plugin
       ignore_ignored_users
 
+      set(help: 'Number guessing game. Initialize with $game start. Then guess numbers with $game guess <number>. ' \
+                'A started game can be quit with $game quit.',
+          plugin_name: 'game')
       match(/game start$/i, method: :init)
       match(/game guess (\d+)/i, method: :guess)
       match(/game quit$/i, method: :quit)
-
-      DOC = 'Number guessing game. Initialize with $game star. Then guess numbers with $game guess <number>. ' \
-            'A game can be quit with $game quit'.freeze
-      Variables::NonConstants.add_command('game', DOC)
 
       @started = false
       @random_number = nil

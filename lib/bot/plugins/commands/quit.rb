@@ -7,10 +7,8 @@ module Plugins
       include Cinch::Plugin
       ignore_ignored_users
 
+      set(help: 'Murders me. Owner-only. No args.', plugin_name: 'quit')
       match(/quit/i)
-
-      DOC = 'Murders me. Owner only command. No args.'.freeze
-      Variables::NonConstants.add_command('quit', DOC)
 
       # Quits the bot if the user is authenticated as the owner.
       def execute(msg)

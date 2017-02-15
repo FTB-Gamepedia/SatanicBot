@@ -6,13 +6,11 @@ module Plugins
     class NewCategory < AuthorizedCommand
       include Cinch::Plugin
       ignore_ignored_users
+
+      set(help: 'Creates a new standard mod category. Op-only. 1 arg: $newmodcat <name>', plugin_name: 'newmodcat')
+      set(help: 'Creates a new minor mod category. Op-only. 1 arg: $newminorcat <name>', plugin_name: 'newminorcat')
       match(/newmodcat (.+)/i, method: :new_mod_category)
       match(/newminorcat (.+)/i, method: :new_minor_category)
-
-      MOD_DOC = 'Creates a standard mod category. Op-only. 1 arg: $newmodcat <name>'.freeze
-      MINOR_DOC = 'Creates a new minor mod category. Op-only. 1 arg: $newminorcat <name>'.freeze
-      Variables::NonConstants.add_command('newmodcat', MOD_DOC)
-      Variables::NonConstants.add_command('newminorcat', MINOR_DOC)
 
       def new_category(msg, page, minor = false)
         butt = LittleHelper.init_wiki
