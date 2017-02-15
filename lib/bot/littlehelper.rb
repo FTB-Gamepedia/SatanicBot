@@ -62,6 +62,7 @@ module LittleHelper
     Plugins::Commands::DeleteTiles,
     Plugins::Commands::ReadTweet,
     Plugins::Commands::Dictionary,
+    Plugins::Commands::IsDisambiguation,
     Plugins::Logger
   ]
 
