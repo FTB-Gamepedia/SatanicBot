@@ -14,11 +14,8 @@ module Plugins
         wiki = LittleHelper.init_wiki
         text = wiki.get_text(page_name)
         if text
-          if text =~ /\{\{Disambig(uation)?(\{\{L\}\})?\}\}/
-            msg.reply("#{page_name} is a disambiguation page.")
-          else
-            msg.reply("#{page_name} is not a disambiguation page.")
-          end
+          is_dis = wiki.get_categories_in_page(page_name).include?('Category:Disambiguation pages')
+          msg.reply("#{page_name} is #{is_dis ? 'a' : 'not a'} disambiguation page.")
         else
           msg.reply("#{page_name} is not a page.")
         end
