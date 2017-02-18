@@ -18,7 +18,7 @@ module Plugins
       # @param username [String] The username to check.
       def execute(msg, username)
         bans = Fishbans.get_total_bans(username)
-        if bans.is_a?(Fixnum)
+        if bans.is_a?(Integer)
           # A ternary would be illogical here for length.
           message =
             if bans > 0

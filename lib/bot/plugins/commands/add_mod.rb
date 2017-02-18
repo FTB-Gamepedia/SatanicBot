@@ -47,7 +47,7 @@ module Plugins
           text.prepend("<noinclude><translate><!--T:1-->\n</noinclude>")
           text << '<noinclude></translate></noinclude>'
           edit = butt.edit(page, text, true, true, "Add #{mod}")
-          if edit.is_a?(Fixnum)
+          if edit.is_a?(Integer)
             msg.reply("Successfully added #{mod} to #{page}")
           else
             msg.reply("Failed! Error code: #{edit}")
