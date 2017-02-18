@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 gem('string-utility', '~> 2.7', '<= 2.7.2')
 gem('mediawiki-butt', '~> 1.3')
-gem('fishbans', '~> 1.1')
+gem('fishbans', '~> 2.0')
 gem('weatheruby', '~> 0.6')
 gem('cinch', '~> 2.3')
 gem('literate_randomizer', '~> 0.4')
