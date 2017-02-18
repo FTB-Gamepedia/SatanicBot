@@ -27,7 +27,7 @@ module Plugins
         # A ternary would be illogical here for length.
         message =
           if bans > 0
-            "#{username} has been banned! What a loser! They've been banned #{bans} times!"
+            "#{username} has been banned! What a loser! They've been banned #{bans} time#{bans == 1 ? '' : 's'}!"
           else
             "#{username} has not been banned! What a gentle person!"
           end
