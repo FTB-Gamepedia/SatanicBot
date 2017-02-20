@@ -7,46 +7,28 @@ module Plugins
       include Cinch::Plugin
       ignore_ignored_users
 
-      set(help: 'Creates a new standard mod category. Op-only. 1 arg: $newmodcat <name>', plugin_name: 'newmodcat')
-      set(help: 'Creates a new minor mod category. Op-only. 1 arg: $newminorcat <name>', plugin_name: 'newminorcat')
-      match(/newmodcat (.+)/i, method: :new_mod_category)
-      match(/newminorcat (.+)/i, method: :new_minor_category)
+      set(help: 'Creates a new mod category. Op-only. 1 arg: $newmodcat <name>', plugin_name: 'newmodcat')
+      match(/newmodcat (.+)/i)
 
-      def new_category(msg, page, minor = false)
+      def execute(msg, page)
+        page = "Category:#{page}" if /^Category:/ !~ page
+
         butt = LittleHelper.init_wiki
         if butt.get_text(page).nil?
-          text = "[[Category:Mod categories]]\n"
-          category = minor ? '[[Category:Minor Mods]]' : '[[Category:Mods]]'
-          text << category
+          text = "[[Category:Mod categories]]\n[[Category:Mods]]"
           begin
-          edit = butt.create_page(page, text, 'New mod category.')
-          if edit
-            msg.reply("Successfully created #{page}.")
-          else
-            msg.reply('Failed! There was no change to the page')
-          end
+            edit = butt.create_page(page, text, 'New mod category.')
+            if edit
+              msg.reply("Successfully created #{page}.")
+            else
+              msg.reply('Failed! There was no change to the page')
+            end
           rescue EditError => e
             msg.reply("Failed! Error code: #{e.message}")
           end
         else
           msg.reply('That page already exists.'.freeze)
         end
-      end
-
-      # Creates a major (non-minor) mod category.
-      # @param msg [Cinch::Message]
-      # @param page [String] The mod name.
-      def new_mod_category(msg, page)
-        page = "Category:#{page}" if /^Category:/ !~ page
-        new_category(msg, page)
-      end
-
-      # Creates a minor mod category.
-      # @param msg [Cinch::Message]
-      # @param page [String] The mod name.
-      def new_minor_category(msg, page)
-        page = "Category:#{page}" if /^Category:/ !~ page
-        new_category(msg, page, true)
       end
     end
   end

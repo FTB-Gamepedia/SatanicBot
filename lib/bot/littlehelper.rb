@@ -42,7 +42,6 @@ module LittleHelper
     Plugins::Commands::FlipCoin,
     Plugins::Commands::WikiStatistics,
     Plugins::Commands::NumberGame,
-    Plugins::Commands::AddMod,
     Plugins::Commands::Tweet,
     Plugins::Commands::Weather,
     Plugins::Commands::BanInfo,
