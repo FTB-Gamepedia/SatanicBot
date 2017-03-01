@@ -18,7 +18,7 @@ module Plugins
       # @param page [String] The page to check.
       def execute(msg, page)
         butt = LittleHelper.init_wiki
-        page = page.spacify
+        page.spacify!
         is_redir = butt.page_redirect?(page)
         link = ISGD.shorten("http://ftb.gamepedia.com/#{page.underscorify}")
         if is_redir.nil?

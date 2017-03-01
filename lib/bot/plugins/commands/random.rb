@@ -77,8 +77,7 @@ module Plugins
         @last_numbers = [] if @last_numbers.nil?
         number = rand(maximum.to_i) while @last_numbers.include?(number)
         @last_numbers.prepend_capped(number, 5)
-        number.to_s.separate if number > 999
-        msg.reply(number)
+        msg.reply(number.to_s.separate)
       end
 
       # Gets a random motivational statement for the user who used the command.

@@ -31,10 +31,10 @@ module Plugins
           links.each do |l|
             text = butt.get_text(l)
             next if text.nil? || text !~ /#{old_page}/
-            text.safely_gsub!(/\[\[#{old_page}\|/, "[[#{new_page}|")
-            text.safely_gsub!(/\[\[#{old_page}\]\]/, "[[#{new_page}]]")
-            text.safely_gsub!(/\{[Ll]\|#{old_page}\|/, "{{L|#{new_page}|")
-            text.safely_gsub!(/\{\{[Ll]\|#{old_page}\}\}/, "{{L|#{new_page}}}")
+            text.gsub!(/\[\[#{old_page}\|/, "[[#{new_page}|")
+            text.gsub!(/\[\[#{old_page}\]\]/, "[[#{new_page}]]")
+            text.gsub!(/\{[Ll]\|#{old_page}\|/, "{{L|#{new_page}|")
+            text.gsub!(/\{\{[Ll]\|#{old_page}\}\}/, "{{L|#{new_page}}}")
             begin
               butt.edit(l, text, true)
             rescue EditError => e
