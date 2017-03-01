@@ -75,11 +75,15 @@ module Plugins
         if full_defs.empty?
           msg.reply('No results found, but somehow it did not error properly. Check the logs.')
         else
-          full_defs.first(MAX_PUBLIC_DEFS).each { |defin| msg.reply(defin) }
-          count = full_defs.count
-          if count > MAX_PUBLIC_DEFS
-            msg.reply("Too many results to list in public (#{count}). Sending private message to requester, #{msg.user.nick}")
-            full_defs.drop(MAX_PUBLIC_DEFS).each { |defin| msg.user.send(defin) }
+          if msg.channel?
+            full_defs.first(MAX_PUBLIC_DEFS).each { |defin| msg.reply(defin) }
+            count = full_defs.count
+            if count > MAX_PUBLIC_DEFS
+              msg.reply("Too many results to list in public (#{count}). Sending private message to requester, #{msg.user.nick}")
+              full_defs.drop(MAX_PUBLIC_DEFS).each { |defin| msg.user.send(defin) }
+            end
+          else
+            full_defs.each { |defin| msg.reply(defin) }
           end
         end
       end
