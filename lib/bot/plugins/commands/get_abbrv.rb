@@ -47,10 +47,13 @@ module Plugins
       def execute(msg, thing)
         butt = LittleHelper.init_wiki
         module_text = butt.get_text(PAGE)
-        escaped_thing = thing.gsub("'") { "\\\\'" }
+        thing.gsub!("'") { %Q{\\\\'} }
 
-        names = get_names(escaped_thing, module_text)
-        abbreviations = get_abbreviations(escaped_thing, module_text)
+        names = get_names(thing, module_text)
+        abbreviations = get_abbreviations(thing, module_text)
+
+        thing.gsub!(%Q{\\\\'}) { "'" }
+        names.each { |val| val.gsub!(%Q{\\\'}) { "'" } }
 
         replies = []
         replies << "#{thing} does not appear to be in the abbreviation list." if names.empty? && abbreviations.empty?
@@ -59,6 +62,14 @@ module Plugins
         replies << "#{thing} is abbreviated as the following: #{abbreviations.join(', ')}" unless abbreviations.empty?
 
         replies.map { |str| msg.reply(str) }
+      end
+
+      def gsub_backslash_quotes!(str, opts = {})
+        if opts[:reversed]
+          str.gsub!("'") { %Q{\\\\'} }
+        else
+          str.gsub!(%Q{\\\\'}) { "'" }
+        end
       end
     end
   end
