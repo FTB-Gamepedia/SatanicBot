@@ -25,7 +25,7 @@ def change_pages(category, new_category_name)
   @mw.get_category_members(category, @mw.query_limit_default, 'page|subcat|file').each do |i|
     text = @mw.get_text(i)
     if text
-      text.gsub!(/\[\[Category\:#{category}/, "Category:#{new_category_name}")
+      text.gsub!(/\[\[Category\:#{category}/, "[[Category:#{new_category_name}")
       edit(i, text, "Changing #{category} to #{new_category_name}")
     else
       puts "#{i} could not be edited. Content found as nil. Continuing without editing..."
