@@ -1,0 +1,96 @@
+#!/usr/bin/env ruby
+# encoding: UTF-8
+
+# A script that automatically changes categories from one name to another.
+# Arguments:
+#   -f, --from      The category being changed, not including the namespace "Category:"
+#   -t, --to        The category to change to, not including the namespace "Category:"
+#   -v, --move      Pass in order to actually move the from page to the to page.
+
+require_relative '../lib/bot/variables'
+require 'mediawiki/butt'
+require 'array_utility'
+
+# Thanks BotPasswords...
+def edit(title, text, summary)
+  begin
+    @mw.edit(title, text, true, true, summary)
+    puts "#{title} has been edited."
+  rescue MediaWiki::Butt::EditError => e
+    puts "Could not edit #{title}: #{e.message}"
+  end
+end
+
+def change_pages(category, new_category_name)
+  @mw.get_category_members(category, @mw.query_limit_default, 'page|subcat|file').each do |i|
+    text = @mw.get_text(i)
+    if text
+      text.gsub!(/\[\[Category\:#{category}/, "Category:#{new_category_name}")
+      edit(i, text, "Changing #{category} to #{new_category_name}")
+    else
+      puts "#{i} could not be edited. Content found as nil. Continuing without editing..."
+      next
+    end
+  end
+end
+
+def change_backlinks(category, new_category_name)
+  backlinks = @mw.what_links_here("Category:#{category}")
+  # Remove this when the Category Overhaul is done.
+  backlinks.delete('Feed The Beast Wiki:Centralized discussion')
+  backlinks.each do |i|
+    text = @mw.get_text(i)
+    if text
+      text.gsub!(/\{\{C\|#{category}/, "{{C|#{new_category_name}")
+      text.gsub!(/\[\[\:#{category}/, "[[:Category:#{new_category_name}")
+      edit(i, text, "Changing #{category} to #{new_category_name}")
+    else
+      puts "#{i} couldn't be edited because its content is nil. Continuing without editing..."
+    end
+  end
+end
+
+@mw = MediaWiki::Butt.new(Variables::Constants::WIKI_URL,
+                          assertion: :bot,
+                          query_limit_default: 'max',
+                          use_continuation: true)
+@mw.login(Variables::Constants::WIKI_USERNAME, Variables::Constants::WIKI_PASSWORD)
+
+using ArrayUtility
+
+from_cat = ARGV.next('-f') || ARGV.next('--from')
+to_cat = ARGV.next('-t') || ARGV.next('--to')
+
+if from_cat && to_cat
+  move = ARGV.include?('-v') || ARGV.include?('--move')
+  if move
+    begin
+      @mw.move("Category:#{from_cat}", "Category:#{to_cat}", 'Renaming category.', true)
+      puts "Moved #{from_cat} to #{to_cat}, left a redirect to be deleted when finished."
+    rescue MediaWiki::Butt::EditError => e
+      puts "Could not move #{from_cat}: #{e.message}"
+    end
+  end
+
+  change_pages(from_cat, to_cat)
+  change_backlinks(from_cat, to_cat)
+
+  backlinks = @mw.what_links_here("Category:#{from_cat}")
+  members = @mw.get_category_members(from_cat, @mw.query_limit_default, 'page|subcat|file')
+  if backlinks.empty? && members.empty?
+    if move
+      begin
+        @mw.delete("Category:#{from_cat}", "Moved category to #{to_cat}.")
+        puts "Deleted #{from_cat} category."
+      rescue MediaWiki::Butt::EditError => e
+        puts "Could not delete #{from_cat}: #{e.message}"
+      end
+    end
+  else
+    puts "#{from_cat} is still used! Be sure to look for it manually!"
+  end
+
+  puts 'Finished.'
+else
+  puts 'You must pass a to and a from parameter.'
+end
