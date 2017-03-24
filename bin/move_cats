@@ -36,8 +36,6 @@ end
 
 def change_backlinks(category, new_category_name)
   backlinks = @mw.what_links_here("Category:#{category}")
-  # Remove this when the Category Overhaul is done.
-  backlinks.delete('Feed The Beast Wiki:Centralized discussion')
   backlinks.each do |i|
     text = @mw.get_text(i)
     if text
