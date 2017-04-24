@@ -20,7 +20,6 @@ module Plugins
       def get_matches(text, standard, hyphen)
         standard_match = text.scan(standard)
         hyphen_match = text.scan(hyphen)
-
         standard_match = [] unless standard_match[0]
         hyphen_match = [] unless hyphen_match[0]
 
@@ -47,12 +46,11 @@ module Plugins
       def execute(msg, thing)
         butt = LittleHelper.init_wiki
         module_text = butt.get_text(PAGE)
-        thing.gsub!("'") { %Q{\\\\'} }
 
-        names = get_names(thing, module_text)
-        abbreviations = get_abbreviations(thing, module_text)
+        escaped_thing = Regexp.escape(thing).gsub("'") { %Q{\\\\'}}
+        names = get_names(escaped_thing, module_text)
+        abbreviations = get_abbreviations(escaped_thing, module_text)
 
-        thing.gsub!(%Q{\\\\'}) { "'" }
         names.map! { |val| val.gsub(%Q{\\\'}) { "'" } }
 
         replies = []
