@@ -53,7 +53,7 @@ module Plugins
         abbreviations = get_abbreviations(thing, module_text)
 
         thing.gsub!(%Q{\\\\'}) { "'" }
-        names.each { |val| val.gsub!(%Q{\\\'}) { "'" } }
+        names.map! { |val| val.gsub(%Q{\\\'}) { "'" } }
 
         replies = []
         replies << "#{thing} does not appear to be in the abbreviation list." if names.empty? && abbreviations.empty?
@@ -61,7 +61,7 @@ module Plugins
         replies << "#{thing} is the abbreviation for the following mod#{s}: #{names.join(', ')}" unless names.empty?
         replies << "#{thing} is abbreviated as the following: #{abbreviations.join(', ')}" unless abbreviations.empty?
 
-        replies.map { |str| msg.reply(str) }
+        replies.each { |str| msg.reply(str) }
       end
 
       def gsub_backslash_quotes!(str, opts = {})
