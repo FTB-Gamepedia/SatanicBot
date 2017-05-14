@@ -31,7 +31,7 @@ module Plugins
         end
         page_text.gsub!(old_cat, new_cat)
         begin
-          edit = butt.edit(page, page_text, true)
+          edit = butt.edit(page, page_text, minor: true)
           if edit
             msg.reply('Finished.'.freeze)
           else

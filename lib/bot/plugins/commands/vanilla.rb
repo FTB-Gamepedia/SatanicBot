@@ -16,7 +16,7 @@ module Plugins
         if butt.get_text(page).nil?
           text = "{{Vanilla|type=#{type}}}"
           begin
-            butt.create_page(page, text, 'New vanilla page.'.freeze)
+            butt.create_page(page, text, summary: 'New vanilla page.'.freeze)
           rescue EditError => e
             msg.reply("Failed! Error code: #{e.message}")
           end

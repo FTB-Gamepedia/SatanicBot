@@ -47,7 +47,7 @@ module Plugins
             break
           end
           begin
-            edit = butt.edit(page, text_ary.join("\n"), true, true, "Adding #{mod}")
+            edit = butt.edit(page, text_ary.join("\n"), minor: true, summary: "Adding #{mod}")
             if edit
               msg.reply("Successfully abbreviated #{mod} as #{abbreviation}")
             else

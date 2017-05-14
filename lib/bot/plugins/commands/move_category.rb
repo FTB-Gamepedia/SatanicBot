@@ -26,7 +26,7 @@ module Plugins
         if !old_cat_contents.nil? && new_cat_contents.nil?
           summary = "Moving #{old_cat} to #{new_cat} through IRC."
           begin
-            butt.create_page(new_cat, old_cat_contents, summary)
+            butt.create_page(new_cat, old_cat_contents, summary: summary)
           rescue EditError => e
             msg.reply("Something went wrong when creating the page #{new_cat}! Error code: #{e.message}")
           end
@@ -45,7 +45,7 @@ module Plugins
             text.gsub!(old_cat, new_cat)
             text.gsub!(/\{\{[Cc]|#{old_cat}\}\}/, "{{C|#{new_cat}}}")
             begin
-              butt.edit(t, text, true)
+              butt.edit(t, text, minor: true)
             rescue EditError => e
               msg.reply("Something went wrongwhen editing #{t}! Error code: #{e.message} ... Continuing ...")
             end

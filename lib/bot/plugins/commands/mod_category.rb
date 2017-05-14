@@ -17,7 +17,7 @@ module Plugins
         if butt.get_text(page).nil?
           text = "[[Category:Mod categories]]\n[[Category:Mods]]"
           begin
-            edit = butt.create_page(page, text, 'New mod category.')
+            edit = butt.create_page(page, text, summary: 'New mod category.')
             if edit
               msg.reply("Successfully created #{page}.")
             else

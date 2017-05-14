@@ -21,7 +21,7 @@ module Plugins
       def execute(msg, old_page, new_page)
         butt = LittleHelper.init_wiki
         begin
-          move = butt.move(old_page, new_page, 'Moving page from IRC.')
+          move = butt.move(old_page, new_page, summary: 'Moving page from IRC.')
         rescue EditError => e
           msg.reply("Failed! Error code: #{e.message}")
         end
@@ -36,7 +36,7 @@ module Plugins
             text.gsub!(/\{[Ll]\|#{old_page}\|/, "{{L|#{new_page}|")
             text.gsub!(/\{\{[Ll]\|#{old_page}\}\}/, "{{L|#{new_page}}}")
             begin
-              butt.edit(l, text, true)
+              butt.edit(l, text, minor: true)
             rescue EditError => e
               msg.reply("Something went wrong when editing #{l}! Error code: #{e.message} ... Continuing ...")
             end

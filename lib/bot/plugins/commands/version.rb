@@ -39,7 +39,7 @@ module Plugins
         return false unless /{{[Ii]nfobox mod}}/ =~ text
         text.sub!(/{{[Ii]nfobox mod\n/, "{{Infobox mod\n|version=#{version}")
         begin
-          edit = butt.edit(page, text, true, true, 'Add version parameter'.freeze)
+          edit = butt.edit(page, text, minor: true, summary: 'Add version parameter'.freeze)
         rescue EditError => e
           msg.reply("Failed! Error code: #{e.message}")
         end
@@ -59,7 +59,7 @@ module Plugins
         text.gsub!(/version=.*/, "version=#{version}")
         text.gsub!(/version =.*/, "version=#{version}")
         begin
-          edit = butt.edit(page, text, true, true, 'Update vesion.'.freeze)
+          edit = butt.edit(page, text, minor: true, summary: 'Update vesion.'.freeze)
         rescue EditError => e
           msg.reply("Failed! Error code: #{e.message}")
         end

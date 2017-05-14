@@ -1,7 +1,9 @@
 source 'https://rubygems.org'
 
 gem('string-utility', '~> 3.0')
-gem('mediawiki-butt', '~> 1.3')
+# TODO: Use commented out mediawiki-butt specification below once 2.0.0 is released.
+gem('mediawiki-butt', github: 'FTB-Gamepedia/MediaWiki-Butt-Ruby')
+# gem('mediawiki-butt', '~> 1.3')
 gem('fishbans', '~> 2.0')
 gem('weatheruby', '~> 0.6')
 gem('cinch', '~> 2.3')
