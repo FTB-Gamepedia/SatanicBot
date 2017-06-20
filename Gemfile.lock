@@ -122,7 +122,7 @@ DEPENDENCIES
   cinch (~> 2.3)
   cleverbot_io (~> 2.0)
   curb (~> 0.9)
-  dotenv (~> 2.1)
+  dotenv (~> 2.2)
   fishbans (~> 2.0)
   isgd (~> 1.0)
   literate_randomizer (~> 0.4)
