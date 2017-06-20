@@ -37,8 +37,8 @@ module Plugins
 
         name = conditions[:full_name]
         condition = conditions[:weather]
-        temp = conditions[:formatted_temperature]
-        feel = conditions[:formatted_feelslike]
+        temp = "#{conditions[:temperature_c]}°C (#{conditions[:temperature_f]}°F)"
+        feel = "#{conditions[:feelslike_c]}°C (#{conditions[:feelslike_f]}°F)"
         humidity = "#{conditions[:humidity]}%"
         date = conditions[:updated]
         message = "#{name}: #{condition} | "
