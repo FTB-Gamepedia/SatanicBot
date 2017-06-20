@@ -60,7 +60,7 @@ GEM
     multi_xml (0.6.0)
     multipart-post (2.0.0)
     naught (1.1.0)
-    octokit (4.6.2)
+    octokit (4.7.0)
       sawyer (~> 0.8.0, >= 0.5.3)
     oj (2.18.1)
     oxford_dictionary (0.1.0)
@@ -128,7 +128,7 @@ DEPENDENCIES
   literate_randomizer (~> 0.4)
   mediawiki-butt!
   mojang (>= 1.0.1)
-  octokit (~> 4.3)
+  octokit (~> 4.7)
   oxford_dictionary (~> 0.1)
   pastee (~> 2.0)
   pg (~> 0.21)
