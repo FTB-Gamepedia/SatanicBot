@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/FTB-Gamepedia/MediaWiki-Butt-Ruby.git
-  revision: 23f20982902ae9faef0fc1ebc5878bf566f0ac35
+  revision: 7a3c3c0f3e5bc76e643c1570608476cd564ce47e
   specs:
     mediawiki-butt (1.3.0)
       httpclient (~> 2.8)
