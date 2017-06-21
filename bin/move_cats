@@ -14,7 +14,7 @@ require 'array_utility'
 # Thanks BotPasswords...
 def edit(title, text, summary)
   begin
-    @mw.edit(title, text, true, true, summary)
+    @mw.edit(title, text, minor: true, summary: summary)
     puts "#{title} has been edited."
   rescue MediaWiki::Butt::EditError => e
     puts "Could not edit #{title}: #{e.message}"
@@ -22,7 +22,7 @@ def edit(title, text, summary)
 end
 
 def change_pages(category, new_category_name)
-  @mw.get_category_members(category, @mw.query_limit_default, 'page|subcat|file').each do |i|
+  @mw.get_category_members(category, 'page|subcat|file').each do |i|
     text = @mw.get_text(i)
     if text
       text.gsub!(/\[\[Category\:#{category}/, "[[Category:#{new_category_name}")
@@ -63,7 +63,7 @@ if from_cat && to_cat
   move = ARGV.include?('-v') || ARGV.include?('--move')
   if move
     begin
-      @mw.move("Category:#{from_cat}", "Category:#{to_cat}", 'Renaming category.', true)
+      @mw.move("Category:#{from_cat}", "Category:#{to_cat}", reason: 'Renaming category.')
       puts "Moved #{from_cat} to #{to_cat}, left a redirect to be deleted when finished."
     rescue MediaWiki::Butt::EditError => e
       puts "Could not move #{from_cat}: #{e.message}"
@@ -74,7 +74,7 @@ if from_cat && to_cat
   change_backlinks(from_cat, to_cat)
 
   backlinks = @mw.what_links_here("Category:#{from_cat}")
-  members = @mw.get_category_members(from_cat, @mw.query_limit_default, 'page|subcat|file')
+  members = @mw.get_category_members(from_cat, 'page|subcat|file')
   if backlinks.empty? && members.empty?
     if move
       begin

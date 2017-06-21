@@ -21,7 +21,7 @@ module Plugins
       def execute(msg, old_page, new_page)
         butt = LittleHelper.init_wiki
         begin
-          move = butt.move(old_page, new_page, summary: 'Moving page from IRC.')
+          move = butt.move(old_page, new_page, reason: 'Moving page from IRC.', suppress_redirect: true)
         rescue EditError => e
           msg.reply("Failed! Error code: #{e.message}")
         end

@@ -17,11 +17,18 @@ module Plugins
       # @param filename [String] The file's name on the wiki.
       def execute(msg, url, filename)
         butt = LittleHelper.init_wiki
-        upload = butt.upload(url, filename)
+        begin
+          upload = butt.upload(url, filename)
+        rescue MediaWiki::Butt::UploadInvalidFileExtError => e
+          msg.reply('Invalid file extension. Failed to upload!')
+        rescue MediaWiki::Butt::EditError => e
+          msg.reply("General error: #{e.message}")
+        end
+
         if upload
           msg.reply('Uploaded the file to the wiki!'.freeze)
         else
-          msg.reply('Possibly failed! Check my logs!')
+          msg.reply('Failed to upload!')
         end
       end
     end
