@@ -1,10 +1,3 @@
-GIT
-  remote: git://github.com/FTB-Gamepedia/MediaWiki-Butt-Ruby.git
-  revision: 7a3c3c0f3e5bc76e643c1570608476cd564ce47e
-  specs:
-    mediawiki-butt (1.3.0)
-      httpclient (~> 2.8)
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -52,6 +45,8 @@ GEM
     isgd (1.0.5)
       httpclient (~> 2.8)
     literate_randomizer (0.4.0)
+    mediawiki-butt (2.0.0)
+      httpclient (~> 2.8)
     memoizable (0.4.2)
       thread_safe (~> 0.3, >= 0.3.1)
     mojang (1.0.1)
@@ -126,7 +121,7 @@ DEPENDENCIES
   fishbans (~> 2.0)
   isgd (~> 1.0)
   literate_randomizer (~> 0.4)
-  mediawiki-butt!
+  mediawiki-butt (~> 2.0)
   mojang (>= 1.0.1)
   octokit (~> 4.7)
   oxford_dictionary (~> 0.1)
