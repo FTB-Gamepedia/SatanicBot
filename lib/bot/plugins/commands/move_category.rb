@@ -43,11 +43,11 @@ module Plugins
             text = butt.get_text(t)
             next if text.nil?
             text.gsub!(old_cat, new_cat)
-            text.gsub!(/\{\{[Cc]|#{old_cat}\}\}/, "{{C|#{new_cat}}}")
+            text.gsub!(/\{\{[Cc]\|#{old_cat.delete('Category:')}\}\}/, "{{C|#{new_cat.delete('Category:')}}}")
             begin
               butt.edit(t, text, minor: true)
             rescue EditError => e
-              msg.reply("Something went wrongwhen editing #{t}! Error code: #{e.message} ... Continuing ...")
+              msg.reply("Something went wrong when editing #{t}! Error code: #{e.message} ... Continuing ...")
             end
 
           end
