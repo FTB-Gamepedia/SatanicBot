@@ -7,6 +7,7 @@ require 'pastee'
 require 'cleverbot'
 require 'sequel'
 require 'oxford_dictionary'
+require 'time'
 require_relative 'variables'
 require_rel 'plugins'
 
@@ -62,6 +63,7 @@ module LittleHelper
     Plugins::Commands::ReadTweet,
     Plugins::Commands::Dictionary,
     Plugins::Commands::IsDisambiguation,
+    Plugins::Commands::Editathon,
     Plugins::Logger
   ]
 
@@ -154,5 +156,34 @@ module LittleHelper
   # @return [Sequel::Dataset] The message dataset.
   def message_table
     DB[:messages] if HAS_DB
+  end
+end
+
+# TODO: Put monkeypatches in a nicer place
+module MediaWiki
+  class Butt
+    # TODO: Implement better history stuff in MediaWiki-Butt
+    # @param page [String] The page name to get the first edit timestamp for
+    # @return [Time] The date and time for this page's first edit converted for UTC
+    def first_edit_timestamp(page)
+      params = {
+        action: 'query',
+        prop: 'revisions',
+        titles: page,
+        rvprop: 'timestamp',
+        rvlimit: @query_limit_default
+      }
+      query(params) do |return_val, query|
+        pageid = query['pages'].keys.find(MediaWiki::Constants::MISSING_PAGEID_PROC) { |id| id != '-1' }
+        return [] if query['pages'][pageid].key?('missing')
+        return_val.concat(query['pages'][pageid].fetch('revisions', []).collect { |h| Time.parse(h['timestamp']).utc })
+      end.min
+    end
+  end
+end
+
+class Time
+  def in_progress?(start_time, end_time)
+    (start_time .. end_time).include?(clone.utc)
   end
 end
