@@ -19,7 +19,7 @@ module Plugins
           butt.first_edit_timestamp(a) <=> butt.first_edit_timestamp(b)
         end
         text = butt.get_text(newest_editathon)
-        dates = text.scan(/<!--\nstart: (.+)\nend: (.+)\n-->/).flatten
+        dates = text.scan(/<!--start: (.+) \/ end: (.+)-->/).flatten
         start_date = Time.parse(dates[0]).utc
         end_date = Time.parse(dates[1]).utc
         current = Time.now.utc
