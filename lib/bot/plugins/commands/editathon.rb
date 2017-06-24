@@ -1,4 +1,5 @@
 require 'string-utility'
+require 'timerizer'
 require_relative 'base_command'
 
 module Plugins
@@ -25,11 +26,11 @@ module Plugins
         current = Time.now.utc
         url = "https:#{butt.get_article_path(newest_editathon.underscorify)}"
         if current.in_progress?(start_date, end_date)
-          msg.reply("Current editathon: #{url}")
+          msg.reply("Current editathon: #{url} ending in #{Time.until(end_date)} (#{end_date.strftime(FORMAT)})")
         elsif current < start_date
-          msg.reply("Upcoming editathon: #{url} starting on #{start_date.strftime(FORMAT)}")
+          msg.reply("Upcoming editathon: #{url} starting in #{Time.until(start_date)} (#{start_date.strftime(FORMAT)})")
         elsif current < end_date
-          msg.reply("Past editathon: #{url} ended on #{end_date.strftime(FORMAT)}")
+          msg.reply("Past editathon: #{url} ended #{Time.since(end_date)} ago (#{end_date.strftime(FORMAT)})")
         end
       end
     end
