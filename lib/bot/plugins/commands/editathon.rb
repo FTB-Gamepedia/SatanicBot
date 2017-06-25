@@ -29,7 +29,7 @@ module Plugins
           msg.reply("Current editathon: #{url} ending in #{Time.until(end_date)} (#{end_date.strftime(FORMAT)})")
         elsif current < start_date
           msg.reply("Upcoming editathon: #{url} starting in #{Time.until(start_date)} (#{start_date.strftime(FORMAT)})")
-        elsif current < end_date
+        elsif current > end_date
           msg.reply("Past editathon: #{url} ended #{Time.since(end_date)} ago (#{end_date.strftime(FORMAT)})")
         end
       end
