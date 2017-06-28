@@ -19,12 +19,16 @@ module Plugins
         newest_editathon = butt.get_category_members('Category:Editathons').max do |a, b|
           butt.first_edit_timestamp(a) <=> butt.first_edit_timestamp(b)
         end
+        url = "https:#{butt.get_article_path(newest_editathon.underscorify)}"
         text = butt.get_text(newest_editathon)
         dates = text.scan(/<!--start: (.+) \/ end: (.+)-->/).flatten
+        if dates.empty?
+          msg.reply("Possibly upcoming editathon: #{url} with no currently specified starting and ending dates")
+          return
+        end
         start_date = Time.parse(dates[0]).utc
         end_date = Time.parse(dates[1]).utc
         current = Time.now.utc
-        url = "https:#{butt.get_article_path(newest_editathon.underscorify)}"
         if current.in_progress?(start_date, end_date)
           msg.reply("Current editathon: #{url} ending in #{Time.until(end_date)} (#{end_date.strftime(FORMAT)})")
         elsif current < start_date
