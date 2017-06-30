@@ -122,6 +122,7 @@ module LittleHelper
         String :to
         String :from
         String :msg
+        String :address
       end
     end
   end

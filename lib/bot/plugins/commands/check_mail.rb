@@ -54,7 +54,7 @@ module Plugins
         unique_messages.each do |hash|
           # Use msg.user.nick instead of hash[:to] because it is lowercase, but nick has proper formatting/casing.
           count = their_messages.count(hash)
-          reply = "#{user.nick}: #{hash[:from]} says \"#{hash[:msg]}\""
+          reply = "#{user.nick}: #{hash[:from]} says \"#{hash[:msg]}\" from #{hash[:address]}"
           reply << " #{count} times" if count > 1
           msg.reply(color ? Format(COLORS.sample, reply) : reply)
         end

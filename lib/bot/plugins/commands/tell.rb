@@ -42,7 +42,7 @@ module Plugins
         end
         recipient = find_appropriate_username(msg, to).downcase
         table = LittleHelper.message_table
-        table.insert(to: recipient, from: msg.user.authname, msg: message)
+        table.insert(to: recipient, from: msg.user.authname, msg: message, address: msg.channel.to_s)
         msg.reply('Stored message for later.')
       end
     end
