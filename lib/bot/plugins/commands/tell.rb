@@ -36,7 +36,7 @@ module Plugins
       # @param message [String] The message to send.
       def execute(msg, to, message)
         # Check both because the authname might be empty but not nil.
-        if !msg.user.authed? || !msg.user.authname.empty?
+        if !msg.user.authed? || msg.user.authname.empty?
           msg.reply('You must be authenticated to use the tell command.')
           return
         end
