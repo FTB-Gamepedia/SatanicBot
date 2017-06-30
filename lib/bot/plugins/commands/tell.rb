@@ -21,11 +21,7 @@ module Plugins
           user.nick == to
         end
         userlist_authname_matches = LittleHelper::BOT.user_list.select { |user| name_match.call(user) }
-        msg.reply(userlist_authname_matches.size)
-        userlist_authname_matches.each { |user| msg.reply(user.nick + " -> " + user.authname.to_s) }
         channel_authname_matches = users_in_current_channel.select { |user| name_match.call(user) }
-        msg.reply(channel_authname_matches.size)
-        channel_authname_matches.each { |user| msg.reply(user.nick + " -> " + user.authname.to_s) }
         return userlist_authname_matches[0].authname if userlist_authname_matches.any?
         return channel_authname_matches[0].authname if channel_authname_matches.any?
         to
