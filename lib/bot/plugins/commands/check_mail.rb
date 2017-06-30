@@ -34,7 +34,11 @@ module Plugins
       def execute(msg)
         table = LittleHelper.message_table
         user = msg.user
-        their_messages = table.where(to: [user.nick.downcase, user.authname&.downcase]).all
+        if !user.authed? || user.authname.empty?
+          msg.reply('You must be authenticated to use the checkmail command.')
+          return
+        end
+        their_messages = table.where(to: [user.authname.downcase]).all
         total_count = their_messages.count
         if total_count < 1
           msg.reply('You have no unread messages.')
@@ -54,7 +58,7 @@ module Plugins
           reply << " #{count} times" if count > 1
           msg.reply(color ? Format(COLORS.sample, reply) : reply)
         end
-        deleted = table.where(to: [user.nick.downcase, user.authname&.downcase]).delete
+        deleted = table.where(to: user.authname.downcase).delete
         msg.reply("Finished reading unread messages. Deleted #{deleted} message#{deleted == 1 ? '' : 's'}.")
       end
     end
