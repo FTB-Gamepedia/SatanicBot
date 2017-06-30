@@ -30,6 +30,9 @@ module Plugins
         :yellow
       ]
 
+      # TODO: Move all Time formats that are like this (eg. editathon command) into a centralized location.
+      FORMAT = '%B %e %Y %H:%M:%S UTC'.freeze
+
       # @param msg [Cinch::Message]
       def execute(msg)
         table = LittleHelper.message_table
@@ -54,7 +57,8 @@ module Plugins
         unique_messages.each do |hash|
           # Use msg.user.nick instead of hash[:to] because it is lowercase, but nick has proper formatting/casing.
           count = their_messages.count(hash)
-          reply = "#{user.nick}: #{hash[:from]} says \"#{hash[:msg]}\" from #{hash[:address]}"
+          reply = "#{user.nick}: #{hash[:from]} says \"#{hash[:msg]}\""
+          reply << " from #{hash[:address]} at #{Time.xmlschema(hash[:at]).strftime(FORMAT)}"
           reply << " #{count} times" if count > 1
           msg.reply(color ? Format(COLORS.sample, reply) : reply)
         end

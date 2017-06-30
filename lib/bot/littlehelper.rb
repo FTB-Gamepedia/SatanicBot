@@ -123,6 +123,7 @@ module LittleHelper
         String :from
         String :msg
         String :address
+        String :at
       end
     end
   end
@@ -186,5 +187,19 @@ end
 class Time
   def in_progress?(start_time, end_time)
     (start_time .. end_time).include?(clone.utc)
+  end
+
+  # Equivalent to calling #strftime('%FT%T'). It converts to UTC but does not modify this Time object.
+  def xmlschema
+    clone.utc.strftime('%FT%T')
+  end
+
+  # Parses a Time object from the xmlschema defined at #xmlschema. Time objects parsed with this and Time objects
+  # converted to UTC using #utc are not equivalent, because this Time object's timezone is "+00:00" which is
+  # functionally UTC but not UTC in name. There is no good alternative to this aside from depending on ActiveSuppport
+  # for TimeWithZone, and this application already has Timerizer which modifies the Time object plenty.
+  def self.xmlschema(str)
+    times = str.match(/(?<year>\d{4})-(?<month>\d{2})-(?<day>\d{2})T(?<hour>\d{2}):(?<minute>\d{2}):(?<second>\d{2})/)
+    Time.new(times[:year], times[:month], times[:day], times[:hour], times[:minute], times[:second], '+00:00')
   end
 end
