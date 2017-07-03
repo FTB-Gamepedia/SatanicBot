@@ -20,7 +20,7 @@ gem('sequel', '~> 4.47')
 gem('pg', '~> 0.21')
 gem('curb', '~> 0.9')
 gem('mojang', '>= 1.0.1')
-gem('timerizer', '~> 0.1')
+gem('timerizer', '~> 0.2')
 gem('oxford_dictionary', '~> 0.1')
 gem('addressable', '~> 2.5')
 
