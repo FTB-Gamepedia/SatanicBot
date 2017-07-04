@@ -19,6 +19,8 @@ module Plugins
       match(/weather$/i, method: :weather_self)
       match(/forecast$/i, method: :forecast_self)
 
+      FORMAT = '%B %e %Y %H:%M:%S %z'.freeze
+
       # Gets the current weather conditions for the location.
       # @param msg [Cinch::Message]
       # @param location [String] The location to get the weather for.
@@ -55,8 +57,9 @@ module Plugins
         message << " | Humidity: #{humidity} | #{precip_chance}% chance of precipitation | #{date}"
 
         alerts.each do |a|
+
           desc = Cinch::Formatting.format(:red, a[:description])
-          message << " | #{desc} until #{a[:expires]}"
+          message << " | #{desc} until #{a[:expires].strftime(FORMAT)}"
         end
         msg.reply(message)
       end

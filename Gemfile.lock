@@ -103,10 +103,10 @@ GEM
       coercible (~> 1.0)
       descendants_tracker (~> 0.0, >= 0.0.3)
       equalizer (~> 0.0, >= 0.0.9)
-    weatheruby (0.6.1)
+    weatheruby (1.0.0)
       httpclient (~> 2.8)
       rainbow (~> 2.1)
-      string-utility (~> 3)
+      string-utility (~> 3.0)
 
 PLATFORMS
   ruby
@@ -134,7 +134,7 @@ DEPENDENCIES
   timerizer (~> 0.2)
   twitter (~> 6.1)
   urbandict (~> 1.0)
-  weatheruby (~> 0.6)
+  weatheruby (~> 1.0)
 
 RUBY VERSION
    ruby 2.4.1p111
