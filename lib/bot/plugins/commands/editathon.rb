@@ -19,7 +19,7 @@ module Plugins
         newest_editathon = butt.get_category_members('Category:Editathons').max do |a, b|
           butt.first_edit_timestamp(a) <=> butt.first_edit_timestamp(b)
         end
-        url = "https:#{butt.get_article_path(newest_editathon.underscorify)}"
+        url = butt.get_article_path(newest_editathon.underscorify)
         text = butt.get_text(newest_editathon)
         dates = text.scan(/<!--start: (.+) \/ end: (.+)-->/).flatten
         if dates.empty?
