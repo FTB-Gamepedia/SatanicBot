@@ -14,12 +14,7 @@ module Plugins
       # list of users in the current channel, and lastly it simply returns the provided name.
       def find_appropriate_username(msg, to)
         users_in_current_channel = msg.channel.users.keys
-        name_match = lambda do |user|
-          if user.authed?
-            user.authname == to || user.nick == to
-          end
-          user.nick == to
-        end
+        name_match = lambda { |user| user.authed? && (user.authname == to || user.nick == to) }
         userlist_authname_matches = LittleHelper::BOT.user_list.select { |user| name_match.call(user) }
         channel_authname_matches = users_in_current_channel.select { |user| name_match.call(user) }
         return userlist_authname_matches[0].authname if userlist_authname_matches.any?
