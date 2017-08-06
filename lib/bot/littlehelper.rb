@@ -64,6 +64,7 @@ module LittleHelper
     Plugins::Commands::Dictionary,
     Plugins::Commands::IsDisambiguation,
     Plugins::Commands::Editathon,
+    Plugins::Commands::ModLinksSummary,
     Plugins::Logger
   ]
 
