@@ -15,7 +15,7 @@ module Plugins
 
         butt = LittleHelper.init_wiki
         if butt.get_text(page).nil?
-          text = "[[Category:Mod categories]]\n[[Category:Mods]]"
+          text = '[[Category:Mods]]'
           begin
             edit = butt.create_page(page, text, summary: 'New mod category.')
             if edit
