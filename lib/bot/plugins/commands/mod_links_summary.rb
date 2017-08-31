@@ -43,7 +43,6 @@ module Plugins
           all_pages_in_category = mw.get_category_members(special_category)
           special_category_pages[special_category] = links_in_page.select { |title| all_pages_in_category.include?(title) }
         end
-        p special_category_pages
         other_mod_pages = links_in_page.reject { |title| mw.get_categories_in_page(title).include?(mod_cat_for_page) }
 
         msg.reply("http://paste.ee/p/#{create_paste(page_name, special_category_pages, other_mod_pages)}")
