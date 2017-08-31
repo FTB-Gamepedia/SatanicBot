@@ -11,7 +11,8 @@ module Plugins
       match(/modlinkssummary (.+)/)
 
       SPECIAL_CATEGORIES = [
-        'Disambiguation pages'
+        'Disambiguation pages',
+        'Modpacks'
       ].freeze
 
       def create_paste(page_name, special_category_pages, other_mod_pages)
