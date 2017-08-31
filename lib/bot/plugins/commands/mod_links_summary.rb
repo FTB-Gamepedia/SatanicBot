@@ -15,6 +15,8 @@ module Plugins
         'Modpacks'
       ].freeze
 
+      REDIRECT_REGEX = /\#REDIRECT \[\[(.+)]]/
+
       def create_paste(page_name, special_category_pages, other_mod_pages)
         str = "== Pages not for this mod ==\n"
         str << other_mod_pages.join("\n")
@@ -28,6 +30,13 @@ module Plugins
         LittleHelper::PASTEE.submit(str, "Summary of bad links in #{page_name}")
       end
 
+      def find_redirect_dest(mw, title)
+        text = mw.get_text(title)
+        return nil unless text
+        match = text.match(REDIRECT_REGEX)
+        match ? find_redirect_dest(mw, match[1]) : title
+      end
+
       def execute(msg, page_name)
         mw = LittleHelper.init_wiki
         links_in_page = mw.get_all_links_in_page(page_name)
@@ -35,7 +44,9 @@ module Plugins
           msg.reply('This page does not exist.')
           return
         end
-        links_in_page.select! { |title| mw.get_text(title) }
+        links_in_page.map! { |title| find_redirect_dest(mw, title) }
+        links_in_page.uniq!
+        links_in_page.compact!
         mod_cat_for_page = mw.get_categories_in_page(page_name).select do |category|
           mw.get_categories_in_page(category).include?('Category:Mods')
         end[0]
