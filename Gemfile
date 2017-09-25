@@ -21,7 +21,7 @@ gem('pg', '~> 0.21')
 gem('curb', '~> 0.9')
 gem('mojang', '>= 1.0.1')
 gem('timerizer', '~> 0.2')
-gem('oxford_dictionary', '~> 0.1')
+gem('oxford_dictionary', '~> 1.0')
 gem('addressable', '~> 2.5')
 
 ruby '2.4.1'
