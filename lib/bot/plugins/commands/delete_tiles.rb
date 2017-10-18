@@ -16,7 +16,7 @@ module Plugins
         params = {
           action: 'deletetiles',
           tsids: ids,
-          tstoken: butt.get_token('edit')
+          tstoken: butt.get_token('csrf')
         }
         response = butt.post(params)
         failures = ids.split('|')

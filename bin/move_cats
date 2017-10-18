@@ -48,10 +48,7 @@ def change_backlinks(category, new_category_name)
   end
 end
 
-@mw = MediaWiki::Butt.new(Variables::Constants::WIKI_URL,
-                          assertion: :bot,
-                          query_limit_default: 'max',
-                          use_continuation: true)
+@mw = MediaWiki::Butt.new(Variables::Constants::WIKI_URL, assertion: :bot)
 @mw.login(Variables::Constants::WIKI_USERNAME, Variables::Constants::WIKI_PASSWORD)
 
 using ArrayUtility

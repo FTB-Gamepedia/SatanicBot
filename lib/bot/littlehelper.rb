@@ -12,8 +12,7 @@ require_relative 'variables'
 require_rel 'plugins'
 
 module LittleHelper
-  BUTT = MediaWiki::Butt.new(Variables::Constants::WIKI_URL, query_limit_default: 5000, use_continuation: true,
-                             assertion: :bot)
+  BUTT = MediaWiki::Butt.new(Variables::Constants::WIKI_URL, query_limit_default: 5000, assertion: :bot)
 
   TWEETER = Twitter::REST::Client.new do |c|
     c.consumer_key = Variables::Constants::TWITTER_CONSUMER_KEY
