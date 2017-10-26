@@ -13,12 +13,10 @@ require 'array_utility'
 
 # Thanks BotPasswords...
 def edit(title, text, summary)
-  begin
-    @mw.edit(title, text, minor: true, summary: summary)
-    puts "#{title} has been edited."
-  rescue MediaWiki::Butt::EditError => e
-    puts "Could not edit #{title}: #{e.message}"
-  end
+  @mw.edit(title, text, minor: true, summary: summary)
+  puts "#{title} has been edited."
+rescue MediaWiki::Butt::EditError => e
+  puts "Could not edit #{title}: #{e.message}"
 end
 
 def change_pages(category, new_category_name)

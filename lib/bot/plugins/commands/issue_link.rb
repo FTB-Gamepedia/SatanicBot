@@ -31,27 +31,25 @@ module Plugins
       # @param repo [String] The full repository.
       # @param issue_num [Integer] The issue number.
       def reply(msg, repo, issue_num)
-        begin
-          issue = Octokit.issue(repo, issue_num)
-          state = issue[:state]
-          title = issue[:title]
-          labels = []
-          issue[:labels].each do |l|
-            labels << l[:name]
-          end
-          milestone = issue&.[](:milestone)&.[](:title)
-          message = "\"#{title}\" ##{issue_num}, is #{state}"
-          unless labels.empty?
-            message << ", with the following labels: #{labels.join(', ')}"
-          end
-          unless milestone.nil?
-            message << ", on the #{milestone} milestone"
-          end
-          message << '.'
-          msg.reply(message)
-        rescue Octokit::NotFound
-          msg.reply("Issue ##{issue_num} cannot be found.")
+        issue = Octokit.issue(repo, issue_num)
+        state = issue[:state]
+        title = issue[:title]
+        labels = []
+        issue[:labels].each do |l|
+          labels << l[:name]
         end
+        milestone = issue&.[](:milestone)&.[](:title)
+        message = "\"#{title}\" ##{issue_num}, is #{state}"
+        unless labels.empty?
+          message << ", with the following labels: #{labels.join(', ')}"
+        end
+        unless milestone.nil?
+          message << ", on the #{milestone} milestone"
+        end
+        message << '.'
+        msg.reply(message)
+      rescue Octokit::NotFound
+        msg.reply("Issue ##{issue_num} cannot be found.")
       end
 
       # Gets some information for an issue stated in the channel using #XX
