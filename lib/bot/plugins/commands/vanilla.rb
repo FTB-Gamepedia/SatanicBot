@@ -23,7 +23,7 @@ module Plugins
             msg.reply("Failed! Error code: #{e.message}")
           end
 
-          msg.reply("Succesfully created #{page}.")
+          msg.reply("Successfully created #{page}.")
         else
           msg.reply('That page already exists.'.freeze)
         end
