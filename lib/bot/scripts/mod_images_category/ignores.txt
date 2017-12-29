@@ -1,0 +1,12 @@
+File:GUI Shaped Crafting Alternate.png
+File:GUI Shapeless Crafting Alternate.png
+File:Heart.svg
+File:Armor.svg
+File:Half Armor.svg
+File:Ambox notice.png
+File:Ambox content.png
+File:GUI Smelting.png
+File:GUI Smelting Flames.png
+File:GUI Smelting Progress.png
+File:Shanks.png
+File:Edit-clear.svg
