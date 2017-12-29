@@ -1,5 +1,6 @@
 require 'cinch'
 require_relative 'base_command'
+require_relative '../wiki'
 
 module Plugins
   module Commands
@@ -38,7 +39,7 @@ module Plugins
       end
 
       def execute(msg, page_name)
-        mw = LittleHelper.init_wiki
+        mw = wiki
         links_in_page = mw.get_all_links_in_page(page_name)
         unless links_in_page
           msg.reply('This page does not exist.')

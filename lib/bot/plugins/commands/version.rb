@@ -1,11 +1,13 @@
 require 'cinch'
 require_relative 'base_command'
+require_relative '../wiki'
 
 module Plugins
   module Commands
     # This is not an AuthorizedCommand because $checkvers does not require you to be authorized.
     class Version < BaseCommand
       include Cinch::Plugin
+      include Plugins::Wiki
       ignore_ignored_users
 
       set(help: 'Updates a mod version on the wiki. Op-only command. 2 args: $updatevers <page> | <version>',
@@ -19,7 +21,7 @@ module Plugins
       # @return [Nil] If there is no version parameter.
       # @return [String] The version number.
       def get_current_verison(page)
-        butt = LittleHelper.init_wiki
+        butt = wiki
         text = butt.get_text(page)
         if text =~ /version=(.*)/ || text =~ /version =(.*)/
           return Regexp.last_match[1]
@@ -28,60 +30,47 @@ module Plugins
         nil
       end
 
+      NOT_FOUND = 'Could not find Infobox/param in the page. ' \
+                  'Please be sure that you entered the page name correctly.'.freeze
+
       # Adds the version parameter to the infobox in the page.
       # @param page [String] The page to add the version to.
+      # @param msg [Cinch::Message] The message that prompted the edit.
       # @param version [String] The version to add.
       # @return [Boolean] True if successful, false if there is no infobox.
       # @return [String] The error code if any.
-      def add_new_param(page, version)
-        butt = LittleHelper.init_wiki
-        text = butt.get_text(page)
-        return false unless /{{[Ii]nfobox mod}}/ =~ text
-        text.sub!(/{{[Ii]nfobox mod\n/, "{{Infobox mod\n|version=#{version}")
-        begin
-          edit = butt.edit(page, text, minor: true, summary: 'Add version parameter'.freeze)
-        rescue EditError => e
-          msg.reply("Failed! Error code: #{e.message}")
+      def add_new_param(page, msg, version)
+        edit(page, msg, minor: true, summary: 'Add version parameter'.freeze) do |text|
+          return { terminate: Proc.new { NOT_FOUND } } if /{{[Ii]nfobox mod/ !~ text
+          text.sub!(/{{[Ii]nfobox mod\n/, "{{Infobox mod\n|version=#{version}")
+          {
+            text: text,
+            success: Proc.new { "Added version parameter to #{page} as #{version}" },
+            fail: Proc.new { "Failed to edit #{page}" },
+            error: Proc.new { |e| "Failed! Error code: #{e.message}" }
+          }
         end
-
-        edit
       end
 
       # Updates the version parameter in the infobox.
       # @param page [String] The page to update.
+      # @param msg [Cinch::Message] The message that prompted this edit.
+      # @param cur_version [String] The current version on the page.
       # @param version [String] The new version.
       # @return [Boolean] See #add_new_param
       # @return [String] See #add_new_param
-      def update_param(page, version)
-        butt = LittleHelper.init_wiki
-        text = butt.get_text(page)
-        return false if /version=#{version}/ =~ text || /version =#{version}/ =~ text
-        text.gsub!(/version=.*/, "version=#{version}")
-        text.gsub!(/version =.*/, "version=#{version}")
-        begin
-          edit = butt.edit(page, text, minor: true, summary: 'Update vesion.'.freeze)
-        rescue EditError => e
-          msg.reply("Failed! Error code: #{e.message}")
+      def update_param(page, msg, cur_version, version)
+        edit(page, msg, minor: true, summary: 'Update version.'.freeze) do |text|
+          return { terminate: Proc.new { NOT_FOUND } } if /\|\s*version\s*=\s*#{version}/ =~ text
+          text.gsub!(/version=.*/, "version=#{version}")
+          text.gsub!(/version =.*/, "version=#{version}")
+          {
+            text: text,
+            success: Proc.new { "Updated #{page} from #{cur_version} to #{version}!" },
+            fail: Proc.new { "Failed to edit #{page}" },
+            error: Proc.new { |e| "Failed! Error code: #{e.message}" }
+          }
         end
-
-        edit
-      end
-
-      NOT_FOUND = 'Could not find Infobox/param in the page. ' \
-                  'Please be sure that you entered the page name correctly.'.freeze
-
-      # Replies according to the return value.
-      # @param return_value [Any] The return value of the edit.
-      # @param mod [String] The mod name.
-      # @param version [String] The new version.
-      # @param new_p [Boolean] Whether the parameter is being created or not.
-      def get_reply(return_value, mod, version, old, new_p = false)
-        return unless return_value
-        success = new_p ? "Added version parameter to #{mod} as #{version}" : "Updated #{mod} from #{old} to #{version}!"
-        failed = "Failed! Error code: #{return_value}"
-        return success if return_value
-        return NOT_FOUND unless return_value
-        return failed if return_value.is_a?(String)
       end
 
       # Updates the mod version for the given mod on the wiki.
@@ -95,11 +84,9 @@ module Plugins
             msg.reply("#{version} is already the current version")
           elsif current.nil?
             msg.reply('That page does not have the param, trying to make one.'.freeze)
-            add = add_new_param(mod, version)
-            msg.reply(get_reply(add, mod, version, current, true))
+            add_new_param(mod, msg, version)
           else
-            update = update_param(mod, version)
-            msg.reply(get_reply(update, mod, version, current))
+            update_param(mod, msg, current, version)
           end
         else
           msg.reply(Variables::Constants::NOT_VERIFIED)

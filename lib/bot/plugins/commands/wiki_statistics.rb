@@ -1,11 +1,13 @@
 require 'cinch'
 require 'string-utility'
 require_relative 'base_command'
+require_relative '../wiki'
 
 module Plugins
   module Commands
     class WikiStatistics < BaseCommand
       include Cinch::Plugin
+      include Plugins::Wiki
       using StringUtility
       ignore_ignored_users
 
@@ -20,7 +22,7 @@ module Plugins
       #   edits, images, users, admins, and active users.
       # @param msg [Cinch::Message]
       def get_all(msg)
-        butt = LittleHelper.init_wiki
+        butt = wiki
         stats = butt.get_statistics
         pages = stats['pages'].to_s.separate
         articles = stats['articles'].to_s.separate
@@ -41,7 +43,7 @@ module Plugins
       #   pages, articles, edits, images, users, activeusers, or admins.
       def get_one(msg, prop)
         if VALID_PROPERTIES.include?(prop.downcase)
-          butt = LittleHelper.init_wiki
+          butt = wiki
           stats = butt.get_statistics
           stat = stats[prop].to_s.separate
           msg.reply("#{prop.capitalize}: #{stat}")

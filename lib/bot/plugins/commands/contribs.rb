@@ -1,11 +1,13 @@
 require 'cinch'
 require 'string-utility'
 require_relative 'base_command'
+require_relative '../wiki'
 
 module Plugins
   module Commands
     class GetContribs < BaseCommand
       include Cinch::Plugin
+      include Plugins::Wiki
       using StringUtility
       ignore_ignored_users
 
@@ -20,7 +22,7 @@ module Plugins
       # @param username [String] The username to check.
       # @param you [Boolean] Whether the username is also the user who performed the command.
       def execute(msg, username, you = false)
-        butt = LittleHelper.init_wiki
+        butt = wiki
         count = butt.get_contrib_count(username).to_s.separate
         unless count
           msg.reply("#{username} is not a user on the wiki.")

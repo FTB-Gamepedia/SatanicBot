@@ -1,10 +1,12 @@
 require 'cinch'
 require_relative 'base_command'
+require_relative '../wiki'
 
 module Plugins
   module Commands
     class GetAbbreviation < BaseCommand
       include Cinch::Plugin
+      include Plugins::Wiki
       ignore_ignored_users
 
       set(help: 'Gets either the abbreviation for the given mod, or the mod for the given abbreviation. 1 arg: $getabbrv <thing>',
@@ -44,7 +46,7 @@ module Plugins
       # @param msg [Cinch::Message]
       # @param thing [String] The abbreviation OR mod.
       def execute(msg, thing)
-        butt = LittleHelper.init_wiki
+        butt = wiki
         module_text = butt.get_text(PAGE)
 
         escaped_thing = Regexp.escape(thing).gsub("'") { %Q{\\\\'}}

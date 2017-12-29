@@ -2,12 +2,14 @@ require 'cinch'
 require 'string-utility'
 require 'isgd'
 require_relative 'base_command'
+require_relative '../wiki'
 
 module Plugins
   module Commands
     class CheckPage < BaseCommand
       using StringUtility
       include Cinch::Plugin
+      include Plugins::Wiki
       ignore_ignored_users
 
       set(help: 'Checks if a page exists. 1 arg: $checkpage <page name>', plugin_name: 'checkpage')
@@ -17,7 +19,7 @@ module Plugins
       # @param msg [Cinch::Message]
       # @param page [String] The page to check.
       def execute(msg, page)
-        butt = LittleHelper.init_wiki
+        butt = wiki
         page.spacify!
         is_redir = butt.page_redirect?(page)
         link = ISGD.shorten("http://ftb.gamepedia.com/#{page.underscorify}")

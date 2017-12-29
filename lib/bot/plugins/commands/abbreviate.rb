@@ -1,11 +1,13 @@
 require 'cinch'
 require 'array_utility'
 require_relative 'base_command'
+require_relative '../wiki'
 
 module Plugins
   module Commands
     class Abbreviate < AuthorizedCommand
       include Cinch::Plugin
+      include Plugins::Wiki
       using ArrayUtility
       ignore_ignored_users
 
@@ -21,15 +23,15 @@ module Plugins
       # @param mod [String] The mod name.
       def execute(msg, abbreviation, mod)
         abbreviation = abbreviation.upcase
-        page = 'Module:Mods/list'
-        butt = LittleHelper.init_wiki
-        module_text = butt.get_text(page)
         mod.gsub!("'") { "\\'" }
-        if module_text =~ /[\s+]#{abbreviation} = \{\'/ || module_text =~ /[\s+]\["#{abbreviation}"\] = \{\'/
-          msg.reply('That abbreviation is already on the list.'.freeze)
-        elsif module_text.include?("= {'#{mod}',")
-          msg.reply('That mod is already on the list.'.freeze)
-        else
+        edit('Module:Mods/list', msg, minor: true, summary: "Adding #{mod}") do |text|
+          if text =~ /[\s+]#{abbreviation} = \{\'/ || text =~ /[\s+]\["#{abbreviation}"\] = \{\'/
+            next { terminate: Proc.new { 'That abbreviation is already on the list.' } }
+          end
+          if text.include?("= {'#{mod}',")
+            next { terminate: Proc.new { 'The mod is already on the list.' } }
+          end
+
           new_line = ' ' * 4
           if abbreviation.include?('-')
             new_line << "[\"#{abbreviation}\"]"
@@ -37,25 +39,22 @@ module Plugins
             new_line << abbreviation
           end
           new_line << " = {'#{mod}', [=[<translate>#{mod}</translate>]=]},"
-          text_ary = module_text.split("\n")
+          text_ary = text.split("\n")
           text_ary.each_with_index do |line, index|
-            next unless line =~ /^[\s]+[\w]+ = \{'/
+            next unless line =~ /^[\s]+[\w]+ = {'/
             ary = [new_line, line]
             next unless ary == ary.sort
             new_line.delete!(',', '') if text_ary.next(line) == '}'
             text_ary.insert(index, new_line)
             break
           end
-          begin
-            edit = butt.edit(page, text_ary.join("\n"), minor: true, summary: "Adding #{mod}")
-            if edit
-              msg.reply("Successfully abbreviated #{mod} as #{abbreviation}")
-            else
-              msg.reply('Failed! There was no change to the mod list')
-            end
-          rescue EditError => e
-            msg.reply("Failed! Error code: #{e.message}")
-          end
+          {
+            text: text_ary.join("\n"),
+            success: Proc.new { "Successfully abbreviated #{mod} as #{abbreviation}" },
+            fail: Proc.new { 'Failed! There was no change to the mod list' },
+            error: Proc.new { |e| "Failed! Error code: #{e.message}" },
+            summary: "Adding #{mod}"
+          }
         end
       end
     end

@@ -1,10 +1,12 @@
 require 'cinch'
 require_relative 'base_command'
+require_relative '../wiki'
 
 module Plugins
   module Commands
     class Upload < AuthorizedCommand
       include Cinch::Plugin
+      include Plugins::Wiki
       ignore_ignored_users
 
       set(help: 'Uploads a web file to the wiki. Op-only. 2 args: $upload <url to upload> <filename to upload to>',
@@ -16,7 +18,7 @@ module Plugins
       # @param url [String] The URL to upload.
       # @param filename [String] The file's name on the wiki.
       def execute(msg, url, filename)
-        butt = LittleHelper.init_wiki
+        butt = wiki
         begin
           upload = butt.upload(url, filename)
         rescue MediaWiki::Butt::UploadInvalidFileExtError => e

@@ -1,5 +1,6 @@
 require 'cinch'
 require_relative 'base_command'
+require_relative '../wiki'
 
 module Plugins
   module Commands
@@ -13,7 +14,7 @@ module Plugins
       def execute(msg, page)
         page = "Category:#{page}" if /^Category:/ !~ page
 
-        butt = LittleHelper.init_wiki
+        butt = wiki
         if butt.get_text(page).nil?
           text = '[[Category:Mods]]'
           begin

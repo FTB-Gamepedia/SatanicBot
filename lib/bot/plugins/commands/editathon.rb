@@ -1,11 +1,13 @@
 require 'string-utility'
 require 'timerizer'
 require_relative 'base_command'
+require_relative '../wiki'
 
 module Plugins
   module Commands
     class Editathon < BaseCommand
       include Cinch::Plugin
+      include Plugins::Wiki
       using StringUtility
       ignore_ignored_users
 
@@ -15,7 +17,7 @@ module Plugins
       FORMAT = '%B %e %Y %H:%M:%S UTC'.freeze
 
       def execute(msg)
-        butt = LittleHelper.init_wiki
+        butt = wiki
         newest_editathon = butt.get_category_members('Category:Editathons').max do |a, b|
           butt.first_edit_timestamp(a) <=> butt.first_edit_timestamp(b)
         end

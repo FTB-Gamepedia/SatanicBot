@@ -1,5 +1,6 @@
 require 'cinch'
 require_relative 'base_command'
+require_relative '../wiki'
 
 module Plugins
   module Commands
@@ -11,10 +12,10 @@ module Plugins
       match(/dis\? (.+)/i)
 
       def execute(msg, page_name)
-        wiki = LittleHelper.init_wiki
-        text = wiki.get_text(page_name)
+        butt = wiki
+        text = butt.get_text(page_name)
         if text
-          is_dis = wiki.get_categories_in_page(page_name).include?('Category:Disambiguation pages')
+          is_dis = butt.get_categories_in_page(page_name).include?('Category:Disambiguation pages')
           msg.reply("#{page_name} is #{is_dis ? 'a' : 'not a'} disambiguation page.")
         else
           msg.reply("#{page_name} is not a page.")

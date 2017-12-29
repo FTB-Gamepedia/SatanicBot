@@ -1,11 +1,13 @@
 require 'cinch'
 require 'mediawiki/exceptions'
 require_relative 'base_command'
+require_relative '../wiki'
 
 module Plugins
   module Commands
     class MoveCategory < AuthorizedCommand
       include Cinch::Plugin
+      include Plugins::Wiki
       ignore_ignored_users
 
       set(help: 'Moves one category to another, and edits all its members to reflect this change. 2 args: $movecat ' \
@@ -18,7 +20,7 @@ module Plugins
       # @param old_cat [String] The old category name.
       # @param new_cat [String] The new category name.
       def execute(msg, old_cat, new_cat)
-        butt = LittleHelper.init_wiki
+        butt = wiki
         old_cat = old_cat =~ /^Category:/ ? old_cat : "Category:#{old_cat}"
         new_cat = new_cat =~ /^Category:/ ? new_cat : "Category:#{new_cat}"
         old_cat_contents = butt.get_text(old_cat)
@@ -40,16 +42,17 @@ module Plugins
 
           members = butt.get_category_members(old_cat)
           members.each do |t|
-            text = butt.get_text(t)
-            next if text.nil?
-            text.gsub!(old_cat, new_cat)
-            text.gsub!(/\{\{[Cc]\|#{old_cat.delete('Category:')}\}\}/, "{{C|#{new_cat.delete('Category:')}}}")
-            begin
-              butt.edit(t, text, minor: true)
-            rescue EditError => e
-              msg.reply("Something went wrong when editing #{t}! Error code: #{e.message} ... Continuing ...")
+            edit(t, msg, minor: true) do |text|
+              return { terminate: nil } if text.nil?
+              text.gsub!(old_cat, new_cat)
+              text.gsub!(/\{\{[Cc]\|#{old_cat.delete('Category:')}\}\}/, "{{C|#{new_cat.delete('Category:')}}}")
+              {
+                text: text,
+                success: nil,
+                fail: nil,
+                error: Proc.new { |e| "Something went wrong when editing #{t}! Error code: #{e.message} ... Continuing ..."}
+              }
             end
-
           end
 
           msg.reply("Finished moving #{old_cat} to #{new_cat}")

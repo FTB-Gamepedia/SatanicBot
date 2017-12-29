@@ -1,10 +1,12 @@
 require 'cinch'
 require_relative 'base_command'
+require_relative '../wiki'
 
 module Plugins
   module Commands
     class SubCategoryMembers < AuthorizedCommand
       include Cinch::Plugin
+      include Plugins::Wiki
       ignore_ignored_users
 
       set(help: 'Gets a comprehensive summary of all category members, their subcategories, and their members. Use ' \
@@ -73,7 +75,7 @@ module Plugins
       # @param category [String] The top category.
       def execute(msg, category)
         category = "Category:#{category}" if /^Category:/ !~ category
-        butt = LittleHelper.init_wiki
+        butt = wiki
         paste_hash = get_members(butt, category)
         paste_contents = create_paste_contents(paste_hash, 1)
         id = LittleHelper::PASTEE.submit(paste_contents, "Summary of #{category} subcats.")

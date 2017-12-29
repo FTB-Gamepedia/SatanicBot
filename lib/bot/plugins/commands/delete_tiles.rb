@@ -1,17 +1,19 @@
 require 'cinch'
 require_relative 'base_command'
+require_relative '../wiki'
 
 module Plugins
   module Commands
     class DeleteTiles < AuthorizedCommand
       include Cinch::Plugin
+      include Plugins::Wiki
       ignore_ignored_users
 
       set(help: 'Deletes a set of Tilesheet tiles. 1 arg: pipe separated list of IDs.', plugin_name: 'deltetiles')
       match(/deletetiles ([\d+\|]+)/i)
 
       def execute(msg, ids)
-        butt = LittleHelper.init_wiki
+        butt = wiki
         # TODO: Finish up MediaWiki::Butt extension stuff.
         params = {
           action: 'deletetiles',
