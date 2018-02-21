@@ -23,7 +23,6 @@ module LittleHelper
 
   WEATHER = Weatheruby.new(Variables::Constants::WUNDERGROUND_KEY, 'EN', true, true)
   PASTEE = Pastee.new(Variables::Constants::PASTEE_KEY)
-  CLEVER = Cleverbot.new(Variables::Constants::CLEVER_USER, Variables::Constants::CLEVER_KEY)
   DICTIONARY = OxfordDictionary.new(app_id: Variables::Constants::DICT_ID, app_key: Variables::Constants::DICT_KEY)
 
   plugins = [
@@ -77,20 +76,22 @@ module LittleHelper
     plugins << Plugins::Commands::GetSentMessages
   end
 
-  unless Variables::Constants::DISABLED_PLUGINS.nil?
-    Variables::Constants::DISABLED_PLUGINS.each do |p|
-      constants = p.split('::')
-      disabled = nil
-      constants.each do |c|
-        if disabled.nil?
-          disabled = Object.const_get(c)
-          next
-        else
-          disabled = disabled.const_get(c)
-        end
+  Variables::Constants::DISABLED_PLUGINS.each do |p|
+    constants = p.split('::')
+    disabled = nil
+    constants.each do |c|
+      if disabled.nil?
+        disabled = Object.const_get(c)
+        next
+      else
+        disabled = disabled.const_get(c)
       end
-      plugins.delete(disabled)
     end
+    plugins.delete(disabled)
+  end
+
+  unless Variables::Constants::DISABLED_PLUGINS.include?('Plugins::Commands::CleverBot')
+    CLEVER = Cleverbot.new(Variables::Constants::CLEVER_USER, Variables::Constants::CLEVER_KEY)
   end
 
   plugins.freeze
