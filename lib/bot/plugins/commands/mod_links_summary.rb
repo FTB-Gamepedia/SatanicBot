@@ -16,7 +16,7 @@ module Plugins
         'Modpacks'
       ].freeze
 
-      REDIRECT_REGEX = /\#REDIRECT \[\[(.+)]]/
+      REDIRECT_REGEX = /\#REDIRECT \[\[(.+)\]\]/
 
       def create_paste(page_name, special_category_pages, other_mod_pages)
         str = "== Pages not for this mod ==\n"

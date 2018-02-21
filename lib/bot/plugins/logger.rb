@@ -1,4 +1,5 @@
 require 'cinch'
+require_relative '../variables'
 
 module Plugins
   class Logger
