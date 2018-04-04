@@ -6,6 +6,7 @@ module Plugins
   module Commands
     class IsDisambiguation < BaseCommand
       include Cinch::Plugin
+      include Plugins::Wiki
       ignore_ignored_users
 
       set(help: 'Returns whether the provided page is a disambiguation page. 1 arg: $dis? <page>', plugin_name: 'dis?')
