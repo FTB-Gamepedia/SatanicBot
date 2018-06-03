@@ -23,7 +23,7 @@ module Plugins
       # @param mod [String] The mod name.
       def execute(msg, abbreviation, mod)
         abbreviation = abbreviation.upcase
-        mod.gsub!("'") { "\\'" }
+        escaped_mod = mod.gsub("'") { "\\'" }
         edit('Module:Mods/list', msg, minor: true, summary: "Adding #{mod}") do |text|
           if text =~ /[\s+]#{abbreviation} = \{\'/ || text =~ /[\s+]\["#{abbreviation}"\] = \{\'/
             next { terminate: Proc.new { 'That abbreviation is already on the list.' } }
@@ -38,7 +38,7 @@ module Plugins
           else
             new_line << abbreviation
           end
-          new_line << " = {'#{mod}', [=[<translate>#{mod}</translate>]=]},"
+          new_line << " = {'#{escaped_mod}', [=[<translate>#{mod}</translate>]=]},"
           text_ary = text.split("\n")
           text_ary.each_with_index do |line, index|
             next unless line =~ /^[\s]+[\w]+ = {'/
