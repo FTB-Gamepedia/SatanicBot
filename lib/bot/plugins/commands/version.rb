@@ -9,7 +9,7 @@ module Plugins
       # @param page [String] The page to check.
       # @return [Nil] If there is no version parameter.
       # @return [String] The version number.
-      def get_current_verison(page)
+      def get_current_version(page)
         butt = wiki
         text = butt.get_text(page)
         if text =~ /\|version=(.*)/ || text =~ /\|version =(.*)/
@@ -32,7 +32,7 @@ module Plugins
         # @param msg [Cinch::Message]
         # @param page [String] The mod page.
         def check(msg, page)
-          version = get_current_verison(page)
+          version = get_current_version(page)
           if version.nil?
             msg.reply('No version found on that page.'.freeze)
           else
@@ -99,7 +99,7 @@ module Plugins
         # @param mod [String] The mod to update on the wiki.
         # @param version [String] The new mod version.
         def update(msg, mod, version)
-          current = get_current_verison(mod)
+          current = get_current_version(mod)
           if current == version
             msg.reply("#{version} is already the current version")
           elsif current.nil?
