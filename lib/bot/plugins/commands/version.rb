@@ -12,7 +12,7 @@ module Plugins
       def get_current_verison(page)
         butt = wiki
         text = butt.get_text(page)
-        if text =~ /version=(.*)/ || text =~ /version =(.*)/
+        if text =~ /\|version=(.*)/ || text =~ /\|version =(.*)/
           return Regexp.last_match[1]
         end
 
@@ -83,8 +83,8 @@ module Plugins
         def update_param(page, msg, cur_version, version)
           edit(page, msg, minor: true, summary: 'Update version.'.freeze) do |text|
             return { terminate: Proc.new { NOT_FOUND } } if /\|\s*version\s*=\s*#{version}/ =~ text
-            text.gsub!(/version=.*/, "version=#{version}")
-            text.gsub!(/version =.*/, "version=#{version}")
+            text.gsub!(/\|version=.*/, "|version=#{version}")
+            text.gsub!(/\|version =.*/, "|version=#{version}")
             {
               text: text,
               success: Proc.new { "Updated #{page} from #{cur_version} to #{version}!" },
