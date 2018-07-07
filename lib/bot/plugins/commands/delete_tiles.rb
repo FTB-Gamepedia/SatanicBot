@@ -9,7 +9,7 @@ module Plugins
       include Plugins::Wiki
       ignore_ignored_users
 
-      set(help: 'Deletes a set of Tilesheet tiles. 1 arg: pipe separated list of IDs.', plugin_name: 'deltetiles')
+      set(help: 'Deletes a set of Tilesheet tiles. 1 arg: pipe separated list of IDs.', plugin_name: 'deletetiles')
       match(/deletetiles ([\d+\|]+)/i)
 
       def execute(msg, ids)
