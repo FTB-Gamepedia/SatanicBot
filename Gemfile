@@ -24,4 +24,4 @@ gem('timerizer', '~> 0.2')
 gem('oxford_dictionary', '~> 1.0')
 gem('addressable', '~> 2.5')
 
-ruby '2.5.0'
+ruby '2.6.3'
