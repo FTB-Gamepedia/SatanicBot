@@ -18,7 +18,7 @@ module Plugins
         return if !user.authed? || user.authname.empty?
         auth = user.authname.downcase
         user_times = Variables::NonConstants.get_mail_times
-        return if user_times.key?(auth) && Time.since(user_times[auth]).minutes < 5
+        return if user_times.key?(auth) && Time.since(user_times[auth]).to_minute < 5
         table = LittleHelper.message_table
         count = table.where(to: [auth]).count
         if count > 0
