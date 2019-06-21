@@ -1,4 +1,4 @@
-# These 2 are disabled because many command's #execute method have a bunch of logic that has no need for modularity.
+# These 2 are disabled because many commands' #execute method have a bunch of logic that has no need for modularity.
 Metrics/MethodLength:
   Enabled: false
 
@@ -27,10 +27,7 @@ Style/Documentation:
 Style/RegexpLiteral:
   Enabled: false
 
-Style/AccessorMethodName:
-  Enabled: false
-
-Style/InlineComment:
+Naming/AccessorMethodName:
   Enabled: false
 
 #Metrics/ModuleLength:
@@ -45,9 +42,10 @@ Style/WordArray:
 Metrics/ParameterLists:
   Enabled: false
 
-# Disable cops on deprecated scripts.
 AllCops:
-  Excludes:
+  TargetRubyVersion: 2.6
+# Disable cops on deprecated scripts.
+  Exclude:
     - lib/bot/scripts/deprecated/disser.rb
     - lib/bot/scripts/deprecated/gcrollback.rb
     - lib/bot/scripts/deprecated/skyrimtemplates.rb
