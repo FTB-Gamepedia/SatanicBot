@@ -1,5 +1,5 @@
 require 'simple_geolocator'
-require 'weatheruby'
+require 'openweathermap'
 require_relative 'base_command'
 
 module Plugins
@@ -26,50 +26,46 @@ module Plugins
       # @param location [String] The location to get the weather for.
       def weather(msg, location)
         begin
-          conditions = LittleHelper::WEATHER.conditions(location)
-        rescue Weatheruby::WeatherError => e
+          current = LittleHelper::WEATHER.current(location)
+        rescue OpenWeatherMap::Exceptions::UnknownLocation => e
           msg.reply(e.message)
+          return
+        rescue
+          msg.reply("Error occurred trying to get weather information for #{location}, please try again.")
           return
         end
 
-        alerts = LittleHelper::WEATHER.alerts(location)
+        # TODO: Alerts. OpenWeatherMap-Ruby does not have support for alerts at the moment.
+        # alerts = LittleHelper::WEATHER.alerts(location)
 
-        now = Time.now
-        precip_chance = LittleHelper::WEATHER.chance_of_precipitation(now, now, location)
+        name = "#{current.city.name}, #{current.city.country}"
+        description = "#{current.weather_conditions.emoji} #{current.weather_conditions.description}"
+        # As per the WEATHER initialization, we use C. This has to be converted to F.
+        temp_max_c = current.weather_conditions.temp_max.round(2)
+        temp_min_c = current.weather_conditions.temp_min.round(2)
+        temp_c = current.weather_conditions.temperature.round(2)
+        temp_max_f = to_f(temp_max_c).round(2)
+        temp_min_f = to_f(temp_min_c).round(2)
+        temp_f =  to_f(temp_c).round(2)
+        temp = "#{temp_c}°C (#{temp_f}°F) (#{temp_min_c}°C — #{temp_max_c}°C) (#{temp_min_f}°F — #{temp_max_f}°F)"
 
-        name = conditions[:full_name]
-        condition = conditions[:weather]
-        temp = "#{conditions[:temperature_c]}°C (#{conditions[:temperature_f]}°F)"
-        feel = "#{conditions[:feelslike_c]}°C (#{conditions[:feelslike_f]}°F)"
-        humidity = "#{conditions[:humidity]}%"
-        date = conditions[:updated]
-        message = "#{name}: #{condition} | "
+        humidity = "#{current.weather_conditions.humidity.round(2)}%"
+        date = current.weather_conditions.time
+        message = "#{name}: #{description} | #{temp} | Humidity: #{humidity} | #{date.strftime(FORMAT)}"
 
-        # Appending `message` based on temp_feel in any other way would make for terrible styling.
-        # rubocop:disable Style/ConditionalAssignment
-        if temp == feel
-          message << "#{temp}, and feels like it!"
-        else
-          message << "#{temp}, but feels like #{feel}"
-        end
-        # rubocop:enable Style/ConditionalAssignment
-
-        message << " | Humidity: #{humidity} | #{precip_chance}% chance of precipitation | #{date}"
-
-        alerts.each do |a|
-
-          desc = Cinch::Formatting.format(:red, a[:description])
-          message << " | #{desc} until #{a[:expires].strftime(FORMAT)}"
-        end
+        # TODO: See above.
+        # alerts.each do |a|
+        #   desc = Cinch::Formatting.format(:red, a[:description])
+        #   message << " | #{desc} until #{a[:expires].strftime(FORMAT)}"
+        # end
         msg.reply(message)
       end
 
-      # Geolocates the IP to a given location, in City, Region syntax.
+      # Geolocates the IP to a given location, in City, Region, Country syntax.
       # @param ip [String] The IP to geolocate
       def get_location_by_ip(ip)
-        region = SimpleGeolocator.get(ip).region
-        city = SimpleGeolocator.get(ip).city
-        "#{city}, #{region.code}"
+        location = SimpleGeolocator.get(ip)
+        "#{location.city}, #{location.region.code}, #{location.country.code}"
       end
 
       # Gets the weather conditions for the user's location by their IP.
@@ -86,10 +82,27 @@ module Plugins
       # @param location [String] The location to get the information for.
       def forecast(msg, location)
         msg.reply("Getting forecast for #{location}...")
-        forecast = LittleHelper::WEATHER.simple_forecast(location)
 
-        forecast.each do |_, f|
-          msg.reply("#{f[:weekday_name]}: #{f[:text]}")
+        begin
+          forecast = LittleHelper::WEATHER.forecast(location)
+        rescue OpenWeatherMap::Exceptions::UnknownLocation => e
+          msg.reply(e.message)
+          return
+        rescue
+          msg.reply("Error occurred trying to get forecast information for #{location}, please try again.")
+          return
+        end
+
+        amalgamated_forecast = {}
+        forecast.forecast.each do |conditions|
+          weekday = conditions.time.strftime('%A')
+          amalgamated_forecast[weekday] = [] unless amalgamated_forecast.keys.include?(weekday)
+          str = "#{conditions.emoji} #{conditions.description} #{conditions.temperature.round(2)}°C (#{to_f(conditions.temperature).round(2)}°F)"
+          amalgamated_forecast[weekday] << str unless amalgamated_forecast[weekday].include?(str)
+        end
+
+        amalgamated_forecast.each do |weekday, strs|
+          msg.reply("#{weekday}: #{strs.join(' → ')}")
         end
       end
 
@@ -100,6 +113,12 @@ module Plugins
         ip = msg.user.host
         location = get_location_by_ip(ip)
         forecast(msg, location)
+      end
+
+      # Converts c to fahrenheit
+      # @param c [Number] celsius
+      def to_f(c)
+        (1.8 * c) + 32
       end
     end
   end

@@ -55,6 +55,7 @@ GEM
     octokit (4.7.0)
       sawyer (~> 0.8.0, >= 0.5.3)
     oj (2.18.1)
+    openweathermap (0.2.1)
     oxford_dictionary (1.0.0)
       plissken (~> 0.1.0)
       virtus (~> 1.0.5)
@@ -99,10 +100,6 @@ GEM
       coercible (~> 1.0)
       descendants_tracker (~> 0.0, >= 0.0.3)
       equalizer (~> 0.0, >= 0.0.9)
-    weatheruby (1.0.0)
-      httpclient (~> 2.8)
-      rainbow (~> 2.1)
-      string-utility (~> 3.0)
 
 PLATFORMS
   ruby
@@ -120,6 +117,7 @@ DEPENDENCIES
   mediawiki-butt (~> 3.0)
   mojang (>= 1.0.1)
   octokit (~> 4.7)
+  openweathermap (~> 0.1)
   oxford_dictionary (~> 1.0)
   pastee (~> 2.0)
   pg (~> 0.21)
@@ -130,10 +128,9 @@ DEPENDENCIES
   timerizer (~> 0.3)
   twitter (~> 6.1)
   urbandict (~> 1.0)
-  weatheruby (~> 1.0)
 
 RUBY VERSION
    ruby 2.6.3p62
 
 BUNDLED WITH
-   1.16.0
+   1.17.3

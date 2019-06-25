@@ -2,7 +2,7 @@ require 'cinch'
 require 'mediawiki-butt'
 require 'require_all'
 require 'twitter'
-require 'weatheruby'
+require 'openweathermap'
 require 'pastee'
 require 'cleverbot'
 require 'sequel'
@@ -21,7 +21,7 @@ module LittleHelper
     c.access_token_secret = Variables::Constants::TWITTER_ACCESS_SECRET
   end
 
-  WEATHER = Weatheruby.new(Variables::Constants::WUNDERGROUND_KEY, 'EN', true, true)
+  WEATHER = OpenWeatherMap::API.new(Variables::Constants::OPENWEATHERMAP_KEY, 'en', 'metric')
   PASTEE = Pastee.new(Variables::Constants::PASTEE_KEY)
   DICTIONARY = OxfordDictionary.new(app_id: Variables::Constants::DICT_ID, app_key: Variables::Constants::DICT_KEY)
 

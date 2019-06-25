@@ -21,7 +21,7 @@ module Variables
     TWITTER_CONSUMER_SECRET = ENV['TWITTER_CONSUMER_SECRET'].freeze
     TWITTER_ACCESS_TOKEN = ENV['TWITTER_ACCESS_TOKEN'].freeze
     TWITTER_ACCESS_SECRET = ENV['TWITTER_ACCESS_SECRET'].freeze
-    WUNDERGROUND_KEY = ENV['WUNDERGROUND_API_KEY'].freeze
+    OPENWEATHERMAP_KEY = ENV['OPENWEATHERMAP_API_KEY'].freeze
     PASTEE_KEY = ENV['PASTEE_API_KEY'].freeze
     CLEVER_USER = ENV['CLEVERBOT_API_USER'].freeze
     CLEVER_KEY = ENV['CLEVERBOT_API_KEY'].freeze
@@ -86,5 +86,13 @@ module Variables
     def append_quote(quote)
       @quotes << quote
     end
+  end
+end
+
+module OpenWeatherMap
+  module Constants
+    # See BecauseOfProg/openweathermap-ruby#1
+    # TODO: Remove when #1 is merged
+    LANGS = %w(ar bg ca cz de el fa fi fr gl hr hu it ja kr la lt mk nl pl pt ro ru se sk sl es tr ua vi zh_cn zh_tw en)
   end
 end
