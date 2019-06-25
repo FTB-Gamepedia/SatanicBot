@@ -17,7 +17,7 @@ TWITTER_CONSUMER_SECRET: ahsudhuahsdhauhsd
 TWITTER_ACCESS_TOKEN: jaisdjasujdaushf
 TWITTER_ACCESS_SECRET: jeuhuthertoqpworj
 
-WUNDERGROUND_API_KEY: abcdefghijklmnop
+OPENWEATHERMAP_API_KEY: abcdefghijklmnop
 
 GITHUB: "#TheSteamTank,esteemed-innovation/flaxbeards-steam-power|FTB-Wiki,ftb-gamepedia/ftb-wiki-issue-tracker"
 
