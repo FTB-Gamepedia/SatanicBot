@@ -6,7 +6,7 @@ require 'openweathermap'
 require 'pastee'
 require 'cleverbot'
 require 'sequel'
-require 'oxford_dictionary'
+require 'mw_dictionary_api'
 require 'time'
 require_relative 'variables'
 require_rel 'plugins'
@@ -23,7 +23,7 @@ module LittleHelper
 
   WEATHER = OpenWeatherMap::API.new(Variables::Constants::OPENWEATHERMAP_KEY, 'en', 'metric')
   PASTEE = Pastee.new(Variables::Constants::PASTEE_KEY)
-  DICTIONARY = OxfordDictionary.new(app_id: Variables::Constants::DICT_ID, app_key: Variables::Constants::DICT_KEY)
+  DICTIONARY = MWDictionaryAPI::Client.new(Variables::Constants::DICT_KEY, api_type: 'collegiate')
 
   plugins = [
     Plugins::Commands::Quit,

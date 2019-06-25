@@ -26,8 +26,8 @@ PASTEE_API_KEY: abcdefghijklmnop
 CLEVERBOT_API_USER: abcdefghudfuhd
 CLEVERBOT_API_KEY:  idjfudjgudfjguhgjhkgofpa
 
-OXFORD_API_KEY: aushfuhsdfushisdufhdisufhisdhfdshf
-OXFORD_API_ID: asjd8asud89
+# The key must be for the Collegiate dictionary
+MERRIAMWEBSTER_API_KEY: aushfuhsdfushisdufhdisufhisdhfdshf
 
 IGNORED_USERS: travis-ci
 
