@@ -93,7 +93,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  addressable (~> 2.5)
+  addressable (~> 2.6)
   array_utility (~> 1.1)
   cinch (~> 2.3)
   cleverbot_io (~> 2.0)

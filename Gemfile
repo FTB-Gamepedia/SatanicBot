@@ -22,6 +22,6 @@ gem('curb', '~> 0.9')
 gem('mojang', '~> 1.0')
 gem('timerizer', '~> 0.3')
 gem('mw_dictionary_api', '~> 0.1')
-gem('addressable', '~> 2.5')
+gem('addressable', '~> 2.6')
 
 ruby '2.6.3'
