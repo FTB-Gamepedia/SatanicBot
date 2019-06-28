@@ -51,7 +51,7 @@ GEM
     octokit (4.14.0)
       sawyer (~> 0.8.0, >= 0.5.3)
     oj (3.7.12)
-    openweathermap (0.2.1)
+    openweathermap (0.2.2)
     pastee (2.0.3)
       httpclient (~> 2.8)
     pg (1.1.4)
