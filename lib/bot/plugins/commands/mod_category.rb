@@ -6,6 +6,8 @@ module Plugins
   module Commands
     class NewCategory < AuthorizedCommand
       include Cinch::Plugin
+      include Plugins::Wiki
+
       ignore_ignored_users
 
       set(help: 'Creates a new mod category. Op-only. 1 arg: $newmodcat <name>', plugin_name: 'newmodcat')
