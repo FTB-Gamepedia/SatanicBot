@@ -35,7 +35,7 @@ module Plugins
 
           members = butt.get_category_members(old_cat)
           members.each do |t|
-            edit(t, msg, minor: true) do |text|
+            edit(t, msg, minor: true, summary: summary) do |text|
               return { terminate: nil } if text.nil?
               text.gsub!(old_cat, new_cat)
               text.gsub!(/\{\{[Cc]\|#{old_cat.delete('Category:')}\}\}/, "{{C|#{new_cat.delete('Category:')}}}")
