@@ -1,5 +1,6 @@
 require 'cinch'
 require 'string-utility'
+require 'mediawiki/exceptions'
 require_relative 'base_command'
 require_relative '../wiki'
 
@@ -24,7 +25,7 @@ module Plugins
         butt = wiki
         begin
           move = butt.move(old_page, new_page, reason: 'Moving page from IRC.', suppress_redirect: true)
-        rescue EditError => e
+        rescue MediaWiki::Butt::EditError => e
           msg.reply("Failed! Error code: #{e.message}")
         end
 

@@ -1,4 +1,5 @@
 require 'cinch'
+require 'mediawiki/exceptions'
 require_relative 'base_command'
 require_relative '../wiki'
 
@@ -26,7 +27,7 @@ module Plugins
             else
               msg.reply('Failed! There was no change to the page')
             end
-          rescue EditError => e
+          rescue MediaWiki::Butt::EditError => e
             msg.reply("Failed! Error code: #{e.message}")
           end
         else

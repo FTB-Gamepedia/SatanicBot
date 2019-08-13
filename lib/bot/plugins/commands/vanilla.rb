@@ -1,4 +1,5 @@
 require 'cinch'
+require 'mediawiki/exceptions'
 require_relative 'base_command'
 require_relative '../wiki'
 
@@ -19,7 +20,7 @@ module Plugins
           text = "{{Vanilla|type=#{type}}}"
           begin
             butt.create_page(page, text, summary: 'New vanilla page.'.freeze)
-          rescue EditError => e
+          rescue MediaWiki::Butt::EditError => e
             msg.reply("Failed! Error code: #{e.message}")
           end
 

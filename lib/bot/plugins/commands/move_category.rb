@@ -29,7 +29,7 @@ module Plugins
           summary = "Moving #{old_cat} to #{new_cat} through IRC."
           begin
             butt.move(old_cat, new_cat, reason: summary, suppress_redirect: true)
-          rescue EditError => e
+          rescue MediaWiki::Butt::EditError => e
             msg.reply("Something went wrong when moving the category #{old_cat} to #{new_cat}! Error code: #{e.message}")
           end
 

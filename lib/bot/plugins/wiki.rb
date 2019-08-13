@@ -1,3 +1,4 @@
+require 'mediawiki/exceptions'
 require_relative '../variables'
 
 module Plugins
@@ -38,7 +39,7 @@ module Plugins
         else
           reply_from_proc(msg, yield_return[:fail])
         end
-      rescue EditError => e
+      rescue MediaWiki::Butt::EditError => e
         reply_from_proc(msg, yield_return[:error], e)
       end
     end
