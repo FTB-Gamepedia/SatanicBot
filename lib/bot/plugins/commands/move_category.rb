@@ -34,7 +34,7 @@ module Plugins
           msg.reply("Something went wrong when moving the category #{old_cat} to #{new_cat}! Error code: #{e.message}")
         end
 
-        members = wiki.get_category_members(old_cat)
+        members = wiki.get_category_members(old_cat, 'page|file|subcat')
         members.each do |t|
           edit(t, msg, minor: true, summary: summary) do |text|
             return { terminate: nil } if text.nil?
