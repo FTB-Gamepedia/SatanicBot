@@ -23,36 +23,31 @@ module Plugins
         butt = wiki
         old_cat = old_cat =~ /^Category:/ ? old_cat : "Category:#{old_cat}"
         new_cat = new_cat =~ /^Category:/ ? new_cat : "Category:#{new_cat}"
-        old_cat_contents = butt.get_text(old_cat)
-        new_cat_contents = butt.get_text(new_cat)
-        if !old_cat_contents.nil? && new_cat_contents.nil?
-          summary = "Moving #{old_cat} to #{new_cat} through IRC."
-          begin
-            butt.move(old_cat, new_cat, reason: summary, suppress_redirect: true)
-          rescue MediaWiki::Butt::EditError => e
-            msg.reply("Something went wrong when moving the category #{old_cat} to #{new_cat}! Error code: #{e.message}")
-          end
 
-          members = butt.get_category_members(old_cat)
-          members.each do |t|
-            edit(t, msg, minor: true, summary: summary) do |text|
-              return { terminate: nil } if text.nil?
-              text.gsub!(old_cat, new_cat)
-              text.gsub!(/\{\{[Cc]\|#{old_cat.delete('Category:')}\}\}/, "{{C|#{new_cat.delete('Category:')}}}")
-              {
-                text: text,
-                success: nil,
-                fail: nil,
-                error: Proc.new { |e| "Something went wrong when editing #{t}! Error code: #{e.message} ... Continuing ..."}
-              }
-            end
-          end
+        summary = "Moving #{old_cat} to #{new_cat} through IRC."
 
-          msg.reply("Finished moving #{old_cat} to #{new_cat}")
-        else
-          msg.reply('Either the new category already exists, or the old one' \
-                    ' does not. Please be sure to use valid categories.'.freeze)
+        begin
+          butt.move(old_cat, new_cat, reason: summary, suppress_redirect: true)
+        rescue MediaWiki::Butt::EditError => e
+          msg.reply("Something went wrong when moving the category #{old_cat} to #{new_cat}! Error code: #{e.message}")
         end
+
+        members = butt.get_category_members(old_cat)
+        members.each do |t|
+          edit(t, msg, minor: true, summary: summary) do |text|
+            return { terminate: nil } if text.nil?
+            text.gsub!(old_cat, new_cat)
+            text.gsub!(/\{\{[Cc]\|#{old_cat.delete('Category:')}\}\}/, "{{C|#{new_cat.delete('Category:')}}}")
+            {
+              text: text,
+              success: nil,
+              fail: nil,
+              error: Proc.new { |e| "Something went wrong when editing #{t}! Error code: #{e.message} ... Continuing ..."}
+            }
+          end
+        end
+
+        msg.reply("Finished moving #{old_cat} to #{new_cat}")
       end
     end
   end
