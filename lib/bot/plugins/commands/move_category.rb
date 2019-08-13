@@ -25,6 +25,9 @@ module Plugins
 
         summary = "Moving #{old_cat} to #{new_cat} through IRC."
 
+        old_cat_c_regex = /\{\{[Cc]\|#{old_cat.delete('Category:')}\}\}/
+        new_cat_c = "{{C|#{new_cat.delete('Category:')}}}"
+
         begin
           wiki.move(old_cat, new_cat, reason: summary, suppress_redirect: true)
         rescue MediaWiki::Butt::EditError => e
@@ -36,7 +39,7 @@ module Plugins
           edit(t, msg, minor: true, summary: summary) do |text|
             return { terminate: nil } if text.nil?
             text.gsub!(old_cat, new_cat)
-            text.gsub!(/\{\{[Cc]\|#{old_cat.delete('Category:')}\}\}/, "{{C|#{new_cat.delete('Category:')}}}")
+            text.gsub!(old_cat_c_regex, new_cat_c)
             {
               text: text,
               success: nil,
