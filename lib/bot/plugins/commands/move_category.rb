@@ -25,8 +25,8 @@ module Plugins
 
         summary = "Moving #{old_cat} to #{new_cat} through IRC."
 
-        old_cat_c_regex = /\{\{[Cc]\|#{old_cat.delete('Category:')}\}\}/
-        new_cat_c = "{{C|#{new_cat.delete('Category:')}}}"
+        old_cat_c_regex = /\{\{[Cc]\|#{old_cat.delete_prefix('Category:')}\}\}/
+        new_cat_c = "{{C|#{new_cat.delete_prefix('Category:')}}}"
 
         begin
           wiki.move(old_cat, new_cat, reason: summary, suppress_redirect: true)
