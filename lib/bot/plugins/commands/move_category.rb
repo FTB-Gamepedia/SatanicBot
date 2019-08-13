@@ -20,19 +20,18 @@ module Plugins
       # @param old_cat [String] The old category name.
       # @param new_cat [String] The new category name.
       def execute(msg, old_cat, new_cat)
-        butt = wiki
         old_cat = old_cat =~ /^Category:/ ? old_cat : "Category:#{old_cat}"
         new_cat = new_cat =~ /^Category:/ ? new_cat : "Category:#{new_cat}"
 
         summary = "Moving #{old_cat} to #{new_cat} through IRC."
 
         begin
-          butt.move(old_cat, new_cat, reason: summary, suppress_redirect: true)
+          wiki.move(old_cat, new_cat, reason: summary, suppress_redirect: true)
         rescue MediaWiki::Butt::EditError => e
           msg.reply("Something went wrong when moving the category #{old_cat} to #{new_cat}! Error code: #{e.message}")
         end
 
-        members = butt.get_category_members(old_cat)
+        members = wiki.get_category_members(old_cat)
         members.each do |t|
           edit(t, msg, minor: true, summary: summary) do |text|
             return { terminate: nil } if text.nil?

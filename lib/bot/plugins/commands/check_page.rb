@@ -19,9 +19,8 @@ module Plugins
       # @param msg [Cinch::Message]
       # @param page [String] The page to check.
       def execute(msg, page)
-        butt = wiki
         page.spacify!
-        is_redir = butt.page_redirect?(page)
+        is_redir = wiki.page_redirect?(page)
         link = ISGD.shorten("http://ftb.gamepedia.com/#{page.underscorify}")
         if is_redir.nil?
           msg.reply("#{page} does not exist on FTB Gamepedia.")

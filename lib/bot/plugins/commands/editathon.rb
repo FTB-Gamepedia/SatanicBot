@@ -17,9 +17,8 @@ module Plugins
       FORMAT = '%B %e %Y %H:%M:%S UTC'.freeze
 
       def execute(msg)
-        butt = wiki
-        newest_editathon = butt.get_category_members('Category:Editathons').max do |a, b|
-          butt.first_edit_timestamp(a) <=> butt.first_edit_timestamp(b)
+        newest_editathon = wiki.get_category_members('Category:Editathons').max do |a, b|
+          wiki.first_edit_timestamp(a) <=> wiki.first_edit_timestamp(b)
         end
         url = butt.get_article_path(newest_editathon.underscorify)
         text = butt.get_text(newest_editathon)

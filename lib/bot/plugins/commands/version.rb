@@ -10,8 +10,7 @@ module Plugins
       # @return [Nil] If there is no version parameter.
       # @return [String] The version number.
       def get_current_version(page)
-        butt = wiki
-        text = butt.get_text(page)
+        text = wiki.get_text(page)
         if text =~ /\|version=(.*)/ || text =~ /\|version =(.*)/
           return Regexp.last_match[1]
         end

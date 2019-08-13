@@ -22,15 +22,14 @@ module Plugins
       # @param old_page [String] The old page name.
       # @param new_page [String] The new page name.
       def execute(msg, old_page, new_page)
-        butt = wiki
         begin
-          move = butt.move(old_page, new_page, reason: 'Moving page from IRC.', suppress_redirect: true)
+          move = wiki.move(old_page, new_page, reason: 'Moving page from IRC.', suppress_redirect: true)
         rescue MediaWiki::Butt::EditError => e
           msg.reply("Failed! Error code: #{e.message}")
         end
 
         if move
-          links = butt.what_links_here(old_page)
+          links = wiki.what_links_here(old_page)
           links.each do |l|
             edit(l, msg, minor: true) do |text|
               return { terminate: nil } if text.nil? || text !~ /#{old_page}/

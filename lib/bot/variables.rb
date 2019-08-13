@@ -70,7 +70,7 @@ module Variables
     # @return [Array<String>] The quotes array.
     def get_quotes(refresh = false)
       if refresh || @quotes.empty?
-        butt = LittleHelper.init_wiki
+        butt = LittleHelper::BUTT
         quotes = butt.get_text('User:SatanicBot/NotGoodEnoughForENV/Quotes').split("\n")
         quotes.delete('<nowiki>')
         quotes.delete('</nowiki>')

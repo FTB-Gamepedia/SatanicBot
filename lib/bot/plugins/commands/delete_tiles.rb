@@ -13,14 +13,13 @@ module Plugins
       match(/deletetiles ([\d+\|]+)/i)
 
       def execute(msg, ids)
-        butt = wiki
         # TODO: Finish up MediaWiki::Butt extension stuff.
         params = {
           action: 'deletetiles',
           tsids: ids,
-          tstoken: butt.get_token('csrf')
+          tstoken: wiki.get_token('csrf')
         }
-        response = butt.post(params)
+        response = wiki.post(params)
         failures = ids.split('|')
         response['edit']['deletetiles'].each_key do |id|
           failures.delete(id)

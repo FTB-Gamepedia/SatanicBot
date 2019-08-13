@@ -15,11 +15,10 @@ module Plugins
       match(/newvanilla (.+) \| (.+)/i)
 
       def execute(msg, page, type)
-        butt = wiki
-        if butt.get_text(page).nil?
+        if wiki.get_text(page).nil?
           text = "{{Vanilla|type=#{type}}}"
           begin
-            butt.create_page(page, text, summary: 'New vanilla page.'.freeze)
+            wiki.create_page(page, text, summary: 'New vanilla page.'.freeze)
           rescue MediaWiki::Butt::EditError => e
             msg.reply("Failed! Error code: #{e.message}")
           end

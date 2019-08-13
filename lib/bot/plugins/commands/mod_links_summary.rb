@@ -31,30 +31,29 @@ module Plugins
         LittleHelper::PASTEE.submit(str, "Summary of bad links in #{page_name}")
       end
 
-      def find_redirect_dest(mw, title)
-        text = mw.get_text(title)
+      def find_redirect_dest(title)
+        text = wiki.get_text(title)
         return nil unless text
         match = text.match(REDIRECT_REGEX)
-        match ? find_redirect_dest(mw, match[1]) : title
+        match ? find_redirect_dest(match[1]) : title
       end
 
       def execute(msg, page_name)
-        mw = wiki
-        links_in_page = mw.get_all_links_in_page(page_name)
+        links_in_page = wiki.get_all_links_in_page(page_name)
         unless links_in_page
           msg.reply('This page does not exist.')
           return
         end
-        links_in_page.map! { |title| find_redirect_dest(mw, title) }
+        links_in_page.map! { |title| find_redirect_dest(title) }
         links_in_page.uniq!
         links_in_page.compact!
-        mod_cat_for_page = mw.get_categories_in_page(page_name).select do |category|
-          mw.get_categories_in_page(category).include?('Category:Mods')
+        mod_cat_for_page = wiki.get_categories_in_page(page_name).select do |category|
+          wiki.get_categories_in_page(category).include?('Category:Mods')
         end[0]
-        other_mod_pages = links_in_page.reject { |title| mw.get_categories_in_page(title).include?(mod_cat_for_page) }
+        other_mod_pages = links_in_page.reject { |title| wiki.get_categories_in_page(title).include?(mod_cat_for_page) }
         special_category_pages = Hash.new([])
         SPECIAL_CATEGORIES.each do |special_category|
-          all_pages_in_category = mw.get_category_members(special_category)
+          all_pages_in_category = wiki.get_category_members(special_category)
           special_category_pages[special_category] = links_in_page.select { |title| all_pages_in_category.include?(title) }
           other_mod_pages.reject! { |title| special_category_pages[special_category].include?(title) }
         end

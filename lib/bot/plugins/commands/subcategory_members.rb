@@ -75,8 +75,7 @@ module Plugins
       # @param category [String] The top category.
       def execute(msg, category)
         category = "Category:#{category}" if /^Category:/ !~ category
-        butt = wiki
-        paste_hash = get_members(butt, category)
+        paste_hash = get_members(wiki, category)
         paste_contents = create_paste_contents(paste_hash, 1)
         id = LittleHelper::PASTEE.submit(paste_contents, "Summary of #{category} subcats.")
         msg.reply("http://paste.ee/p/#{id}")

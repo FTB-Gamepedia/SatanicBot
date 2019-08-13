@@ -22,12 +22,11 @@ module Plugins
       # @param category [String] The top category.
       def execute(msg, category)
         category = "Category:#{category}" if /^Category:/ !~ category
-        butt = wiki
-        members = butt.get_category_members(category)
+        members = wiki.get_category_members(category)
         paste_hash = {}
         members.each do |page|
           next unless page
-          categories = butt.get_categories_in_page(page)
+          categories = wiki.get_categories_in_page(page)
           categories.each do |cat|
             paste_hash[cat] = [] unless paste_hash.key?(cat)
             paste_hash[cat] << page

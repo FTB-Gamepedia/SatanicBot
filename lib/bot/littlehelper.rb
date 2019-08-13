@@ -8,11 +8,12 @@ require 'cleverbot'
 require 'sequel'
 require 'mw_dictionary_api'
 require 'time'
+require_relative 'extended_butt'
 require_relative 'variables'
 require_rel 'plugins'
 
 module LittleHelper
-  BUTT = MediaWiki::Butt.new(Variables::Constants::WIKI_URL, query_limit_default: 5000, assertion: :bot)
+  BUTT = ExtendedButt.new(Variables::Constants::WIKI_URL, query_limit_default: 5000, assertion: :bot)
 
   TWEETER = Twitter::REST::Client.new do |c|
     c.consumer_key = Variables::Constants::TWITTER_CONSUMER_KEY
@@ -132,19 +133,6 @@ module LittleHelper
 
   module_function
 
-  # Initializes the MediaWiki::Butt instance. Logs back in if necessary.
-  # @return [MediaWiki::Butt].
-  def init_wiki
-    wiki_login unless BUTT.user_bot?
-
-    BUTT
-  end
-
-  # Logs into the wiki with MediaWiki::Butt.
-  def wiki_login
-    BUTT.login(Variables::Constants::WIKI_USERNAME, Variables::Constants::WIKI_PASSWORD)
-  end
-
   # Starts the bot.
   def run
     BOT.start
@@ -164,28 +152,6 @@ module LittleHelper
 end
 
 # TODO: Put monkeypatches in a nicer place
-module MediaWiki
-  class Butt
-    # TODO: Implement better history stuff in MediaWiki-Butt
-    # @param page [String] The page name to get the first edit timestamp for
-    # @return [Time] The date and time for this page's first edit converted for UTC
-    def first_edit_timestamp(page)
-      params = {
-        action: 'query',
-        prop: 'revisions',
-        titles: page,
-        rvprop: 'timestamp',
-        rvlimit: @query_limit_default
-      }
-      query(params) do |return_val, query|
-        pageid = query['pages'].keys.find(MediaWiki::Constants::MISSING_PAGEID_PROC) { |id| id != '-1' }
-        return [] if query['pages'][pageid].key?('missing')
-        return_val.concat(query['pages'][pageid].fetch('revisions', []).collect { |h| Time.parse(h['timestamp']).utc })
-      end.min
-    end
-  end
-end
-
 class Time
   def in_progress?(start_time, end_time)
     (start_time .. end_time).include?(clone.utc)

@@ -46,8 +46,7 @@ module Plugins
       # @param msg [Cinch::Message]
       # @param thing [String] The abbreviation OR mod.
       def execute(msg, thing)
-        butt = wiki
-        module_text = butt.get_text(PAGE)
+        module_text = wiki.get_text(PAGE)
 
         escaped_thing = Regexp.escape(thing).gsub("'") { %Q{\\\\'}}
         names = get_names(escaped_thing, module_text)

@@ -4,9 +4,9 @@ require_relative '../variables'
 module Plugins
   # A mixin for handling MediaWiki actions without redundant code
   module Wiki
-    # @return [MediaWiki::Butt] Use this to obtain the current MW instance and log in if necessary
+    # @return [MediaWiki::Butt] Use this to obtain the current MW instance
     def wiki
-      LittleHelper.init_wiki
+      LittleHelper::BUTT
     end
 
     # @param title [String] see MediaWiki::Butt#edit
@@ -25,15 +25,14 @@ module Plugins
     #   The :text key contains the text to replace the page contents with (see {MediaWiki::Butt#edit})
     # @return [void]
     def edit(title, msg, opts = {})
-      mw = wiki
-      content = mw.get_text(title)
+      content = wiki.get_text(title)
       yield_return = yield(content)
       if yield_return.key?(:terminate)
         reply_from_proc(msg, yield_return[:terminate])
         return
       end
       begin
-        edit_resp = mw.edit(title, yield_return[:text], opts.merge(yield_return))
+        edit_resp = wiki.edit(title, yield_return[:text], opts.merge(yield_return))
         if edit_resp
           reply_from_proc(msg, yield_return[:success])
         else

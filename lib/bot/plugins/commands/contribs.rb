@@ -22,13 +22,12 @@ module Plugins
       # @param username [String] The username to check.
       # @param you [Boolean] Whether the username is also the user who performed the command.
       def execute(msg, username, you = false)
-        butt = wiki
-        count = butt.get_contrib_count(username).to_s.separate
+        count = wiki.get_contrib_count(username).to_s.separate
         unless count
           msg.reply("#{username} is not a user on the wiki.")
           return
         end
-        date = butt.get_registration_time(username)
+        date = wiki.get_registration_time(username)
         month = date.strftime('%B').strip
         day = date.strftime('%e').strip
         year = date.strftime('%Y').strip

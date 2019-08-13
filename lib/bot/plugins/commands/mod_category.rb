@@ -17,11 +17,10 @@ module Plugins
       def execute(msg, page)
         page = "Category:#{page}" if /^Category:/ !~ page
 
-        butt = wiki
-        if butt.get_text(page).nil?
+        if wiki.get_text(page).nil?
           text = '[[Category:Mods]]'
           begin
-            edit = butt.create_page(page, text, summary: 'New mod category.')
+            edit = wiki.create_page(page, text, summary: 'New mod category.')
             if edit
               msg.reply("Successfully created #{page}.")
             else

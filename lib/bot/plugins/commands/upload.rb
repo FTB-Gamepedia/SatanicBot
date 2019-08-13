@@ -18,9 +18,8 @@ module Plugins
       # @param url [String] The URL to upload.
       # @param filename [String] The file's name on the wiki.
       def execute(msg, url, filename)
-        butt = wiki
         begin
-          upload = butt.upload(url, filename)
+          upload = wiki.upload(url, filename)
         rescue MediaWiki::Butt::UploadInvalidFileExtError => e
           msg.reply('Invalid file extension. Failed to upload!')
         rescue MediaWiki::Butt::EditError => e

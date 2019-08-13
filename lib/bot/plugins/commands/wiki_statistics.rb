@@ -22,8 +22,7 @@ module Plugins
       #   edits, images, users, admins, and active users.
       # @param msg [Cinch::Message]
       def get_all(msg)
-        butt = wiki
-        stats = butt.get_statistics
+        stats = wiki.get_statistics
         pages = stats['pages'].to_s.separate
         articles = stats['articles'].to_s.separate
         edits = stats['edits'].to_s.separate
@@ -43,8 +42,7 @@ module Plugins
       #   pages, articles, edits, images, users, activeusers, or admins.
       def get_one(msg, prop)
         if VALID_PROPERTIES.include?(prop.downcase)
-          butt = wiki
-          stats = butt.get_statistics
+          stats = wiki.get_statistics
           stat = stats[prop].to_s.separate
           msg.reply("#{prop.capitalize}: #{stat}")
         else
