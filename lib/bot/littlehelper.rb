@@ -4,7 +4,6 @@ require 'require_all'
 require 'twitter'
 require 'openweathermap'
 require 'pastee'
-require 'cleverbot'
 require 'sequel'
 require 'mw_dictionary_api'
 require 'time'
@@ -54,7 +53,6 @@ module LittleHelper
     Plugins::Commands::GetAbbreviation,
     Plugins::Commands::SubCategoryMembers,
     Plugins::Commands::NewVanilla,
-    Plugins::Commands::CleverBot,
     Plugins::Commands::RefreshQuotes,
     Plugins::Commands::UrbanDict,
     Plugins::Commands::Drama,
@@ -90,10 +88,6 @@ module LittleHelper
       end
     end
     plugins.delete(disabled)
-  end
-
-  unless Variables::Constants::DISABLED_PLUGINS.include?('Plugins::Commands::CleverBot')
-    CLEVER = Cleverbot.new(Variables::Constants::CLEVER_USER, Variables::Constants::CLEVER_KEY)
   end
 
   plugins.freeze
