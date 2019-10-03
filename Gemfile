@@ -23,4 +23,4 @@ gem('timerizer', '~> 0.3')
 gem('mw_dictionary_api', '~> 0.1')
 gem('addressable', '~> 2.6')
 
-ruby '2.6.3'
+ruby '2.6.5'
