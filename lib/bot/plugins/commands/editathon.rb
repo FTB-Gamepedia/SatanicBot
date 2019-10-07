@@ -20,8 +20,10 @@ module Plugins
         newest_editathon = wiki.get_category_members('Category:Editathons').max do |a, b|
           wiki.first_edit_timestamp(a) <=> wiki.first_edit_timestamp(b)
         end
-        url = butt.get_article_path(newest_editathon.underscorify)
-        text = butt.get_text(newest_editathon)
+        url = wiki.get_article_path(newest_editathon.underscorify)
+        text = wiki.get_text(newest_editathon)
+        # Text can't be nil, and if it is, then there's a serious problem with the code. There are always going to be editathons.
+        # noinspection RubyNilAnalysis
         dates = text.scan(/<!--start: (.+) \/ end: (.+)-->/).flatten
         if dates.empty?
           msg.reply("Possibly upcoming editathon: #{url} with no currently specified starting and ending dates")
