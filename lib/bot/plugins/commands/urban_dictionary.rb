@@ -8,12 +8,12 @@ module Plugins
       include Cinch::Plugin
       ignore_ignored_users
 
-      match(/what does ["'](.+)["'] mean\?/i, use_prefix: false)
+      match(/what does (["'])([^"']*)\1 mean\?/i, use_prefix: false)
       set(help: 'Gets a definition for the word from Urban Dictionary.', plugin_name: 'urban')
 
       CACHE = {}
 
-      def execute(msg, word)
+      def execute(msg, _, word)
         validate_cache(msg.user)
         slangs = UrbanDictionary.define(word)
         if slangs.empty?
