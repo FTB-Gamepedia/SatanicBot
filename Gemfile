@@ -1,4 +1,4 @@
-source 'https://rubygems.org'
+source 'http://rubygems.org'
 
 gem('addressable', '~> 2.6')
 gem('array_utility', '~> 1.1')
@@ -9,7 +9,7 @@ gem('fishbans', '~> 2.0')
 gem('isgd', '~> 1.0')
 gem('literate_randomizer', '~> 0.4')
 gem('mediawiki-butt', '~> 3.0')
-gem('mojang', '~> 1.0')
+gem('mojang', '~> 2.0')
 gem('mw_dictionary_api', '~> 0.1')
 gem('octokit', '~> 4.14')
 gem('openweathermap', '~> 0.1')
