@@ -106,7 +106,7 @@ DEPENDENCIES
   pastee (~> 2.0)
   pg (~> 1.1)
   require_all (~> 2.0)
-  sequel (~> 5.22)
+  sequel (~> 5.25)
   simple_geolocator (~> 2.0)
   string-utility (~> 3.0)
   timerizer (~> 0.3)
