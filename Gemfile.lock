@@ -102,7 +102,7 @@ DEPENDENCIES
   mojang (~> 2.0)
   mw_dictionary_api (~> 0.1)
   octokit (~> 4.14)
-  openweathermap (~> 0.1)
+  openweathermap (~> 0.2)
   pastee (~> 2.0)
   pg (~> 1.1)
   require_all (~> 2.0)
