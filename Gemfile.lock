@@ -1,3 +1,11 @@
+GIT
+  remote: https://github.com/elifoster/mw_dictionary_api.git
+  revision: d988abf89702a0fb193ba5d7c31cb6ca87c13f88
+  branch: nokogiri-update
+  specs:
+    mw_dictionary_api (0.1.2)
+      nokogiri (~> 1.10.5)
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -35,16 +43,14 @@ GEM
       httpclient (~> 2.8)
     memoizable (0.4.2)
       thread_safe (~> 0.3, >= 0.3.1)
-    mini_portile2 (2.1.0)
+    mini_portile2 (2.4.0)
     mojang (2.0.1)
       curb (~> 0.9)
       oj (~> 3.10)
     multipart-post (2.1.1)
-    mw_dictionary_api (0.1.3)
-      nokogiri (~> 1.6.0)
     naught (1.1.0)
-    nokogiri (1.6.8.1)
-      mini_portile2 (~> 2.1.0)
+    nokogiri (1.10.7)
+      mini_portile2 (~> 2.4.0)
     octokit (4.14.0)
       sawyer (~> 0.8.0, >= 0.5.3)
     oj (3.10.0)
@@ -100,7 +106,7 @@ DEPENDENCIES
   literate_randomizer (~> 0.4)
   mediawiki-butt (~> 3.0)
   mojang (~> 2.0)
-  mw_dictionary_api (~> 0.1)
+  mw_dictionary_api!
   octokit (~> 4.14)
   openweathermap (~> 0.2)
   pastee (~> 2.0)
