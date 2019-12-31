@@ -15,7 +15,7 @@ gem('mw_dictionary_api', git: 'https://github.com/elifoster/mw_dictionary_api.gi
 gem('octokit', '~> 4.14')
 gem('openweathermap', '~> 0.2')
 gem('pastee', '~> 2.0')
-gem('pg', '~> 1.1')
+gem('pg', '~> 1.2')
 gem('require_all', '~> 3.0')
 gem('sequel', '~> 5.27')
 gem('simple_geolocator', '~> 2.0')
