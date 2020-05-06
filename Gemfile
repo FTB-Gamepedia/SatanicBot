@@ -12,7 +12,7 @@ gem('mediawiki-butt', '~> 4.0')
 gem('mojang', '~> 2.0')
 # Use custom fork until gniquil/mw_dictionary_api#4 is merged to fix security issues, possibly indefinitely.
 gem('mw_dictionary_api', git: 'https://github.com/elifoster/mw_dictionary_api.git', branch: 'nokogiri-update')
-gem('octokit', '~> 4.15')
+gem('octokit', '~> 4.18')
 gem('openweathermap', '~> 0.2')
 gem('pastee', '~> 2.0')
 gem('pg', '~> 1.2')
