@@ -8,7 +8,7 @@ gem('dotenv', '~> 2.7')
 gem('fishbans', '~> 2.0')
 gem('isgd', '~> 1.0')
 gem('literate_randomizer', '~> 0.4')
-gem('mediawiki-butt', '~> 3.0')
+gem('mediawiki-butt', '~> 4.0')
 gem('mojang', '~> 2.0')
 # Use custom fork until gniquil/mw_dictionary_api#4 is merged to fix security issues, possibly indefinitely.
 gem('mw_dictionary_api', git: 'https://github.com/elifoster/mw_dictionary_api.git', branch: 'nokogiri-update')
