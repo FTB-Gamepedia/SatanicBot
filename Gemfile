@@ -21,7 +21,7 @@ gem('sequel', '~> 5.29')
 gem('simple_geolocator', '~> 2.0')
 gem('string-utility', '~> 3.0')
 gem('timerizer', '~> 0.3')
-gem('twitter', '~> 6.2')
+gem('twitter', '~> 7.0')
 gem('urbandict', '~> 1.0')
 
 ruby '2.6.5'
