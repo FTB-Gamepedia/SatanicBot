@@ -60,7 +60,7 @@ GEM
     octokit (4.18.0)
       faraday (>= 0.9)
       sawyer (~> 0.8.0, >= 0.5.3)
-    oj (3.10.0)
+    oj (3.10.6)
     openweathermap (0.2.3)
     pastee (2.0.3)
       httpclient (~> 2.8)
