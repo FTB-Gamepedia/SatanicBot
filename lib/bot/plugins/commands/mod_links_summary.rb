@@ -20,16 +20,15 @@ module Plugins
       REDIRECT_REGEX = /\#REDIRECT \[\[(.+)\]\]/
 
       def create_paste(page_name, special_category_pages, other_mod_pages)
-        str = "== Pages not for this mod ==\n"
-        str << other_mod_pages.join("\n")
-        str << "\n\n"
+        other_mod_section = Pastee::Paste::Section.new(name: 'Pages not for this mod', contents: other_mod_pages.join("\n"))
+        sections = [other_mod_section]
         special_category_pages.each do |category, pages|
-          str << "== #{category} ==\n"
-          str << pages.join("\n")
-          str << "\n\n"
+          contents = pages.empty? ? 'none' : pages.join("\n")
+          sections << Pastee::Paste::Section.new(name: category, contents: contents)
         end
+        p sections
 
-        LittleHelper::PASTEE.submit_simple("Summary of bad links in #{page_name}", str)
+        LittleHelper::PASTEE.submit(Pastee::Paste.new(description: "Summary of bad links in #{page_name}", sections: sections))
       end
 
       def find_redirect_dest(title)
