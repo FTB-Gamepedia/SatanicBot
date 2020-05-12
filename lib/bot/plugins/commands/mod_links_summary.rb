@@ -6,6 +6,7 @@ module Plugins
   module Commands
     class ModLinksSummary < BaseCommand
       include Cinch::Plugin
+      include Plugins::Wiki
       ignore_ignored_users
 
       set(help: 'Gets a summary of problematic links within a mod page. 1 arg: $modlinkssummary <page name>')
