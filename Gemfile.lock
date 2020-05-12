@@ -62,7 +62,7 @@ GEM
       sawyer (~> 0.8.0, >= 0.5.3)
     oj (3.10.6)
     openweathermap (0.2.3)
-    pastee (2.0.3)
+    pastee (3.0.0)
       httpclient (~> 2.8)
     patron (0.13.3)
     pg (1.2.3)
@@ -118,7 +118,7 @@ DEPENDENCIES
   mw_dictionary_api!
   octokit (~> 4.18)
   openweathermap (~> 0.2)
-  pastee (~> 2.0)
+  pastee (~> 3.0)
   pg (~> 1.2)
   require_all (~> 3.0)
   sequel (~> 5.32)

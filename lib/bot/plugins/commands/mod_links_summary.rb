@@ -28,7 +28,7 @@ module Plugins
           str << "\n\n"
         end
 
-        LittleHelper::PASTEE.submit(str, "Summary of bad links in #{page_name}")
+        LittleHelper::PASTEE.submit_simple("Summary of bad links in #{page_name}", str)
       end
 
       def find_redirect_dest(title)

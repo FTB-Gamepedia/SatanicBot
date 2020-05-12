@@ -77,7 +77,7 @@ module Plugins
         category = "Category:#{category}" if /^Category:/ !~ category
         paste_hash = get_members(wiki, category)
         paste_contents = create_paste_contents(paste_hash, 1)
-        id = LittleHelper::PASTEE.submit(paste_contents, "Summary of #{category} subcats.")
+        id = LittleHelper::PASTEE.submit_simple("Summary of #{category} subcats.", paste_contents)
         msg.reply("http://paste.ee/p/#{id}")
       end
     end
