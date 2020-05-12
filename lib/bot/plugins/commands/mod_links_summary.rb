@@ -26,7 +26,6 @@ module Plugins
           contents = pages.empty? ? 'none' : pages.join("\n")
           sections << Pastee::Paste::Section.new(name: category, contents: contents)
         end
-        p sections
 
         LittleHelper::PASTEE.submit(Pastee::Paste.new(description: "Summary of bad links in #{page_name}", sections: sections))
       end
