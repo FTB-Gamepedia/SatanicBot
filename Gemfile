@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem('addressable', '~> 2.6')
+gem('addressable', '~> 2.8')
 gem('array_utility', '~> 1.1')
 gem('cinch', '~> 2.3')
 gem('curb', '~> 0.9')
