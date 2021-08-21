@@ -15,7 +15,12 @@ module Plugins
 
       def execute(msg, _, word)
         validate_cache(msg.user)
-        slangs = UrbanDictionary.define(word)
+        begin
+          slangs = UrbanDictionary.define(word)
+        rescue UrbanDictionary::UrbanDictError => e
+          msg.reply(e.message)
+          return
+        end
         if slangs.empty?
           msg.reply("That's a good question, #{msg.user.nick}.")
         else

@@ -44,7 +44,7 @@ module LittleHelper
     Plugins::Commands::NumberGame,
     Plugins::Commands::Tweet,
     Plugins::Commands::Weather,
-    Plugins::Commands::BanInfo,
+    # Plugins::Commands::BanInfo,
     Plugins::Commands::IssueLink,
     Plugins::Commands::MoveCategory,
     Plugins::Commands::MoveGeneral,
