@@ -6,6 +6,12 @@ GIT
     mw_dictionary_api (0.1.2)
       nokogiri (~> 1.10.5)
 
+GIT
+  remote: https://github.com/phaul/cinch
+  revision: 2085790c435b5c12c4c0a08e84f8d5e07521f732
+  specs:
+    cinch (2.3.1)
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -14,7 +20,6 @@ GEM
     array_utility (1.1.1)
     buftok (0.2.0)
     chunky_png (1.4.0)
-    cinch (2.3.4)
     curb (0.9.11)
     data_types (1.1.2)
     domain_name (0.5.20190701)
@@ -125,7 +130,7 @@ PLATFORMS
 DEPENDENCIES
   addressable (~> 2.8)
   array_utility (~> 1.1)
-  cinch (~> 2.3)
+  cinch!
   curb (~> 0.9)
   dotenv (~> 2.7)
   fishbans (~> 2.0)
