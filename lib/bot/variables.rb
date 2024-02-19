@@ -39,17 +39,8 @@ module Variables
 
   module NonConstants
     @quotes = []
-    @youve_got_mail_times = {}
 
     module_function
-
-    def get_mail_times
-      @youve_got_mail_times
-    end
-
-    def add_mail_time(user, time)
-      @youve_got_mail_times[user] = time
-    end
 
     # Gets the current quote array, or refreshes it.
     # @param refresh [Boolean] Whether to refresh the array. Will automatically refresh if it has not been initialized.
