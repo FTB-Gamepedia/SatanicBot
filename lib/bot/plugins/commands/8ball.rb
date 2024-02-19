@@ -1,23 +1,18 @@
-require 'cinch'
 require 'string-utility'
 require_relative 'base_command'
 
 module Plugins
   module Commands
     class EightBall < BaseCommand
-      include Cinch::Plugin
-      ignore_ignored_users
-
-      set(help: 'Determines your fortune. No args'.freeze, plugin_name: '8ball')
-      match(/8ball/i)
-
-      # DOC = 'Determines your fortune. No args'.freeze
-      # Variables::NonConstants.add_command('8ball', DOC)
+      def initialize
+        @name = :'8ball'
+        @help_msg = 'Determines your fortune.'
+        @usage_msg = '8ball'
+      end
 
       # Gets a random fortune and says it in chat.
-      # @param msg [Cinch::Message] The message.
-      def execute(msg)
-        msg.reply(StringUtility.random_line(Variables::Constants::FORTUNE_PATH))
+      def execute(event, *args)
+        StringUtility.random_line(Variables::Constants::FORTUNE_PATH)
       end
     end
   end

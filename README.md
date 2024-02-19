@@ -1,16 +1,11 @@
 # SatanicBot
-[![Stories in Ready](https://badge.waffle.io/elifoster/SatanicBot.png?label=ready&title=Ready)](https://waffle.io/elifoster/SatanicBot)
 [![License](https://img.shields.io/:license-mit-blue.svg)]()
 
-SatanicBot is an IRC and FTB Wiki bot written in Ruby (formerly Perl 5). It utilizes custom Ruby Gems created by myself and others at the FTB Wiki, such as string-utility, fishbans, mediawiki-butt, and weatheruby, and Ruby gems by other awesome developers, such as sferik's twitter gem.
+SatanicBot is a Discord and FTB Wiki bot written in Ruby (formerly Perl 5). It utilizes custom Ruby Gems created by myself and others at the FTB Wiki, such as string-utility, fishbans, mediawiki-butt, and weatheruby, and Ruby gems by other awesome developers, such as sferik's twitter gem.
 
-It allows for configuration, so you are free to use this in your IRC channel(s). The only downfall to the current configuration system is that you must have something to put in all of the options. However, if you never use the commands, or disable/delete them altogether, it really shouldn't matter what you put in there.
+It allows for configuration, so you are free to use this in your Discord servers. The only downfall to the current configuration system is that you must have something to put in all of the options. However, if you never use the commands, or disable/delete them altogether, it really shouldn't matter what you put in there.
 
-You can find this bot in its purest form in the following channels on EsperNet:
-* #FTB-Wiki
-* #FTB-Wiki-Dev
-* #SatanicSanta
-* #TheSteamTank
+You can find this bot in its purest form in the FTB Wiki Discord.
 
 ## Features
 * Configuration
