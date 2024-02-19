@@ -1,12 +1,4 @@
-IRC_SERVER: irc.esper.net
-IRC_PORT: 6667
-IRC_CHANNELS: "#Channel1,Channel2"
-IRC_DEV_CHANNELS: "#DevChannel1,DevChannel2"
-IRC_USERNAME: MyUsername
-IRC_PASSWORD: password
-IRC_REALNAME: MyUsername's Ugly Bot
-IRC_NICKNAMES: MyNickname,MyOtherNickname
-OWNER: SatanicSanta
+DISCORD_TOKEN=abcdefghijklmnop
 
 WIKI_URL: http://ftb.gamepedia.com/api.php
 WIKI_USERNAME: MyUsername
@@ -26,8 +18,8 @@ PASTEE_API_KEY: abcdefghijklmnop
 # The key must be for the Collegiate dictionary
 MERRIAMWEBSTER_API_KEY: aushfuhsdfushisdufhdisufhisdhfdshf
 
-IGNORED_USERS: travis-ci
+OWNER: Username#12345
+IGNORED_USERS: travis-ci#0000
+ADMIN_ROLE: Administrator
 
 DISABLED_PLUGINS: Plugins::Logger,Plugins::Commands::Weather
-
-VALID_AUTHNAMES: Me,NotYou

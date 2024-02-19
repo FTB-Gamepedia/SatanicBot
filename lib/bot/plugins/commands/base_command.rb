@@ -1,28 +1,15 @@
-require 'cinch'
+require 'discordrb'
 
-module Cinch
-  module Plugin
-    module ClassMethods
-      def ignore_ignored_users
-        hook(:pre, for: [:match])
-      end
-    end
-  end
-
+module Discordrb
   class User
     # @return [Boolean] Whether this user should be ignored by the bot.
     def ignored?
-      Variables::Constants::IGNORED_USERS.include?(nick)
-    end
-
-    # @return [Boolean] Whether this user is authorized to use authorized-only commands with the bot.
-    def authorized?
-      Variables::Constants::VALID_PEOPLE.include?(authname)
+      Variables::Constants::IGNORED_USERS.include?(username)
     end
 
     # @return [Boolean] Whether this user is the owner of the bot.
     def owns_bot?
-      authname == Variables::Constants::OWNER
+      username == Variables::Constants::OWNER
     end
   end
 end
@@ -30,23 +17,45 @@ end
 module Plugins
   module Commands
     class BaseCommand
-      def hook(msg)
-        !msg.user.ignored?
+      attr_reader :name
+      attr_reader :help_msg
+      attr_reader :usage_msg
+      attr_reader :args
+
+      def initialize
+        @args = {}
+      end
+
+      def can_execute?(event)
+        !event.user.ignored? && !disabled?
+      end
+
+      def disabled?
+        Variables::Constants::DISABLED_PLUGINS.include? self.class.name
       end
     end
 
-    class AuthorizedCommand < BaseCommand
-      def hook(msg)
-        authorized = msg.user.authorized?
-        msg.reply(Variables::Constants::NOT_VERIFIED) unless authorized
+    class AdminCommand < BaseCommand
+      @@admin_role = nil
+
+      def can_execute?(event)
+        return false unless super(event)
+
+        @@admin_role = event.server.roles.select { |r| r.name == Variables::Constants::ADMIN_ROLE_NAME }[0] if @@admin_role.nil?
+
+        authorized = event.author.role? @@admin_role
+        event.send_message("Only users in the #{@@admin_role.name} role can use this command.") unless authorized
         authorized
       end
     end
 
     class OwnerCommand < BaseCommand
-      def hook(msg)
-        is_owner = msg.user.owns_bot?
-        msg.reply(Variables::Constants::OWNER_ONLY) unless is_owner
+      ERROR_MSG = 'This command is for the owner only.'.freeze
+
+      def can_execute?(event)
+        return false unless super(event)
+        is_owner = event.author.owns_bot?
+        event.send_message(ERROR_MSG) unless is_owner
         is_owner
       end
     end

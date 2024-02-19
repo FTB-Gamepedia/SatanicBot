@@ -6,14 +6,7 @@ module Variables
 
     Dotenv.load
 
-    IRC_USERNAME = ENV['IRC_USERNAME'].freeze
-    IRC_PASSWORD = ENV['IRC_PASSWORD'].freeze
-    IRC_REALNAME = ENV['IRC_REALNAME'].freeze
-    IRC_NICKNAMES = ENV['IRC_NICKNAMES'].split(',').freeze
-    IRC_SERVER = ENV['IRC_SERVER'].freeze
-    IRC_PORT = ENV['IRC_PORT'].to_i.freeze
-    IRC_CHANNELS = ENV['IRC_CHANNELS'].split(',').freeze
-    IRC_DEV_CHANNELS = ENV['IRC_DEV_CHANNELS'].split(',').freeze
+    DISCORD_TOKEN = ENV['DISCORD_TOKEN'].freeze
     WIKI_URL = ENV['WIKI_URL'].freeze
     WIKI_USERNAME = ENV['WIKI_USERNAME'].freeze
     WIKI_PASSWORD = ENV['WIKI_PASSWORD'].freeze
@@ -25,9 +18,9 @@ module Variables
     PASTEE_KEY = ENV['PASTEE_API_KEY'].freeze
     DICT_KEY = ENV['MERRIAMWEBSTER_API_KEY'].freeze
     DISABLED_PLUGINS = ENV['DISABLED_PLUGINS'].split(',')
-    IGNORED_USERS = ENV['IGNORED_USERS'].split(',') + IRC_NICKNAMES
-    IGNORED_USERS.freeze
+    IGNORED_USERS = ENV['IGNORED_USERS'].split(',').freeze
     OWNER = ENV['OWNER']
+    ADMIN_ROLE_NAME = ENV['ADMIN_ROLE'].freeze
 
     # rubocop:disable Style/MutableConstant
     ISSUE_TRACKING = {}
@@ -40,13 +33,8 @@ module Variables
 
     ISSUE_TRACKING.freeze
 
-    VALID_PEOPLE = ENV['VALID_AUTHNAMES'].split(',').freeze
-
     MOTIVATE_PATH = "#{PWD}/lib/bot/info/motivate.txt".freeze
     FORTUNE_PATH = "#{PWD}/lib/bot/info/8ball.txt".freeze
-
-    NOT_VERIFIED = 'You are not verified to use this command. If you think this is a mistake, talk to the operator'.freeze
-    OWNER_ONLY = 'This command is for the owner only.'.freeze
   end
 
   module NonConstants
