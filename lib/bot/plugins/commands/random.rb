@@ -16,7 +16,7 @@ module Plugins
 
         # Gets a random word that has not been said in the channel within the past
         #   5 calls.
-        def execute(event, *args)
+        def execute(event)
           @last_words ||= []
           word = LiterateRandomizer.word
           word = LiterateRandomizer.word while @last_words.include?(word)
@@ -32,7 +32,7 @@ module Plugins
 
         # Gets a random sentence that has not been said in the channel within the
         #   past 5 calls.
-        def execute(event, *args)
+        def execute(event)
           @last_sentences ||= []
           sentence = LiterateRandomizer.sentence
           sentence = LiterateRandomizer.sentence while @last_sentences.include?(sentence)
@@ -48,7 +48,7 @@ module Plugins
 
         # Gets a random quote that has not been said in the channel within the
         #   past 5 calls.
-        def execute(event, *args)
+        def execute(event)
           quotes = Variables::NonConstants.get_quotes
           quote = quotes.sample
           @last_quotes ||= []
