@@ -6,6 +6,7 @@ gem('dotenv', '~> 3.0')
 gem('string-utility', '~> 3.0')
 gem('literate_randomizer', '~> 0.4')
 gem('array_utility', '~> 1.1')
+gem('mediawiki-butt', '~> 4.0')
 
 # gem('addressable', '~> 2.8')
 # gem('curb', '~> 0.9')

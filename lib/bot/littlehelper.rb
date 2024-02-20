@@ -1,16 +1,18 @@
 require 'discordrb'
 require 'require_all'
 require 'time'
+require_relative 'extended_butt'
 require_relative 'variables'
 # require_rel 'plugins/commands'
 require_relative 'plugins/commands/8ball'
 require_relative 'plugins/commands/flip_coin'
 require_relative 'plugins/commands/src'
 require_relative 'plugins/commands/random'
+require_relative 'plugins/commands/get_abbrv'
 
 
 module LittleHelper
-  # BUTT = ExtendedButt.new(Variables::Constants::WIKI_URL, query_limit_default: 5000, assertion: :bot)
+  BUTT = ExtendedButt.new(Variables::Constants::WIKI_URL, query_limit_default: 5000, assertion: :bot)
 
   # TWEETER = Twitter::REST::Client.new do |c|
   #   c.consumer_key = Variables::Constants::TWITTER_CONSUMER_KEY
@@ -26,6 +28,7 @@ module LittleHelper
   plugins = [
     Plugins::Commands::EightBall.new,
     Plugins::Commands::FlipCoin.new,
+    Plugins::Commands::GetAbbreviation.new,
     Plugins::Commands::Random::RandomWord.new,
     Plugins::Commands::Random::RandomSentence.new,
     Plugins::Commands::Random::RandomQuote.new,

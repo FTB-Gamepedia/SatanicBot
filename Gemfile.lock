@@ -18,12 +18,15 @@ GEM
     http-cookie (1.0.5)
       domain_name (~> 0.5)
     literate_randomizer (0.4.0)
+    mediawiki-butt (4.0.1)
+      patron (~> 0.13)
     mime-types (3.5.2)
       mime-types-data (~> 3.2015)
     mime-types-data (3.2024.0206)
     netrc (0.11.0)
     opus-ruby (1.0.1)
       ffi
+    patron (0.13.3)
     require_all (3.0.0)
     rest-client (2.1.0)
       http-accept (>= 1.7.0, < 2.0)
@@ -44,6 +47,7 @@ DEPENDENCIES
   discordrb (~> 3.4)
   dotenv (~> 3.0)
   literate_randomizer (~> 0.4)
+  mediawiki-butt (~> 4.0)
   require_all (~> 3.0)
   string-utility (~> 3.0)
 

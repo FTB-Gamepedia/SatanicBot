@@ -1,19 +1,17 @@
-require 'cinch'
 require_relative 'base_command'
 require_relative '../wiki'
 
 module Plugins
   module Commands
     class GetAbbreviation < BaseCommand
-      include Cinch::Plugin
       include Plugins::Wiki
-      ignore_ignored_users
-
-      set(help: 'Gets either the abbreviation for the given mod, or the mod for the given abbreviation. 1 arg: $getabbrv <thing>',
-          plugin_name: 'getabbrv')
-      match(/getabbrv (.+)/)
 
       PAGE = 'Module:Mods/list'.freeze
+
+      def initialize
+        super(:getabbrv, 'Gets either the abbreviation for the given mod, or the mod for the given abbreviation.', 'getabbrv <abbrv or mod>')
+        @attributes[:min_args] = 1
+      end
 
       # @param text [String] The text to scan
       # @param standard [Regexp] The regular expression to scan as the "standard" syntax (ABBRV = {'Name'})
@@ -43,9 +41,9 @@ module Plugins
       end
 
       # Gets either the abbreviation of a mod, or the mod using an abbreviation.
-      # @param msg [Cinch::Message]
-      # @param thing [String] The abbreviation OR mod.
-      def execute(msg, thing)
+      def execute(event, args)
+        thing = args.join(' ')
+
         module_text = wiki.get_text(PAGE)
 
         escaped_thing = Regexp.escape(thing).gsub("'") { %Q{\\\\'}}
@@ -60,7 +58,7 @@ module Plugins
         replies << "#{thing} is the abbreviation for the following mod#{s}: #{names.join(', ')}" unless names.empty?
         replies << "#{thing} is abbreviated as the following: #{abbreviations.join(', ')}" unless abbreviations.empty?
 
-        replies.each { |str| msg.reply(str) }
+        replies.join("\n")
       end
 
       def gsub_backslash_quotes!(str, opts = {})
