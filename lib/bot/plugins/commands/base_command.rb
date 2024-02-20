@@ -18,12 +18,19 @@ module Plugins
   module Commands
     class BaseCommand
       attr_reader :name
-      attr_reader :help_msg
-      attr_reader :usage_msg
-      attr_reader :args
+      attr_reader :attributes
 
-      def initialize
-        @args = {}
+      # @param name [Symbol] The name of the command, how it is called
+      # @param help_msg [String] Output of $help command.
+      # @param usage_msg [String] The "usage" section of the help command. Defaults to name converted to a String.
+      #   Use to define command arguments, with <> being required and [] being optional. For example,
+      #   'command <arg1> <arg2> [optional3]'
+      def initialize(name, help_msg, usage_msg = nil)
+        @name = name
+        @attributes = {
+          description: help_msg,
+          usage: usage_msg || name.to_s
+        }
       end
 
       def can_execute?(event)

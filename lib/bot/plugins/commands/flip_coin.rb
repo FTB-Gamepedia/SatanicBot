@@ -4,9 +4,7 @@ module Plugins
   module Commands
     class FlipCoin < BaseCommand
       def initialize
-        @name = :flip
-        @help_msg = 'Heads or tails! No args.'
-        @usage_msg = 'flip'
+        super(:flip, 'Heads or tails! No args.', 'flip')
       end
 
       COIN = %w(Tails! Heads!).freeze

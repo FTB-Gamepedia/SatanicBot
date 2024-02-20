@@ -4,9 +4,7 @@ module Plugins
   module Commands
     class Src < BaseCommand
       def initialize
-        @name = :src
-        @help_msg = "Outputs my creator's name and my source repository."
-        @usage_msg = 'src'
+        super(:src, "Outputs my creator's name and my source repository.")
       end
 
       # States the creator of the bot, as well as the source code repository.

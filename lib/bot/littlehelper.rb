@@ -6,6 +6,7 @@ require_relative 'variables'
 require_relative 'plugins/commands/8ball'
 require_relative 'plugins/commands/flip_coin'
 require_relative 'plugins/commands/src'
+require_relative 'plugins/commands/random'
 
 
 module LittleHelper
@@ -25,6 +26,11 @@ module LittleHelper
   plugins = [
     Plugins::Commands::EightBall.new,
     Plugins::Commands::FlipCoin.new,
+    Plugins::Commands::Random::RandomWord.new,
+    Plugins::Commands::Random::RandomSentence.new,
+    Plugins::Commands::Random::RandomQuote.new,
+    Plugins::Commands::Random::RandomNumber.new,
+    Plugins::Commands::Random::Motivate.new,
     Plugins::Commands::Src.new
   ].freeze
 
@@ -32,7 +38,7 @@ module LittleHelper
 
   BOT = Discordrb::Commands::CommandBot.new(token: Variables::Constants::DISCORD_TOKEN, prefix: DEV_MODE ? '&' : '$', intents: [ Discordrb::INTENTS[:server_messages] ])
   plugins.each do |plugin|
-    BOT.command(plugin.name, description: plugin.help_msg, usage: plugin.usage_msg) do |event, *args|
+    BOT.command(plugin.name, plugin.attributes) do |event, *args|
       plugin.execute(event, args) if plugin.can_execute?(event)
     end
   end
