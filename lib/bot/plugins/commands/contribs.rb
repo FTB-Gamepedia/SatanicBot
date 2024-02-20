@@ -1,32 +1,33 @@
-require 'cinch'
 require 'string-utility'
 require_relative 'base_command'
 require_relative '../wiki'
 
 module Plugins
   module Commands
-    class GetContribs < BaseCommand
-      include Cinch::Plugin
+    class Contribs < BaseCommand
       include Plugins::Wiki
       using StringUtility
-      ignore_ignored_users
 
-      set(help: 'Provides the number of contributions and the registration date of the user on the wiki. ' \
-                '1 option arg: $contribs [username]. If no arg is given, it will use the nickname of the user.',
-          plugin_name: 'contribs')
-      match(/contribs (.+)/i, method: :execute)
-      match(/contribs$/i, method: :no_username)
+      def initialize
+        super(:contribs, 'Provides the number of contributions and registration date for the user on the wiki.', 'contribs [user]')
+        @attributes[:min_args] = 0
+        @attributes[:max_args] = 1
+      end
 
       # Gets the amount of contributions and the registration date of the given user.
-      # @param msg [Cinch::Message]
-      # @param username [String] The username to check.
-      # @param you [Boolean] Whether the username is also the user who performed the command.
-      def execute(msg, username, you = false)
-        count = wiki.get_contrib_count(username).to_s.separate
-        unless count
-          msg.reply("#{username} is not a user on the wiki.")
-          return
+      # @param event [Discordrb::Commands::CommandEvent]
+      # @param args [Array<String>] The passed arguments.
+      def execute(event, args)
+        you = args.empty?
+        username = you ? event.author.display_name : args[0]
+
+        # TODO: Fix MediaWiki-Butt-Ruby#83
+        begin
+          count = wiki.get_contrib_count(username).to_s.separate
+        rescue NoMethodError
+          return "#{username} is not a user on the wiki."
         end
+        
         date = wiki.get_registration_time(username)
         month = date.strftime('%B').strip
         day = date.strftime('%e').strip
@@ -48,15 +49,7 @@ module Plugins
           end
 
         message_contribs = count == '1' ? '1 contribution' : "#{count} contributions"
-        message = "#{message_start} made #{message_contribs} to the wiki and registered on #{month} #{day}, #{year}"
-        msg.reply(message)
-      end
-
-      # Gets the amount of contributions and the registration date of the user who performed the command.
-      # @see execute
-      # @param msg [Cinch::Message]
-      def no_username(msg)
-        execute(msg, msg.user.nick, true)
+        return "#{message_start} made #{message_contribs} to the wiki and registered on #{month} #{day}, #{year}"
       end
     end
   end

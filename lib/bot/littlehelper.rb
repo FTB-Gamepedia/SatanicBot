@@ -9,6 +9,7 @@ require_relative 'plugins/commands/flip_coin'
 require_relative 'plugins/commands/src'
 require_relative 'plugins/commands/random'
 require_relative 'plugins/commands/get_abbrv'
+require_relative 'plugins/commands/contribs'
 
 
 module LittleHelper
@@ -26,6 +27,7 @@ module LittleHelper
   # DICTIONARY = MWDictionaryAPI::Client.new(Variables::Constants::DICT_KEY, api_type: 'collegiate')
 
   plugins = [
+    Plugins::Commands::Contribs.new,
     Plugins::Commands::EightBall.new,
     Plugins::Commands::FlipCoin.new,
     Plugins::Commands::GetAbbreviation.new,
