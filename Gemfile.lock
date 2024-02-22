@@ -62,6 +62,8 @@ GEM
       sawyer (~> 0.9)
     opus-ruby (1.0.1)
       ffi
+    pastee (3.0.0)
+      httpclient (~> 2.8)
     patron (0.13.3)
     public_suffix (5.0.4)
     require_all (3.0.0)
@@ -96,6 +98,7 @@ DEPENDENCIES
   literate_randomizer (~> 0.4)
   mediawiki-butt (~> 4.0)
   octokit (~> 8.1)
+  pastee (~> 3.0)
   require_all (~> 3.0)
   string-utility (~> 3.0)
 

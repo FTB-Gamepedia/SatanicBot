@@ -1,16 +1,15 @@
-require 'cinch'
 require_relative 'base_command'
 require_relative '../wiki'
 
 module Plugins
   module Commands
     class ModLinksSummary < BaseCommand
-      include Cinch::Plugin
       include Plugins::Wiki
-      ignore_ignored_users
 
-      set(help: 'Gets a summary of problematic links within a mod page. 1 arg: $modlinkssummary <page name>')
-      match(/modlinkssummary (.+)/)
+      def initialize
+        super(:modlinkssummary, 'Gets a summary of potentially problematic links within a mod page.', 'modlinkssummary <page>')
+        @attributes[:min_args] = 1
+      end
 
       SPECIAL_CATEGORIES = [
         'Disambiguation pages',
@@ -27,7 +26,7 @@ module Plugins
           sections << Pastee::Paste::Section.new(name: category, contents: contents)
         end
 
-        LittleHelper::PASTEE.submit(Pastee::Paste.new(description: "Summary of bad links in #{page_name}", sections: sections))
+        LittleHelper::PASTEE.submit(Pastee::Paste.new(description: "Summary of potentially bad links in #{page_name}", sections: sections))
       end
 
       def find_redirect_dest(title)
@@ -37,7 +36,8 @@ module Plugins
         match ? find_redirect_dest(match[1]) : title
       end
 
-      def execute(msg, page_name)
+      def execute(event, args)
+        page_name = args.join('_')
         links_in_page = wiki.get_all_links_in_page(page_name)
         unless links_in_page
           msg.reply('This page does not exist.')
@@ -57,7 +57,7 @@ module Plugins
           other_mod_pages.reject! { |title| special_category_pages[special_category].include?(title) }
         end
 
-        msg.reply("http://paste.ee/p/#{create_paste(page_name, special_category_pages, other_mod_pages)}")
+        return "http://paste.ee/p/#{create_paste(page_name, special_category_pages, other_mod_pages)}"
       end
     end
   end

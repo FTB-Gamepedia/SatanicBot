@@ -1,6 +1,7 @@
 require 'discordrb'
 require 'require_all'
 require 'time'
+require 'pastee'
 require_relative 'extended_butt'
 require_relative 'variables'
 # require_rel 'plugins/commands'
@@ -11,8 +12,7 @@ require_relative 'plugins/commands/src'
 require_relative 'plugins/commands/random'
 require_relative 'plugins/commands/get_abbrv'
 require_relative 'plugins/commands/contribs'
-
-
+require_relative 'plugins/commands/mod_links_summary'
 
 module LittleHelper
   BUTT = ExtendedButt.new(Variables::Constants::WIKI_URL, query_limit_default: 5000, assertion: :bot)
@@ -25,7 +25,7 @@ module LittleHelper
   # end
 
   # WEATHER = OpenWeatherMap::API.new(Variables::Constants::OPENWEATHERMAP_KEY, 'en', 'metric')
-  # PASTEE = Pastee.new(Variables::Constants::PASTEE_KEY)
+  PASTEE = Pastee.new(Variables::Constants::PASTEE_KEY)
   # DICTIONARY = MWDictionaryAPI::Client.new(Variables::Constants::DICT_KEY, api_type: 'collegiate')
 
   commands = [
@@ -33,6 +33,7 @@ module LittleHelper
     Plugins::Commands::EightBall.new,
     Plugins::Commands::FlipCoin.new,
     Plugins::Commands::GetAbbreviation.new,
+    Plugins::Commands::ModLinksSummary.new,
     Plugins::Commands::Random::RandomWord.new,
     Plugins::Commands::Random::RandomSentence.new,
     Plugins::Commands::Random::RandomQuote.new,
