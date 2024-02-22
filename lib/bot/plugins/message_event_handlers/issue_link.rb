@@ -40,7 +40,7 @@ module Plugins
           repo_message.each do |msg_data|
             reply = form_reply(msg_data[0], msg_data[1])
             if reply
-              url = ISGD.shorten("https://github.com/#{msg_data[0]}/issues/#{msg_data[1]}")
+              url = no_embed(ISGD.shorten("https://github.com/#{msg_data[0]}/issues/#{msg_data[1]}"))
               message << "#{msg_data[0]}##{msg_data[1]}: #{url}"
               message << form_reply(msg_data[0], msg_data[1])
             else

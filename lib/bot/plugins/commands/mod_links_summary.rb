@@ -57,7 +57,7 @@ module Plugins
           other_mod_pages.reject! { |title| special_category_pages[special_category].include?(title) }
         end
 
-        return "http://paste.ee/p/#{create_paste(page_name, special_category_pages, other_mod_pages)}"
+        return no_embed("http://paste.ee/p/#{create_paste(page_name, special_category_pages, other_mod_pages)}")
       end
     end
   end

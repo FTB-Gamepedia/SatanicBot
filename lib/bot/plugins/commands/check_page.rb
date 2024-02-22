@@ -18,7 +18,7 @@ module Plugins
         page.spacify!
         is_redir = wiki.page_redirect?(page)
         # TODO: Change URL to be dynamic.
-        link = ISGD.shorten("https://ftb.fandom.com/#{page.underscorify}")
+        link = no_embed(ISGD.shorten("https://ftb.fandom.com/#{page.underscorify}"))
         if is_redir.nil?
           "#{page} does not exist on the FTB Wiki."
         elsif is_redir
