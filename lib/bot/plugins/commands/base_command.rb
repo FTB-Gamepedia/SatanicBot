@@ -1,4 +1,5 @@
 require 'discordrb'
+require_relative '../base_plugin'
 
 module Discordrb
   class User
@@ -16,7 +17,7 @@ end
 
 module Plugins
   module Commands
-    class BaseCommand
+    class BaseCommand < BasePlugin
       attr_reader :name
       attr_reader :attributes
 
@@ -31,14 +32,6 @@ module Plugins
           description: help_msg,
           usage: usage_msg || name.to_s
         }
-      end
-
-      def can_execute?(event)
-        !event.user.ignored? && !disabled?
-      end
-
-      def disabled?
-        Variables::Constants::DISABLED_PLUGINS.include? self.class.name
       end
     end
 

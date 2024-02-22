@@ -4,12 +4,14 @@ require 'time'
 require_relative 'extended_butt'
 require_relative 'variables'
 # require_rel 'plugins/commands'
+require_rel 'plugins/message_event_handlers'
 require_relative 'plugins/commands/8ball'
 require_relative 'plugins/commands/flip_coin'
 require_relative 'plugins/commands/src'
 require_relative 'plugins/commands/random'
 require_relative 'plugins/commands/get_abbrv'
 require_relative 'plugins/commands/contribs'
+
 
 
 module LittleHelper
@@ -26,7 +28,7 @@ module LittleHelper
   # PASTEE = Pastee.new(Variables::Constants::PASTEE_KEY)
   # DICTIONARY = MWDictionaryAPI::Client.new(Variables::Constants::DICT_KEY, api_type: 'collegiate')
 
-  plugins = [
+  commands = [
     Plugins::Commands::Contribs.new,
     Plugins::Commands::EightBall.new,
     Plugins::Commands::FlipCoin.new,
@@ -39,12 +41,21 @@ module LittleHelper
     Plugins::Commands::Src.new
   ].freeze
 
+  message_event_handlers = [
+    Plugins::MessageEventHandlers::IssueLink.new
+  ].freeze
+
   DEV_MODE = ARGV.include?('-d')
 
   BOT = Discordrb::Commands::CommandBot.new(token: Variables::Constants::DISCORD_TOKEN, prefix: DEV_MODE ? '&' : '$', intents: [ Discordrb::INTENTS[:server_messages] ])
-  plugins.each do |plugin|
-    BOT.command(plugin.name, plugin.attributes) do |event, *args|
-      plugin.execute(event, args) if plugin.can_execute?(event)
+  commands.each do |command|
+    BOT.command(command.name, command.attributes) do |event, *args|
+      command.execute(event, args) if command.can_execute?(event)
+    end
+  end
+  message_event_handlers.each do |meh|
+    BOT.message(meh.attributes) do |event|
+      event.respond(meh.execute(event)) if meh.can_execute?(event)
     end
   end
 

@@ -22,17 +22,6 @@ module Variables
     OWNER = ENV['OWNER']
     ADMIN_ROLE_NAME = ENV['ADMIN_ROLE'].freeze
 
-    # rubocop:disable Style/MutableConstant
-    ISSUE_TRACKING = {}
-    githubs = ENV['GITHUB'].split('|')
-    githubs.each do |i|
-      ary = i.split(',')
-      ISSUE_TRACKING[ary[0]] = ary[1]
-    end
-    # rubocop:enable Style/MutableConstant
-
-    ISSUE_TRACKING.freeze
-
     MOTIVATE_PATH = "#{PWD}/lib/bot/info/motivate.txt".freeze
     FORTUNE_PATH = "#{PWD}/lib/bot/info/8ball.txt".freeze
   end
