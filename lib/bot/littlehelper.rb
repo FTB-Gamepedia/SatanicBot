@@ -14,6 +14,7 @@ require_relative 'plugins/commands/get_abbrv'
 require_relative 'plugins/commands/contribs'
 require_relative 'plugins/commands/mod_links_summary'
 require_relative 'plugins/commands/is_disambiguation'
+require_relative 'plugins/commands/check_page'
 
 module LittleHelper
   BUTT = ExtendedButt.new(Variables::Constants::WIKI_URL, query_limit_default: 5000, assertion: :bot)
@@ -30,6 +31,7 @@ module LittleHelper
   # DICTIONARY = MWDictionaryAPI::Client.new(Variables::Constants::DICT_KEY, api_type: 'collegiate')
 
   commands = [
+    Plugins::Commands::CheckPage.new,
     Plugins::Commands::Contribs.new,
     Plugins::Commands::EightBall.new,
     Plugins::Commands::FlipCoin.new,
