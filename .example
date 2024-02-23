@@ -20,6 +20,6 @@ MERRIAMWEBSTER_API_KEY: aushfuhsdfushisdufhdisufhisdhfdshf
 
 OWNER: Username12345
 IGNORED_USERS: travis-ci#0000
-ADMIN_ROLE: Administrator
+AUTHORIZED_ROLE: 1234567890123456789
 
 DISABLED_PLUGINS: Plugins::Logger,Plugins::Commands::Weather

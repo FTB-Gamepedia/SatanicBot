@@ -19,8 +19,8 @@ module Variables
     DICT_KEY = ENV['MERRIAMWEBSTER_API_KEY'].freeze
     DISABLED_PLUGINS = ENV['DISABLED_PLUGINS'].split(',')
     IGNORED_USERS = ENV['IGNORED_USERS'].split(',').freeze
-    OWNER = ENV['OWNER']
-    ADMIN_ROLE_NAME = ENV['ADMIN_ROLE'].freeze
+    OWNER = ENV['OWNER'].freeze
+    AUTHORIZED_ROLE_ID = ENV['AUTHORIZED_ROLE'].to_i
 
     MOTIVATE_PATH = "#{PWD}/lib/bot/info/motivate.txt".freeze
     FORTUNE_PATH = "#{PWD}/lib/bot/info/8ball.txt".freeze

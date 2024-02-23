@@ -10,7 +10,7 @@ module Plugins
     end
 
     # @param title [String] see MediaWiki::Butt#edit
-    # @param msg [Cinch::Message] The message that prompted this edit
+    # @param event [Discordrb::Events::CommandEvent] The command event that prompted this edit
     # @param opts [Hash<Symbol, Any>] see MediaWiki::Butt#edit
     # @yield [text] The text of the page being edited
     # @yield [opts] The options to be passed to edit, as passed to this function's opts parameter. This can be used
@@ -24,35 +24,35 @@ module Plugins
     #   The Procs can also be nil (or return nil) if no message should be sent at all.
     #   The :text key contains the text to replace the page contents with (see {MediaWiki::Butt#edit})
     # @return [void]
-    def edit(title, msg, opts = {})
+    def edit(title, event, opts = {})
       content = wiki.get_text(title)
       yield_return = yield(content)
       if yield_return.key?(:terminate)
-        reply_from_proc(msg, yield_return[:terminate])
+        reply_from_proc(event, yield_return[:terminate])
         return
       end
       begin
         edit_resp = wiki.edit(title, yield_return[:text], opts.merge(yield_return))
         if edit_resp
-          reply_from_proc(msg, yield_return[:success])
+          reply_from_proc(event, yield_return[:success])
         else
-          reply_from_proc(msg, yield_return[:fail])
+          reply_from_proc(event, yield_return[:fail])
         end
       rescue MediaWiki::Butt::EditError => e
-        reply_from_proc(msg, yield_return[:error], e)
+        reply_from_proc(event, yield_return[:error], e)
       end
     end
 
     private
 
     # Helper function that replies from a provided Proc, if it is not nil nor is its return value.
-    # @param msg [Cinch::Message] The message to reply to
+    # @param event [Discordrb::Events::CommandEvent] The message to reply to
     # @param proc [Proc] The Proc that returns the message. Nilable.
     # @param params [Any] The params to pass to the Proc if it is not nil.
     # @return [void]
-    def reply_from_proc(msg, proc, params = nil)
+    def reply_from_proc(event, proc, params = nil)
       to_send = proc&.call(params)
-      msg.reply(to_send) if to_send
+      event.send_message(to_send) if to_send
     end
   end
 end

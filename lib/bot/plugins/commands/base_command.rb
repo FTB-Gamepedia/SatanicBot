@@ -35,17 +35,10 @@ module Plugins
       end
     end
 
-    class AdminCommand < BaseCommand
-      @@admin_role = nil
-
-      def can_execute?(event)
-        return false unless super(event)
-
-        @@admin_role = event.server.roles.select { |r| r.name == Variables::Constants::ADMIN_ROLE_NAME }[0] if @@admin_role.nil?
-
-        authorized = event.author.role? @@admin_role
-        event.send_message("Only users in the #{@@admin_role.name} role can use this command.") unless authorized
-        authorized
+    class AuthorizedCommand < BaseCommand
+      def initialize(name, help_msg, usage_msg = nil)
+        super(name, help_msg, usage_msg)
+        @attributes[:required_roles] = [ Variables::Constants::AUTHORIZED_ROLE_ID ]
       end
     end
 
