@@ -15,6 +15,7 @@ require_relative 'plugins/commands/contribs'
 require_relative 'plugins/commands/mod_links_summary'
 require_relative 'plugins/commands/is_disambiguation'
 require_relative 'plugins/commands/check_page'
+require_relative 'plugins/commands/kill'
 
 module LittleHelper
   BUTT = ExtendedButt.new(Variables::Constants::WIKI_URL, query_limit_default: 5000, assertion: :bot)
@@ -37,6 +38,7 @@ module LittleHelper
     Plugins::Commands::FlipCoin.new,
     Plugins::Commands::GetAbbreviation.new,
     Plugins::Commands::IsDisambiguation.new,
+    Plugins::Commands::Kill.new,
     Plugins::Commands::ModLinksSummary.new,
     Plugins::Commands::Random::RandomWord.new,
     Plugins::Commands::Random::RandomSentence.new,
