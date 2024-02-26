@@ -51,7 +51,8 @@ module LittleHelper
   ].freeze
 
   message_event_handlers = [
-    Plugins::MessageEventHandlers::IssueLink.new
+    Plugins::MessageEventHandlers::IssueLink.new,
+    Plugins::MessageEventHandlers::UrbanDict.new
   ].freeze
 
   DEV_MODE = ARGV.include?('-d')

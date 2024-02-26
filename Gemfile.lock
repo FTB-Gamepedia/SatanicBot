@@ -79,6 +79,8 @@ GEM
     string-utility (3.0.1)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
+    urbandict (1.1.1)
+      httpclient (~> 2.8)
     uri (0.13.0)
     websocket (1.2.10)
     websocket-client-simple (0.8.0)
@@ -101,6 +103,7 @@ DEPENDENCIES
   pastee (~> 3.0)
   require_all (~> 3.0)
   string-utility (~> 3.0)
+  urbandict (~> 1.1)
 
 RUBY VERSION
    ruby 3.3.0p0

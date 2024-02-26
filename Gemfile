@@ -12,6 +12,7 @@ gem('isgd', '~> 1.0')
 gem('activesupport', '~> 7.1.3')
 gem('activesupport-core-ext', '~> 4.0.0')
 gem('pastee', '~> 3.0')
+gem('urbandict', '~> 1.1')
 
 # gem('addressable', '~> 2.8')
 # gem('curb', '~> 0.9')
@@ -22,6 +23,5 @@ gem('pastee', '~> 3.0')
 # gem('simple_geolocator', '~> 2.0')
 # gem('timerizer', '~> 0.3')
 # gem('twitter', '~> 7.0')
-# gem('urbandict', '~> 1.0')
 
 ruby '~> 3.3'
