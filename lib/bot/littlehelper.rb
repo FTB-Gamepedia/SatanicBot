@@ -17,6 +17,7 @@ require_relative 'plugins/commands/is_disambiguation'
 require_relative 'plugins/commands/check_page'
 require_relative 'plugins/commands/kill'
 require_relative 'plugins/commands/abbreviate'
+require_relative 'plugins/commands/new_vanilla'
 
 module LittleHelper
   BUTT = ExtendedButt.new(Variables::Constants::WIKI_URL, query_limit_default: 5000, assertion: :bot)
@@ -47,7 +48,8 @@ module LittleHelper
     Plugins::Commands::Random::RandomQuote.new,
     Plugins::Commands::Random::RandomNumber.new,
     Plugins::Commands::Random::Motivate.new,
-    Plugins::Commands::Src.new
+    Plugins::Commands::Src.new,
+    Plugins::Commands::NewVanilla.new
   ].freeze
 
   message_event_handlers = [
