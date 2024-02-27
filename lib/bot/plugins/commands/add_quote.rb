@@ -1,36 +1,40 @@
-require 'cinch'
 require_relative 'base_command'
 require_relative '../wiki'
 
 module Plugins
   module Commands
     class AddQuote < AuthorizedCommand
-      include Cinch::Plugin
       include Plugins::Wiki
-      ignore_ignored_users
 
-      set(help: 'Adds a quote to the quote list. Op-only. 1 arg: $addquote <quote>', plugin_name: 'addquote')
-      match(/addquote (.+)/i)
+      def initialize
+        super(:addquote, 'Adds a quote to the quote list. Either provide a quote as an argument, or reply to the message to add.', 'addquote [quote]')
+      end
 
-      # Adds a quote to the quote list, for $randquote.
-      # @param msg [Cinch::Message]
-      # @param quote [String] The quote's text.
-      def execute(msg, quote)
-        edit("User:#{Variables::Constants::WIKI_USERNAME}/NotGoodEnoughForENV/Quotes", msg) do |text|
-          # TODO: See random
-          quotes = text.split("\n")
-          quotes.delete('</nowiki>')
-          quotes << quote
-          quotes << '</nowiki>'
-          {
-            text: quotes.join("\n"),
-            success: Proc.new do
-              Variables::NonConstants.append_quote(quote)
-              'Added to the quote list'
-            end,
-            fail: Proc.new { 'Failed! There was no change to the page.' },
-            error: Proc.new { |e| "Failed! Error code: #{e.message}" }
-          }
+      def execute(event, args)
+        if event.message.reply?
+          quote = "#{event.message.referenced_message.author.nick || event.message.referenced_message.author.username}: #{event.message.referenced_message.text}"
+        else
+          quote = args.join(' ')
+        end
+        if !quote.empty?
+          edit("User:#{Variables::Constants::WIKI_USERNAME}/NotGoodEnoughForENV/Quotes", event) do |text|
+            # TODO: See random
+            quotes = text.split("\n")
+            quotes.delete('</nowiki>')
+            quotes << quote
+            quotes << '</nowiki>'
+            {
+              text: quotes.join("\n"),
+              success: Proc.new do
+                Variables::NonConstants.append_quote(quote)
+                'Added to the quote list'
+              end,
+              fail: Proc.new { 'Failed! There was no change to the page.' },
+              error: Proc.new { |e| "Failed! Error code: #{e.message}" }
+            }
+          end
+        else
+          return 'No quote provided.'
         end
       end
     end

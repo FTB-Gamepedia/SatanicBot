@@ -12,7 +12,7 @@ module Plugins
         @attributes[:min_args] = 3
       end
 
-      def execute(msg, args)
+      def execute(event, args)
         arg_match = args.join(' ').match(/(.+) \| (.+)/)
         page = arg_match[1]
         page = page.end_with?('(Vanilla)') ? page : "#{page} (Vanilla)"

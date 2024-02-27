@@ -1,6 +1,7 @@
 DISCORD_TOKEN=abcdefghijklmnop
 
 WIKI_URL: https://ftb.fandom.com/api.php
+WIKI_AUTHNAME: MyUsername@BotPasswords
 WIKI_USERNAME: MyUsername
 WIKI_PASSWORD: password
 

@@ -18,6 +18,8 @@ require_relative 'plugins/commands/check_page'
 require_relative 'plugins/commands/kill'
 require_relative 'plugins/commands/abbreviate'
 require_relative 'plugins/commands/new_vanilla'
+require_relative 'plugins/commands/refresh_quotes'
+require_relative 'plugins/commands/add_quote'
 
 module LittleHelper
   BUTT = ExtendedButt.new(Variables::Constants::WIKI_URL, query_limit_default: 5000, assertion: :bot)
@@ -35,6 +37,7 @@ module LittleHelper
 
   commands = [
     Plugins::Commands::Abbreviate.new,
+    Plugins::Commands::AddQuote.new,
     Plugins::Commands::CheckPage.new,
     Plugins::Commands::Contribs.new,
     Plugins::Commands::EightBall.new,
@@ -48,6 +51,7 @@ module LittleHelper
     Plugins::Commands::Random::RandomQuote.new,
     Plugins::Commands::Random::RandomNumber.new,
     Plugins::Commands::Random::Motivate.new,
+    Plugins::Commands::RefreshQuotes.new,
     Plugins::Commands::Src.new,
     Plugins::Commands::NewVanilla.new
   ].freeze

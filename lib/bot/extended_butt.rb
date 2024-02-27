@@ -7,7 +7,7 @@ class ExtendedButt < MediaWiki::Butt
     begin
       super(params)
     rescue MediaWiki::Butt::NotBotError => e
-      login(Variables::Constants::WIKI_USERNAME, Variables::Constants::WIKI_PASSWORD)
+      login(Variables::Constants::WIKI_AUTHNAME, Variables::Constants::WIKI_PASSWORD)
       retry
     end
   end

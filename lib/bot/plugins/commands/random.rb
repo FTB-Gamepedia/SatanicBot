@@ -48,7 +48,7 @@ module Plugins
 
         # Gets a random quote that has not been said in the channel within the
         #   past 5 calls.
-        def execute(event)
+        def execute(event, args)
           quotes = Variables::NonConstants.get_quotes
           quote = quotes.sample
           @last_quotes ||= []
