@@ -22,6 +22,7 @@ require_relative 'plugins/commands/new_vanilla'
 require_relative 'plugins/commands/refresh_quotes'
 require_relative 'plugins/commands/add_quote'
 require_relative 'plugins/commands/tweet'
+require_relative 'plugins/commands/upload'
 
 module LittleHelper
   BUTT = ExtendedButt.new(Variables::Constants::WIKI_URL, query_limit_default: 5000, assertion: :bot)
@@ -55,6 +56,7 @@ module LittleHelper
     Plugins::Commands::RefreshQuotes.new,
     Plugins::Commands::Src.new,
     Plugins::Commands::Tweet.new,
+    Plugins::Commands::Upload.new,
     Plugins::Commands::NewVanilla.new
   ].freeze
 
