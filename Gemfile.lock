@@ -86,6 +86,7 @@ GEM
     websocket-client-simple (0.8.0)
       event_emitter
       websocket
+    x (0.14.1)
 
 PLATFORMS
   ruby
@@ -104,6 +105,7 @@ DEPENDENCIES
   require_all (~> 3.0)
   string-utility (~> 3.0)
   urbandict (~> 1.1)
+  x (~> 0.14)
 
 RUBY VERSION
    ruby 3.3.0p0

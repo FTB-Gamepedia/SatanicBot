@@ -1,24 +1,21 @@
-require 'cinch'
 require_relative 'base_command'
 
 module Plugins
   module Commands
     class Tweet < BaseCommand
-      include Cinch::Plugin
+      def initialize
+        super(:tweet, 'Tweets the provided message on the bot Twitter account.', 'tweet <message>')
+        @attributes[:min_args] = 1
+      end
 
-      set(help: 'Tweets the provided message on the bot Twitter account. 1 arg: $tweet <message>', plugin_name: 'tweet')
-      match(/tweet (.+)/i)
-
-      # Tweets the message provided.
-      # @param msg [Cinch::Message]
-      # @param tweet [String] The message to tweet.
-      def execute(msg, tweet)
-        # 134 because it has to fit "[IRC] "
-        if tweet.length > 1 && tweet.length < 134
-          LittleHelper::TWEETER.update("[IRC] #{tweet}")
-          msg.reply('Successfully tweeted!'.freeze)
+      def execute(event, args)
+        tweet = args.join(' ')
+        # 270 because it has to fit '[Discord '
+        if tweet.length < 270
+          LittleHelper::X_CLIENT.post('tweets', { text: "[Discord] #{tweet}" }.to_json)
+          return 'Successfully tweeted!'.freeze
         else
-          msg.reply('That tweet is either too long or too short.'.freeze)
+          return 'That tweet is too long or too short.'.freeze
         end
       end
     end

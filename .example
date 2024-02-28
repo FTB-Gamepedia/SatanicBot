@@ -5,10 +5,10 @@ WIKI_AUTHNAME: MyUsername@BotPasswords
 WIKI_USERNAME: MyUsername
 WIKI_PASSWORD: password
 
-TWITTER_CONSUMER_KEY: abcdefefghijklmnop
-TWITTER_CONSUMER_SECRET: ahsudhuahsdhauhsd
-TWITTER_ACCESS_TOKEN: jaisdjasujdaushf
-TWITTER_ACCESS_SECRET: jeuhuthertoqpworj
+X_API_KEY: abcdefefghijklmnop
+X_API_SECRET: ahsudhuahsdhauhsd
+X_ACCESS_TOKEN: jaisdjasujdaushf
+X_ACCESS_SECRET: jeuhuthertoqpworj
 
 OPENWEATHERMAP_API_KEY: abcdefghijklmnop
 

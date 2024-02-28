@@ -2,6 +2,7 @@ require 'discordrb'
 require 'require_all'
 require 'time'
 require 'pastee'
+require 'x'
 require_relative 'extended_butt'
 require_relative 'variables'
 # require_rel 'plugins/commands'
@@ -20,16 +21,16 @@ require_relative 'plugins/commands/abbreviate'
 require_relative 'plugins/commands/new_vanilla'
 require_relative 'plugins/commands/refresh_quotes'
 require_relative 'plugins/commands/add_quote'
+require_relative 'plugins/commands/tweet'
 
 module LittleHelper
   BUTT = ExtendedButt.new(Variables::Constants::WIKI_URL, query_limit_default: 5000, assertion: :bot)
 
-  # TWEETER = Twitter::REST::Client.new do |c|
-  #   c.consumer_key = Variables::Constants::TWITTER_CONSUMER_KEY
-  #   c.consumer_secret = Variables::Constants::TWITTER_CONSUMER_SECRET
-  #   c.access_token = Variables::Constants::TWITTER_ACCESS_TOKEN
-  #   c.access_token_secret = Variables::Constants::TWITTER_ACCESS_SECRET
-  # end
+  X_CLIENT = X::Client.new(
+    api_key: Variables::Constants::X_API_KEY, 
+    api_key_secret: Variables::Constants::X_API_SECRET, 
+    access_token: Variables::Constants::X_ACCESS_TOKEN,
+    access_token_secret: Variables::Constants::X_ACCESS_SECRET)
 
   # WEATHER = OpenWeatherMap::API.new(Variables::Constants::OPENWEATHERMAP_KEY, 'en', 'metric')
   PASTEE = Pastee.new(Variables::Constants::PASTEE_KEY)
@@ -53,6 +54,7 @@ module LittleHelper
     Plugins::Commands::Random::Motivate.new,
     Plugins::Commands::RefreshQuotes.new,
     Plugins::Commands::Src.new,
+    Plugins::Commands::Tweet.new,
     Plugins::Commands::NewVanilla.new
   ].freeze
 
