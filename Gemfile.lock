@@ -81,7 +81,7 @@ GEM
       concurrent-ruby (~> 1.0)
     urbandict (1.1.1)
       httpclient (~> 2.8)
-    uri (0.13.0)
+    uri (0.13.3)
     websocket (1.2.10)
     websocket-client-simple (0.8.0)
       event_emitter
